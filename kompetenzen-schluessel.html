@@ -1,1 +1,1194 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schlüsselkompetenzen entdecken | ABU EBA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        :root {
+            --ktzh-blue: #0066CC;
+            --ktzh-cyan: #00A0E0;
+            --ktzh-lightblue: #E8F4F8;
+            --ktzh-darkgray: #3C3C3B;
+            --ktzh-gray: #767676;
+            --white: #FFFFFF;
+            --green: #10B981;
+            --yellow: #F59E0B;
+            --purple: #8B5CF6;
+            --orange: #FF8C42;
+            --red: #EF4444;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f9fc 0%, #ffffff 100%);
+            color: var(--ktzh-darkgray);
+            line-height: 1.6;
+        }
+
+        /* Header mit Animation */
+        header {
+            background: linear-gradient(135deg, var(--yellow) 0%, var(--orange) 100%);
+            color: var(--white);
+            padding: 3rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '🎯';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.1;
+            right: -3rem;
+            top: -3rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .breadcrumb {
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--white);
+            text-decoration: none;
+            opacity: 0.9;
+            font-size: 0.875rem;
+        }
+
+        header h1 {
+            font-size: 2.75rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: -3rem auto 3rem;
+            padding: 0 2rem;
+        }
+
+        /* Intro Card mit Challenge */
+        .intro-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 12px 32px rgba(0, 102, 204, 0.15);
+            margin-bottom: 3rem;
+            border: 3px solid var(--yellow);
+        }
+
+        .challenge-badge {
+            display: inline-block;
+            background: var(--yellow);
+            color: var(--ktzh-darkgray);
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .intro-card h2 {
+            font-size: 2rem;
+            color: var(--ktzh-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .intro-card p {
+            font-size: 1.125rem;
+            color: var(--ktzh-gray);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        /* Interactive Scenario */
+        .scenario-box {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin: 2rem 0;
+            border-left: 6px solid var(--orange);
+        }
+
+        .scenario-box h3 {
+            color: #92400E;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .scenario-text {
+            color: #78350F;
+            font-size: 1.125rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        /* Interactive Challenge */
+        .challenge-section {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin: 2rem 0;
+            border: 3px solid var(--ktzh-cyan);
+        }
+
+        .challenge-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .challenge-icon {
+            font-size: 3rem;
+        }
+
+        .challenge-title {
+            flex: 1;
+        }
+
+        .challenge-title h3 {
+            color: var(--ktzh-blue);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .challenge-title p {
+            color: var(--ktzh-gray);
+            font-size: 0.95rem;
+        }
+
+        /* Matching Game */
+        .matching-game {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .matching-column h4 {
+            color: var(--ktzh-blue);
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+        }
+
+        .matching-item {
+            background: var(--ktzh-lightblue);
+            border: 3px solid transparent;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .matching-item:hover {
+            transform: translateX(4px);
+            border-color: var(--ktzh-cyan);
+        }
+
+        .matching-item.selected {
+            background: var(--ktzh-cyan);
+            color: var(--white);
+            border-color: var(--ktzh-blue);
+            transform: scale(1.05);
+        }
+
+        .matching-item.correct {
+            background: var(--green);
+            color: var(--white);
+            border-color: #059669;
+        }
+
+        .matching-item.incorrect {
+            background: var(--red);
+            color: var(--white);
+            border-color: #DC2626;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .matching-item-number {
+            display: inline-block;
+            background: var(--white);
+            color: var(--ktzh-blue);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 700;
+            margin-right: 0.75rem;
+        }
+
+        .matching-item.selected .matching-item-number,
+        .matching-item.correct .matching-item-number {
+            background: var(--white);
+            color: var(--ktzh-blue);
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .progress-text {
+            color: var(--ktzh-gray);
+            font-size: 0.95rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .progress-bar-container {
+            background: var(--ktzh-lightgray);
+            height: 12px;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, var(--green) 0%, #059669 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.6s ease;
+            border-radius: 20px;
+        }
+
+        /* Kompetenz Overview Grid */
+        .kompetenz-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .kompetenz-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(0, 102, 204, 0.08);
+            border-left: 6px solid var(--ktzh-blue);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .kompetenz-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 32px rgba(0, 102, 204, 0.15);
+        }
+
+        .kompetenz-card .number {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--ktzh-lightblue);
+            color: var(--ktzh-blue);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.125rem;
+        }
+
+        .kompetenz-card h3 {
+            color: var(--ktzh-blue);
+            font-size: 1.125rem;
+            margin-bottom: 0.75rem;
+            padding-right: 3rem;
+            line-height: 1.4;
+        }
+
+        .kompetenz-card p {
+            color: var(--ktzh-gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .kompetenz-card .icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Feedback Messages */
+        .feedback-message {
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            display: none;
+            animation: slideIn 0.4s ease;
+        }
+
+        .feedback-message.show {
+            display: block;
+        }
+
+        .feedback-message.success {
+            background: #ECFDF5;
+            border-left: 4px solid var(--green);
+            color: #065F46;
+        }
+
+        .feedback-message.info {
+            background: var(--ktzh-lightblue);
+            border-left: 4px solid var(--ktzh-cyan);
+            color: #0C4A6E;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Button */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: var(--ktzh-blue);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--ktzh-cyan);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 160, 224, 0.3);
+        }
+
+        .btn-success {
+            background: var(--green);
+            color: var(--white);
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            .matching-game { grid-template-columns: 1fr; }
+            .kompetenz-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 20px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.4s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            right: 1.5rem;
+            top: 1.5rem;
+            font-size: 2rem;
+            color: var(--ktzh-gray);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            background: var(--ktzh-lightblue);
+            color: var(--ktzh-blue);
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
+            color: var(--white);
+            padding: 3rem 2rem 2rem;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .modal-number {
+            display: inline-block;
+            background: var(--white);
+            color: var(--ktzh-blue);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 50px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-body-content {
+            padding: 2.5rem;
+        }
+
+        .example-scenario {
+            background: #FEF3C7;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-left: 6px solid var(--yellow);
+        }
+
+        .example-scenario h4 {
+            color: #92400E;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .example-scenario p {
+            color: #78350F;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .question-section {
+            background: var(--ktzh-lightblue);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .question-section h4 {
+            color: var(--ktzh-blue);
+            font-size: 1.125rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .answer-option {
+            background: var(--white);
+            border: 3px solid var(--ktzh-lightgray);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .answer-option:hover {
+            border-color: var(--ktzh-cyan);
+            transform: translateX(4px);
+        }
+
+        .answer-option input[type="radio"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .answer-option label {
+            flex: 1;
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .answer-option.correct {
+            background: var(--green);
+            color: var(--white);
+            border-color: #059669;
+        }
+
+        .answer-option.incorrect {
+            background: var(--red);
+            color: var(--white);
+            border-color: #DC2626;
+        }
+
+        .check-button {
+            background: var(--ktzh-blue);
+            color: var(--white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1.5rem;
+        }
+
+        .check-button:hover {
+            background: var(--ktzh-cyan);
+            transform: translateY(-2px);
+        }
+
+        .check-button:disabled {
+            background: var(--ktzh-gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .feedback-box {
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .feedback-box.show {
+            display: block;
+            animation: slideIn 0.4s ease;
+        }
+
+        .feedback-box.success {
+            background: #ECFDF5;
+            border-left: 6px solid var(--green);
+            color: #065F46;
+        }
+
+        .feedback-box.error {
+            background: #FEE2E2;
+            border-left: 6px solid var(--red);
+            color: #991B1B;
+        }
+
+        .feedback-box h5 {
+            font-size: 1.125rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .feedback-box p {
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="breadcrumb">
+                <a href="kompetenzen-einfuehrung.html">← Zurück zur Kompetenz-Übersicht</a>
+            </div>
+            <h1>🎯 Schlüsselkompetenzen</h1>
+            <p>12 Kompetenzen für lebenslanges Lernen – entdecken, verstehen, anwenden</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Intro Card -->
+        <div class="intro-card">
+            <div class="challenge-badge">⚡ INTERAKTIVE ENTDECKUNG</div>
+            <h2>Was sind Schlüsselkompetenzen?</h2>
+            <p>Schlüsselkompetenzen sind <strong>persönliche, soziale und methodische Fähigkeiten</strong>, die Sie in allen Lebensbereichen brauchen – im Beruf, in der Schule und im Privatleben.</p>
+            <p>Sie helfen Ihnen, Herausforderungen zu meistern, mit anderen zusammenzuarbeiten, Entscheidungen zu treffen und sich weiterzuentwickeln.</p>
+            <p><strong>Das Besondere:</strong> Diese 12 Kompetenzen werden <strong>nicht einzeln geübt</strong>, sondern kommen in allen Themen und Umsetzungsbeispielen zum Einsatz – oft mehrere gleichzeitig!</p>
+        </div>
+
+        <!-- Aktivitäts-Tracker -->
+        <div class="activity-tracker">
+            <div class="activity-header">
+                <div class="activity-icon">📊</div>
+                <div class="activity-content">
+                    <h3>Ihre Aktivität</h3>
+                    <p><span id="completedComps">0</span> von 12 Kompetenzen erkundet</p>
+                </div>
+            </div>
+            <div class="activity-progress-bar">
+                <div class="activity-progress-fill" id="activityProgress"></div>
+            </div>
+        </div>
+
+        <!-- Alle 12 Schlüsselkompetenzen -->
+        <div style="margin-top: 4rem;">
+            <h2 style="font-size: 2rem; color: var(--ktzh-blue); margin-bottom: 1rem; text-align: center;">Die 12 Schlüsselkompetenzen im Detail</h2>
+            <p style="text-align: center; color: var(--ktzh-gray); font-size: 1.125rem; margin-bottom: 3rem;">Klicken Sie auf eine Kompetenz, um ein konkretes Jugend-Beispiel zu sehen 👇</p>
+
+            <div class="kompetenz-grid">
+                <div class="kompetenz-card" onclick="openKompetenz(1)">
+                    <div class="number">1</div>
+                    <div class="icon">🔍</div>
+                    <h3>Zwischen relevanten und irrelevanten Quellen unterscheiden</h3>
+                    <p>Informationen filtern, bewerten und nutzen – auch bei KI-Inhalten</p>
+                </div>
+
+                <div class="kompetenz-card" onclick="openKompetenz(2)">
+                    <div class="number">2</div>
+                    <div class="icon">🎯</div>
+                    <h3>Ziele setzen, überprüfen und anpassen</h3>
+                    <p>Prioritäten setzen, Fortschritte bewerten, Strategien anpassen</p>
+                </div>
+
+                <div class="kompetenz-card" onclick="openKompetenz(3)">
+                    <div class="number">3</div>
+                    <div class="icon">💡</div>
+                    <h3>Innovative Problemlösungen entwickeln</h3>
+                    <p>Kreativ, flexibel und vorausschauend denken und handeln</p>
+                </div>
+
+                <div class="kompetenz-card" onclick="openKompetenz(4)">
+                    <div class="number">4</div>
+                    <div class="icon">🤝</div>
+                    <h3>In unterschiedlichen Teams arbeiten</h3>
+                    <p>Kooperieren, kommunizieren, koordinieren und Verantwortung teilen</p>
+                </div>
+
+                <div class="kompetenz-card" onclick="openKompetenz(5)">
+                    <div class="number">5</div>
+                    <div class="icon">🔄</div>
+                    <h3>Eigene Werthaltungen reflektieren</h3>
+                    <p>Werte hinterfragen, Perspektiven erweitern, ethisch handeln</p>
+                </div>
+
+                <div class="kompetenz-card" onclick="openKompetenz(6)">
+                    <div class="number">6</div>
+                    <div class="icon">💬</div>
+                    <h3>Standpunkte begründen und überzeugen</h3>
+                    <p>Argumente klar und überzeugend präsentieren</p>
+                </div>
+
+                <div class="kompetenz-card" onclick="openKompetenz(7)">
+                    <div class="number">7</div>
+                    <div class="icon">👁️</div>
+                    <h3>Unterschiedliche Standpunkte nachvollziehen</h3>
+                    <p>Perspektivenwechsel, Empathie entwickeln, Toleranz zeigen</p>
+                </div>
+
+                <div class="kompetenz-card" onclick="openKompetenz(8)">
+                    <div class="number">8</div>
+                    <div class="icon">📅</div>
+                    <h3>Lebensphasen planen</h3>
+                    <p>Ressourcen aufbauen, Laufbahn gestalten, Gesundheit beachten</p>
+                </div>
+
+                <div class="kompetenz-card" onclick="openKompetenz(9)">
+                    <div class="number">9</div>
+                    <div class="icon">🌍</div>
+                    <h3>Vernetzt und nachhaltig denken</h3>
+                    <p>Zusammenhänge verstehen, nachhaltig handeln</p>
+                </div>
+
+                <div class="kompetenz-card" onclick="openKompetenz(10)">
+                    <div class="number">10</div>
+                    <div class="icon">⚡</div>
+                    <h3>Mit Veränderungen umgehen</h3>
+                    <p>Flexibel sein, anpassen, konstruktiv reagieren</p>
+                </div>
+
+                <div class="kompetenz-card" onclick="openKompetenz(11)">
+                    <div class="number">11</div>
+                    <div class="icon">🤔</div>
+                    <h3>Mit Mehrdeutigkeiten umgehen</h3>
+                    <p>Unsicherheiten aushalten, verschiedene Perspektiven berücksichtigen</p>
+                </div>
+
+                <div class="kompetenz-card" onclick="openKompetenz(12)">
+                    <div class="number">12</div>
+                    <div class="icon">🗳️</div>
+                    <h3>An gesellschaftlichen Prozessen partizipieren</h3>
+                    <p>Mitgestalten, Handlungsspielräume nutzen, aktiv werden</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal für Kompetenz-Details -->
+        <div id="kompetenzModal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close" onclick="closeModal()">&times;</span>
+                <div id="modalBody"></div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-buttons">
+            <a href="kompetenzen-einfuehrung.html" class="btn btn-primary">
+                <span>←</span>
+                <span>Zurück zur Übersicht</span>
+            </a>
+            <a href="thema1-uebersicht.html" class="btn btn-success">
+                <span>Jetzt Thema 1 starten</span>
+                <span>→</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let selectedSituation = null;
+        let selectedKompetenz = null;
+        let matches = {};
+        let correctMatches = 0;
+
+        // Richtige Zuordnungen
+        const correctAnswers = {
+            1: 2,  // Konflikt erkennen → Ziele setzen
+            2: 7,  // Perspektive wechseln → Standpunkte nachvollziehen
+            3: 3,  // Lösung finden → Innovative Problemlösung
+            4: 6   // Begründen → Standpunkte begründen
+        };
+
+        function selectSituation(num) {
+            // Vorherige Auswahl entfernen
+            document.querySelectorAll('[data-situation]').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // Neue Auswahl
+            selectedSituation = num;
+            document.querySelector(`[data-situation="${num}"]`).classList.add('selected');
+            
+            checkIfPairReady();
+        }
+
+        function selectKompetenz(num) {
+            // Vorherige Auswahl entfernen
+            document.querySelectorAll('[data-kompetenz]').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // Neue Auswahl
+            selectedKompetenz = num;
+            document.querySelector(`[data-kompetenz="${num}"]`).classList.add('selected');
+            
+            checkIfPairReady();
+        }
+
+        function checkIfPairReady() {
+            if (selectedSituation && selectedKompetenz) {
+                // Prüfen ob richtig
+                const isCorrect = correctAnswers[selectedSituation] === selectedKompetenz;
+                
+                const situationEl = document.querySelector(`[data-situation="${selectedSituation}"]`);
+                const kompetenzEl = document.querySelector(`[data-kompetenz="${selectedKompetenz}"]`);
+                
+                if (isCorrect) {
+                    // Richtig!
+                    situationEl.classList.remove('selected');
+                    situationEl.classList.add('correct');
+                    kompetenzEl.classList.remove('selected');
+                    kompetenzEl.classList.add('correct');
+                    
+                    // Disable beide
+                    situationEl.onclick = null;
+                    kompetenzEl.onclick = null;
+                    
+                    // Match speichern
+                    matches[selectedSituation] = selectedKompetenz;
+                    correctMatches++;
+                    
+                    // Progress aktualisieren
+                    updateProgress();
+                    
+                    // Feedback
+                    showFeedback('success', '✅ Richtig! Sehr gut erkannt.');
+                    
+                    // Alle richtig?
+                    if (correctMatches === 4) {
+                        setTimeout(() => {
+                            document.getElementById('successSection').style.display = 'block';
+                            document.getElementById('successSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 1000);
+                    }
+                } else {
+                    // Falsch
+                    situationEl.classList.remove('selected');
+                    situationEl.classList.add('incorrect');
+                    kompetenzEl.classList.remove('selected');
+                    kompetenzEl.classList.add('incorrect');
+                    
+                    showFeedback('info', '❌ Nicht ganz. Versuchen Sie es nochmal!');
+                    
+                    // Nach 1 Sekunde zurücksetzen
+                    setTimeout(() => {
+                        situationEl.classList.remove('incorrect');
+                        kompetenzEl.classList.remove('incorrect');
+                    }, 1000);
+                }
+                
+                // Reset selection
+                selectedSituation = null;
+                selectedKompetenz = null;
+            }
+        }
+
+        function updateProgress() {
+            const percentage = (correctMatches / 4) * 100;
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('matchedCount').textContent = correctMatches;
+        }
+
+        function showFeedback(type, message) {
+            const feedback = document.getElementById('feedbackMessage');
+            feedback.className = `feedback-message ${type} show`;
+            feedback.textContent = message;
+            
+            setTimeout(() => {
+                feedback.classList.remove('show');
+            }, 3000);
+        }
+
+        // Kompetenz-Daten mit Beispielen
+        const kompetenzData = {
+            1: {
+                icon: '🔍',
+                title: 'Zwischen relevanten und irrelevanten Quellen unterscheiden',
+                scenario: 'Du scrollst durch TikTok und siehst ein Video: "5G-Antennen machen krank – BEWEIS!" Das Video hat 50\'000 Likes und viele Kommentare. Dein Kollege teilt es in der Klassen-Gruppe und fragt: "Ist das wahr?"',
+                question: 'Was ist die beste Reaktion?',
+                options: [
+                    { text: 'Das Video sofort selbst teilen, weil so viele Likes es glaubwürdig machen', correct: false },
+                    { text: 'Die Quelle prüfen, nach wissenschaftlichen Studien suchen und das BAG (Bundesamt für Gesundheit) konsultieren', correct: true },
+                    { text: 'Einfach ignorieren und weiterscrollen', correct: false },
+                    { text: 'Dem Kollegen glauben, weil er es geteilt hat', correct: false }
+                ],
+                explanation: 'Likes sagen nichts über Wahrheit aus! Bei Gesundheitsthemen sind offizielle Stellen (BAG, WHO) und wissenschaftliche Studien die verlässlichsten Quellen. Social Media verbreitet oft Fehlinformationen.'
+            },
+            2: {
+                icon: '🎯',
+                title: 'Ziele setzen, überprüfen und anpassen',
+                scenario: 'Du möchtest die Lehrabschlussprüfung mit einer guten Note bestehen. Gleichzeitig trainierst du 4x pro Woche für ein Fussballturnier, arbeitest am Wochenende im Restaurant und möchtest Zeit mit Freunden verbringen. Nach 2 Wochen merkst du: Es ist zu viel.',
+                question: 'Wie gehst du vor?',
+                options: [
+                    { text: 'Einfach weitermachen und hoffen, dass es irgendwie klappt', correct: false },
+                    { text: 'Prioritäten setzen: Lehre hat Vorrang, Fussball auf 2x/Woche reduzieren, feste Lernzeiten einplanen', correct: true },
+                    { text: 'Die Lehre aufgeben, weil Fussball wichtiger ist', correct: false },
+                    { text: 'Auf Schlaf verzichten, um alles zu schaffen', correct: false }
+                ],
+                explanation: 'Ziele müssen realistisch sein! Wenn du merkst, dass es nicht klappt, musst du Prioritäten setzen und Ziele anpassen. Die Lehrabschlussprüfung ist wichtig für deine Zukunft – andere Dinge können vorübergehend reduziert werden.'
+            },
+            3: {
+                icon: '💡',
+                title: 'Innovative Problemlösungen entwickeln',
+                scenario: 'In deinem Lehrbetrieb gibt es ein Problem: Die Mittagspause ist zu kurz, um auswärts essen zu gehen, aber es gibt keine Mikrowelle oder Küche. Viele kaufen teures Fast Food oder bleiben hungrig.',
+                question: 'Welche Lösung zeigt innovative Problemlösung?',
+                options: [
+                    { text: 'Einfach akzeptieren, dass es so ist', correct: false },
+                    { text: 'Einen Vorschlag ausarbeiten: Kollektiv eine Mikrowelle anschaffen, Essensplan organisieren, mit Chef sprechen', correct: true },
+                    { text: 'Jeden Tag Fast Food kaufen, auch wenn es teuer ist', correct: false },
+                    { text: 'Heimlich im Lager essen und hoffen, dass niemand es sieht', correct: false }
+                ],
+                explanation: 'Innovation bedeutet: Nicht nur das Problem sehen, sondern kreative Lösungen entwickeln! Du analysierst die Situation, entwickelst einen Vorschlag und gehst professionell vor. Das zeigt unternehmerisches Denken.'
+            },
+            4: {
+                icon: '🤝',
+                title: 'In unterschiedlichen Teams arbeiten',
+                scenario: 'Für ein Schulprojekt wirst du mit drei Personen eingeteilt, die du nicht gut kennst. Eine Person redet viel, macht aber nichts. Eine andere ist super organisiert, aber etwas herrisch. Die dritte ist ruhig und unsicher.',
+                question: 'Wie verhältst du dich im Team?',
+                options: [
+                    { text: 'Alles selbst machen, weil es so am schnellsten geht', correct: false },
+                    { text: 'Mit allen reden: Aufgaben fair verteilen, Stärken nutzen, ruhige Person einbeziehen, klare Deadlines setzen', correct: true },
+                    { text: 'Die herrische Person machen lassen und einfach folgen', correct: false },
+                    { text: 'Dich bei der Lehrperson beschweren und das Team wechseln', correct: false }
+                ],
+                explanation: 'Gute Teamarbeit heisst: Kommunizieren, Stärken erkennen, alle einbeziehen und gemeinsam Verantwortung übernehmen. Konflikte gehören dazu – wichtig ist, wie du damit umgehst!'
+            },
+            5: {
+                icon: '🔄',
+                title: 'Eigene Werthaltungen reflektieren',
+                scenario: 'Deine Kollegin zeigt dir ein Foto von ihrer neuen Jacke, die bei einer Fast-Fashion-Kette CHF 29.- kostet. Du hast gerade einen Dokumentarfilm über Kinderarbeit in der Textilindustrie gesehen. Du weisst, dass solche Jacken unter schlechten Bedingungen produziert werden.',
+                question: 'Wie reagierst du?',
+                options: [
+                    { text: 'Sagen: "Die Jacke ist hässlich und unethisch!" und sie kritisieren', correct: false },
+                    { text: 'Deine Gedanken für dich behalten und nichts sagen', correct: false },
+                    { text: 'Respektvoll das Gespräch suchen: Deine Werte erklären, aber ihre Situation auch verstehen (nicht jeder kann sich teure Mode leisten)', correct: true },
+                    { text: 'Selbst auch so eine Jacke kaufen, um nicht als Moralapostel dazustehen', correct: false }
+                ],
+                explanation: 'Werte reflektieren bedeutet: Eigene Überzeugungen haben, aber andere Perspektiven verstehen. Nicht jeder hat die gleichen Möglichkeiten. Respektvoller Dialog ist wichtiger als Belehrung!'
+            },
+            6: {
+                icon: '💬',
+                title: 'Standpunkte begründen und überzeugen',
+                scenario: 'In deinem Lehrbetrieb wird diskutiert, ob Lehrlinge eigene Laptops statt Desktop-PCs bekommen sollen. Dein Chef ist skeptisch: "Zu teuer und unnötig." Du findest aber, dass mobile Arbeitsplätze sinnvoll wären.',
+                question: 'Wie überzeugst du deinen Chef?',
+                options: [
+                    { text: 'Sagen: "Alle anderen Firmen haben das auch!" ohne weitere Argumente', correct: false },
+                    { text: 'Eine Präsentation vorbereiten: Vorteile aufzeigen (Flexibilität, Home-Office, Kostenkalkulation), Beispiele von anderen Firmen, Testphase vorschlagen', correct: true },
+                    { text: 'Einfach aufgeben, weil der Chef eh nicht zuhört', correct: false },
+                    { text: 'Dich mit anderen Lehrlingen zusammentun und fordern: "Laptops oder wir streiken!"', correct: false }
+                ],
+                explanation: 'Überzeugen braucht: Gute Argumente, Fakten, Beispiele und professionelle Kommunikation. Emotionale Forderungen oder Aufgeben bringen nichts. Zeige, dass du mitdenkst!'
+            },
+            7: {
+                icon: '👁️',
+                title: 'Unterschiedliche Standpunkte nachvollziehen',
+                scenario: 'Deine beste Freundin ist sauer, weil du am Wochenende mit anderen Kollegen feiern warst, ohne sie einzuladen. Sie sagt: "Du ignorierst mich ständig!" Du findest, sie übertreibt – du hast doch das Recht, auch mit anderen etwas zu unternehmen.',
+                question: 'Wie gehst du damit um?',
+                options: [
+                    { text: 'Sagen: "Du bist zu empfindlich, jetzt hör auf zu nerven!"', correct: false },
+                    { text: 'Ihre Perspektive verstehen: Sie fühlt sich ausgeschlossen. Ruhig erklären, dass du auch andere Freunde hast, aber Zeit mit ihr auch wichtig ist', correct: true },
+                    { text: 'Sie ignorieren, bis sie sich beruhigt', correct: false },
+                    { text: 'Dich entschuldigen und versprechen, nie mehr ohne sie wegzugehen', correct: false }
+                ],
+                explanation: 'Empathie bedeutet: Verstehen, warum jemand verletzt ist, auch wenn du anders denkst. Beides ist ok – du darfst andere Freunde haben UND sie darf sich ausgeschlossen fühlen. Dialog hilft!'
+            },
+            8: {
+                icon: '📅',
+                title: 'Lebensphasen planen',
+                scenario: 'Du bist im 2. Lehrjahr und überlegst: Nach der Lehre direkt arbeiten oder Berufsmatura nachholen? Arbeiten bringt Geld, aber die BM öffnet mehr Karrierechancen. Deine Eltern sagen: "Verdiene endlich Geld!" Deine Lehrperson sagt: "Mach die BM!"',
+                question: 'Wie triffst du die Entscheidung?',
+                options: [
+                    { text: 'Einfach machen, was die Eltern sagen', correct: false },
+                    { text: 'Pro/Contra-Liste erstellen: Finanzielle Situation prüfen, Karriereziele klären, evt. beides kombinieren (Teilzeit arbeiten + BM), mit Berufsberatung sprechen', correct: true },
+                    { text: 'Spontan entscheiden, ohne gross nachzudenken', correct: false },
+                    { text: 'Warten und schauen, was passiert', correct: false }
+                ],
+                explanation: 'Lebensplanung braucht: Eigene Ziele kennen, Ressourcen prüfen, Optionen abwägen, Beratung nutzen. Es gibt oft Kompromisse – z.B. Teilzeit arbeiten und gleichzeitig BM machen!'
+            },
+            9: {
+                icon: '🌍',
+                title: 'Vernetzt und nachhaltig denken',
+                scenario: 'Du kaufst dir ein neues Smartphone für CHF 1\'200.-. Es funktioniert super! Nach 1,5 Jahren kommt das neue Modell raus. Dein altes funktioniert noch, aber das neue hat bessere Kamera und mehr Speicher. Deine Kollegen haben alle schon das neueste Modell.',
+                question: 'Was tust du?',
+                options: [
+                    { text: 'Sofort das neue kaufen, damit du dazugehörst', correct: false },
+                    { text: 'Überlegen: Brauche ich es wirklich? Was passiert mit dem alten Phone? Umwelt, Ressourcen, Elektroschrott bedenken. Evt. warten.', correct: true },
+                    { text: 'Das alte wegwerfen und das neue kaufen – ist doch dein Geld', correct: false },
+                    { text: 'Deinen Eltern sagen, sie sollen das neue kaufen', correct: false }
+                ],
+                explanation: 'Nachhaltiges Denken heisst: Konsequenzen bedenken! Jedes neue Phone braucht Rohstoffe (oft unter schlechten Bedingungen abgebaut), erzeugt CO2 und Elektroschrott. Brauchst du es wirklich oder ist es Gruppendruck?'
+            },
+            10: {
+                icon: '⚡',
+                title: 'Mit Veränderungen umgehen',
+                scenario: 'Dein Lehrbetrieb wird umstrukturiert. Dein bisheriger Berufsbildner, mit dem du super klarkommst, wechselt in eine andere Abteilung. Ab nächster Woche hast du eine neue Berufsbildnerin, die als sehr streng gilt. Du hast Angst vor der Veränderung.',
+                question: 'Wie gehst du damit um?',
+                options: [
+                    { text: 'Sofort eine neue Lehrstelle suchen, weil du nicht mehr zufrieden bist', correct: false },
+                    { text: 'Offen in die neue Situation gehen: Chance sehen, neue Person kennenlernen, Fragen stellen, bei Problemen ansprechen', correct: true },
+                    { text: 'Innerlich kündigen und nur noch Dienst nach Vorschrift machen', correct: false },
+                    { text: 'Dich bei allen über die neue Berufsbildnerin beschweren, bevor du sie überhaupt kennst', correct: false }
+                ],
+                explanation: 'Veränderung gehört zum Leben! "Streng" kann auch heissen: Du lernst mehr! Gib der neuen Situation eine Chance, bevor du urteilst. Flexibilität ist eine wichtige Kompetenz!'
+            },
+            11: {
+                icon: '🤔',
+                title: 'Mit Mehrdeutigkeiten umgehen',
+                scenario: 'Dein Chef sagt: "Die Arbeit war OK." Du weisst nicht: Meint er "gut gemacht" oder "gerade noch akzeptabel"? Er sagt oft nicht klar, was er denkt. Das verunsichert dich. Du fragst dich: Bin ich gut genug oder sollte ich mir Sorgen machen?',
+                question: 'Wie gehst du mit dieser Unsicherheit um?',
+                options: [
+                    { text: 'Annehmen, dass es schlecht war und frustriert sein', correct: false },
+                    { text: 'Das Gespräch suchen: "Danke für das Feedback. Was genau könnte ich noch verbessern?" Konkrete Rückmeldung erfragen', correct: true },
+                    { text: 'Es ignorieren und einfach weitermachen wie bisher', correct: false },
+                    { text: 'Bei Kollegen nachfragen, was der Chef wohl gemeint haben könnte', correct: false }
+                ],
+                explanation: 'Mehrdeutigkeit ist unbequem! Aber: Du kannst damit umgehen, indem du nachfragst. Das ist professionell und zeigt, dass du an Verbesserung interessiert bist. Unklarheiten klären statt interpretieren!'
+            },
+            12: {
+                icon: '🗳️',
+                title: 'An gesellschaftlichen Prozessen partizipieren',
+                scenario: 'In deiner Gemeinde soll ein Jugendtreff geschlossen werden, weil die Gemeinde sparen muss. Viele Jugendliche sind sauer, aber niemand unternimmt etwas. Du denkst: "Die Politiker interessiert unsere Meinung eh nicht."',
+                question: 'Was kannst du tun?',
+                options: [
+                    { text: 'Nichts, weil Jugendliche eh nichts ändern können', correct: false },
+                    { text: 'Mit anderen Jugendlichen organisieren: Petition starten, Gemeinderat kontaktieren, an Gemeindeversammlung teilnehmen, Medien informieren', correct: true },
+                    { text: 'Auf Social Media schimpfen, aber sonst nichts machen', correct: false },
+                    { text: 'Warten, bis jemand anders etwas unternimmt', correct: false }
+                ],
+                explanation: 'Demokratie heisst: Mitmachen! Auch als Jugendliche habt ihr Rechte (Petition, Anhörung, Medien). Gemeinsam seid ihr stark. Wer nichts sagt, wird nicht gehört. Engagement kann etwas bewirken!'
+            }
+        };
+
+        // Modal öffnen
+        function openKompetenz(num) {
+            const data = kompetenzData[num];
+            const modal = document.getElementById('kompetenzModal');
+            const modalBody = document.getElementById('modalBody');
+
+            modalBody.innerHTML = `
+                <div class="modal-header">
+                    <div class="modal-number">${num}</div>
+                    <h2 class="modal-title">${data.title}</h2>
+                </div>
+                <div class="modal-body-content">
+                    <div class="example-scenario">
+                        <h4>💭 Alltagssituation für dich:</h4>
+                        <p>${data.scenario}</p>
+                    </div>
+
+                    <div class="question-section">
+                        <h4>❓ ${data.question}</h4>
+                        <form id="answerForm${num}">
+                            ${data.options.map((opt, idx) => `
+                                <div class="answer-option" id="option${num}_${idx}">
+                                    <input type="radio" name="answer${num}" id="radio${num}_${idx}" value="${idx}">
+                                    <label for="radio${num}_${idx}">${opt.text}</label>
+                                </div>
+                            `).join('')}
+                        </form>
+                        <button class="check-button" onclick="checkAnswer(${num})">
+                            Antwort überprüfen
+                        </button>
+                    </div>
+
+                    <div id="feedback${num}" class="feedback-box"></div>
+                </div>
+            `;
+
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Modal schließen
+        function closeModal() {
+            const modal = document.getElementById('kompetenzModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        // ESC-Taste zum Schließen
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Außerhalb klicken zum Schließen
+        document.getElementById('kompetenzModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Antwort überprüfen
+        function checkAnswer(num) {
+            const data = kompetenzData[num];
+            const form = document.getElementById(`answerForm${num}`);
+            const selected = form.querySelector('input[type="radio"]:checked');
+
+            if (!selected) {
+                alert('Bitte wählen Sie eine Antwort aus!');
+                return;
+            }
+
+            const selectedIndex = parseInt(selected.value);
+            const isCorrect = data.options[selectedIndex].correct;
+            const feedback = document.getElementById(`feedback${num}`);
+
+            // Alle Optionen einfärben
+            data.options.forEach((opt, idx) => {
+                const optionEl = document.getElementById(`option${num}_${idx}`);
+                if (opt.correct) {
+                    optionEl.classList.add('correct');
+                } else if (idx === selectedIndex && !isCorrect) {
+                    optionEl.classList.add('incorrect');
+                }
+                // Radio disabled
+                document.getElementById(`radio${num}_${idx}`).disabled = true;
+            });
+
+            // Feedback anzeigen
+            feedback.className = `feedback-box show ${isCorrect ? 'success' : 'error'}`;
+            feedback.innerHTML = `
+                <h5>${isCorrect ? '✅ Richtig!' : '❌ Nicht ganz...'}</h5>
+                <p>${data.explanation}</p>
+            `;
+
+            // Button deaktivieren
+            event.target.disabled = true;
+            event.target.textContent = isCorrect ? '✓ Richtig beantwortet' : '✓ Antwort geprüft';
+        }
+    </script>
+</body>
+</html>
