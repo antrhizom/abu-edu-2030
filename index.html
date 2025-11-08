@@ -138,6 +138,162 @@
             box-shadow: 0 6px 20px rgba(0, 160, 224, 0.4);
         }
 
+        /* Progress Tracker */
+        .progress-container {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 600px;
+            box-shadow: 0 4px 16px rgba(0, 102, 204, 0.1);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-label {
+            color: var(--ktzh-blue);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .progress-percentage {
+            color: var(--ktzh-cyan);
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .progress-bar {
+            background: var(--ktzh-lightgray);
+            height: 12px;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
+            height: 100%;
+            width: 0%;
+            border-radius: 20px;
+            transition: width 0.6s ease;
+        }
+
+        .progress-stats {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--ktzh-gray);
+            font-size: 0.95rem;
+        }
+
+        .stat-icon {
+            font-size: 1.25rem;
+        }
+
+        /* Kompetenz Card Hover Effects */
+        .kompetenz-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kompetenz-card::after {
+            content: '👆 Klicken';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--ktzh-cyan);
+            color: var(--white);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .kompetenz-card:hover::after {
+            opacity: 1;
+        }
+
+        .kompetenz-card.visited {
+            border-color: var(--green);
+        }
+
+        .kompetenz-card.visited::before {
+            content: '✓';
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--green);
+            color: var(--white);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        /* Thema Card Interactive */
+        .thema-card {
+            position: relative;
+        }
+
+        .thema-card.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .thema-card.locked::after {
+            content: '🔒';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            opacity: 0.3;
+        }
+
+        .thema-card.completed::before {
+            content: '✓';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--green);
+            color: var(--white);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            z-index: 10;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .pulse {
+            animation: pulse 0.5s ease;
+        }
+
         /* Kompetenz Section */
         .kompetenz-section {
             max-width: 1400px;
@@ -386,7 +542,29 @@
         <section class="hero">
             <h2>Willkommen zum digitalen<br>ABU-Lehrmittel</h2>
             <p>Interaktive Lernmodule für die zweijährige Grundbildung mit Eidgenössischem Berufsattest (EBA). Lernen Sie die Kompetenzen kennen und erkunden Sie alle 8 Themen.</p>
-            <a href="#kompetenzen" class="hero-cta">
+            
+            <!-- Progress Tracker -->
+            <div class="progress-container">
+                <div class="progress-header">
+                    <div class="progress-label">Ihr Lernfortschritt</div>
+                    <div class="progress-percentage">0%</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-stats">
+                    <div class="stat-item">
+                        <span class="stat-icon">✓</span>
+                        <span class="stat-text"><span id="completedCount">0</span> von 12 abgeschlossen</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">🏆</span>
+                        <span class="stat-text"><span id="badgeCount">0</span> Badges verdient</span>
+                    </div>
+                </div>
+            </div>
+
+            <a href="#kompetenzen" class="hero-cta" onclick="pulseKompetenzen()">
                 <span>🎯</span>
                 <span>Kompetenzen kennenlernen</span>
             </a>
@@ -566,5 +744,158 @@
         <p>Basierend auf dem Rahmenlehrplan ABU 2030 | Kanton Zürich</p>
         <p style="margin-top: 1rem; opacity: 0.7;">© 2025 | Allgemeinbildender Unterricht</p>
     </footer>
+
+    <script>
+        // LocalStorage für Fortschritt
+        const STORAGE_KEY = 'eba_learning_progress';
+
+        // Fortschritt laden
+        function loadProgress() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            return saved ? JSON.parse(saved) : {
+                visitedKompetenzen: [],
+                completedThemen: [],
+                badges: 0
+            };
+        }
+
+        // Fortschritt speichern
+        function saveProgress(progress) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+            updateProgressDisplay();
+        }
+
+        // Progress Display aktualisieren
+        function updateProgressDisplay() {
+            const progress = loadProgress();
+            const totalItems = 12; // 4 Kompetenzen + 8 Themen
+            const completed = progress.visitedKompetenzen.length + progress.completedThemen.length;
+            const percentage = Math.round((completed / totalItems) * 100);
+
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('completedCount').textContent = completed;
+            document.getElementById('badgeCount').textContent = progress.badges;
+            
+            const progressPercentage = document.querySelector('.progress-percentage');
+            progressPercentage.textContent = percentage + '%';
+            
+            if (percentage === 100) {
+                progressPercentage.textContent = '🎉 100%';
+            }
+        }
+
+        // Kompetenz-Karten als besucht markieren
+        function markKompetenzVisited(index) {
+            const progress = loadProgress();
+            if (!progress.visitedKompetenzen.includes(index)) {
+                progress.visitedKompetenzen.push(index);
+                saveProgress(progress);
+            }
+        }
+
+        // Kompetenzen-Sektion pulsen
+        function pulseKompetenzen() {
+            const section = document.getElementById('kompetenzen');
+            section.classList.add('pulse');
+            setTimeout(() => section.classList.remove('pulse'), 500);
+        }
+
+        // Kompetenz-Karten Setup
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgressDisplay();
+            
+            // Visited Status wiederherstellen
+            const progress = loadProgress();
+            
+            // Kompetenz-Karten
+            const kompetenzCards = document.querySelectorAll('.kompetenz-card');
+            kompetenzCards.forEach((card, index) => {
+                if (progress.visitedKompetenzen.includes(index)) {
+                    card.classList.add('visited');
+                }
+                
+                card.addEventListener('click', function(e) {
+                    if (!e.target.closest('a')) return;
+                    markKompetenzVisited(index);
+                    card.classList.add('visited');
+                });
+            });
+
+            // Thema-Karten mit Hover-Effekt
+            const themaCards = document.querySelectorAll('.thema-card');
+            themaCards.forEach((card, index) => {
+                if (progress.completedThemen.includes(index)) {
+                    card.classList.add('completed');
+                }
+                
+                // Thema 1 ist immer freigeschaltet, andere nur wenn vorheriges abgeschlossen
+                if (index > 0 && !progress.completedThemen.includes(index - 1)) {
+                    card.classList.add('locked');
+                    card.onclick = function(e) {
+                        e.preventDefault();
+                        alert('Schließen Sie zuerst Thema ' + index + ' ab!');
+                    };
+                }
+            });
+
+            // Badge beim ersten Besuch
+            if (progress.visitedKompetenzen.length === 0 && progress.completedThemen.length === 0) {
+                setTimeout(() => {
+                    showWelcomeBadge();
+                }, 1000);
+            }
+        });
+
+        // Willkommens-Badge anzeigen
+        function showWelcomeBadge() {
+            const progress = loadProgress();
+            if (progress.badges === 0) {
+                progress.badges = 1;
+                saveProgress(progress);
+                
+                // Einfache Benachrichtigung
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+                    color: white;
+                    padding: 2rem 3rem;
+                    border-radius: 16px;
+                    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.4);
+                    z-index: 10000;
+                    text-align: center;
+                    animation: fadeIn 0.3s ease;
+                `;
+                notification.innerHTML = `
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Willkommens-Badge erhalten!</h3>
+                    <p style="opacity: 0.95;">Ihr Lernweg beginnt jetzt</p>
+                `;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.animation = 'fadeOut 0.3s ease';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+        }
+
+        // CSS für Animationen
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+                to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            }
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>
