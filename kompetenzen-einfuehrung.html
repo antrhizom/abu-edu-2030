@@ -7,7 +7,19 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-    <script src="firebase-config.js"></script>
+    <script>
+        // Firebase Config - Optional, wird nur verwendet wenn vorhanden
+        let firebaseConfig = null;
+        try {
+            // Versuche externe Config zu laden (wenn vorhanden)
+            if (typeof window.firebaseConfig !== 'undefined') {
+                firebaseConfig = window.firebaseConfig;
+            }
+        } catch (e) {
+            console.log('📦 Firebase config not found, using localStorage fallback');
+        }
+    </script>
+    <script src="config/firebase-config.js" onerror="console.log('Firebase config file not found - using localStorage')"></script>
 
     <style>
         * {
@@ -1466,19 +1478,25 @@ Zum Beispiel:
         let auth = null;
         let useFirebase = false;
 
-        if (typeof firebase !== 'undefined' && firebaseConfig) {
-            try {
-                if (!firebase.apps.length) {
-                    firebase.initializeApp(firebaseConfig);
+        // Warte kurz, damit firebase-config.js geladen werden kann
+        setTimeout(() => {
+            if (typeof firebase !== 'undefined' && typeof firebaseConfig !== 'undefined' && firebaseConfig) {
+                try {
+                    if (!firebase.apps.length) {
+                        firebase.initializeApp(firebaseConfig);
+                    }
+                    db = firebase.firestore();
+                    auth = firebase.auth();
+                    useFirebase = true;
+                    console.log('🔥 Firebase initialized successfully');
+                } catch (error) {
+                    console.log('📦 Firebase initialization failed, using localStorage fallback');
+                    console.error(error);
                 }
-                db = firebase.firestore();
-                auth = firebase.auth();
-                useFirebase = true;
-                console.log('🔥 Firebase initialized');
-            } catch (error) {
-                console.log('📦 Firebase not available, using localStorage');
+            } else {
+                console.log('📦 Firebase not configured, using localStorage fallback');
             }
-        }
+        }, 100);
 
         // Robot Quotes
         const robotQuotes = [
