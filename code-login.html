@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ABU EBA - Login erstellen</title>
+    <title>ABU EBA - Login</title>
     <style>
         * {
             margin: 0;
@@ -38,7 +38,7 @@
             background: var(--white);
             border-radius: 30px;
             padding: 3rem;
-            max-width: 700px;
+            max-width: 600px;
             width: 100%;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
@@ -76,77 +76,26 @@
             font-size: 1rem;
         }
 
-        .form-group input,
-        .form-group select {
+        .form-group input {
             width: 100%;
             padding: 1rem;
             border: 2px solid var(--ktzh-lightblue);
             border-radius: 15px;
             font-size: 1rem;
             transition: all 0.3s ease;
-            font-family: inherit;
+            font-family: 'Courier New', monospace;
         }
 
-        .form-group input:focus,
-        .form-group select:focus {
+        .form-group input:focus {
             outline: none;
             border-color: var(--ktzh-blue);
             box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.1);
         }
 
-        .symbol-grid {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            gap: 0.5rem;
-            margin-top: 0.75rem;
-        }
-
-        .symbol-option {
-            font-size: 1.75rem;
-            padding: 0.5rem;
-            border: 2px solid var(--ktzh-lightblue);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            background: var(--white);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            aspect-ratio: 1;
-            line-height: 1;
-        }
-
-        .symbol-option:hover {
-            transform: scale(1.1);
-            border-color: var(--ktzh-cyan);
-        }
-
-        .symbol-option.selected {
-            background: var(--ktzh-blue);
-            border-color: var(--ktzh-blue);
-            transform: scale(1.15);
-        }
-
-        .code-preview {
-            background: var(--ktzh-lightblue);
-            padding: 1.5rem;
-            border-radius: 15px;
-            margin: 2rem 0;
-            text-align: center;
-        }
-
-        .code-preview p {
+        .helper-text {
             font-size: 0.875rem;
             color: var(--ktzh-gray);
-            margin-bottom: 0.5rem;
-        }
-
-        .code-preview .code {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--ktzh-blue);
-            font-family: 'Courier New', monospace;
+            margin-top: 0.5rem;
         }
 
         .btn {
@@ -183,6 +132,7 @@
             margin-top: 1rem;
             text-align: center;
             font-weight: 600;
+            display: none;
         }
 
         .message.error {
@@ -197,38 +147,51 @@
             border: 2px solid var(--success);
         }
 
-        .helper-text {
-            font-size: 0.875rem;
-            color: var(--ktzh-gray);
-            margin-top: 0.5rem;
+        .links {
+            margin-top: 2rem;
+            text-align: center;
         }
 
-        .back-link {
+        .link {
             display: block;
-            text-align: center;
-            margin-top: 1.5rem;
+            margin-top: 1rem;
             color: var(--ktzh-blue);
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s ease;
         }
 
-        .back-link:hover {
+        .link:hover {
             color: var(--ktzh-cyan);
+        }
+
+        .divider {
+            margin: 2rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: var(--ktzh-lightblue);
+        }
+
+        .divider span {
+            position: relative;
+            background: var(--white);
+            padding: 0 1rem;
+            color: var(--ktzh-gray);
+            font-size: 0.875rem;
         }
 
         @media (max-width: 768px) {
             .login-container {
                 padding: 2rem;
-            }
-
-            .symbol-grid {
-                grid-template-columns: repeat(8, 1fr);
-            }
-
-            .symbol-option {
-                font-size: 1.4rem;
-                padding: 0.3rem;
             }
         }
     </style>
@@ -236,218 +199,109 @@
 <body>
     <div class="login-container">
         <div class="logo">
-            <div class="logo-icon">🎓</div>
-            <h1>Login erstellen</h1>
-            <p>Erstelle deinen persönlichen Zugang</p>
+            <div class="logo-icon">🔐</div>
+            <h1>Login</h1>
+            <p>Melde dich mit deinem Code an</p>
         </div>
 
         <form id="loginForm">
-            <!-- Name -->
+            <!-- Code Input -->
             <div class="form-group">
-                <label for="name">Dein Vorname</label>
+                <label for="code">Dein Code</label>
                 <input 
                     type="text" 
-                    id="name" 
-                    placeholder="z.B. Anna" 
+                    id="code" 
+                    placeholder="NAME-25-🚀-1234" 
                     required
-                    maxlength="20"
                     autocomplete="off"
                 >
-                <div class="helper-text">Nur dein Vorname (ohne Sonderzeichen)</div>
-            </div>
-
-            <!-- Lehrstart -->
-            <div class="form-group">
-                <label for="year">Lehrstart (Jahr)</label>
-                <select id="year" required>
-                    <option value="">Bitte wählen...</option>
-                    <option value="23">2023</option>
-                    <option value="24">2024</option>
-                    <option value="25">2025</option>
-                    <option value="26">2026</option>
-                    <option value="27">2027</option>
-                    <option value="28">2028</option>
-                    <option value="29">2029</option>
-                    <option value="30">2030</option>
-                </select>
-            </div>
-
-            <!-- Symbol -->
-            <div class="form-group">
-                <label>Wähle dein Symbol</label>
-                <div class="symbol-grid" id="symbolGrid"></div>
-                <input type="hidden" id="symbol" required>
-                <div class="helper-text">Wähle ein Symbol, das dir gefällt</div>
-            </div>
-
-            <!-- PIN -->
-            <div class="form-group">
-                <label for="pin">Deine 4-stellige PIN</label>
-                <input 
-                    type="password" 
-                    id="pin" 
-                    placeholder="z.B. 1234" 
-                    required
-                    maxlength="4"
-                    pattern="[0-9]{4}"
-                    inputmode="numeric"
-                    autocomplete="off"
-                >
-                <div class="helper-text">4 Zahlen, die du dir gut merken kannst</div>
-            </div>
-
-            <!-- Code Preview -->
-            <div class="code-preview">
-                <p>Dein generierter Code:</p>
-                <div class="code" id="codePreview">---</div>
+                <div class="helper-text">Format: NAME-JAHR-SYMBOL-PIN</div>
             </div>
 
             <!-- Submit Button -->
-            <button type="submit" class="btn btn-primary" id="submitBtn" disabled>
-                Code erstellen & einloggen
+            <button type="submit" class="btn btn-primary" id="submitBtn">
+                🚀 Einloggen
             </button>
 
             <!-- Message -->
-            <div id="message"></div>
+            <div id="message" class="message"></div>
         </form>
 
-        <a href="index.html" class="back-link">← Zurück zur Startseite</a>
+        <div class="divider">
+            <span>oder</span>
+        </div>
+
+        <div class="links">
+            <a href="code-erstellen.html" class="link">✨ Neuen Code erstellen</a>
+            <a href="welcome-back.html" class="link">← Zurück</a>
+        </div>
     </div>
 
     <script>
-        // 50 diverse Symbole
-        const symbols = [
-            '🦁', '🌟', '⚡', '🎨', '🚀', '💎', '🌈', '🔥', '🌺', '🎯',
-            '🐯', '🦄', '🌸', '⭐', '💫', '🎭', '🎪', '🎬', '🎵', '🎸',
-            '⚽', '🏀', '🎾', '🏆', '🎮', '🎲', '🧩', '🎰', '🎳', '🎯',
-            '🌍', '🌙', '☀️', '⛅', '🌊', '🏔️', '🌴', '🍀', '🌻', '🌹',
-            '🦋', '🐝', '🐞', '🦜', '🐬', '🦈', '🐙', '🦀', '🐢', '🦎'
-        ];
-
-        const symbolGrid = document.getElementById('symbolGrid');
-        const symbolInput = document.getElementById('symbol');
-        const nameInput = document.getElementById('name');
-        const yearSelect = document.getElementById('year');
-        const pinInput = document.getElementById('pin');
-        const codePreview = document.getElementById('codePreview');
-        const submitBtn = document.getElementById('submitBtn');
-        const messageDiv = document.getElementById('message');
         const form = document.getElementById('loginForm');
-
-        // Render symbols
-        symbols.forEach(symbol => {
-            const div = document.createElement('div');
-            div.className = 'symbol-option';
-            div.textContent = symbol;
-            div.addEventListener('click', () => selectSymbol(symbol, div));
-            symbolGrid.appendChild(div);
-        });
-
-        function selectSymbol(symbol, element) {
-            // Remove previous selection
-            document.querySelectorAll('.symbol-option').forEach(el => {
-                el.classList.remove('selected');
-            });
-            
-            // Add selection
-            element.classList.add('selected');
-            symbolInput.value = symbol;
-            
-            updatePreview();
-            checkFormValidity();
-        }
-
-        function updatePreview() {
-            const name = nameInput.value.trim().toUpperCase() || '---';
-            const year = yearSelect.value || '--';
-            const symbol = symbolInput.value || '❓';
-            const pin = pinInput.value ? '••••' : '----';
-            
-            codePreview.textContent = `${name}-${year}-${symbol}-${pin}`;
-        }
-
-        function checkFormValidity() {
-            const isValid = 
-                nameInput.value.trim() !== '' &&
-                yearSelect.value !== '' &&
-                symbolInput.value !== '' &&
-                pinInput.value.length === 4 &&
-                /^[0-9]{4}$/.test(pinInput.value);
-            
-            submitBtn.disabled = !isValid;
-        }
-
-        // Update preview on input
-        nameInput.addEventListener('input', () => {
-            // Remove special characters, keep only letters
-            nameInput.value = nameInput.value.replace(/[^a-zA-ZäöüÄÖÜ]/g, '');
-            updatePreview();
-            checkFormValidity();
-        });
-
-        yearSelect.addEventListener('change', () => {
-            updatePreview();
-            checkFormValidity();
-        });
-
-        pinInput.addEventListener('input', () => {
-            // Keep only numbers
-            pinInput.value = pinInput.value.replace(/[^0-9]/g, '');
-            updatePreview();
-            checkFormValidity();
-        });
+        const codeInput = document.getElementById('code');
+        const messageDiv = document.getElementById('message');
 
         // Form submission
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const name = nameInput.value.trim().toUpperCase();
-            const year = yearSelect.value;
-            const symbol = symbolInput.value;
-            const pin = pinInput.value;
+            const code = codeInput.value.trim();
             
-            const code = `${name}-${year}-${symbol}-${pin}`;
-            
-            // Simulate backend check (replace with actual API call)
-            const isAvailable = await checkCodeAvailability(code);
-            
-            if (isAvailable) {
-                showMessage('success', '✅ Code erfolgreich erstellt! Du wirst weitergeleitet...');
-                
-                // Store code (replace with actual authentication)
-                localStorage.setItem('abuEbaCode', code);
-                localStorage.setItem('abuEbaName', name);
-                
-                // Redirect after 2 seconds
-                setTimeout(() => {
-                    window.location.href = 'startzweig.html';
-                }, 2000);
-            } else {
-                showMessage('error', '❌ Diese Kombination ist bereits vergeben. Bitte wähle ein anderes Symbol oder eine andere PIN.');
+            // Validate format
+            const codeParts = code.split('-');
+            if (codeParts.length !== 4) {
+                showMessage('error', '❌ Ungültiges Code-Format. Bitte verwende: NAME-JAHR-SYMBOL-PIN');
+                return;
             }
-        });
 
-        async function checkCodeAvailability(code) {
-            // TODO: Replace with actual backend API call
-            // For now, simulate with localStorage check
+            const [name, year, symbol, pin] = codeParts;
+
+            // Basic validation
+            if (name.length === 0 || year.length !== 2 || pin.length !== 4 || !/^[0-9]{4}$/.test(pin)) {
+                showMessage('error', '❌ Ungültiger Code. Bitte überprüfe deine Eingabe.');
+                return;
+            }
+
+            // Check if code exists
             const existingCodes = JSON.parse(localStorage.getItem('abuEbaCodes') || '[]');
             
             if (existingCodes.includes(code)) {
-                return false;
+                showMessage('success', '✅ Login erfolgreich! Du wirst weitergeleitet...');
+                
+                // Store code
+                localStorage.setItem('abuEbaCode', code);
+                localStorage.setItem('abuEbaName', name);
+                
+                // Redirect after 1.5 seconds
+                setTimeout(() => {
+                    window.location.href = 'startzweig.html';
+                }, 1500);
+            } else {
+                showMessage('error', '❌ Code nicht gefunden. Hast du bereits einen Code erstellt?');
             }
-            
-            // Store the code
-            existingCodes.push(code);
-            localStorage.setItem('abuEbaCodes', JSON.stringify(existingCodes));
-            
-            return true;
-        }
+        });
 
         function showMessage(type, text) {
             messageDiv.className = `message ${type}`;
             messageDiv.textContent = text;
             messageDiv.style.display = 'block';
         }
+
+        // Format code input (automatically add dashes)
+        codeInput.addEventListener('input', (e) => {
+            let value = e.target.value;
+            
+            // Remove all non-alphanumeric characters except emoji and dashes
+            // This is a simplified approach - in production, you might want more sophisticated emoji handling
+            
+            // Auto-capitalize the name part if it's the first segment
+            const parts = value.split('-');
+            if (parts[0]) {
+                parts[0] = parts[0].toUpperCase();
+                e.target.value = parts.join('-');
+            }
+        });
     </script>
 </body>
 </html>
