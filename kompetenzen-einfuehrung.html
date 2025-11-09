@@ -1,1 +1,877 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kompetenzen verstehen | ABU EBA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        :root {
+            --ktzh-blue: #0066CC;
+            --ktzh-cyan: #00A0E0;
+            --ktzh-lightblue: #E8F4F8;
+            --ktzh-darkgray: #3C3C3B;
+            --ktzh-gray: #767676;
+            --white: #FFFFFF;
+            --green: #10B981;
+            --yellow: #F59E0B;
+            --purple: #8B5CF6;
+            --orange: #FF8C42;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: var(--ktzh-darkgray);
+            line-height: 1.6;
+            background: linear-gradient(180deg, var(--white) 0%, var(--ktzh-lightblue) 100%);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
+            color: var(--white);
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '🎯';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.1;
+            right: -5rem;
+            top: -5rem;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.5rem;
+            opacity: 0.95;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section {
+            margin-bottom: 5rem;
+        }
+
+        .section-intro {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border-left: 6px solid var(--ktzh-blue);
+        }
+
+        .section-intro h2 {
+            font-size: 2.25rem;
+            color: var(--ktzh-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .section-intro p {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: var(--ktzh-gray);
+        }
+
+        .eisberg-container {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            margin-bottom: 3rem;
+        }
+
+        .eisberg-visual {
+            max-width: 600px;
+            margin: 3rem auto;
+            position: relative;
+        }
+
+        .water-line {
+            width: 100%;
+            height: 3px;
+            background: var(--ktzh-cyan);
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .water-line::before {
+            content: '🌊 Sichtbare Oberfläche 🌊';
+            position: absolute;
+            top: -2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.875rem;
+            color: var(--ktzh-cyan);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .eisberg-top,
+        .eisberg-bottom {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .eisberg-top {
+            background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+            border: 3px solid var(--ktzh-cyan);
+            margin-bottom: 2rem;
+        }
+
+        .eisberg-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 160, 224, 0.3);
+        }
+
+        .eisberg-bottom {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            border: 3px solid var(--yellow);
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .eisberg-bottom:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 32px rgba(245, 158, 11, 0.3);
+        }
+
+        .eisberg-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .eisberg-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .eisberg-top .eisberg-title {
+            color: var(--ktzh-blue);
+        }
+
+        .eisberg-bottom .eisberg-title {
+            color: #92400E;
+        }
+
+        .eisberg-description {
+            font-size: 1.125rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .eisberg-details {
+            display: none;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px dashed rgba(0, 0, 0, 0.1);
+        }
+
+        .eisberg-details.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .kompetenz-item {
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .kompetenz-icon {
+            font-size: 2rem;
+        }
+
+        .kompetenz-text {
+            flex: 1;
+        }
+
+        .kompetenz-label {
+            font-weight: 700;
+            color: var(--ktzh-blue);
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .kompetenz-desc {
+            color: var(--ktzh-gray);
+            font-size: 0.938rem;
+        }
+
+        .dimensionen-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .dimension-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-top: 6px solid;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .dimension-card.gesellschaft {
+            border-top-color: var(--ktzh-blue);
+        }
+
+        .dimension-card.sprache {
+            border-top-color: var(--green);
+        }
+
+        .dimension-card.schluessel {
+            border-top-color: var(--purple);
+        }
+
+        .dimension-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+        }
+
+        .dimension-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .dimension-card h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .dimension-card.gesellschaft h3 {
+            color: var(--ktzh-blue);
+        }
+
+        .dimension-card.sprache h3 {
+            color: var(--green);
+        }
+
+        .dimension-card.schluessel h3 {
+            color: var(--purple);
+        }
+
+        .dimension-card p {
+            font-size: 1.125rem;
+            line-height: 1.7;
+            color: var(--ktzh-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .spiral-container {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            margin-top: 3rem;
+        }
+
+        .spiral-visual {
+            max-width: 700px;
+            margin: 2rem auto;
+            text-align: center;
+        }
+
+        .spiral-levels {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .spiral-level {
+            background: linear-gradient(135deg, var(--ktzh-lightblue) 0%, var(--white) 100%);
+            border: 3px solid var(--ktzh-cyan);
+            border-radius: 20px;
+            padding: 2rem 2.5rem;
+            width: 100%;
+            max-width: 600px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .spiral-level:nth-child(1) { max-width: 520px; }
+        .spiral-level:nth-child(2) { max-width: 600px; }
+
+        .spiral-level:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(0, 160, 224, 0.3);
+        }
+
+        .level-title {
+            font-weight: 700;
+            color: var(--ktzh-blue);
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .level-desc {
+            color: var(--ktzh-gray);
+            font-size: 1rem;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
+            color: var(--white);
+            border-radius: 30px;
+            padding: 4rem 3rem;
+            text-align: center;
+            margin-top: 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '🚀';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.1;
+            left: -3rem;
+            bottom: -5rem;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section p {
+            font-size: 1.25rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1.25rem 3rem;
+            background: var(--white);
+            color: var(--ktzh-blue);
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--ktzh-blue);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 3rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            gap: 0.75rem;
+        }
+
+        .click-hint {
+            font-size: 0.875rem;
+            color: var(--ktzh-cyan);
+            font-weight: 600;
+            margin-top: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .dimensionen-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .robot-buddy {
+                bottom: 1rem;
+                right: 1rem;
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+        /* Robot Buddy Easter Egg */
+        .robot-buddy {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--ktzh-cyan) 0%, var(--ktzh-blue) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            animation: bobbing 3s ease-in-out infinite;
+        }
+
+        .robot-buddy:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 12px 32px rgba(0, 102, 204, 0.6);
+        }
+
+        .robot-buddy.speaking {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes bobbing {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
+        }
+
+        .robot-speech {
+            position: fixed;
+            bottom: 7rem;
+            right: 2rem;
+            max-width: 350px;
+            background: var(--white);
+            border: 3px solid var(--ktzh-cyan);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 999;
+            animation: popIn 0.3s ease-out;
+        }
+
+        .robot-speech.active {
+            display: block;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .robot-speech::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 30px;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 15px solid var(--ktzh-cyan);
+        }
+
+        .robot-speech p {
+            font-size: 1rem;
+            color: var(--ktzh-darkgray);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .robot-speech .quote-author {
+            font-size: 0.875rem;
+            color: var(--ktzh-blue);
+            font-weight: 600;
+            margin-top: 0.75rem;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>Kompetenzen verstehen</h1>
+            <p>Was bedeutet kompetenzorientiertes Lernen?</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <a href="startzweig.html" class="back-link">
+            ← Zurück zur Startauswahl
+        </a>
+
+        <!-- Intro -->
+        <div class="section-intro">
+            <h2>💡 Warum Kompetenzen?</h2>
+            <p>
+                In deiner Ausbildung geht es nicht nur darum, <strong>was</strong> du lernst, 
+                sondern auch <strong>wie</strong> und <strong>warum</strong>. Kompetenzen sind 
+                Fähigkeiten, die du im Leben wirklich brauchst – nicht nur Wissen, sondern 
+                auch Können und die richtige Haltung.
+            </p>
+        </div>
+
+        <!-- Eisberg Metapher -->
+        <section class="section">
+            <div class="eisberg-container">
+                <h2 style="font-size: 2.25rem; color: var(--ktzh-blue); margin-bottom: 1rem; text-align: center;">
+                    🧊 Die Eisberg-Metapher
+                </h2>
+                <p style="text-align: center; font-size: 1.125rem; color: var(--ktzh-gray); margin-bottom: 2rem;">
+                    Was du tust, ist nur die Spitze des Eisbergs. Darunter liegt viel mehr!
+                </p>
+
+                <div class="eisberg-visual">
+                    <div class="eisberg-top" onclick="toggleDetails('performanz')">
+                        <div class="eisberg-icon">👀</div>
+                        <div class="eisberg-title">Performanz</div>
+                        <div class="eisberg-description">
+                            Das <strong>Sichtbare</strong> – was du tust, zeigst, produzierst.
+                        </div>
+                        <div class="click-hint">👆 Klick mich für mehr Details</div>
+                        <div class="eisberg-details" id="performanz-details">
+                            <p><strong>Beispiele:</strong></p>
+                            <p>📝 Einen Text schreiben • 🗣️ Ein Referat halten • 🎨 Ein Poster gestalten</p>
+                        </div>
+                    </div>
+
+                    <div class="water-line"></div>
+
+                    <div class="eisberg-bottom" onclick="toggleDetails('kompetenz')">
+                        <div class="eisberg-icon">💎</div>
+                        <div class="eisberg-title">Kompetenz</div>
+                        <div class="eisberg-description">
+                            Das <strong>Unsichtbare</strong> – was dich befähigt zu handeln.
+                        </div>
+                        <div class="click-hint">👆 Klick mich für mehr Details</div>
+                        <div class="eisberg-details" id="kompetenz-details">
+                            <div class="kompetenz-item">
+                                <div class="kompetenz-icon">🧠</div>
+                                <div class="kompetenz-text">
+                                    <div class="kompetenz-label">Wissen</div>
+                                    <div class="kompetenz-desc">Was du weißt (Fakten, Konzepte, Zusammenhänge)</div>
+                                </div>
+                            </div>
+                            <div class="kompetenz-item">
+                                <div class="kompetenz-icon">⚙️</div>
+                                <div class="kompetenz-text">
+                                    <div class="kompetenz-label">Können</div>
+                                    <div class="kompetenz-desc">Was du anwenden kannst (Methoden, Techniken)</div>
+                                </div>
+                            </div>
+                            <div class="kompetenz-item">
+                                <div class="kompetenz-icon">❤️</div>
+                                <div class="kompetenz-text">
+                                    <div class="kompetenz-label">Wollen</div>
+                                    <div class="kompetenz-desc">Deine Haltung, Motivation, Werte</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3 Dimensionen -->
+        <section class="section">
+            <div class="section-intro">
+                <h2>🎯 Die 3 Dimensionen des Lernens</h2>
+                <p>
+                    Jedes Thema verbindet drei Bereiche, die zusammen deine Kompetenz bilden.
+                </p>
+            </div>
+
+            <div class="dimensionen-grid">
+                <a href="gesellschaft-handlungsfelder.html" class="dimension-card gesellschaft">
+                    <div class="dimension-icon">🏛️</div>
+                    <h3>Gesellschaft</h3>
+                    <p>
+                        <strong>Wissen über die Welt</strong> – 8 Aspekte (Politik, Wirtschaft, 
+                        Recht, Kultur, Identität & Sozialisation, Ethik, Ökologie, Technologie). 
+                        Jeder Aspekt umfasst mehrere Handlungsfelder. Du verstehst gesellschaftliche 
+                        Zusammenhänge.
+                    </p>
+                    <div class="click-hint">👆 Klick für Details & Handlungsfelder</div>
+                </a>
+
+                <a href="sprache-modi.html" class="dimension-card sprache">
+                    <div class="dimension-icon">💬</div>
+                    <h3>Sprache & Kommunikation</h3>
+                    <p>
+                        <strong>Kommunikation in allen Formen</strong> – Lesen, Schreiben, Sprechen, 
+                        Zuhören. <strong>Digitale Kompetenzen sind hier integriert:</strong> Tools nutzen, 
+                        online kommunizieren, KI verantwortungsvoll einsetzen.
+                    </p>
+                    <div class="click-hint">👆 Klick für Details & Sprachmodi</div>
+                </a>
+
+                <a href="schluesselkompetenzen.html" class="dimension-card schluessel">
+                    <div class="dimension-icon">🔑</div>
+                    <h3>Schlüsselkompetenzen</h3>
+                    <p>
+                        <strong>12 überfachliche Fähigkeiten</strong> – Selbstorganisation, 
+                        Problemlösung, Teamarbeit, vernetztes Denken. Skills, die in jedem Beruf wichtig sind.
+                    </p>
+                    <div class="click-hint">👆 Klick für Details & alle Kompetenzen</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Spiralcurriculum -->
+        <section class="section">
+            <div class="spiral-container">
+                <h2 style="font-size: 2.25rem; color: var(--ktzh-blue); margin-bottom: 1rem; text-align: center;">
+                    🌀 Das Spiralcurriculum
+                </h2>
+                <p style="text-align: center; font-size: 1.125rem; color: var(--ktzh-gray); margin-bottom: 2rem;">
+                    In deiner <strong>2-jährigen EBA-Ausbildung</strong> durchläufst du <strong>2 Niveaus</strong>. 
+                    Auf jedem Niveau begegnest du Kompetenzen <strong>mehrfach</strong> und übst sie wiederholt. 
+                    Wiederholung macht dich sicherer und kompetenter.
+                </p>
+
+                <div class="spiral-visual">
+                    <div class="spiral-levels">
+                        <div class="spiral-level">
+                            <div class="level-title">📍 Niveau 1: Grundlagen aufbauen</div>
+                            <div class="level-desc">
+                                Du lernst Grundlagen kennen und übst grundlegende Handlungen <strong>mehrfach</strong> 
+                                in verschiedenen Themen und Kontexten. Wiederholtes Üben macht dich sicherer.
+                            </div>
+                        </div>
+                        <div class="spiral-level">
+                            <div class="level-title">🎯 Niveau 2: Vertiefen & selbstständig werden</div>
+                            <div class="level-desc">
+                                Du wendest Gelerntes selbstständiger an und übst <strong>erneut</strong> in komplexeren 
+                                Situationen. Du handelst zunehmend eigenverantwortlich und reflektiert.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 3rem; padding: 2rem; background: var(--ktzh-lightblue); border-radius: 15px;">
+                    <p style="font-size: 1.125rem; text-align: center; color: var(--ktzh-darkgray);">
+                        <strong>💡 Das bedeutet:</strong> Wenn du eine Kompetenz im Thema 1 kennenlernst, 
+                        übst du sie dort mehrmals. Später begegnest du ihr wieder in anderen Themen – 
+                        auf dem gleichen oder dem nächsten Niveau. <strong>Wiederholtes Üben über 2 Jahre</strong> 
+                        macht dich kompetent.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <div class="cta-section">
+            <h2>Bereit, loszulegen?</h2>
+            <p>
+                Jetzt weißt du, wie kompetenzorientiertes Lernen funktioniert. 
+                Tauche ein in die 8 Themen und erlebe es selbst!
+            </p>
+            <a href="Lerninhalte/themen-uebersicht.html" class="btn">
+                🚀 Zu den Themen
+            </a>
+        </div>
+    </div>
+
+    <!-- Robot Buddy Easter Egg -->
+    <div class="robot-buddy" onclick="speakWisdom()" id="robotBuddy">
+        🤖
+    </div>
+    <div class="robot-speech" id="robotSpeech">
+        <p id="wisdomText"></p>
+        <div class="quote-author" id="wisdomAuthor"></div>
+    </div>
+
+    <script>
+        function toggleDetails(id) {
+            const details = document.getElementById(id + '-details');
+            details.classList.toggle('active');
+        }
+
+        // Robot Wisdom Quotes
+        const wisdomQuotes = [
+            {
+                text: "Kompetenz ist nicht, was du weißt – sondern was du mit dem, was du weißt, tun kannst. Real talk.",
+                author: "– RoboBuddy 3000"
+            },
+            {
+                text: "Do or do not. There is no try. Üben, üben, üben – das ist der Weg zur Macht!",
+                author: "– Master Yoda Style"
+            },
+            {
+                text: "Bruder, Lernen ist wie Leveln in nem RPG. Jede Quest bringt XP, auch wenn sie schwer ist.",
+                author: "– Gaming Weisheit"
+            },
+            {
+                text: "Fr fr: Fehler machen ist nicht cringe, sondern based. So lernst du am besten!",
+                author: "– Gen Z Robot"
+            },
+            {
+                text: "Die Macht ist stark in dir. Aber nur wenn du übst und nicht nach 5 Minuten aufgibst.",
+                author: "– Star Wars Edition"
+            },
+            {
+                text: "Kompetenzen sind wie Pokemon – du musst sie trainieren, dann werden sie stärker!",
+                author: "– Prof. Robotnik"
+            },
+            {
+                text: "Kein Cap: Wer mehrmals übt, wird zum Boss. So einfach ist die Formel.",
+                author: "– Street Smart Bot"
+            },
+            {
+                text: "Das Spiralcurriculum ist wie eine Playlist – die besten Songs kommen immer wieder, aber du verstehst sie jedes Mal besser.",
+                author: "– DJ RoboMix"
+            },
+            {
+                text: "Sheesh! Wissen allein bringt nix. Du musst es anwenden können – das ist der Move!",
+                author: "– Urban Dictionary Bot"
+            },
+            {
+                text: "May the competence be with you. Immer. Auch montags um 7 Uhr.",
+                author: "– Jedi Master Bot"
+            },
+            {
+                text: "Eisberg-Metapher = 90% unsichtbar, genau wie deine Skills bis du sie zeigst. Flex on 'em!",
+                author: "– RoboCoach"
+            },
+            {
+                text: "Vibe Check: Bist du am Lernen oder am Prokrastinieren? Sei ehrlich zu dir selbst!",
+                author: "– Therapy Bot 2.0"
+            }
+        ];
+
+        let lastQuoteIndex = -1;
+
+        function speakWisdom() {
+            const robot = document.getElementById('robotBuddy');
+            const speech = document.getElementById('robotSpeech');
+            const wisdomText = document.getElementById('wisdomText');
+            const wisdomAuthor = document.getElementById('wisdomAuthor');
+
+            robot.classList.add('speaking');
+            setTimeout(() => robot.classList.remove('speaking'), 500);
+
+            // Get random quote (but not the same as last time)
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * wisdomQuotes.length);
+            } while (randomIndex === lastQuoteIndex && wisdomQuotes.length > 1);
+            
+            lastQuoteIndex = randomIndex;
+            const quote = wisdomQuotes[randomIndex];
+
+            wisdomText.textContent = quote.text;
+            wisdomAuthor.textContent = quote.author;
+
+            // Toggle speech bubble
+            if (speech.classList.contains('active')) {
+                speech.classList.remove('active');
+                setTimeout(() => speech.classList.add('active'), 100);
+            } else {
+                speech.classList.add('active');
+            }
+
+            // Auto-hide after 8 seconds
+            setTimeout(() => {
+                speech.classList.remove('active');
+            }, 8000);
+        }
+
+        // Track page visit for portfolio
+        if (localStorage.getItem('abuEbaCode')) {
+            const visitData = {
+                page: 'kompetenzen-einfuehrung',
+                timestamp: new Date().toISOString(),
+                code: localStorage.getItem('abuEbaCode')
+            };
+            
+            const visits = JSON.parse(localStorage.getItem('abuEbaVisits') || '[]');
+            visits.push(visitData);
+            localStorage.setItem('abuEbaVisits', JSON.stringify(visits));
+        }
+
+        // Close speech bubble when clicking outside
+        document.addEventListener('click', function(event) {
+            const robot = document.getElementById('robotBuddy');
+            const speech = document.getElementById('robotSpeech');
+            
+            if (!robot.contains(event.target) && !speech.contains(event.target)) {
+                speech.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
