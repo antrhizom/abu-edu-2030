@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ABU EBA - Dein Weg zum Lernen</title>
+    <title>ABU EBA - Lernpfad wählen</title>
     <style>
         * {
             margin: 0;
@@ -33,142 +33,225 @@
         }
 
         .container {
-            max-width: 1000px;
-            width: 100%;
-        }
-
-        .header {
-            text-align: center;
-            color: var(--white);
-            margin-bottom: 3rem;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .header p {
-            font-size: 1.25rem;
-            opacity: 0.95;
-        }
-
-        .choices {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-
-        .choice-card {
             background: var(--white);
-            border-radius: 20px;
+            border-radius: 30px;
             padding: 3rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-decoration: none;
-            color: var(--ktzh-darkgray);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .choice-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
+            max-width: 900px;
             width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--ktzh-blue), var(--ktzh-cyan));
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
         }
 
-        .choice-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .choice-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
-        }
-
-        .choice-icon {
-            font-size: 4rem;
+        .success-icon {
+            font-size: 5rem;
             margin-bottom: 1.5rem;
+            animation: bounce 1s ease-in-out;
         }
 
-        .choice-card h2 {
-            font-size: 1.75rem;
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
             color: var(--ktzh-blue);
             margin-bottom: 1rem;
-            font-weight: 700;
         }
 
-        .choice-card p {
-            font-size: 1.125rem;
-            line-height: 1.7;
+        .user-greeting {
+            font-size: 1.5rem;
+            color: var(--ktzh-darkgray);
+            margin-bottom: 2rem;
+        }
+
+        .user-info {
+            background: var(--ktzh-lightblue);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-item {
+            padding: 1rem;
+        }
+
+        .info-label {
+            font-size: 0.875rem;
+            color: var(--ktzh-gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ktzh-blue);
+        }
+
+        .info-value.symbol {
+            font-size: 2rem;
+        }
+
+        .info-value.code {
+            font-family: 'Courier New', monospace;
+        }
+
+        .message {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10B981;
+            border: 2px solid #10B981;
+            padding: 1.5rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .placeholder {
+            padding: 3rem;
+            background: var(--ktzh-lightblue);
+            border-radius: 20px;
             color: var(--ktzh-gray);
         }
 
-        .choice-badge {
-            display: inline-block;
-            background: var(--ktzh-lightblue);
+        .placeholder h2 {
             color: var(--ktzh-blue);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 15px;
+            font-size: 1rem;
             font-weight: 600;
-            margin-top: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--ktzh-blue);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--ktzh-cyan);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--ktzh-blue);
+            border: 2px solid var(--ktzh-blue);
+        }
+
+        .btn-secondary:hover {
+            background: var(--ktzh-lightblue);
         }
 
         @media (max-width: 768px) {
-            .choices {
-                grid-template-columns: 1fr;
+            .container {
+                padding: 2rem;
             }
 
-            .header h1 {
+            h1 {
                 font-size: 2rem;
             }
 
-            .choice-card {
-                padding: 2rem;
+            .info-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>Wie möchtest du starten?</h1>
-            <p>Wähle deinen Einstieg ins kompetenzorientierte Lernen</p>
+        <div class="success-icon">🎉</div>
+        <h1>Login erfolgreich!</h1>
+        <div class="user-greeting">Willkommen, <span id="userName"></span>!</div>
+
+        <div class="message">
+            ✅ Du bist jetzt eingeloggt und kannst mit dem Lernen starten!
         </div>
 
-        <div class="choices">
-            <a href="kompetenzen-einfuehrung.html" class="choice-card">
-                <div class="choice-icon">💡</div>
-                <h2>Sinn und Struktur des Lehrmittels</h2>
-                <p>
-                    Verstehe die <strong>didaktische Logik</strong> hinter diesem Lehrmittel. 
-                    Erfahre, wie Kompetenzorientierung funktioniert und warum das Lernen 
-                    so strukturiert ist.
-                </p>
-                <span class="choice-badge">Erst verstehen</span>
-            </a>
+        <div class="user-info">
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Dein Symbol</div>
+                    <div class="info-value symbol" id="userSymbol"></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Dein Code</div>
+                    <div class="info-value code" id="userCode"></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Lehrstart</div>
+                    <div class="info-value" id="userYear"></div>
+                </div>
+            </div>
+        </div>
 
-            <a href="Lerninhalte/themen-uebersicht.html" class="choice-card">
-                <div class="choice-icon">🎯</div>
-                <h2>Zu den Themen</h2>
-                <p>
-                    Tauche direkt in die <strong>8 Themen</strong> ein. Jedes Thema ist 
-                    kompetenzorientiert aufgebaut mit individuellen Lebensbezügen und 
-                    konkreten Lerninhalten.
-                </p>
-                <span class="choice-badge">Direkt loslegen</span>
-            </a>
+        <div class="placeholder">
+            <h2>🚧 In Entwicklung</h2>
+            <p>
+                Hier wirst du bald deine Lernpfade auswählen können:<br>
+                <strong>Thema 1-8</strong> aus dem ABU EBA Lehrplan
+            </p>
+        </div>
+
+        <div style="margin-top: 2rem;">
+            <a href="index.html" class="btn btn-primary">🏠 Zur Startseite</a>
+            <button onclick="logout()" class="btn btn-secondary">🚪 Logout</button>
         </div>
     </div>
+
+    <script>
+        // Load user data
+        const userName = localStorage.getItem('abuEbaName');
+        const userCode = localStorage.getItem('abuEbaCode');
+
+        // If no login data found, redirect to index
+        if (!userName || !userCode) {
+            window.location.href = 'index.html';
+        }
+
+        // Extract data from code (format: NAME-YEAR-SYMBOL-PIN)
+        const codeParts = userCode.split('-');
+        const userSymbol = codeParts.length >= 3 ? codeParts[2] : '❓';
+        const userYear = codeParts.length >= 2 ? '20' + codeParts[1] : '----';
+
+        // Display user info
+        document.getElementById('userName').textContent = userName;
+        document.getElementById('userSymbol').textContent = userSymbol;
+        document.getElementById('userCode').textContent = userCode;
+        document.getElementById('userYear').textContent = userYear;
+
+        // Logout function
+        function logout() {
+            if (confirm('Möchtest du dich wirklich ausloggen?')) {
+                localStorage.removeItem('abuEbaCode');
+                localStorage.removeItem('abuEbaName');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Celebrate animation
+        const icon = document.querySelector('.success-icon');
+        setInterval(() => {
+            icon.style.transform = 'rotate(360deg)';
+            setTimeout(() => {
+                icon.style.transform = 'rotate(0deg)';
+            }, 500);
+        }, 5000);
+    </script>
 </body>
 </html>
