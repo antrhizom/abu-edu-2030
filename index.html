@@ -31,6 +31,110 @@
             overflow-x: hidden;
         }
 
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(0, 102, 204, 0.1);
+            z-index: 9999;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ktzh-blue), var(--ktzh-cyan));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-badge {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 9998;
+            font-weight: 600;
+            color: var(--ktzh-blue);
+            font-size: 0.875rem;
+        }
+
+        .progress-badge .percentage {
+            font-size: 1.5rem;
+            color: var(--ktzh-cyan);
+        }
+
+        /* Floating Robot */
+        .floating-robot {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9997;
+            cursor: pointer;
+            animation: float-robot 3s ease-in-out infinite;
+        }
+
+        @keyframes float-robot {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .robot-icon {
+            font-size: 4rem;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .floating-robot:hover .robot-icon {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .robot-speech {
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+            min-width: 250px;
+            max-width: 300px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .robot-speech::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 30px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid var(--white);
+        }
+
+        .robot-speech.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .robot-speech p {
+            color: var(--ktzh-blue);
+            font-weight: 600;
+            font-size: 0.938rem;
+            line-height: 1.5;
+        }
+
         /* Hero Section */
         .hero {
             background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
@@ -152,6 +256,7 @@
             gap: 1.5rem;
         }
 
+        /* Clickable Hero Cards */
         .hero-card {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
@@ -159,16 +264,29 @@
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.2);
             transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
 
         .hero-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-5px) scale(1.02);
             background: rgba(255, 255, 255, 0.25);
+        }
+
+        .hero-card.explored {
+            border: 2px solid var(--white);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
         }
 
         .hero-card-icon {
             font-size: 2.5rem;
             margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-card:hover .hero-card-icon {
+            transform: scale(1.2) rotate(10deg);
         }
 
         .hero-card h3 {
@@ -176,9 +294,40 @@
             margin-bottom: 0.5rem;
         }
 
-        .hero-card p {
+        .hero-card-preview {
             font-size: 0.938rem;
             opacity: 0.9;
+        }
+
+        .hero-card-detail {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            font-size: 0.875rem;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .hero-card.active .hero-card-detail {
+            opacity: 1;
+            max-height: 500px;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+
+        .hero-card.explored .checkmark {
+            opacity: 1;
+            transform: scale(1);
         }
 
         /* Stats Section */
@@ -199,6 +348,12 @@
 
         .stat-item {
             padding: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: scale(1.1);
         }
 
         .stat-number {
@@ -213,13 +368,13 @@
             opacity: 0.9;
         }
 
-        /* Features Section */
-        .features {
+        /* Accordion Sections */
+        .accordion-section {
             padding: 6rem 2rem;
             background: linear-gradient(180deg, var(--white) 0%, var(--ktzh-lightblue) 100%);
         }
 
-        .features-content {
+        .accordion-content {
             max-width: 1200px;
             margin: 0 auto;
         }
@@ -242,44 +397,84 @@
             margin: 0 auto;
         }
 
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
-        }
-
-        .feature-card {
+        .accordion-item {
             background: var(--white);
-            padding: 2.5rem;
             border-radius: 20px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 16px 40px rgba(0, 102, 204, 0.15);
-            border-color: var(--ktzh-cyan);
-        }
-
-        .feature-icon {
-            font-size: 3.5rem;
             margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
-        .feature-card h3 {
+        .accordion-item.explored {
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+        }
+
+        .accordion-header {
+            padding: 2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-header:hover {
+            background: var(--ktzh-lightblue);
+        }
+
+        .accordion-icon {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+
+        .accordion-title {
+            flex-grow: 1;
+        }
+
+        .accordion-title h3 {
             font-size: 1.5rem;
             color: var(--ktzh-blue);
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
 
-        .feature-card p {
+        .accordion-title .subtitle {
+            color: var(--ktzh-gray);
+            font-size: 0.938rem;
+        }
+
+        .accordion-toggle {
+            font-size: 2rem;
+            color: var(--ktzh-cyan);
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .accordion-item.open .accordion-toggle {
+            transform: rotate(180deg);
+        }
+
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .accordion-item.open .accordion-body {
+            max-height: 1000px;
+        }
+
+        .accordion-body-content {
+            padding: 0 2rem 2rem 2rem;
             color: var(--ktzh-gray);
             line-height: 1.8;
         }
 
-        /* Modules Preview */
+        .accordion-body-content strong {
+            color: var(--ktzh-blue);
+        }
+
+        /* Modules Grid */
         .modules {
             padding: 6rem 2rem;
             background: var(--white);
@@ -307,11 +502,22 @@
             text-decoration: none;
             color: inherit;
             display: block;
+            position: relative;
         }
 
         .module-card:hover {
             transform: translateY(-5px) scale(1.02);
             box-shadow: 0 12px 32px rgba(0, 102, 204, 0.2);
+        }
+
+        .module-card.explored {
+            background: linear-gradient(135deg, var(--ktzh-cyan) 0%, var(--ktzh-blue) 100%);
+            color: var(--white);
+        }
+
+        .module-card.explored h4,
+        .module-card.explored p {
+            color: var(--white);
         }
 
         .module-header {
@@ -333,6 +539,11 @@
             font-size: 0.75rem;
             font-weight: 600;
             margin-left: auto;
+        }
+
+        .module-card.explored .module-badge {
+            background: var(--white);
+            color: var(--ktzh-cyan);
         }
 
         .module-card h4 {
@@ -419,6 +630,21 @@
             .cta h2 {
                 font-size: 2rem;
             }
+
+            .progress-badge {
+                top: 10px;
+                right: 10px;
+                padding: 0.5rem 1rem;
+            }
+
+            .floating-robot {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .robot-icon {
+                font-size: 3rem;
+            }
         }
 
         @media (max-width: 768px) {
@@ -443,8 +669,27 @@
     </style>
 </head>
 <body>
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- Progress Badge -->
+    <div class="progress-badge">
+        <div class="percentage" id="progressPercentage">0%</div>
+        <div style="font-size: 0.75rem; margin-top: 0.25rem;">erkundet</div>
+    </div>
+
+    <!-- Floating Robot -->
+    <div class="floating-robot" id="floatingRobot">
+        <div class="robot-speech" id="robotSpeech">
+            <p id="robotQuote">Klick mich für Weisheiten! 🤖</p>
+        </div>
+        <div class="robot-icon">🤖</div>
+    </div>
+
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" data-section>
         <div class="hero-content">
             <div class="hero-text">
                 <h1>🎓 ABU EBA Digital</h1>
@@ -454,7 +699,7 @@
                     Entdecke, wie Kompetenzen zusammenwirken und warum das für dein Leben wichtig ist.
                 </p>
                 <div class="hero-actions">
-                    <a href="code-login.html" class="btn btn-primary" id="startBtn">
+                    <a href="code-erstellen-firebase.html" class="btn btn-primary" id="startBtn">
                         🚀 Jetzt starten
                     </a>
                     <a href="#why" class="btn btn-secondary">
@@ -464,193 +709,151 @@
             </div>
 
             <div class="hero-visual">
-                <div class="hero-card">
+                <div class="hero-card" data-interactive>
+                    <span class="checkmark">✓</span>
                     <div class="hero-card-icon">🧊</div>
                     <h3>Kompetenz verstehen</h3>
-                    <p>Die Eisberg-Metapher: Was du kannst vs. was dahinter steckt</p>
+                    <p class="hero-card-preview">Die Eisberg-Metapher...</p>
+                    <div class="hero-card-detail">
+                        <strong>Performanz</strong> (was du tust) ist nur die Spitze. Darunter liegen <strong>Kompetenzen</strong>: Wissen, Können, Wollen. Wir machen das Unsichtbare sichtbar!
+                    </div>
                 </div>
-                <div class="hero-card">
+                <div class="hero-card" data-interactive>
+                    <span class="checkmark">✓</span>
                     <div class="hero-card-icon">🔄</div>
                     <h3>Zirkularität</h3>
-                    <p>Kompetenzen kehren wieder – in neuen Kontexten</p>
+                    <p class="hero-card-preview">Kompetenzen kehren wieder...</p>
+                    <div class="hero-card-detail">
+                        Kompetenzen begegnen dir <strong>immer wieder</strong> – in verschiedenen Themen, neuen Kontexten. Du lernst nicht isoliert, sondern <strong>vernetzt</strong>.
+                    </div>
                 </div>
-                <div class="hero-card">
+                <div class="hero-card" data-interactive>
+                    <span class="checkmark">✓</span>
                     <div class="hero-card-icon">🎯</div>
                     <h3>3 Dimensionen</h3>
-                    <p>Gesellschaft + Sprache + Schlüsselkompetenzen</p>
+                    <p class="hero-card-preview">Gesellschaft + Sprache + Schlüssel...</p>
+                    <div class="hero-card-detail">
+                        Jedes Thema verbindet <strong>Gesellschaft</strong> (Wissen), <strong>Sprache</strong> (Kommunikation) und <strong>Schlüsselkompetenzen</strong> (überfachliche Fähigkeiten).
+                    </div>
                 </div>
-                <div class="hero-card">
+                <div class="hero-card" data-interactive>
+                    <span class="checkmark">✓</span>
                     <div class="hero-card-icon">💡</div>
                     <h3>Sinnhaftigkeit</h3>
-                    <p>Erkenne, warum du lernst was du lernst</p>
+                    <p class="hero-card-preview">Erkenne den Mehrwert...</p>
+                    <div class="hero-card-detail">
+                        <strong>Warum</strong> lernst du das? Weil es für dein Leben, deinen Beruf, deine Zukunft relevant ist. Du erkennst den <strong>Bezug</strong> zu deinem Alltag.
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Stats -->
-    <section class="stats">
+    <section class="stats" data-section>
         <div class="stats-content">
-            <div class="stat-item">
+            <div class="stat-item" data-interactive>
                 <div class="stat-number">16</div>
                 <div class="stat-label">Lerninhalte</div>
             </div>
-            <div class="stat-item">
+            <div class="stat-item" data-interactive>
                 <div class="stat-number">8</div>
                 <div class="stat-label">Umsetzungsbeispiele</div>
             </div>
-            <div class="stat-item">
+            <div class="stat-item" data-interactive>
                 <div class="stat-number">12</div>
                 <div class="stat-label">Schlüsselkompetenzen</div>
             </div>
-            <div class="stat-item">
+            <div class="stat-item" data-interactive>
                 <div class="stat-number">100%</div>
                 <div class="stat-label">Digital & Interaktiv</div>
             </div>
         </div>
     </section>
 
-    <!-- Why Section -->
-    <section class="features" id="why" style="background: var(--white);">
-        <div class="features-content">
+    <!-- Accordion Section: Why -->
+    <section class="accordion-section" id="why" data-section>
+        <div class="accordion-content">
             <div class="section-header">
                 <h2>🤔 Warum dieses Lehrmittel?</h2>
-                <p>Verstehe, wie du lernst – und warum es wichtig ist</p>
+                <p>Klicke auf die Karten, um mehr zu erfahren</p>
             </div>
 
-            <div class="features-grid">
-                <div class="feature-card" style="border: 3px solid var(--ktzh-blue);">
-                    <div class="feature-icon">🧊</div>
-                    <h3>Die Eisberg-Metapher</h3>
-                    <p>
-                        <strong>Performanz</strong> (was du tust) ist nur die Spitze. 
-                        Darunter liegen <strong>Kompetenzen</strong>: Wissen, Können, Wollen. 
-                        Wir machen das Unsichtbare sichtbar – du verstehst, was dich befähigt.
-                    </p>
+            <div class="accordion-item" data-interactive>
+                <div class="accordion-header">
+                    <div class="accordion-icon">🧊</div>
+                    <div class="accordion-title">
+                        <h3>Die Eisberg-Metapher</h3>
+                        <div class="subtitle">Was du siehst vs. was dahinter steckt</div>
+                    </div>
+                    <div class="accordion-toggle">▼</div>
                 </div>
-
-                <div class="feature-card" style="border: 3px solid var(--green);">
-                    <div class="feature-icon">🔄</div>
-                    <h3>Zirkularität erkennen</h3>
-                    <p>
-                        Kompetenzen begegnen dir <strong>immer wieder</strong> – in verschiedenen Themen, 
-                        neuen Kontexten. Du lernst nicht isoliert, sondern <strong>vernetzt</strong>. 
-                        Jedes Thema baut auf vorherigen auf und vertieft dein Verständnis.
-                    </p>
-                </div>
-
-                <div class="feature-card" style="border: 3px solid var(--purple);">
-                    <div class="feature-icon">🎯</div>
-                    <h3>3 Dimensionen verstehen</h3>
-                    <p>
-                        Jedes Thema verbindet <strong>Gesellschaft</strong> (Wissen), 
-                        <strong>Sprache</strong> (Kommunikation) und <strong>Schlüsselkompetenzen</strong> 
-                        (überfachliche Fähigkeiten). Du siehst, wie alles zusammenhängt.
-                    </p>
-                </div>
-
-                <div class="feature-card" style="border: 3px solid var(--orange);">
-                    <div class="feature-icon">💡</div>
-                    <h3>Sinnhaftigkeit erleben</h3>
-                    <p>
-                        <strong>Warum</strong> lernst du das? Weil es für dein Leben, 
-                        deinen Beruf, deine Zukunft relevant ist. Du erkennst den <strong>Bezug</strong> 
-                        zu deinem Alltag und verstehst den Mehrwert.
-                    </p>
-                </div>
-
-                <div class="feature-card" style="border: 3px solid var(--ktzh-cyan);">
-                    <div class="feature-icon">🌱</div>
-                    <h3>Spiralcurriculum</h3>
-                    <p>
-                        Du durchläufst Kompetenzen <strong>mehrfach</strong> – jedes Mal tiefer, 
-                        komplexer, selbstständiger. Wie eine Spirale: immer höher, 
-                        immer mit mehr Verständnis.
-                    </p>
-                </div>
-
-                <div class="feature-card" style="border: 3px solid var(--yellow);">
-                    <div class="feature-icon">🔗</div>
-                    <h3>Verknüpfung sehen</h3>
-                    <p>
-                        Das Lehrmittel zeigt dir <strong>transparent</strong>, welche Kompetenzen 
-                        du gerade aufbaust. Du siehst den <strong>roten Faden</strong> 
-                        und verstehst die Struktur hinter dem Lernen.
-                    </p>
+                <div class="accordion-body">
+                    <div class="accordion-body-content">
+                        <p><strong>Performanz</strong> (was du tust) ist nur die Spitze des Eisbergs. Darunter liegen <strong>Kompetenzen</strong>: Wissen, Können, Wollen. Wir machen das Unsichtbare sichtbar – du verstehst, was dich befähigt, bestimmte Dinge zu tun.</p>
+                        <p style="margin-top: 1rem;">Mit der Eisberg-Metapher erkennst du die <strong>Tiefe</strong> deines Lernens: Es geht nicht nur darum, etwas zu tun, sondern zu verstehen, warum und wie du es kannst.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Features -->
-    <section class="features" id="features">
-        <div class="features-content">
-            <div class="section-header">
-                <h2>Warum ABU EBA Digital?</h2>
-                <p>Moderne Bildung braucht moderne Werkzeuge</p>
+            <div class="accordion-item" data-interactive>
+                <div class="accordion-header">
+                    <div class="accordion-icon">🔄</div>
+                    <div class="accordion-title">
+                        <h3>Zirkularität erkennen</h3>
+                        <div class="subtitle">Kompetenzen kehren in neuen Kontexten wieder</div>
+                    </div>
+                    <div class="accordion-toggle">▼</div>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-body-content">
+                        <p>Kompetenzen begegnen dir <strong>immer wieder</strong> – in verschiedenen Themen, neuen Kontexten. Du lernst nicht isoliert, sondern <strong>vernetzt</strong>. Jedes Thema baut auf vorherigen auf und vertieft dein Verständnis.</p>
+                        <p style="margin-top: 1rem;">Das <strong>Spiralcurriculum</strong> bedeutet: Du durchläufst Kompetenzen mehrfach – jedes Mal tiefer, komplexer, selbstständiger.</p>
+                    </div>
+                </div>
             </div>
 
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🔍</div>
-                    <h3>Transparenz & Verständnis</h3>
-                    <p>
-                        Du siehst bei jedem Lerninhalt <strong>explizit</strong>, welche Kompetenzen 
-                        du aufbaust. Gesellschaftliche Aspekte, Sprachmodi, Schlüsselkompetenzen – 
-                        alles ist sichtbar und nachvollziehbar.
-                    </p>
+            <div class="accordion-item" data-interactive>
+                <div class="accordion-header">
+                    <div class="accordion-icon">🎯</div>
+                    <div class="accordion-title">
+                        <h3>3 Dimensionen verstehen</h3>
+                        <div class="subtitle">Gesellschaft • Sprache • Schlüsselkompetenzen</div>
+                    </div>
+                    <div class="accordion-toggle">▼</div>
                 </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">📝</div>
-                    <h3>Portfolio-System</h3>
-                    <p>
-                        Dokumentiere deinen Lernfortschritt, schreibe Reflexionen und 
-                        teile dein Portfolio mit Lehrpersonen und Berufsbildnern.
-                    </p>
+                <div class="accordion-body">
+                    <div class="accordion-body-content">
+                        <p>Jedes Thema verbindet drei wichtige Bereiche:</p>
+                        <p style="margin-top: 0.5rem;"><strong>📚 Gesellschaft:</strong> Wissen über gesellschaftliche Zusammenhänge</p>
+                        <p style="margin-top: 0.5rem;"><strong>💬 Sprache:</strong> Kommunikation in verschiedenen Modi</p>
+                        <p style="margin-top: 0.5rem;"><strong>🔑 Schlüsselkompetenzen:</strong> Überfachliche Fähigkeiten wie Selbstmanagement, Kooperation</p>
+                        <p style="margin-top: 1rem;">Du siehst, wie alles zusammenhängt und sich gegenseitig verstärkt!</p>
+                    </div>
                 </div>
+            </div>
 
-                <div class="feature-card">
-                    <div class="feature-icon">💬</div>
-                    <h3>Feedback & Reaktionen</h3>
-                    <p>
-                        Erhalte Emoji-Reaktionen auf deine Reflexionen von Lehrpersonen 
-                        und Peers. Motivierend und direkt.
-                    </p>
+            <div class="accordion-item" data-interactive>
+                <div class="accordion-header">
+                    <div class="accordion-icon">💡</div>
+                    <div class="accordion-title">
+                        <h3>Sinnhaftigkeit erleben</h3>
+                        <div class="subtitle">Warum lerne ich das eigentlich?</div>
+                    </div>
+                    <div class="accordion-toggle">▼</div>
                 </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3>Einfacher Zugang</h3>
-                    <p>
-                        Kein kompliziertes Login – nur Code + PIN. 
-                        Funktioniert auf allen Geräten, überall, jederzeit.
-                    </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🎮</div>
-                    <h3>Gamification</h3>
-                    <p>
-                        Sammle Punkte, schalte Achievements frei und verfolge 
-                        deinen Fortschritt. Lernen darf Spaß machen!
-                    </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">📱</div>
-                    <h3>Responsive</h3>
-                    <p>
-                        Funktioniert perfekt auf Smartphone, Tablet und Desktop. 
-                        Lerne wann und wo du willst.
-                    </p>
+                <div class="accordion-body">
+                    <div class="accordion-body-content">
+                        <p><strong>Warum</strong> lernst du das? Weil es für dein Leben, deinen Beruf, deine Zukunft relevant ist. Du erkennst den <strong>Bezug</strong> zu deinem Alltag und verstehst den Mehrwert jedes Lerninhalts.</p>
+                        <p style="margin-top: 1rem;">Das Lehrmittel zeigt dir <strong>transparent</strong>, welche Kompetenzen du gerade aufbaust. Du siehst den <strong>roten Faden</strong> und verstehst die Struktur hinter dem Lernen.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Modules Preview -->
-    <section class="modules">
+    <section class="modules" data-section>
         <div class="modules-content">
             <div class="section-header">
                 <h2>Entdecke die Module</h2>
@@ -658,7 +861,7 @@
             </div>
 
             <div class="modules-grid">
-                <a href="kompetenzen-einfuehrung.html" class="module-card">
+                <a href="kompetenzen-einfuehrung.html" class="module-card" data-interactive>
                     <div class="module-header">
                         <div class="module-icon">🎯</div>
                         <div class="module-badge">★ Start hier!</div>
@@ -667,7 +870,7 @@
                     <p>Eisberg-Metapher, 3 Dimensionen, Zirkularität – verstehe die Grundlagen!</p>
                 </a>
 
-                <div class="module-card">
+                <div class="module-card" data-interactive>
                     <div class="module-header">
                         <div class="module-icon">💼</div>
                         <div class="module-badge">Thema 1</div>
@@ -676,7 +879,7 @@
                     <p>Lehrvertrag, Kommunikation, Orientierung im Betrieb und Schule.</p>
                 </div>
 
-                <div class="module-card">
+                <div class="module-card" data-interactive>
                     <div class="module-header">
                         <div class="module-icon">💰</div>
                         <div class="module-badge">Thema 2</div>
@@ -685,7 +888,7 @@
                     <p>Budget erstellen, Konsumentscheidungen treffen, Schulden vermeiden.</p>
                 </div>
 
-                <div class="module-card">
+                <div class="module-card" data-interactive>
                     <div class="module-header">
                         <div class="module-icon">🌍</div>
                         <div class="module-badge">Thema 3</div>
@@ -694,7 +897,7 @@
                     <p>Ökologie, nachhaltiger Konsum, Ressourcen schonen.</p>
                 </div>
 
-                <div class="module-card">
+                <div class="module-card" data-interactive>
                     <div class="module-header">
                         <div class="module-icon">🗳️</div>
                         <div class="module-badge">Thema 4</div>
@@ -703,7 +906,7 @@
                     <p>Demokratie, Partizipation, politische Prozesse verstehen.</p>
                 </div>
 
-                <div class="module-card">
+                <div class="module-card" data-interactive>
                     <div class="module-header">
                         <div class="module-icon">👥</div>
                         <div class="module-badge">Thema 5</div>
@@ -712,7 +915,7 @@
                     <p>Identität, Kultur, Vielfalt, Konfliktlösung.</p>
                 </div>
 
-                <div class="module-card">
+                <div class="module-card" data-interactive>
                     <div class="module-header">
                         <div class="module-icon">💻</div>
                         <div class="module-badge">Thema 6</div>
@@ -721,7 +924,7 @@
                     <p>Medienbildung, Datenschutz, Fake News erkennen.</p>
                 </div>
 
-                <div class="module-card">
+                <div class="module-card" data-interactive>
                     <div class="module-header">
                         <div class="module-icon">🏥</div>
                         <div class="module-badge">Thema 7</div>
@@ -734,7 +937,7 @@
     </section>
 
     <!-- CTA -->
-    <section class="cta">
+    <section class="cta" data-section>
         <div class="cta-content">
             <h2>Bereit, Kompetenzen zu verstehen?</h2>
             <p>
@@ -742,26 +945,138 @@
                 sondern auch <strong>warum</strong> und <strong>wie</strong> alles zusammenhängt. 
                 Starte jetzt deine Lernreise!
             </p>
-            <a href="code-login.html" class="btn btn-primary" style="background: var(--white); color: var(--orange);">
+            <a href="code-erstellen-firebase.html" class="btn btn-primary" style="background: var(--white); color: var(--orange);">
                 🎓 Code erstellen & loslegen
             </a>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer>
+    <footer data-section>
         <p>ABU EBA Digital | Digital Learning Hub Zürich | © 2024</p>
     </footer>
 
-    <script type="module">
-        // Check if user is already logged in
-        setTimeout(() => {
-            if (window.abuTracker && window.abuTracker.isLoggedIn()) {
-                const startBtn = document.getElementById('startBtn');
-                startBtn.textContent = '📊 Zu meinem Portfolio';
-                startBtn.href = 'portfolio.html';
+    <script>
+        // Robot Quotes
+        const robotQuotes = [
+            "🧠 Lernen ist wie Programmieren – Schritt für Schritt!",
+            "💡 Kompetenzen sind wie Code: wiederverwendbar!",
+            "🎯 Fokus ist der Compiler des Erfolgs!",
+            "🔄 Fehler sind Features im Lernprozess!",
+            "🚀 Jeder Klick hier bringt dich weiter!",
+            "📚 Wissen teilen = Wissen² !",
+            "🌟 Du bist der Programmierer deiner Zukunft!",
+            "⚡ Kleine Schritte, große Wirkung!",
+            "🎨 Kreativität ist die beste Schnittstelle!",
+            "🧩 Jedes Teil des Puzzles zählt!",
+            "💪 Durchhalten = Update installieren!",
+            "🌈 Vielfalt macht Code robust!",
+            "🔥 Leidenschaft ist das beste Framework!",
+            "🎓 Bildung ist Open Source für's Leben!",
+            "✨ Neugier ist der beste Debugger!"
+        ];
+
+        let currentQuoteIndex = 0;
+
+        // Progress Tracking
+        const interactiveElements = document.querySelectorAll('[data-interactive]');
+        const totalElements = interactiveElements.length;
+        let exploredElements = new Set();
+
+        function updateProgress() {
+            const percentage = Math.round((exploredElements.size / totalElements) * 100);
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressPercentage').textContent = percentage + '%';
+            
+            // Save to localStorage
+            localStorage.setItem('abuEbaIndexProgress', JSON.stringify({
+                explored: Array.from(exploredElements),
+                percentage: percentage
+            }));
+        }
+
+        // Load saved progress
+        const savedProgress = localStorage.getItem('abuEbaIndexProgress');
+        if (savedProgress) {
+            try {
+                const data = JSON.parse(savedProgress);
+                exploredElements = new Set(data.explored || []);
+                updateProgress();
+                
+                // Mark explored elements
+                exploredElements.forEach(index => {
+                    if (interactiveElements[index]) {
+                        interactiveElements[index].classList.add('explored');
+                    }
+                });
+            } catch (e) {
+                console.log('Could not load progress');
             }
-        }, 500);
+        }
+
+        // Track clicks on interactive elements
+        interactiveElements.forEach((element, index) => {
+            element.addEventListener('click', function(e) {
+                if (!exploredElements.has(index)) {
+                    exploredElements.add(index);
+                    element.classList.add('explored');
+                    updateProgress();
+                }
+                
+                // Toggle active state for hero cards
+                if (element.classList.contains('hero-card')) {
+                    element.classList.toggle('active');
+                }
+            });
+        });
+
+        // Accordion functionality
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', function() {
+                const item = this.parentElement;
+                const wasOpen = item.classList.contains('open');
+                
+                // Close all accordions
+                document.querySelectorAll('.accordion-item').forEach(acc => {
+                    acc.classList.remove('open');
+                });
+                
+                // Open clicked one if it wasn't open
+                if (!wasOpen) {
+                    item.classList.add('open');
+                }
+            });
+        });
+
+        // Floating Robot
+        const floatingRobot = document.getElementById('floatingRobot');
+        const robotSpeech = document.getElementById('robotSpeech');
+        const robotQuote = document.getElementById('robotQuote');
+
+        floatingRobot.addEventListener('click', function() {
+            robotQuote.textContent = robotQuotes[currentQuoteIndex];
+            robotSpeech.classList.add('show');
+            
+            currentQuoteIndex = (currentQuoteIndex + 1) % robotQuotes.length;
+            
+            setTimeout(() => {
+                robotSpeech.classList.remove('show');
+            }, 5000);
+        });
+
+        // Auto-show robot on first visit
+        setTimeout(() => {
+            if (!localStorage.getItem('robotGreeted')) {
+                robotQuote.textContent = "👋 Willkommen! Klick mich für Inspiration!";
+                robotSpeech.classList.add('show');
+                localStorage.setItem('robotGreeted', 'true');
+                
+                setTimeout(() => {
+                    robotSpeech.classList.remove('show');
+                }, 4000);
+            }
+        }, 2000);
 
         // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -773,9 +1088,9 @@
                 }
             });
         });
-    </script>
 
-    <!-- Load tracker for login check -->
-    <script type="module" src="./config/abu-tracker.js"></script>
+        console.log('🎓 ABU EBA Digital - Interaktive Version geladen!');
+        console.log('📊 Fortschritt:', exploredElements.size, '/', totalElements, 'Elemente erkundet');
+    </script>
 </body>
 </html>
