@@ -234,9 +234,16 @@
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(.disabled) {
             transform: translateY(-3px);
             box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: var(--ktzh-gray);
+            color: var(--white);
         }
 
         .btn-secondary {
@@ -336,30 +343,6 @@
             background: rgba(255, 255, 255, 0.4);
             border-left: 5px solid #10B981;
             box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
-        }
-
-        .example-box .click-hint {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--ktzh-blue);
-            padding: 0.25rem 0.5rem;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .example-box:not(.explored):hover .click-hint {
-            opacity: 1;
-        }
-
-        .example-box.explored .click-hint {
-            opacity: 1;
-            background: #10B981;
-            color: var(--white);
         }
 
         .example-title {
@@ -640,90 +623,6 @@
             transform: scale(1) rotate(0deg);
         }
 
-        /* Modules Grid */
-        .modules {
-            padding: 6rem 2rem;
-            background: var(--white);
-        }
-
-        .modules-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .modules-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .module-card {
-            background: linear-gradient(135deg, var(--ktzh-lightblue) 0%, var(--white) 100%);
-            border-radius: 16px;
-            padding: 2rem;
-            border: 2px solid var(--ktzh-cyan);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-            position: relative;
-        }
-
-        .module-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 12px 32px rgba(0, 102, 204, 0.2);
-        }
-
-        .module-card.explored {
-            background: linear-gradient(135deg, var(--ktzh-cyan) 0%, var(--ktzh-blue) 100%);
-            color: var(--white);
-        }
-
-        .module-card.explored h4,
-        .module-card.explored p {
-            color: var(--white);
-        }
-
-        .module-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .module-icon {
-            font-size: 2.5rem;
-        }
-
-        .module-badge {
-            background: var(--ktzh-cyan);
-            color: var(--white);
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-left: auto;
-        }
-
-        .module-card.explored .module-badge {
-            background: var(--white);
-            color: var(--ktzh-cyan);
-        }
-
-        .module-card h4 {
-            font-size: 1.25rem;
-            color: var(--ktzh-blue);
-            margin-bottom: 0.75rem;
-        }
-
-        .module-card p {
-            color: var(--ktzh-gray);
-            font-size: 0.938rem;
-            line-height: 1.6;
-        }
-
         /* CTA Section */
         .cta {
             background: linear-gradient(135deg, var(--yellow) 0%, var(--orange) 100%);
@@ -760,6 +659,15 @@
             font-size: 1.25rem;
             color: rgba(255, 255, 255, 0.95);
             margin-bottom: 2.5rem;
+        }
+
+        .cta-hint {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            color: var(--white);
         }
 
         /* Footer */
@@ -865,9 +773,6 @@
                     Entdecke, wie Kompetenzen zusammenwirken und warum das für dein Leben wichtig ist.
                 </p>
                 <div class="hero-actions">
-                    <a href="code-erstellen-firebase.html" class="btn btn-primary" id="startBtn">
-                        🚀 Jetzt starten
-                    </a>
                     <a href="#why" class="btn btn-secondary">
                         🤔 Warum?
                     </a>
@@ -1120,90 +1025,6 @@
         </div>
     </section>
 
-    <!-- Modules Preview -->
-    <section class="modules" data-section>
-        <div class="modules-content">
-            <div class="section-header">
-                <h2>Entdecke die Module</h2>
-                <p>8 spannende Themen aus deinem ABU-Alltag</p>
-            </div>
-
-            <div class="modules-grid">
-                <a href="kompetenzen-einfuehrung.html" class="module-card">
-                    <div class="module-header">
-                        <div class="module-icon">🎯</div>
-                        <div class="module-badge">★ Start hier!</div>
-                    </div>
-                    <h4>Kompetenzen verstehen</h4>
-                    <p>Eisberg-Metapher, 3 Dimensionen, Zirkularität – verstehe die Grundlagen!</p>
-                </a>
-
-                <div class="module-card">
-                    <div class="module-header">
-                        <div class="module-icon">💼</div>
-                        <div class="module-badge">Thema 1</div>
-                    </div>
-                    <h4>Ins Berufsleben einsteigen</h4>
-                    <p>Lehrvertrag, Kommunikation, Orientierung im Betrieb und Schule.</p>
-                </div>
-
-                <div class="module-card">
-                    <div class="module-header">
-                        <div class="module-icon">💰</div>
-                        <div class="module-badge">Thema 2</div>
-                    </div>
-                    <h4>Budget & Finanzen</h4>
-                    <p>Budget erstellen, Konsumentscheidungen treffen, Schulden vermeiden.</p>
-                </div>
-
-                <div class="module-card">
-                    <div class="module-header">
-                        <div class="module-icon">🌍</div>
-                        <div class="module-badge">Thema 3</div>
-                    </div>
-                    <h4>Nachhaltigkeit</h4>
-                    <p>Ökologie, nachhaltiger Konsum, Ressourcen schonen.</p>
-                </div>
-
-                <div class="module-card">
-                    <div class="module-header">
-                        <div class="module-icon">🗳️</div>
-                        <div class="module-badge">Thema 4</div>
-                    </div>
-                    <h4>Politik & Mitbestimmung</h4>
-                    <p>Demokratie, Partizipation, politische Prozesse verstehen.</p>
-                </div>
-
-                <div class="module-card">
-                    <div class="module-header">
-                        <div class="module-icon">👥</div>
-                        <div class="module-badge">Thema 5</div>
-                    </div>
-                    <h4>Zusammenleben</h4>
-                    <p>Identität, Kultur, Vielfalt, Konfliktlösung.</p>
-                </div>
-
-                <div class="module-card">
-                    <div class="module-header">
-                        <div class="module-icon">💻</div>
-                        <div class="module-badge">Thema 6</div>
-                    </div>
-                    <h4>Digitale Welt</h4>
-                    <p>Medienbildung, Datenschutz, Fake News erkennen.</p>
-                </div>
-
-                <div class="module-card">
-                    <div class="module-header">
-                        <div class="module-icon">🏥</div>
-                        <div class="module-badge">Thema 7</div>
-                    </div>
-                    <h4>Gesundheit</h4>
-                    <p>Wohlbefinden, Prävention, Gesundheitssystem.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- CTA -->
     <section class="cta" data-section>
         <div class="cta-content">
@@ -1213,8 +1034,11 @@
                 sondern auch <strong>warum</strong> und <strong>wie</strong> alles zusammenhängt. 
                 Starte jetzt deine Lernreise!
             </p>
-            <a href="code-erstellen-firebase.html" class="btn btn-primary" style="background: var(--white); color: var(--orange);">
-                🎓 Code erstellen & loslegen
+            <div class="cta-hint" id="ctaHint">
+                🔒 Erkunde erst alle Bereiche oben, dann wird der Button freigeschaltet!
+            </div>
+            <a href="code-erstellen-firebase.html" class="btn btn-primary disabled" id="startBtn">
+                🚀 Jetzt starten (0% erkundet)
             </a>
         </div>
     </section>
@@ -1225,6 +1049,13 @@
     </footer>
 
     <script>
+        // Auto-Login Check - Redirect wenn bereits eingeloggt
+        const userCode = localStorage.getItem('abuEbaCode');
+        if (userCode) {
+            console.log('✅ User bereits eingeloggt, redirect zu startzweig.html');
+            window.location.href = 'startzweig.html';
+        }
+
         // Robot Quotes
         const robotQuotes = [
             "🧠 Lernen ist wie Programmieren – Schritt für Schritt!",
@@ -1232,7 +1063,7 @@
             "🎯 Fokus ist der Compiler des Erfolgs!",
             "🔄 Fehler sind Features im Lernprozess!",
             "🚀 Jeder Klick hier bringt dich weiter!",
-            "📚 Wissen teilen = Wissen² !",
+            "📚 Wissen teilen = Wissen²!",
             "🌟 Du bist der Programmierer deiner Zukunft!",
             "⚡ Kleine Schritte, große Wirkung!",
             "🎨 Kreativität ist die beste Schnittstelle!",
@@ -1258,6 +1089,29 @@
             const percentage = Math.round((totalExplored / totalElements) * 100);
             document.getElementById('progressFill').style.width = percentage + '%';
             document.getElementById('progressPercentage').textContent = percentage + '%';
+            
+            // Update Start Button
+            const startBtn = document.getElementById('startBtn');
+            const ctaHint = document.getElementById('ctaHint');
+            
+            if (percentage === 100) {
+                startBtn.classList.remove('disabled');
+                startBtn.textContent = '🚀 Jetzt starten!';
+                startBtn.style.pointerEvents = 'auto';
+                ctaHint.textContent = '✅ Perfekt! Du hast alles erkundet. Jetzt kannst du starten!';
+                ctaHint.style.background = 'rgba(16, 185, 129, 0.3)';
+                
+                // Robot congratulates
+                robotQuote.textContent = "🎉 Fantastisch! Du hast 100% erreicht! Jetzt kannst du loslegen!";
+                robotSpeech.classList.add('show');
+                setTimeout(() => {
+                    robotSpeech.classList.remove('show');
+                }, 5000);
+            } else {
+                startBtn.classList.add('disabled');
+                startBtn.textContent = `🚀 Jetzt starten (${percentage}% erkundet)`;
+                startBtn.style.pointerEvents = 'none';
+            }
             
             // Save to localStorage
             localStorage.setItem('abuEbaIndexProgress', JSON.stringify({
@@ -1375,13 +1229,13 @@
         // Auto-show robot on first visit
         setTimeout(() => {
             if (!localStorage.getItem('robotGreeted')) {
-                robotQuote.textContent = "👋 Willkommen! Klick mich für Inspiration!";
+                robotQuote.textContent = "👋 Willkommen! Erkunde alle Bereiche um den Start-Button freizuschalten!";
                 robotSpeech.classList.add('show');
                 localStorage.setItem('robotGreeted', 'true');
                 
                 setTimeout(() => {
                     robotSpeech.classList.remove('show');
-                }, 4000);
+                }, 5000);
             }
         }, 2000);
 
@@ -1396,9 +1250,12 @@
             });
         });
 
-        console.log('🎓 ABU EBA Digital - Interaktive Version v2.0 geladen!');
+        // Initial progress update
+        updateProgress();
+
+        console.log('🎓 ABU EBA Digital - Landing Page mit Auto-Login geladen!');
         console.log('📊 Tracking:', totalElements, 'interaktive Elemente');
-        console.log('💡 NEU: Beispiele in Accordeons sind jetzt auch klickbar!');
+        console.log('🔒 Start-Button wird bei 100% freigeschaltet');
     </script>
 </body>
 </html>
