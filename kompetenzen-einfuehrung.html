@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <div class="header-actions">
-    <a href="portfolio.html" class="btn-portfolio">📁 Mein Portfolio</a>
-    <div class="user-info">👤 Anna</div>
-</div>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kompetenzen verstehen - ABU EBA</title>
@@ -915,6 +911,16 @@
                 text-align: center;
             }
 
+            .header-content > div {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .header-content a {
+                width: 100%;
+                justify-content: center;
+            }
+
             .header-title h1 {
                 font-size: 1.5rem;
             }
@@ -999,8 +1005,13 @@
                 <span class="header-icon">🎯</span>
                 <h1>Kompetenzen verstehen</h1>
             </div>
-            <div class="user-info">
-                <span id="userDisplay">👤 Gast</span>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <a href="portfolio.html" style="background: rgba(255, 255, 255, 0.2); color: var(--white); padding: 0.75rem 1.5rem; border-radius: 20px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; display: flex; align-items: center; gap: 0.5rem;" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">
+                    📁 Mein Portfolio
+                </a>
+                <div class="user-info">
+                    <span id="userDisplay">👤 Gast</span>
+                </div>
             </div>
         </div>
     </header>
