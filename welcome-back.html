@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Willkommen zurück - ABU EBA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --ktzh-blue: #0066CC;
+            --ktzh-cyan: #00A0E0;
+            --ktzh-lightblue: #E8F4F8;
+            --ktzh-darkgray: #3C3C3B;
+            --ktzh-gray: #767676;
+            --white: #FFFFFF;
+            --green: #10B981;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: var(--ktzh-darkgray);
+            line-height: 1.6;
+            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .welcome-container {
+            background: var(--white);
+            border-radius: 30px;
+            padding: 3rem;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .welcome-icon {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            animation: wave 2s ease-in-out infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(20deg); }
+            75% { transform: rotate(-20deg); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--ktzh-blue);
+            margin-bottom: 1rem;
+        }
+
+        .user-greeting {
+            font-size: 1.75rem;
+            color: var(--ktzh-darkgray);
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .user-info {
+            background: var(--ktzh-lightblue);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .user-info-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .user-info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .user-symbol {
+            font-size: 3rem;
+        }
+
+        .user-code {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ktzh-blue);
+            font-family: 'Courier New', monospace;
+        }
+
+        .user-label {
+            font-size: 0.875rem;
+            color: var(--ktzh-gray);
+            margin-top: 0.5rem;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1.25rem;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--ktzh-blue), var(--ktzh-cyan));
+            color: var(--white);
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(0, 102, 204, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--ktzh-blue);
+            border: 2px solid var(--ktzh-blue);
+        }
+
+        .btn-secondary:hover {
+            background: var(--ktzh-lightblue);
+        }
+
+        .link-text {
+            display: block;
+            margin-top: 1.5rem;
+            color: var(--ktzh-gray);
+            font-size: 0.938rem;
+        }
+
+        .link-action {
+            color: var(--ktzh-blue);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .link-action:hover {
+            color: var(--ktzh-cyan);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .welcome-container {
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .user-greeting {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-container">
+        <div class="welcome-icon">👋</div>
+        <h1>Willkommen zurück!</h1>
+        <div class="user-greeting" id="userGreeting">Hallo, <span id="userName"></span>!</div>
+
+        <div class="user-info">
+            <div class="user-info-row">
+                <div class="user-symbol" id="userSymbol"></div>
+            </div>
+            <div class="user-info-row">
+                <div class="user-code" id="userCode"></div>
+            </div>
+            <div class="user-label">Dein Login-Code</div>
+        </div>
+
+        <a href="startzweig.html" class="btn btn-primary" id="continueBtn">
+            🚀 Weiter zu deinem Lernpfad
+        </a>
+
+        <button type="button" class="btn btn-secondary" id="logoutBtn">
+            🔄 Mit anderem Code einloggen
+        </button>
+
+        <div class="link-text">
+            Möchtest du deinen Code ändern? 
+            <a href="#" class="link-action" id="changeCodeLink">Code bearbeiten</a>
+        </div>
+    </div>
+
+    <script>
+        // Load user data
+        const userName = localStorage.getItem('abuEbaName');
+        const userCode = localStorage.getItem('abuEbaCode');
+
+        // If no login data found, redirect to index
+        if (!userName || !userCode) {
+            window.location.href = 'index.html';
+        }
+
+        // Extract symbol from code (format: NAME-YEAR-SYMBOL-PIN)
+        const codeParts = userCode.split('-');
+        const userSymbol = codeParts.length >= 3 ? codeParts[2] : '❓';
+
+        // Display user info
+        document.getElementById('userName').textContent = userName;
+        document.getElementById('userSymbol').textContent = userSymbol;
+        document.getElementById('userCode').textContent = userCode;
+
+        // Logout button
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            if (confirm('Möchtest du dich wirklich mit einem anderen Code einloggen? Deine aktuellen Daten bleiben gespeichert.')) {
+                // Clear current session but keep the code registered
+                localStorage.removeItem('abuEbaCode');
+                localStorage.removeItem('abuEbaName');
+                
+                // Redirect to code login
+                window.location.href = 'code-login.html';
+            }
+        });
+
+        // Change code link
+        document.getElementById('changeCodeLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            if (confirm('Möchtest du einen neuen Code erstellen? Dies wird deinen aktuellen Code ersetzen.')) {
+                // Clear current session
+                localStorage.removeItem('abuEbaCode');
+                localStorage.removeItem('abuEbaName');
+                
+                // Redirect to create new code
+                window.location.href = 'code-erstellen.html';
+            }
+        });
+
+        // Continue button animation
+        const continueBtn = document.getElementById('continueBtn');
+        continueBtn.addEventListener('mouseenter', () => {
+            document.querySelector('.welcome-icon').style.transform = 'scale(1.1) rotate(5deg)';
+        });
+        continueBtn.addEventListener('mouseleave', () => {
+            document.querySelector('.welcome-icon').style.transform = 'scale(1) rotate(0deg)';
+        });
+    </script>
+</body>
+</html>
