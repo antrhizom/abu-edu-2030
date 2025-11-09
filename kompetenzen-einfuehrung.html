@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kompetenzen verstehen | ABU EBA</title>
+    <title>Kompetenzen verstehen - ABU EBA</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -24,513 +29,66 @@
             --orange: #FF8C42;
         }
 
-        body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            color: var(--ktzh-darkgray);
-            line-height: 1.6;
-            background: linear-gradient(180deg, var(--white) 0%, var(--ktzh-lightblue) 100%);
-        }
-
-        .header {
-            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
-            color: var(--white);
-            padding: 4rem 2rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '🎯';
-            position: absolute;
-            font-size: 20rem;
-            opacity: 0.1;
-            right: -5rem;
-            top: -5rem;
-            animation: float 8s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-30px) rotate(10deg); }
-        }
-
-        .header-content {
-            max-width: 900px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .header h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .header p {
-            font-size: 1.5rem;
-            opacity: 0.95;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-        }
-
-        .section {
-            margin-bottom: 5rem;
-        }
-
-        .section-intro {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 3rem;
-            margin-bottom: 3rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-            border-left: 6px solid var(--ktzh-blue);
-        }
-
-        .section-intro h2 {
-            font-size: 2.25rem;
-            color: var(--ktzh-blue);
-            margin-bottom: 1.5rem;
-        }
-
-        .section-intro p {
-            font-size: 1.25rem;
-            line-height: 1.8;
-            color: var(--ktzh-gray);
-        }
-
-        .eisberg-container {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-            margin-bottom: 3rem;
-        }
-
-        .eisberg-visual {
-            max-width: 600px;
-            margin: 3rem auto;
-            position: relative;
-        }
-
-        .water-line {
-            width: 100%;
-            height: 3px;
-            background: var(--ktzh-cyan);
-            position: relative;
-            margin: 2rem 0;
-        }
-
-        .water-line::before {
-            content: '🌊 Sichtbare Oberfläche 🌊';
-            position: absolute;
-            top: -2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.875rem;
-            color: var(--ktzh-cyan);
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        .eisberg-top,
-        .eisberg-bottom {
-            text-align: center;
-            padding: 2rem;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .eisberg-top {
-            background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
-            border: 3px solid var(--ktzh-cyan);
-            margin-bottom: 2rem;
-        }
-
-        .eisberg-top:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 24px rgba(0, 160, 224, 0.3);
-        }
-
-        .eisberg-bottom {
-            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
-            border: 3px solid var(--yellow);
-            min-height: 300px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .eisberg-bottom:hover {
-            transform: scale(1.02);
-            box-shadow: 0 12px 32px rgba(245, 158, 11, 0.3);
-        }
-
-        .eisberg-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-
-        .eisberg-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .eisberg-top .eisberg-title {
-            color: var(--ktzh-blue);
-        }
-
-        .eisberg-bottom .eisberg-title {
-            color: #92400E;
-        }
-
-        .eisberg-description {
-            font-size: 1.125rem;
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
-        }
-
-        .eisberg-details {
-            display: none;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 2px dashed rgba(0, 0, 0, 0.1);
-        }
-
-        .eisberg-details.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .kompetenz-item {
+        /* Progress Badge */
+        .progress-badge {
+            position: fixed;
+            top: 20px;
+            right: 20px;
             background: var(--white);
             padding: 1rem 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .kompetenz-icon {
-            font-size: 2rem;
-        }
-
-        .kompetenz-text {
-            flex: 1;
-        }
-
-        .kompetenz-label {
-            font-weight: 700;
-            color: var(--ktzh-blue);
-            font-size: 1rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .kompetenz-desc {
-            color: var(--ktzh-gray);
-            font-size: 0.938rem;
-        }
-
-        .dimensionen-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .dimension-card {
-            background: var(--white);
             border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            border-top: 6px solid;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        .dimension-card.gesellschaft {
-            border-top-color: var(--ktzh-blue);
-        }
-
-        .dimension-card.sprache {
-            border-top-color: var(--green);
-        }
-
-        .dimension-card.schluessel {
-            border-top-color: var(--purple);
-        }
-
-        .dimension-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
-        }
-
-        .dimension-icon {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .dimension-card h3 {
-            font-size: 1.75rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .dimension-card.gesellschaft h3 {
-            color: var(--ktzh-blue);
-        }
-
-        .dimension-card.sprache h3 {
-            color: var(--green);
-        }
-
-        .dimension-card.schluessel h3 {
-            color: var(--purple);
-        }
-
-        .dimension-card p {
-            font-size: 1.125rem;
-            line-height: 1.7;
-            color: var(--ktzh-gray);
-            margin-bottom: 1.5rem;
-        }
-
-        .spiral-container {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-            margin-top: 3rem;
-        }
-
-        .spiral-visual {
-            max-width: 700px;
-            margin: 2rem auto;
-            text-align: center;
-        }
-
-        .spiral-levels {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        .spiral-level {
-            background: linear-gradient(135deg, var(--ktzh-lightblue) 0%, var(--white) 100%);
-            border: 3px solid var(--ktzh-cyan);
-            border-radius: 20px;
-            padding: 2rem 2.5rem;
-            width: 100%;
-            max-width: 600px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .spiral-level:nth-child(1) { max-width: 520px; }
-        .spiral-level:nth-child(2) { max-width: 600px; }
-
-        .spiral-level:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 24px rgba(0, 160, 224, 0.3);
-        }
-
-        .level-title {
-            font-weight: 700;
-            color: var(--ktzh-blue);
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .level-desc {
-            color: var(--ktzh-gray);
-            font-size: 1rem;
-        }
-
-        .cta-section {
-            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
-            color: var(--white);
-            border-radius: 30px;
-            padding: 4rem 3rem;
-            text-align: center;
-            margin-top: 5rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-section::before {
-            content: '🚀';
-            position: absolute;
-            font-size: 15rem;
-            opacity: 0.1;
-            left: -3rem;
-            bottom: -5rem;
-        }
-
-        .cta-section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .cta-section p {
-            font-size: 1.25rem;
-            margin-bottom: 2.5rem;
-            opacity: 0.95;
-            position: relative;
-            z-index: 1;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 1.25rem 3rem;
-            background: var(--white);
-            color: var(--ktzh-blue);
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.25rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-            position: relative;
-            z-index: 1;
-        }
-
-        .btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
-        }
-
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--ktzh-blue);
-            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 9998;
             font-weight: 600;
-            margin-bottom: 3rem;
-            transition: all 0.3s ease;
-        }
-
-        .back-link:hover {
-            gap: 0.75rem;
-        }
-
-        .click-hint {
+            color: var(--ktzh-blue);
             font-size: 0.875rem;
+        }
+
+        .progress-badge .percentage {
+            font-size: 1.5rem;
             color: var(--ktzh-cyan);
-            font-weight: 600;
-            margin-top: 1rem;
-            animation: pulse 2s infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-
-            .dimensionen-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .robot-buddy {
-                bottom: 1rem;
-                right: 1rem;
-                width: 60px;
-                height: 60px;
-            }
-        }
-
-        /* Robot Buddy Easter Egg */
-        .robot-buddy {
+        /* Floating Robot */
+        .floating-robot {
             position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--ktzh-cyan) 0%, var(--ktzh-blue) 100%);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9997;
             cursor: pointer;
-            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.4);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            animation: bobbing 3s ease-in-out infinite;
+            animation: float-robot 3s ease-in-out infinite;
         }
 
-        .robot-buddy:hover {
-            transform: scale(1.1) rotate(10deg);
-            box-shadow: 0 12px 32px rgba(0, 102, 204, 0.6);
+        @keyframes float-robot {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
         }
 
-        .robot-buddy.speaking {
-            animation: shake 0.5s ease-in-out;
+        .robot-icon {
+            font-size: 4rem;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
         }
 
-        @keyframes bobbing {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-10deg); }
-            75% { transform: rotate(10deg); }
+        .floating-robot:hover .robot-icon {
+            transform: scale(1.2) rotate(10deg);
         }
 
         .robot-speech {
-            position: fixed;
-            bottom: 7rem;
-            right: 2rem;
-            max-width: 350px;
+            position: absolute;
+            bottom: 100%;
+            right: 0;
             background: var(--white);
-            border: 3px solid var(--ktzh-cyan);
-            border-radius: 20px;
-            padding: 1.5rem;
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
-            display: none;
-            z-index: 999;
-            animation: popIn 0.3s ease-out;
-        }
-
-        .robot-speech.active {
-            display: block;
-        }
-
-        @keyframes popIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.8) translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+            min-width: 250px;
+            max-width: 300px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
         }
 
         .robot-speech::after {
@@ -540,338 +98,1771 @@
             right: 30px;
             width: 0;
             height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 15px solid var(--ktzh-cyan);
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid var(--white);
+        }
+
+        .robot-speech.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
         }
 
         .robot-speech p {
-            font-size: 1rem;
+            color: var(--ktzh-blue);
+            font-weight: 600;
+            font-size: 0.938rem;
+            line-height: 1.5;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             color: var(--ktzh-darkgray);
-            margin: 0;
+            line-height: 1.6;
+            background: linear-gradient(180deg, var(--white) 0%, var(--ktzh-lightblue) 100%);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
+            color: var(--white);
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-title h1 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .header-icon {
+            font-size: 3rem;
+        }
+
+        .user-info {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.938rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(0, 102, 204, 0.1);
+            z-index: 9999;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ktzh-blue), var(--ktzh-cyan));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Intro Section */
+        .intro-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .intro-card h2 {
+            font-size: 2.5rem;
+            color: var(--ktzh-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .intro-card p {
+            font-size: 1.25rem;
+            color: var(--ktzh-gray);
+            max-width: 800px;
+            margin: 0 auto 2rem auto;
+        }
+
+        .intro-highlight {
+            background: var(--ktzh-lightblue);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--ktzh-cyan);
+            margin-top: 2rem;
+        }
+
+        .intro-highlight strong {
+            color: var(--ktzh-blue);
+        }
+
+        /* Learning Steps */
+        .learning-step {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .learning-step:hover {
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            cursor: pointer;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, var(--ktzh-blue), var(--ktzh-cyan));
+            color: var(--white);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-title h3 {
+            font-size: 1.75rem;
+            color: var(--ktzh-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-subtitle {
+            color: var(--ktzh-gray);
+            font-size: 1rem;
+        }
+
+        .step-content {
+            color: var(--ktzh-darkgray);
+            font-size: 1.125rem;
+            line-height: 1.8;
+        }
+
+        .step-content p {
+            margin-bottom: 1rem;
+        }
+
+        /* Interactive Iceberg */
+        .iceberg-container {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .iceberg-visual {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .iceberg-part {
+            padding: 2rem;
+            margin: 0.5rem 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .iceberg-visible {
+            background: linear-gradient(135deg, #E8F4F8 0%, #FFFFFF 100%);
+            border: 3px solid var(--ktzh-cyan);
+            transform: translateY(0);
+        }
+
+        .iceberg-invisible {
+            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
+            color: var(--white);
+            transform: translateY(0);
+        }
+
+        .iceberg-part:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.2);
+        }
+
+        .iceberg-part h4 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .iceberg-part p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .iceberg-detail {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            font-size: 0.938rem;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .iceberg-part.active .iceberg-detail {
+            max-height: 500px;
+            opacity: 1;
+        }
+
+        .waterline {
+            border-top: 3px dashed var(--ktzh-cyan);
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .waterline::before {
+            content: '💧 Wasseroberfläche';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--white);
+            padding: 0 1rem;
+            color: var(--ktzh-cyan);
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        /* Example Boxes */
+        .example-box {
+            background: var(--ktzh-lightblue);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+            border-left: 4px solid var(--ktzh-cyan);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .example-box:hover {
+            background: #D0E8F2;
+            transform: translateX(5px);
+        }
+
+        .example-box.explored {
+            background: #C5E6D5;
+            border-left: 6px solid var(--green);
+        }
+
+        .example-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .example-title {
+            font-weight: 700;
+            color: var(--ktzh-blue);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .example-box.explored .example-title {
+            color: var(--green);
+        }
+
+        .example-toggle {
+            background: rgba(0, 102, 204, 0.1);
+            color: var(--ktzh-blue);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .example-box:hover .example-toggle {
+            background: var(--ktzh-blue);
+            color: var(--white);
+        }
+
+        .example-box.explored .example-toggle {
+            background: var(--green);
+            color: var(--white);
+        }
+
+        .example-content {
+            color: var(--ktzh-darkgray);
+            font-size: 0.938rem;
+            line-height: 1.6;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .example-box.open .example-content {
+            max-height: 1000px;
+            opacity: 1;
+            margin-top: 0.75rem;
+        }
+
+        /* Dimension Cards */
+        .dimensions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .dimension-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 3px solid var(--ktzh-cyan);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .dimension-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(0, 102, 204, 0.2);
+        }
+
+        .dimension-card.explored {
+            background: linear-gradient(135deg, var(--ktzh-lightblue) 0%, var(--white) 100%);
+            border-color: var(--green);
+        }
+
+        .dimension-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .dimension-card h4 {
+            font-size: 1.5rem;
+            color: var(--ktzh-blue);
+            margin-bottom: 1rem;
+        }
+
+        .dimension-card p {
+            color: var(--ktzh-gray);
+            font-size: 0.938rem;
             line-height: 1.6;
         }
 
-        .robot-speech .quote-author {
-            font-size: 0.875rem;
+        .dimension-detail {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--ktzh-lightblue);
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .dimension-card.active .dimension-detail {
+            max-height: 1000px;
+            opacity: 1;
+        }
+
+        /* Quiz Section */
+        .quiz-card {
+            background: linear-gradient(135deg, var(--purple) 0%, var(--ktzh-blue) 100%);
+            color: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .quiz-card h3 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .quiz-question {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-question h4 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .quiz-option {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(5px);
+        }
+
+        .quiz-option.selected {
+            background: rgba(255, 255, 255, 0.4);
+            border-color: var(--white);
+        }
+
+        .quiz-option.correct {
+            background: var(--green);
+            border-color: var(--white);
+        }
+
+        .quiz-option.wrong {
+            background: #EF4444;
+            border-color: var(--white);
+            opacity: 0.6;
+        }
+
+        .quiz-feedback {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--ktzh-darkgray);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        .quiz-submit {
+            background: var(--white);
+            color: var(--ktzh-blue);
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            border: none;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .quiz-submit:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .quiz-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Completion Card */
+        .completion-card {
+            background: linear-gradient(135deg, var(--green) 0%, var(--ktzh-cyan) 100%);
+            color: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .completion-card h3 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .completion-card p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .completion-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Portfolio Button */
+        .portfolio-section {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .portfolio-section h4 {
+            color: var(--ktzh-blue);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .portfolio-section p {
+            color: var(--ktzh-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Activity Summary */
+        .activity-summary {
+            background: var(--ktzh-lightblue);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--ktzh-cyan);
+        }
+
+        .activity-summary h5 {
+            color: var(--ktzh-blue);
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+
+        .activity-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .activity-stat {
+            text-align: center;
+            padding: 0.75rem;
+            background: var(--white);
+            border-radius: 8px;
+        }
+
+        .activity-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ktzh-cyan);
+            display: block;
+        }
+
+        .activity-stat-label {
+            font-size: 0.813rem;
+            color: var(--ktzh-gray);
+        }
+
+        .reflection-area {
+            margin-top: 1.5rem;
+        }
+
+        .reflection-area label {
+            display: block;
             color: var(--ktzh-blue);
             font-weight: 600;
-            margin-top: 0.75rem;
-            text-align: right;
+            margin-bottom: 0.5rem;
+        }
+
+        .reflection-area textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            border: 2px solid var(--ktzh-lightblue);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .reflection-area textarea:focus {
+            outline: none;
+            border-color: var(--ktzh-cyan);
+        }
+
+        /* Emoji Reactions */
+        .emoji-reactions {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border: 2px solid var(--ktzh-lightblue);
+        }
+
+        .emoji-reactions h5 {
+            color: var(--ktzh-blue);
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+
+        .emoji-grid {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .emoji-button {
+            font-size: 2rem;
+            background: var(--ktzh-lightblue);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .emoji-button:hover {
+            transform: scale(1.1);
+            background: var(--white);
+            border-color: var(--ktzh-cyan);
+        }
+
+        .emoji-button.selected {
+            background: var(--ktzh-cyan);
+            border-color: var(--ktzh-blue);
+        }
+
+        .emoji-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--ktzh-blue);
+            color: var(--white);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 10px;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .reactions-list {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--ktzh-lightblue);
+        }
+
+        .reaction-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.938rem;
+            color: var(--ktzh-gray);
+        }
+
+        .reaction-emoji {
+            font-size: 1.5rem;
+        }
+
+        .share-section {
+            background: var(--ktzh-lightblue);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+        }
+
+        .share-section h5 {
+            color: var(--ktzh-blue);
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+
+        .share-link {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .share-link input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid var(--ktzh-cyan);
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+
+        .share-link button {
+            padding: 0.75rem 1.5rem;
+            background: var(--ktzh-cyan);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .share-link button:hover {
+            background: var(--ktzh-blue);
+            transform: scale(1.05);
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.125rem;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--ktzh-blue), var(--ktzh-cyan));
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--ktzh-blue);
+            border: 2px solid var(--ktzh-blue);
+        }
+
+        .btn-secondary:hover {
+            background: var(--ktzh-blue);
+            color: var(--white);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-title h1 {
+                font-size: 1.5rem;
+            }
+
+            .intro-card h2 {
+                font-size: 2rem;
+            }
+
+            .intro-card p {
+                font-size: 1rem;
+            }
+
+            .step-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .step-title h3 {
+                font-size: 1.5rem;
+            }
+
+            .dimensions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .completion-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Checkmark Animation */
+        .checkmark {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+
+        .explored .checkmark {
+            opacity: 1;
+            transform: scale(1);
         }
     </style>
 </head>
 <body>
-    <div class="header">
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- Progress Badge -->
+    <div class="progress-badge">
+        <div class="percentage" id="progressPercentage">0%</div>
+        <div style="font-size: 0.75rem; margin-top: 0.25rem;">erkundet</div>
+    </div>
+
+    <!-- Floating Robot -->
+    <div class="floating-robot" id="floatingRobot">
+        <div class="robot-speech" id="robotSpeech">
+            <p id="robotQuote">Klick mich für Weisheiten! 🤖</p>
+        </div>
+        <div class="robot-icon">🤖</div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
         <div class="header-content">
-            <h1>Kompetenzen verstehen</h1>
-            <p>Was bedeutet kompetenzorientiertes Lernen?</p>
+            <div class="header-title">
+                <span class="header-icon">🎯</span>
+                <h1>Kompetenzen verstehen</h1>
+            </div>
+            <div class="user-info">
+                <span id="userDisplay">👤 Gast</span>
+            </div>
         </div>
-    </div>
+    </header>
 
+    <!-- Main Content -->
     <div class="container">
-        <a href="startzweig.html" class="back-link">
-            ← Zurück zur Startauswahl
-        </a>
-
         <!-- Intro -->
-        <div class="section-intro">
-            <h2>💡 Warum Kompetenzen?</h2>
+        <div class="intro-card">
+            <h2>🧊 Willkommen zur Kompetenz-Einführung!</h2>
             <p>
-                In deiner Ausbildung geht es nicht nur darum, <strong>was</strong> du lernst, 
-                sondern auch <strong>wie</strong> und <strong>warum</strong>. Kompetenzen sind 
-                Fähigkeiten, die du im Leben wirklich brauchst – nicht nur Wissen, sondern 
-                auch Können und die richtige Haltung.
+                Bevor du mit den Themen startest, möchten wir dir zeigen, <strong>wie dieses Lehrmittel funktioniert</strong> 
+                und <strong>warum</strong> wir Kompetenzen so wichtig finden.
             </p>
+            <div class="intro-highlight">
+                <strong>💡 Das Ziel:</strong> Du verstehst, was Kompetenzen sind, wie sie zusammenhängen 
+                und warum du sie in verschiedenen Themen immer wieder begegnest. 
+                Am Ende weißt du genau, wie du mit diesem Lehrmittel lernst!
+            </div>
         </div>
 
-        <!-- Eisberg Metapher -->
-        <section class="section">
-            <div class="eisberg-container">
-                <h2 style="font-size: 2.25rem; color: var(--ktzh-blue); margin-bottom: 1rem; text-align: center;">
-                    🧊 Die Eisberg-Metapher
-                </h2>
-                <p style="text-align: center; font-size: 1.125rem; color: var(--ktzh-gray); margin-bottom: 2rem;">
-                    Was du tust, ist nur die Spitze des Eisbergs. Darunter liegt viel mehr!
-                </p>
-
-                <div class="eisberg-visual">
-                    <div class="eisberg-top" onclick="toggleDetails('performanz')">
-                        <div class="eisberg-icon">👀</div>
-                        <div class="eisberg-title">Performanz</div>
-                        <div class="eisberg-description">
-                            Das <strong>Sichtbare</strong> – was du tust, zeigst, produzierst.
-                        </div>
-                        <div class="click-hint">👆 Klick mich für mehr Details</div>
-                        <div class="eisberg-details" id="performanz-details">
-                            <p><strong>Beispiele:</strong></p>
-                            <p>📝 Einen Text schreiben • 🗣️ Ein Referat halten • 🎨 Ein Poster gestalten</p>
-                        </div>
-                    </div>
-
-                    <div class="water-line"></div>
-
-                    <div class="eisberg-bottom" onclick="toggleDetails('kompetenz')">
-                        <div class="eisberg-icon">💎</div>
-                        <div class="eisberg-title">Kompetenz</div>
-                        <div class="eisberg-description">
-                            Das <strong>Unsichtbare</strong> – was dich befähigt zu handeln.
-                        </div>
-                        <div class="click-hint">👆 Klick mich für mehr Details</div>
-                        <div class="eisberg-details" id="kompetenz-details">
-                            <div class="kompetenz-item">
-                                <div class="kompetenz-icon">🧠</div>
-                                <div class="kompetenz-text">
-                                    <div class="kompetenz-label">Wissen</div>
-                                    <div class="kompetenz-desc">Was du weißt (Fakten, Konzepte, Zusammenhänge)</div>
-                                </div>
-                            </div>
-                            <div class="kompetenz-item">
-                                <div class="kompetenz-icon">⚙️</div>
-                                <div class="kompetenz-text">
-                                    <div class="kompetenz-label">Können</div>
-                                    <div class="kompetenz-desc">Was du anwenden kannst (Methoden, Techniken)</div>
-                                </div>
-                            </div>
-                            <div class="kompetenz-item">
-                                <div class="kompetenz-icon">❤️</div>
-                                <div class="kompetenz-text">
-                                    <div class="kompetenz-label">Wollen</div>
-                                    <div class="kompetenz-desc">Deine Haltung, Motivation, Werte</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <!-- Step 1: Eisberg-Metapher -->
+        <div class="learning-step" data-step="1">
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <div class="step-title">
+                    <h3>🧊 Die Eisberg-Metapher</h3>
+                    <div class="step-subtitle">Performanz vs. Kompetenz - Was siehst du, was steckt dahinter?</div>
                 </div>
             </div>
-        </section>
-
-        <!-- 3 Dimensionen -->
-        <section class="section">
-            <div class="section-intro">
-                <h2>🎯 Die 3 Dimensionen des Lernens</h2>
+            <div class="step-content">
                 <p>
-                    Jedes Thema verbindet drei Bereiche, die zusammen deine Kompetenz bilden.
+                    Stell dir einen Eisberg vor: Was du über dem Wasser siehst, ist nur ein kleiner Teil. 
+                    Der größte Teil liegt unter Wasser – unsichtbar, aber entscheidend.
                 </p>
-            </div>
-
-            <div class="dimensionen-grid">
-                <a href="gesellschaft-handlungsfelder.html" class="dimension-card gesellschaft">
-                    <div class="dimension-icon">🏛️</div>
-                    <h3>Gesellschaft</h3>
-                    <p>
-                        <strong>Wissen über die Welt</strong> – 8 Aspekte (Politik, Wirtschaft, 
-                        Recht, Kultur, Identität & Sozialisation, Ethik, Ökologie, Technologie). 
-                        Jeder Aspekt umfasst mehrere Handlungsfelder. Du verstehst gesellschaftliche 
-                        Zusammenhänge.
-                    </p>
-                    <div class="click-hint">👆 Klick für Details & Handlungsfelder</div>
-                </a>
-
-                <a href="sprache-modi.html" class="dimension-card sprache">
-                    <div class="dimension-icon">💬</div>
-                    <h3>Sprache & Kommunikation</h3>
-                    <p>
-                        <strong>Kommunikation in allen Formen</strong> – Lesen, Schreiben, Sprechen, 
-                        Zuhören. <strong>Digitale Kompetenzen sind hier integriert:</strong> Tools nutzen, 
-                        online kommunizieren, KI verantwortungsvoll einsetzen.
-                    </p>
-                    <div class="click-hint">👆 Klick für Details & Sprachmodi</div>
-                </a>
-
-                <a href="schluesselkompetenzen.html" class="dimension-card schluessel">
-                    <div class="dimension-icon">🔑</div>
-                    <h3>Schlüsselkompetenzen</h3>
-                    <p>
-                        <strong>12 überfachliche Fähigkeiten</strong> – Selbstorganisation, 
-                        Problemlösung, Teamarbeit, vernetztes Denken. Skills, die in jedem Beruf wichtig sind.
-                    </p>
-                    <div class="click-hint">👆 Klick für Details & alle Kompetenzen</div>
-                </a>
-            </div>
-        </section>
-
-        <!-- Spiralcurriculum -->
-        <section class="section">
-            <div class="spiral-container">
-                <h2 style="font-size: 2.25rem; color: var(--ktzh-blue); margin-bottom: 1rem; text-align: center;">
-                    🌀 Das Spiralcurriculum
-                </h2>
-                <p style="text-align: center; font-size: 1.125rem; color: var(--ktzh-gray); margin-bottom: 2rem;">
-                    In deiner <strong>2-jährigen EBA-Ausbildung</strong> durchläufst du <strong>2 Niveaus</strong>. 
-                    Auf jedem Niveau begegnest du Kompetenzen <strong>mehrfach</strong> und übst sie wiederholt. 
-                    Wiederholung macht dich sicherer und kompetenter.
+                <p>
+                    <strong>Performanz</strong> ist das, was du <em>tust</em> – das Sichtbare. 
+                    <strong>Kompetenzen</strong> sind das, was dich dazu <em>befähigt</em> – das Unsichtbare.
                 </p>
 
-                <div class="spiral-visual">
-                    <div class="spiral-levels">
-                        <div class="spiral-level">
-                            <div class="level-title">📍 Niveau 1: Grundlagen aufbauen</div>
-                            <div class="level-desc">
-                                Du lernst Grundlagen kennen und übst grundlegende Handlungen <strong>mehrfach</strong> 
-                                in verschiedenen Themen und Kontexten. Wiederholtes Üben macht dich sicherer.
+                <div class="iceberg-container">
+                    <div class="iceberg-visual">
+                        <div class="iceberg-part iceberg-visible" data-interactive>
+                            <span class="checkmark">✓</span>
+                            <h4>👁️ Performanz (sichtbar)</h4>
+                            <p>Was du konkret tust oder zeigst</p>
+                            <div class="iceberg-detail">
+                                <strong>Beispiele:</strong><br>
+                                • Du hältst eine Präsentation<br>
+                                • Du schreibst einen Lehrvertrag aus<br>
+                                • Du erstellst ein Budget in Excel<br>
+                                • Du führst ein Kundengespräch<br><br>
+                                Das ist das <strong>Ergebnis</strong> deiner Kompetenzen!
                             </div>
                         </div>
-                        <div class="spiral-level">
-                            <div class="level-title">🎯 Niveau 2: Vertiefen & selbstständig werden</div>
-                            <div class="level-desc">
-                                Du wendest Gelerntes selbstständiger an und übst <strong>erneut</strong> in komplexeren 
-                                Situationen. Du handelst zunehmend eigenverantwortlich und reflektiert.
+
+                        <div class="waterline"></div>
+
+                        <div class="iceberg-part iceberg-invisible" data-interactive>
+                            <span class="checkmark">✓</span>
+                            <h4>🧊 Kompetenzen (unsichtbar)</h4>
+                            <p>Was dich dazu befähigt: Wissen, Können, Wollen</p>
+                            <div class="iceberg-detail">
+                                <strong>Die drei Säulen:</strong><br><br>
+                                <strong>1. Wissen:</strong> Du kennst die Theorie (z.B. was ein Lehrvertrag ist)<br>
+                                <strong>2. Können:</strong> Du wendest es an (z.B. kannst du Vertragsklauseln prüfen)<br>
+                                <strong>3. Wollen:</strong> Du bist motiviert, es zu tun (z.B. willst du deine Rechte schützen)<br><br>
+                                <strong>Nur zusammen</strong> ergeben sie echte Kompetenz!
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div style="margin-top: 3rem; padding: 2rem; background: var(--ktzh-lightblue); border-radius: 15px;">
-                    <p style="font-size: 1.125rem; text-align: center; color: var(--ktzh-darkgray);">
-                        <strong>💡 Das bedeutet:</strong> Wenn du eine Kompetenz im Thema 1 kennenlernst, 
-                        übst du sie dort mehrmals. Später begegnest du ihr wieder in anderen Themen – 
-                        auf dem gleichen oder dem nächsten Niveau. <strong>Wiederholtes Üben über 2 Jahre</strong> 
-                        macht dich kompetent.
-                    </p>
+                <div class="example-box" data-example-interactive>
+                    <div class="example-header">
+                        <div class="example-title">💼 Beispiel aus deinem Alltag: Professionell telefonieren</div>
+                        <div class="example-toggle">Klick mich!</div>
+                    </div>
+                    <div class="example-content">
+                        <strong>Performanz (sichtbar):</strong><br>
+                        Du nimmst im Betrieb das Telefon ab, begrüßt den Kunden höflich, beantwortest seine Frage 
+                        und verabschiedest dich professionell.<br><br>
+
+                        <strong>Kompetenzen (unsichtbar):</strong><br>
+                        • <strong>Wissen:</strong> Du kennst die Produkte deiner Firma<br>
+                        • <strong>Können:</strong> Du sprichst klar und höflich, hörst aktiv zu<br>
+                        • <strong>Wollen:</strong> Du möchtest dem Kunden helfen und professionell wirken<br><br>
+
+                        👉 <strong>Dieses Lehrmittel</strong> hilft dir, all diese Kompetenzen zu entwickeln!
+                    </div>
                 </div>
             </div>
-        </section>
-
-        <!-- CTA -->
-        <div class="cta-section">
-            <h2>Bereit, loszulegen?</h2>
-            <p>
-                Jetzt weißt du, wie kompetenzorientiertes Lernen funktioniert. 
-                Tauche ein in die 8 Themen und erlebe es selbst!
-            </p>
-            <a href="Lerninhalte/themen-uebersicht.html" class="btn">
-                🚀 Zu den Themen
-            </a>
         </div>
-    </div>
 
-    <!-- Robot Buddy Easter Egg -->
-    <div class="robot-buddy" onclick="speakWisdom()" id="robotBuddy">
-        🤖
-    </div>
-    <div class="robot-speech" id="robotSpeech">
-        <p id="wisdomText"></p>
-        <div class="quote-author" id="wisdomAuthor"></div>
+        <!-- Step 2: Zirkularität -->
+        <div class="learning-step" data-step="2">
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <div class="step-title">
+                    <h3>🔄 Zirkularität erkennen</h3>
+                    <div class="step-subtitle">Kompetenzen begegnen dir immer wieder – in neuen Kontexten</div>
+                </div>
+            </div>
+            <div class="step-content">
+                <p>
+                    Du lernst Kompetenzen nicht <strong>einmal</strong> und bist dann fertig. 
+                    Sie begegnen dir <strong>immer wieder</strong> – in verschiedenen Themen, auf neuen Ebenen, 
+                    mit steigender Komplexität.
+                </p>
+                <p>
+                    Das nennen wir <strong>Spiralcurriculum</strong>: Wie eine Spirale drehst du dich nach oben, 
+                    durchläufst dieselben Kompetenzen mehrfach – aber jedes Mal tiefer, selbstständiger, bewusster.
+                </p>
+
+                <div class="example-box" data-example-interactive>
+                    <div class="example-header">
+                        <div class="example-title">🔄 Beispiel: Kompetenz "Kooperation" kehrt immer wieder</div>
+                        <div class="example-toggle">Klick mich!</div>
+                    </div>
+                    <div class="example-content">
+                        <strong>Thema 1 (Berufseinstieg):</strong><br>
+                        Du lernst, mit deinem Berufsbildner zusammenzuarbeiten – Aufgaben klären, Feedback annehmen.<br><br>
+
+                        <strong>Thema 2 (Budget):</strong><br>
+                        Du besprichst mit deiner Familie das Geld – wer zahlt was? Wie teilen wir Kosten?<br><br>
+
+                        <strong>Thema 3 (Nachhaltigkeit):</strong><br>
+                        Du arbeitest im Team an einem Projekt für weniger Müll im Betrieb – Rollen verteilen, gemeinsam Lösungen finden.<br><br>
+
+                        👉 <strong>Jedes Mal</strong> wird die Kooperation komplexer. Du baust darauf auf, was du vorher gelernt hast!
+                    </div>
+                </div>
+
+                <div class="example-box" data-example-interactive>
+                    <div class="example-header">
+                        <div class="example-title">📱 Beispiel: Digitale Kompetenzen entwickeln sich weiter</div>
+                        <div class="example-toggle">Klick mich!</div>
+                    </div>
+                    <div class="example-content">
+                        <strong>Thema 1 (Berufseinstieg):</strong><br>
+                        WhatsApp-Nachrichten an Berufsbildner – was ist angemessen, was nicht?<br><br>
+
+                        <strong>Thema 2 (Budget):</strong><br>
+                        Banking-App nutzen – Überweisungen machen, Kontostand prüfen.<br><br>
+
+                        <strong>Thema 6 (Digitale Welt):</strong><br>
+                        Fake News auf Instagram erkennen, Datenschutz bei TikTok verstehen.<br><br>
+
+                        👉 Du siehst: <strong>Digitale Kompetenzen</strong> sind überall dabei – sie entwickeln sich mit!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: 3 Dimensionen -->
+        <div class="learning-step" data-step="3">
+            <div class="step-header">
+                <div class="step-number">3</div>
+                <div class="step-title">
+                    <h3>🎯 Die 3 Dimensionen verstehen</h3>
+                    <div class="step-subtitle">Gesellschaft • Sprache (inkl. Digital) • Schlüsselkompetenzen</div>
+                </div>
+            </div>
+            <div class="step-content">
+                <p>
+                    Jedes Thema in diesem Lehrmittel verbindet <strong>drei wichtige Bereiche</strong>. 
+                    Sie sind wie drei Puzzleteile, die zusammenpassen müssen:
+                </p>
+
+                <div class="dimensions-grid">
+                    <div class="dimension-card" data-interactive>
+                        <span class="checkmark">✓</span>
+                        <div class="dimension-icon">📚</div>
+                        <h4>Gesellschaft</h4>
+                        <p>
+                            <strong>Wissen</strong> über gesellschaftliche Zusammenhänge – Politik, Wirtschaft, 
+                            Recht, Kultur, Ökologie, Ethik.
+                        </p>
+                        <div class="dimension-detail">
+                            <strong>Beispiele:</strong><br>
+                            • Wie funktioniert das Steuersystem?<br>
+                            • Was sind meine Rechte als Lernende/r?<br>
+                            • Warum ist Nachhaltigkeit wichtig?<br>
+                            • Wie läuft eine Abstimmung ab?<br><br>
+                            👉 Du verstehst die <strong>Welt um dich herum</strong>!
+                        </div>
+                    </div>
+
+                    <div class="dimension-card" data-interactive>
+                        <span class="checkmark">✓</span>
+                        <div class="dimension-icon">💬</div>
+                        <h4>Sprache & Kommunikation</h4>
+                        <p>
+                            <strong>Kommunikation</strong> in verschiedenen Formen – schreiben, sprechen, lesen, digital. 
+                            <strong>Digitale Kompetenzen sind hier integriert!</strong>
+                        </p>
+                        <div class="dimension-detail">
+                            <strong>Sprachmodi:</strong><br>
+                            • Mündlich kommunizieren (Gespräche führen)<br>
+                            • Schriftlich ausdrücken (E-Mails, Briefe)<br>
+                            • Texte verstehen (Verträge lesen)<br>
+                            • <strong>Digital kommunizieren (Apps, Tools, KI nutzen)</strong><br>
+                            • Präsentieren (Folien, Videos)<br><br>
+                            👉 <strong>Digitale Kompetenzen</strong> sind in allen Modi dabei – sie gehören zur modernen Kommunikation!
+                        </div>
+                    </div>
+
+                    <div class="dimension-card" data-interactive>
+                        <span class="checkmark">✓</span>
+                        <div class="dimension-icon">🔑</div>
+                        <h4>Schlüsselkompetenzen</h4>
+                        <p>
+                            <strong>Überfachliche Fähigkeiten</strong> für lebenslanges Lernen – 
+                            Selbstmanagement, Kooperation, kritisches Denken.
+                        </p>
+                        <div class="dimension-detail">
+                            <strong>12 Schlüsselkompetenzen:</strong><br>
+                            1. Selbstmanagement<br>
+                            2. Lernstrategien<br>
+                            3. Kritisches Denken<br>
+                            4. Kreativität<br>
+                            5. Kooperation<br>
+                            6. Konfliktlösung<br>
+                            7. Informationskompetenz<br>
+                            8. Medienkompetenz<br>
+                            9. Problemlösen<br>
+                            10. Verantwortung<br>
+                            11. Resilienz<br>
+                            12. Interkulturelle Kompetenz<br><br>
+                            👉 Diese Fähigkeiten brauchst du <strong>überall</strong> – im Beruf, Privatleben, Schule!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example-box" data-example-interactive>
+                    <div class="example-header">
+                        <div class="example-title">💰 Beispiel: Alle 3 Dimensionen beim Thema "Dein erster Lohn"</div>
+                        <div class="example-toggle">Klick mich!</div>
+                    </div>
+                    <div class="example-content">
+                        <strong>📚 Gesellschaft (Wissen):</strong><br>
+                        • Wie funktioniert das Steuersystem in der Schweiz?<br>
+                        • Was sind AHV, IV, ALV? Warum werden diese abgezogen?<br>
+                        • Welche Rechte habe ich als Lernende/r?<br><br>
+
+                        <strong>💬 Sprache & Kommunikation (inkl. Digital):</strong><br>
+                        • Lohnabrechnung lesen und verstehen<br>
+                        • Mit Chef über Lohnerhöhung sprechen<br>
+                        • <strong>Budget-Tabelle in Excel erstellen (digitale Kompetenz!)</strong><br>
+                        • <strong>Banking-App nutzen für Überweisungen (digitale Kompetenz!)</strong><br><br>
+
+                        <strong>🔑 Schlüsselkompetenzen:</strong><br>
+                        • <strong>Selbstmanagement:</strong> Geld einteilen, nicht alles sofort ausgeben<br>
+                        • <strong>Kritisches Denken:</strong> Brauche ich das neue iPhone wirklich?<br>
+                        • <strong>Informationskompetenz:</strong> Wo finde ich Infos zu Steuern?<br><br>
+
+                        👉 <strong>Alle 3 Dimensionen zusammen</strong> machen dich finanziell kompetent!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz -->
+        <div class="quiz-card">
+            <h3>🎯 Kurzes Wissens-Check</h3>
+            
+            <div class="quiz-question" data-question="1">
+                <h4>1. Was ist der Unterschied zwischen Performanz und Kompetenz?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-answer="wrong">
+                        Performanz ist wichtiger als Kompetenz
+                    </div>
+                    <div class="quiz-option" data-answer="correct">
+                        Performanz ist das Sichtbare (was du tust), Kompetenz das Unsichtbare (was dich befähigt)
+                    </div>
+                    <div class="quiz-option" data-answer="wrong">
+                        Es gibt keinen Unterschied, beides ist gleich
+                    </div>
+                </div>
+                <div class="quiz-feedback">
+                    <strong>✅ Richtig!</strong> Performanz ist wie die Spitze des Eisbergs – sichtbar. 
+                    Kompetenzen (Wissen, Können, Wollen) liegen darunter und befähigen dich zur Performanz.
+                </div>
+            </div>
+
+            <div class="quiz-question" data-question="2">
+                <h4>2. Was bedeutet "Zirkularität" beim Lernen?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-answer="wrong">
+                        Du lernst jede Kompetenz nur einmal
+                    </div>
+                    <div class="quiz-option" data-answer="correct">
+                        Kompetenzen begegnen dir immer wieder in verschiedenen Themen – jedes Mal tiefer
+                    </div>
+                    <div class="quiz-option" data-answer="wrong">
+                        Du lernst nur im Kreis herum, ohne Fortschritt
+                    </div>
+                </div>
+                <div class="quiz-feedback">
+                    <strong>✅ Richtig!</strong> Wie eine Spirale nach oben: Du durchläufst Kompetenzen mehrfach, 
+                    aber jedes Mal auf höherem Niveau, mit mehr Tiefe und Selbstständigkeit.
+                </div>
+            </div>
+
+            <div class="quiz-question" data-question="3">
+                <h4>3. Welche 3 Dimensionen gehören zu jedem Thema?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-answer="wrong">
+                        Lesen, Schreiben, Rechnen
+                    </div>
+                    <div class="quiz-option" data-answer="correct">
+                        Gesellschaft, Sprache & Kommunikation (inkl. Digital), Schlüsselkompetenzen
+                    </div>
+                    <div class="quiz-option" data-answer="wrong">
+                        Theorie, Praxis, Prüfung
+                    </div>
+                </div>
+                <div class="quiz-feedback">
+                    <strong>✅ Richtig!</strong> Jedes Thema verbindet Wissen über Gesellschaft, 
+                    Kommunikationsfähigkeiten (inklusive digitaler Kompetenzen) und überfachliche Schlüsselkompetenzen.
+                </div>
+            </div>
+
+            <button class="quiz-submit" id="quizSubmit" disabled>Quiz auswerten</button>
+        </div>
+
+        <!-- Completion -->
+        <div class="completion-card" id="completionCard" style="display: none;">
+            <h3>🎉 Geschafft!</h3>
+            <p>Du hast die Kompetenz-Einführung erfolgreich abgeschlossen!</p>
+            
+            <div class="completion-stats">
+                <div class="stat-item">
+                    <span class="stat-value">✓</span>
+                    <span class="stat-label">Eisberg verstanden</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">✓</span>
+                    <span class="stat-label">Zirkularität erkannt</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">✓</span>
+                    <span class="stat-label">3 Dimensionen kennen</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="quizScore">0/3</span>
+                    <span class="stat-label">Quiz</span>
+                </div>
+            </div>
+
+            <div class="portfolio-section">
+                <h4>📝 Ins Portfolio speichern</h4>
+                <p>Deine Aktivität und Reflexion werden gespeichert und können mit anderen geteilt werden!</p>
+                
+                <div class="activity-summary">
+                    <h5>📊 Deine Aktivität in diesem Modul</h5>
+                    <div class="activity-stats">
+                        <div class="activity-stat">
+                            <span class="activity-stat-value" id="statInteractive">0/0</span>
+                            <span class="activity-stat-label">Elemente erkundet</span>
+                        </div>
+                        <div class="activity-stat">
+                            <span class="activity-stat-value" id="statExamples">0/0</span>
+                            <span class="activity-stat-label">Beispiele gelesen</span>
+                        </div>
+                        <div class="activity-stat">
+                            <span class="activity-stat-value" id="statQuiz">0/3</span>
+                            <span class="activity-stat-label">Quiz-Punkte</span>
+                        </div>
+                        <div class="activity-stat">
+                            <span class="activity-stat-value" id="statProgress">0%</span>
+                            <span class="activity-stat-label">Gesamt</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reflection-area">
+                    <label for="reflection">💭 Deine Reflexion</label>
+                    <textarea id="reflection" placeholder="Schreibe hier deine Reflexion...
+
+Zum Beispiel:
+- Was habe ich über Kompetenzen gelernt?
+- Welche der 3 Dimensionen finde ich am interessantesten?
+- Wie hilft mir das Wissen über Zirkularität beim Lernen?
+- Was war für mich neu oder überraschend?"></textarea>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="savePortfolio">
+                        💾 Ins Portfolio speichern
+                    </button>
+                </div>
+
+                <div class="share-section" id="shareSection" style="display: none;">
+                    <h5>🔗 Portfolio teilen</h5>
+                    <p>Teile diesen Link mit deiner Lehrperson oder Peergroup:</p>
+                    <div class="share-link">
+                        <input type="text" id="shareLink" readonly>
+                        <button id="copyLink">📋 Kopieren</button>
+                    </div>
+                </div>
+
+                <div class="emoji-reactions" id="emojiReactions" style="display: none;">
+                    <h5>😊 Reaktionen von anderen</h5>
+                    <div class="emoji-grid">
+                        <button class="emoji-button" data-emoji="👍" title="Gut gemacht">
+                            👍
+                            <span class="emoji-count" data-count="0">0</span>
+                        </button>
+                        <button class="emoji-button" data-emoji="💯" title="Perfekt">
+                            💯
+                            <span class="emoji-count" data-count="0">0</span>
+                        </button>
+                        <button class="emoji-button" data-emoji="👏" title="Toll">
+                            👏
+                            <span class="emoji-count" data-count="0">0</span>
+                        </button>
+                        <button class="emoji-button" data-emoji="✅" title="Verstanden">
+                            ✅
+                            <span class="emoji-count" data-count="0">0</span>
+                        </button>
+                        <button class="emoji-button" data-emoji="❤️" title="Sehr persönlich">
+                            ❤️
+                            <span class="emoji-count" data-count="0">0</span>
+                        </button>
+                        <button class="emoji-button" data-emoji="🔥" title="Wow!">
+                            🔥
+                            <span class="emoji-count" data-count="0">0</span>
+                        </button>
+                        <button class="emoji-button" data-emoji="💪" title="Stark">
+                            💪
+                            <span class="emoji-count" data-count="0">0</span>
+                        </button>
+                        <button class="emoji-button" data-emoji="🎯" title="Auf den Punkt">
+                            🎯
+                            <span class="emoji-count" data-count="0">0</span>
+                        </button>
+                    </div>
+                    <div class="reactions-list" id="reactionsList"></div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="index.html" class="btn btn-secondary">🏠 Zur Startseite</a>
+                <a href="startzweig.html" class="btn btn-primary">🚀 Zu den Themen</a>
+            </div>
+        </div>
     </div>
 
     <script>
-        function toggleDetails(id) {
-            const details = document.getElementById(id + '-details');
-            details.classList.toggle('active');
+        // Firebase Setup
+        let db = null;
+        let auth = null;
+        let useFirebase = false;
+
+        if (typeof firebase !== 'undefined' && firebaseConfig) {
+            try {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                db = firebase.firestore();
+                auth = firebase.auth();
+                useFirebase = true;
+                console.log('🔥 Firebase initialized');
+            } catch (error) {
+                console.log('📦 Firebase not available, using localStorage');
+            }
         }
 
-        // Robot Wisdom Quotes
-        const wisdomQuotes = [
-            {
-                text: "Kompetenz ist nicht, was du weißt – sondern was du mit dem, was du weißt, tun kannst. Real talk.",
-                author: "– RoboBuddy 3000"
-            },
-            {
-                text: "Do or do not. There is no try. Üben, üben, üben – das ist der Weg zur Macht!",
-                author: "– Master Yoda Style"
-            },
-            {
-                text: "Bruder, Lernen ist wie Leveln in nem RPG. Jede Quest bringt XP, auch wenn sie schwer ist.",
-                author: "– Gaming Weisheit"
-            },
-            {
-                text: "Fr fr: Fehler machen ist nicht cringe, sondern based. So lernst du am besten!",
-                author: "– Gen Z Robot"
-            },
-            {
-                text: "Die Macht ist stark in dir. Aber nur wenn du übst und nicht nach 5 Minuten aufgibst.",
-                author: "– Star Wars Edition"
-            },
-            {
-                text: "Kompetenzen sind wie Pokemon – du musst sie trainieren, dann werden sie stärker!",
-                author: "– Prof. Robotnik"
-            },
-            {
-                text: "Kein Cap: Wer mehrmals übt, wird zum Boss. So einfach ist die Formel.",
-                author: "– Street Smart Bot"
-            },
-            {
-                text: "Das Spiralcurriculum ist wie eine Playlist – die besten Songs kommen immer wieder, aber du verstehst sie jedes Mal besser.",
-                author: "– DJ RoboMix"
-            },
-            {
-                text: "Sheesh! Wissen allein bringt nix. Du musst es anwenden können – das ist der Move!",
-                author: "– Urban Dictionary Bot"
-            },
-            {
-                text: "May the competence be with you. Immer. Auch montags um 7 Uhr.",
-                author: "– Jedi Master Bot"
-            },
-            {
-                text: "Eisberg-Metapher = 90% unsichtbar, genau wie deine Skills bis du sie zeigst. Flex on 'em!",
-                author: "– RoboCoach"
-            },
-            {
-                text: "Vibe Check: Bist du am Lernen oder am Prokrastinieren? Sei ehrlich zu dir selbst!",
-                author: "– Therapy Bot 2.0"
-            }
+        // Robot Quotes
+        const robotQuotes = [
+            "🧠 Lernen ist wie Programmieren – Schritt für Schritt!",
+            "💡 Kompetenzen sind wie Code: wiederverwendbar!",
+            "🎯 Fokus ist der Compiler des Erfolgs!",
+            "🔄 Fehler sind Features im Lernprozess!",
+            "🚀 Jeder Klick hier bringt dich weiter!",
+            "📚 Wissen teilen = Wissen²!",
+            "🌟 Du bist der Programmierer deiner Zukunft!",
+            "⚡ Kleine Schritte, große Wirkung!",
+            "🎨 Kreativität ist die beste Schnittstelle!",
+            "🧩 Jedes Teil des Puzzles zählt!",
+            "💪 Durchhalten = Update installieren!",
+            "🌈 Vielfalt macht Code robust!",
+            "🔥 Leidenschaft ist das beste Framework!",
+            "🎓 Bildung ist Open Source für's Leben!",
+            "✨ Neugier ist der beste Debugger!"
         ];
 
-        let lastQuoteIndex = -1;
+        let currentQuoteIndex = 0;
 
-        function speakWisdom() {
-            const robot = document.getElementById('robotBuddy');
-            const speech = document.getElementById('robotSpeech');
-            const wisdomText = document.getElementById('wisdomText');
-            const wisdomAuthor = document.getElementById('wisdomAuthor');
+        // User Info
+        const userCode = localStorage.getItem('abuEbaCode');
+        const userName = localStorage.getItem('abuEbaName');
+        
+        if (userCode && userName) {
+            document.getElementById('userDisplay').textContent = `👤 ${userName}`;
+        }
 
-            robot.classList.add('speaking');
-            setTimeout(() => robot.classList.remove('speaking'), 500);
+        // Check if viewing someone else's portfolio
+        const urlParams = new URLSearchParams(window.location.search);
+        const viewingCode = urlParams.get('view');
+        const isViewer = viewingCode && viewingCode !== userCode;
 
-            // Get random quote (but not the same as last time)
-            let randomIndex;
-            do {
-                randomIndex = Math.floor(Math.random() * wisdomQuotes.length);
-            } while (randomIndex === lastQuoteIndex && wisdomQuotes.length > 1);
+        // Progress Tracking
+        const interactiveElements = document.querySelectorAll('[data-interactive]');
+        const exampleElements = document.querySelectorAll('[data-example-interactive]');
+        const totalInteractive = interactiveElements.length;
+        const totalExamples = exampleElements.length;
+        const totalAll = totalInteractive + totalExamples;
+        
+        let exploredInteractive = new Set();
+        let exploredExamples = new Set();
+        let quizScore = 0;
+
+        function updateProgress() {
+            const totalExplored = exploredInteractive.size + exploredExamples.size;
+            const percentage = Math.round((totalExplored / totalAll) * 100);
             
-            lastQuoteIndex = randomIndex;
-            const quote = wisdomQuotes[randomIndex];
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressPercentage').textContent = percentage + '%';
+            
+            // Update stats
+            document.getElementById('statInteractive').textContent = `${exploredInteractive.size}/${totalInteractive}`;
+            document.getElementById('statExamples').textContent = `${exploredExamples.size}/${totalExamples}`;
+            document.getElementById('statProgress').textContent = percentage + '%';
+        }
 
-            wisdomText.textContent = quote.text;
-            wisdomAuthor.textContent = quote.author;
+        function updateActivityStats() {
+            document.getElementById('statInteractive').textContent = `${exploredInteractive.size}/${totalInteractive}`;
+            document.getElementById('statExamples').textContent = `${exploredExamples.size}/${totalExamples}`;
+            document.getElementById('statQuiz').textContent = `${quizScore}/3`;
+            
+            const totalExplored = exploredInteractive.size + exploredExamples.size;
+            const percentage = Math.round((totalExplored / totalAll) * 100);
+            document.getElementById('statProgress').textContent = percentage + '%';
+        }
 
-            // Toggle speech bubble
-            if (speech.classList.contains('active')) {
-                speech.classList.remove('active');
-                setTimeout(() => speech.classList.add('active'), 100);
-            } else {
-                speech.classList.add('active');
+        // Interactive Elements
+        interactiveElements.forEach((element, index) => {
+            element.addEventListener('click', function() {
+                this.classList.toggle('active');
+                if (!exploredInteractive.has(index)) {
+                    exploredInteractive.add(index);
+                    this.classList.add('explored');
+                    updateProgress();
+                    updateActivityStats();
+                }
+            });
+        });
+
+        // Example Boxes
+        exampleElements.forEach((element, index) => {
+            element.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.classList.toggle('open');
+                if (!exploredExamples.has(index)) {
+                    exploredExamples.add(index);
+                    this.classList.add('explored');
+                    updateProgress();
+                    updateActivityStats();
+                }
+            });
+        });
+
+        // Floating Robot
+        const floatingRobot = document.getElementById('floatingRobot');
+        const robotSpeech = document.getElementById('robotSpeech');
+        const robotQuote = document.getElementById('robotQuote');
+
+        floatingRobot.addEventListener('click', function() {
+            robotQuote.textContent = robotQuotes[currentQuoteIndex];
+            robotSpeech.classList.add('show');
+            
+            currentQuoteIndex = (currentQuoteIndex + 1) % robotQuotes.length;
+            
+            setTimeout(() => {
+                robotSpeech.classList.remove('show');
+            }, 5000);
+        });
+
+        // Auto-show robot on first visit
+        setTimeout(() => {
+            if (!localStorage.getItem('robotGreetedKompetenzen')) {
+                robotQuote.textContent = "👋 Willkommen! Klick auf die Elemente um sie zu erkunden!";
+                robotSpeech.classList.add('show');
+                localStorage.setItem('robotGreetedKompetenzen', 'true');
+                
+                setTimeout(() => {
+                    robotSpeech.classList.remove('show');
+                }, 4000);
+            }
+        }, 2000);
+
+        // Quiz Logic
+        const quizQuestions = document.querySelectorAll('.quiz-question');
+        const quizSubmit = document.getElementById('quizSubmit');
+        let selectedAnswers = {};
+
+        quizQuestions.forEach((question, qIndex) => {
+            const options = question.querySelectorAll('.quiz-option');
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    options.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedAnswers[qIndex + 1] = this.dataset.answer;
+                    
+                    if (Object.keys(selectedAnswers).length === quizQuestions.length) {
+                        quizSubmit.disabled = false;
+                    }
+                });
+            });
+        });
+
+        quizSubmit.addEventListener('click', function() {
+            let correctCount = 0;
+            
+            quizQuestions.forEach((question, qIndex) => {
+                const options = question.querySelectorAll('.quiz-option');
+                const feedback = question.querySelector('.quiz-feedback');
+                
+                options.forEach(option => {
+                    const isCorrect = option.dataset.answer === 'correct';
+                    const isSelected = option.classList.contains('selected');
+                    
+                    if (isCorrect) {
+                        option.classList.add('correct');
+                        if (isSelected) correctCount++;
+                    } else if (isSelected) {
+                        option.classList.add('wrong');
+                    }
+                });
+                
+                feedback.classList.add('show');
+            });
+
+            quizScore = correctCount;
+            document.getElementById('quizScore').textContent = `${correctCount}/3`;
+            document.getElementById('statQuiz').textContent = `${correctCount}/3`;
+            updateActivityStats();
+            
+            document.getElementById('completionCard').style.display = 'block';
+            document.getElementById('completionCard').scrollIntoView({ behavior: 'smooth' });
+            
+            quizSubmit.style.display = 'none';
+        });
+
+        // Portfolio Save with Firebase
+        document.getElementById('savePortfolio').addEventListener('click', async function() {
+            const reflection = document.getElementById('reflection').value;
+            
+            if (!reflection.trim()) {
+                alert('Bitte schreibe zuerst eine Reflexion! 📝');
+                return;
             }
 
-            // Auto-hide after 8 seconds
-            setTimeout(() => {
-                speech.classList.remove('active');
-            }, 8000);
-        }
+            if (!userCode) {
+                alert('⚠️ Bitte logge dich zuerst ein!');
+                return;
+            }
 
-        // Track page visit for portfolio
-        if (localStorage.getItem('abuEbaCode')) {
-            const visitData = {
-                page: 'kompetenzen-einfuehrung',
-                timestamp: new Date().toISOString(),
-                code: localStorage.getItem('abuEbaCode')
+            this.disabled = true;
+            this.textContent = '⏳ Speichere...';
+
+            const portfolioEntry = {
+                type: 'module',
+                module: 'Kompetenzen verstehen',
+                completed: true,
+                date: new Date().toISOString(),
+                reflection: reflection,
+                activity: {
+                    interactiveExplored: exploredInteractive.size,
+                    totalInteractive: totalInteractive,
+                    examplesExplored: exploredExamples.size,
+                    totalExamples: totalExamples,
+                    quizScore: quizScore,
+                    quizTotal: 3,
+                    progressPercentage: Math.round(((exploredInteractive.size + exploredExamples.size) / totalAll) * 100)
+                },
+                quizAnswers: selectedAnswers
             };
-            
-            const visits = JSON.parse(localStorage.getItem('abuEbaVisits') || '[]');
-            visits.push(visitData);
-            localStorage.setItem('abuEbaVisits', JSON.stringify(visits));
-        }
 
-        // Close speech bubble when clicking outside
-        document.addEventListener('click', function(event) {
-            const robot = document.getElementById('robotBuddy');
-            const speech = document.getElementById('robotSpeech');
-            
-            if (!robot.contains(event.target) && !speech.contains(event.target)) {
-                speech.classList.remove('active');
+            try {
+                if (useFirebase && db) {
+                    // Save to Firebase
+                    const entryId = `kompetenzen-einfuehrung-${Date.now()}`;
+                    await db.collection('portfolios').doc(userCode).collection('entries').doc(entryId).set(portfolioEntry);
+                    
+                    console.log('✅ Saved to Firebase');
+                } else {
+                    // Fallback to localStorage
+                    let portfolio = JSON.parse(localStorage.getItem('abuEbaPortfolio') || '[]');
+                    portfolio.push(portfolioEntry);
+                    localStorage.setItem('abuEbaPortfolio', JSON.stringify(portfolio));
+                    
+                    console.log('✅ Saved to localStorage');
+                }
+
+                this.textContent = '✓ Gespeichert';
+                this.style.background = 'var(--green)';
+                
+                // Show share section
+                const shareSection = document.getElementById('shareSection');
+                const emojiSection = document.getElementById('emojiReactions');
+                shareSection.style.display = 'block';
+                emojiSection.style.display = 'block';
+                
+                // Generate share link
+                const shareUrl = `${window.location.origin}${window.location.pathname}?view=${userCode}`;
+                document.getElementById('shareLink').value = shareUrl;
+                
+                // Load existing reactions
+                loadReactions();
+
+            } catch (error) {
+                console.error('❌ Error saving:', error);
+                alert('⚠️ Fehler beim Speichern. Bitte versuche es erneut.');
+                this.disabled = false;
+                this.textContent = '💾 Ins Portfolio speichern';
             }
         });
+
+        // Copy Link
+        document.getElementById('copyLink').addEventListener('click', function() {
+            const linkInput = document.getElementById('shareLink');
+            linkInput.select();
+            document.execCommand('copy');
+            
+            this.textContent = '✓ Kopiert!';
+            setTimeout(() => {
+                this.textContent = '📋 Kopieren';
+            }, 2000);
+        });
+
+        // Emoji Reactions
+        const emojiButtons = document.querySelectorAll('.emoji-button');
+        
+        emojiButtons.forEach(button => {
+            button.addEventListener('click', async function() {
+                if (!userCode) {
+                    alert('⚠️ Bitte logge dich ein um zu reagieren!');
+                    return;
+                }
+
+                const emoji = this.dataset.emoji;
+                const targetCode = viewingCode || userCode;
+
+                try {
+                    if (useFirebase && db) {
+                        const reactionRef = db.collection('portfolios')
+                            .doc(targetCode)
+                            .collection('entries')
+                            .doc('kompetenzen-einfuehrung')
+                            .collection('reactions')
+                            .doc(userCode);
+
+                        // Toggle reaction
+                        const existingReaction = await reactionRef.get();
+                        
+                        if (existingReaction.exists && existingReaction.data().emoji === emoji) {
+                            // Remove reaction
+                            await reactionRef.delete();
+                        } else {
+                            // Add/update reaction
+                            await reactionRef.set({
+                                emoji: emoji,
+                                fromCode: userCode,
+                                fromName: userName || 'Anonym',
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                            });
+                        }
+
+                        // Reload reactions
+                        loadReactions();
+                    } else {
+                        alert('🔥 Firebase benötigt für Reaktionen');
+                    }
+                } catch (error) {
+                    console.error('❌ Error adding reaction:', error);
+                }
+            });
+        });
+
+        // Load Reactions
+        async function loadReactions() {
+            if (!useFirebase || !db) return;
+
+            const targetCode = viewingCode || userCode;
+            
+            try {
+                const reactionsSnapshot = await db.collection('portfolios')
+                    .doc(targetCode)
+                    .collection('entries')
+                    .doc('kompetenzen-einfuehrung')
+                    .collection('reactions')
+                    .get();
+
+                const reactions = {};
+                const reactionsList = [];
+
+                reactionsSnapshot.forEach(doc => {
+                    const data = doc.data();
+                    const emoji = data.emoji;
+                    
+                    reactions[emoji] = (reactions[emoji] || 0) + 1;
+                    reactionsList.push({
+                        emoji: emoji,
+                        name: data.fromName,
+                        code: data.fromCode
+                    });
+                });
+
+                // Update counts
+                emojiButtons.forEach(button => {
+                    const emoji = button.dataset.emoji;
+                    const countSpan = button.querySelector('.emoji-count');
+                    const count = reactions[emoji] || 0;
+                    countSpan.textContent = count;
+                    countSpan.dataset.count = count;
+                    
+                    // Highlight if user reacted
+                    const userReacted = reactionsList.some(r => r.code === userCode && r.emoji === emoji);
+                    if (userReacted) {
+                        button.classList.add('selected');
+                    } else {
+                        button.classList.remove('selected');
+                    }
+                });
+
+                // Show reactions list
+                const reactionsListDiv = document.getElementById('reactionsList');
+                if (reactionsList.length > 0) {
+                    reactionsListDiv.innerHTML = '<p style="font-size: 0.875rem; color: var(--ktzh-gray); margin-bottom: 0.5rem;">Reaktionen:</p>';
+                    reactionsList.forEach(reaction => {
+                        const item = document.createElement('div');
+                        item.className = 'reaction-item';
+                        item.innerHTML = `
+                            <span class="reaction-emoji">${reaction.emoji}</span>
+                            <span>${reaction.name}</span>
+                        `;
+                        reactionsListDiv.appendChild(item);
+                    });
+                } else {
+                    reactionsListDiv.innerHTML = '<p style="font-size: 0.875rem; color: var(--ktzh-gray);">Noch keine Reaktionen</p>';
+                }
+
+            } catch (error) {
+                console.error('❌ Error loading reactions:', error);
+            }
+        }
+
+        // If viewing someone's portfolio, load it
+        if (isViewer) {
+            document.getElementById('savePortfolio').style.display = 'none';
+            document.getElementById('shareSection').style.display = 'none';
+            document.getElementById('emojiReactions').style.display = 'block';
+            document.querySelector('.reflection-area').style.display = 'none';
+            
+            loadReactions();
+        }
+
+        console.log('🎯 Kompetenz-Einführung geladen');
+        console.log('👤 User:', userName || 'Gast');
+        console.log('📊 Interaktive Elemente:', totalAll);
+        console.log('🔥 Firebase:', useFirebase ? 'Aktiv' : 'LocalStorage Fallback');
+        if (isViewer) {
+            console.log('👁️ Viewing portfolio of:', viewingCode);
+        }
     </script>
 </body>
 </html>
