@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ABU EBA - Lernpfad wählen</title>
+    <title>ABU EBA - Startzweig</title>
     <style>
         * {
             margin: 0;
@@ -112,16 +112,42 @@
             font-weight: 600;
         }
 
-        .placeholder {
-            padding: 3rem;
+        .redirect-info {
             background: var(--ktzh-lightblue);
             border-radius: 20px;
-            color: var(--ktzh-gray);
+            padding: 2rem;
+            margin-bottom: 2rem;
         }
 
-        .placeholder h2 {
+        .redirect-info h2 {
             color: var(--ktzh-blue);
             margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .redirect-info p {
+            color: var(--ktzh-darkgray);
+            font-size: 1.1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 1.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ktzh-blue), var(--ktzh-cyan));
+            animation: progress 3s linear;
+        }
+
+        @keyframes progress {
+            from { width: 0%; }
+            to { width: 100%; }
         }
 
         .btn {
@@ -180,17 +206,17 @@
         <div class="user-greeting">Willkommen, <span id="userName"></span>!</div>
 
         <div class="message">
-            ✅ Du bist jetzt eingeloggt und kannst mit dem Lernen starten!
+            ✅ Sie sind jetzt eingeloggt und können mit dem Lernen starten!
         </div>
 
         <div class="user-info">
             <div class="info-grid">
                 <div class="info-item">
-                    <div class="info-label">Dein Symbol</div>
+                    <div class="info-label">Ihr Symbol</div>
                     <div class="info-value symbol" id="userSymbol"></div>
                 </div>
                 <div class="info-item">
-                    <div class="info-label">Dein Code</div>
+                    <div class="info-label">Ihr Code</div>
                     <div class="info-value code" id="userCode"></div>
                 </div>
                 <div class="info-item">
@@ -200,16 +226,16 @@
             </div>
         </div>
 
-        <div class="placeholder">
-            <h2>🚧 In Entwicklung</h2>
-            <p>
-                Hier wirst du bald deine Lernpfade auswählen können:<br>
-                <strong>Thema 1-8</strong> aus dem ABU EBA Lehrplan
-            </p>
+        <div class="redirect-info">
+            <h2 id="redirectTitle">🚀 Weiterleitung...</h2>
+            <p id="redirectMessage">Sie werden automatisch weitergeleitet</p>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
         </div>
 
         <div style="margin-top: 2rem;">
-            <a href="index.html" class="btn btn-primary">🏠 Zur Startseite</a>
+            <a href="index.html" class="btn btn-secondary">🏠 Zur Startseite</a>
             <button onclick="logout()" class="btn btn-secondary">🚪 Logout</button>
         </div>
     </div>
@@ -235,11 +261,35 @@
         document.getElementById('userCode').textContent = userCode;
         document.getElementById('userYear').textContent = userYear;
 
+        // Check if user has completed the competency introduction
+        const competencyCompleted = localStorage.getItem('abuEbaCompetencyCompleted');
+        
+        // Update redirect message based on user progress
+        if (competencyCompleted === 'true') {
+            document.getElementById('redirectTitle').textContent = '📚 Zu Ihren Themen';
+            document.getElementById('redirectMessage').textContent = 'Sie werden zur Themen-Übersicht weitergeleitet...';
+        } else {
+            document.getElementById('redirectTitle').textContent = '🎯 Kompetenzen kennenlernen';
+            document.getElementById('redirectMessage').textContent = 'Sie werden zur Einführung in die Kompetenzen weitergeleitet...';
+        }
+
+        // Automatic redirect after 3 seconds
+        setTimeout(() => {
+            if (competencyCompleted === 'true') {
+                // User has completed competencies → Go to theme overview
+                window.location.href = 'Lerninhalte/themen-uebersicht.html';
+            } else {
+                // User has NOT completed competencies → Go to introduction
+                window.location.href = 'kompetenzen-einfuehrung.html';
+            }
+        }, 3000);
+
         // Logout function
         function logout() {
-            if (confirm('Möchtest du dich wirklich ausloggen?')) {
+            if (confirm('Möchten Sie sich wirklich ausloggen?')) {
                 localStorage.removeItem('abuEbaCode');
                 localStorage.removeItem('abuEbaName');
+                localStorage.removeItem('abuEbaCompetencyCompleted');
                 window.location.href = 'index.html';
             }
         }
