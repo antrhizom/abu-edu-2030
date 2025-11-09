@@ -71,12 +71,27 @@
             animation: float-robot 3s ease-in-out infinite;
         }
 
+        /* Floating Yoda */
+        .floating-yoda {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 9997;
+            cursor: pointer;
+            animation: float-yoda 4s ease-in-out infinite;
+        }
+
         @keyframes float-robot {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-20px) rotate(5deg); }
         }
 
-        .robot-icon {
+        @keyframes float-yoda {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(-3deg); }
+        }
+
+        .robot-icon, .yoda-icon {
             font-size: 4rem;
             filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
             transition: transform 0.3s ease;
@@ -86,10 +101,13 @@
             transform: scale(1.2) rotate(10deg);
         }
 
-        .robot-speech {
+        .floating-yoda:hover .yoda-icon {
+            transform: scale(1.2) rotate(-10deg);
+        }
+
+        .robot-speech, .yoda-speech {
             position: absolute;
             bottom: 100%;
-            right: 0;
             background: var(--white);
             padding: 1rem 1.5rem;
             border-radius: 15px;
@@ -101,6 +119,16 @@
             transform: translateY(10px);
             transition: all 0.3s ease;
             pointer-events: none;
+        }
+
+        .robot-speech {
+            right: 0;
+        }
+
+        .yoda-speech {
+            left: 0;
+            background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+            border: 2px solid var(--green);
         }
 
         .robot-speech::after {
@@ -115,17 +143,34 @@
             border-top: 10px solid var(--white);
         }
 
-        .robot-speech.show {
+        .yoda-speech::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 30px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #DCFCE7;
+        }
+
+        .robot-speech.show, .yoda-speech.show {
             opacity: 1;
             transform: translateY(0);
             pointer-events: auto;
         }
 
-        .robot-speech p {
+        .robot-speech p, .yoda-speech p {
             color: var(--ktzh-blue);
             font-weight: 600;
             font-size: 0.938rem;
             line-height: 1.5;
+        }
+
+        .yoda-speech p {
+            color: var(--green);
+            font-style: italic;
         }
 
         body {
@@ -1002,10 +1047,18 @@
         <div style="font-size: 0.75rem; margin-top: 0.25rem;">erkundet</div>
     </div>
 
-    <!-- Floating Robot -->
+    <!-- Floating Yoda (Wise Quotes) -->
+    <div class="floating-yoda" id="floatingYoda">
+        <div class="yoda-speech" id="yodaSpeech">
+            <p id="yodaQuote">Klick mich für Weisheit! 🧙</p>
+        </div>
+        <div class="yoda-icon">🧙‍♂️</div>
+    </div>
+
+    <!-- Floating Robot (Language Help) -->
     <div class="floating-robot" id="floatingRobot">
         <div class="robot-speech" id="robotSpeech">
-            <p id="robotQuote">Klick mich für Weisheiten! 🤖</p>
+            <p id="robotQuote">Klick mich für Erklärungen! 🤖</p>
         </div>
         <div class="robot-icon">🤖</div>
     </div>
@@ -1466,6 +1519,9 @@ Zum Beispiel:
             </div>
 
             <div class="action-buttons">
+                <button class="btn btn-secondary" id="resetButton">
+                    🔄 Nochmal durchgehen
+                </button>
                 <a href="index.html" class="btn btn-secondary">🏠 Zur Startseite</a>
                 <a href="startzweig.html" class="btn btn-primary">🚀 Zu den Themen</a>
             </div>
@@ -1498,26 +1554,43 @@ Zum Beispiel:
             }
         }, 100);
 
-        // Robot Quotes
-        const robotQuotes = [
-            "🧠 Lernen ist wie Programmieren – Schritt für Schritt!",
-            "💡 Kompetenzen sind wie Code: wiederverwendbar!",
-            "🎯 Fokus ist der Compiler des Erfolgs!",
-            "🔄 Fehler sind Features im Lernprozess!",
-            "🚀 Jeder Klick hier bringt dich weiter!",
-            "📚 Wissen teilen = Wissen²!",
-            "🌟 Du bist der Programmierer deiner Zukunft!",
-            "⚡ Kleine Schritte, große Wirkung!",
-            "🎨 Kreativität ist die beste Schnittstelle!",
-            "🧩 Jedes Teil des Puzzles zählt!",
-            "💪 Durchhalten = Update installieren!",
-            "🌈 Vielfalt macht Code robust!",
-            "🔥 Leidenschaft ist das beste Framework!",
-            "🎓 Bildung ist Open Source für's Leben!",
-            "✨ Neugier ist der beste Debugger!"
+        // Yoda Quotes (thematisch zu Kompetenzen)
+        const yodaQuotes = [
+            "Sichtbar nur die Spitze ist. Darunter die wahre Kompetenz liegt. 🧊",
+            "Wiederkehren Kompetenzen tun. Spirale nach oben führt dich. 🔄",
+            "Drei Dimensionen vereinen sich. Stark wirst du dadurch. 🎯",
+            "Nicht was du tust, zählt. Was dich befähigt, wichtig ist. 💡",
+            "Lernen nie aufhört. Immer wieder begegnen Kompetenzen dir. 🌟",
+            "Wissen, Können, Wollen - zusammen stark sie sind. ⚡",
+            "Gesellschaft, Sprache, Schlüssel - drei Wege zum Ziel führen. 🗝️",
+            "Geduld haben musst du. Schritt für Schritt wächst Kompetenz. 🌱",
+            "Zusammenhang erkennen wichtig ist. Alles verbunden es ist. 🔗",
+            "Reflektieren macht weise. Aus Tun lernen du musst. 🪞",
+            "Heute lernst du. Morgen anwendest du. Übermorgen meisterst du. 📈",
+            "Unsichtbares sichtbar machen - deine Aufgabe das ist. 👁️"
+        ];
+
+        // Robot Explanations (Schwierige Wörter vereinfacht)
+        const robotExplanations = [
+            "💡 **Performanz?** Das ist einfach: Was du tust, was man sehen kann!",
+            "🔄 **Zirkularität?** Wie ein Kreis - du kommst immer wieder zurück, aber auf höherem Level!",
+            "🎯 **Kompetenz** = Wissen + Können + Wollen. Alle drei zusammen brauchst du!",
+            "🧊 **Eisberg-Metapher?** Nur ein kleiner Teil ist sichtbar. Das meiste liegt unter Wasser!",
+            "📚 **Gesellschaft?** Das bedeutet: Wie funktioniert die Welt um dich herum?",
+            "💬 **Sprachmodi?** Verschiedene Arten zu kommunizieren: sprechen, schreiben, digital...",
+            "🔑 **Schlüsselkompetenzen?** Fähigkeiten, die du überall brauchst - im Beruf, Privatleben, Schule!",
+            "🌀 **Spiralcurriculum?** Du lernst das Gleiche mehrmals, aber jedes Mal tiefer!",
+            "💪 **Können** heißt: Du kannst es wirklich anwenden, nicht nur davon reden!",
+            "🧠 **Wissen** heißt: Du verstehst die Theorie, kennst die Zusammenhänge!",
+            "❤️ **Wollen** heißt: Du bist motiviert, hast den Antrieb es zu tun!",
+            "🎨 **Dimensionen?** Verschiedene Blickwinkel auf das gleiche Thema!",
+            "📱 **Digital** bedeutet: Mit Computer, Handy, Apps arbeiten - Teil der Sprache heute!",
+            "🤝 **Kooperation?** Zusammenarbeiten, gemeinsam Ziele erreichen!",
+            "🎯 **Reflexion?** Nachdenken: Was habe ich gelernt? Wie ging es mir dabei?"
         ];
 
         let currentQuoteIndex = 0;
+        let currentRobotIndex = 0;
 
         // User Info
         const userCode = localStorage.getItem('abuEbaCode');
@@ -1593,26 +1666,55 @@ Zum Beispiel:
             });
         });
 
-        // Floating Robot
+        // Floating Yoda (Wise Quotes)
+        const floatingYoda = document.getElementById('floatingYoda');
+        const yodaSpeech = document.getElementById('yodaSpeech');
+        const yodaQuote = document.getElementById('yodaQuote');
+
+        floatingYoda.addEventListener('click', function() {
+            yodaQuote.textContent = yodaQuotes[currentQuoteIndex];
+            yodaSpeech.classList.add('show');
+            
+            currentQuoteIndex = (currentQuoteIndex + 1) % yodaQuotes.length;
+            
+            setTimeout(() => {
+                yodaSpeech.classList.remove('show');
+            }, 6000);
+        });
+
+        // Auto-show Yoda on first visit
+        setTimeout(() => {
+            if (!localStorage.getItem('yodaGreetedKompetenzen')) {
+                yodaQuote.textContent = "Willkommen, junger Lernender. Klicke auf Elemente, erkunden du sollst! 🧙‍♂️";
+                yodaSpeech.classList.add('show');
+                localStorage.setItem('yodaGreetedKompetenzen', 'true');
+                
+                setTimeout(() => {
+                    yodaSpeech.classList.remove('show');
+                }, 5000);
+            }
+        }, 3000);
+
+        // Floating Robot (Language Help)
         const floatingRobot = document.getElementById('floatingRobot');
         const robotSpeech = document.getElementById('robotSpeech');
         const robotQuote = document.getElementById('robotQuote');
 
         floatingRobot.addEventListener('click', function() {
-            robotQuote.textContent = robotQuotes[currentQuoteIndex];
+            robotQuote.innerHTML = robotExplanations[currentRobotIndex];
             robotSpeech.classList.add('show');
             
-            currentQuoteIndex = (currentQuoteIndex + 1) % robotQuotes.length;
+            currentRobotIndex = (currentRobotIndex + 1) % robotExplanations.length;
             
             setTimeout(() => {
                 robotSpeech.classList.remove('show');
-            }, 5000);
+            }, 7000);
         });
 
         // Auto-show robot on first visit
         setTimeout(() => {
             if (!localStorage.getItem('robotGreetedKompetenzen')) {
-                robotQuote.textContent = "👋 Willkommen! Klick auf die Elemente um sie zu erkunden!";
+                robotQuote.innerHTML = "👋 Hallo! Ich erkläre dir schwierige Wörter. Klick mich an!";
                 robotSpeech.classList.add('show');
                 localStorage.setItem('robotGreetedKompetenzen', 'true');
                 
@@ -1888,6 +1990,98 @@ Zum Beispiel:
             
             loadReactions();
         }
+
+        // Reset Button - Nochmal durchgehen (erstellt neuen Portfolio-Eintrag)
+        document.getElementById('resetButton').addEventListener('click', async function() {
+            if (!confirm('🔄 Möchtest du das Modul nochmal durchgehen?\n\nDein bisheriger Portfolio-Eintrag bleibt erhalten, aber es wird ein neuer Durchgang gestartet.')) {
+                return;
+            }
+
+            // Save current state as completed entry if reflection exists
+            const currentReflection = document.getElementById('reflection').value;
+            if (currentReflection.trim() && userCode) {
+                const completedEntry = {
+                    type: 'module',
+                    module: 'Kompetenzen verstehen (Durchgang)',
+                    completed: true,
+                    date: new Date().toISOString(),
+                    reflection: currentReflection,
+                    activity: {
+                        interactiveExplored: exploredInteractive.size,
+                        totalInteractive: totalInteractive,
+                        examplesExplored: exploredExamples.size,
+                        totalExamples: totalExamples,
+                        quizScore: quizScore,
+                        quizTotal: 3,
+                        progressPercentage: Math.round(((exploredInteractive.size + exploredExamples.size) / totalAll) * 100)
+                    },
+                    quizAnswers: selectedAnswers
+                };
+
+                try {
+                    if (useFirebase && db) {
+                        const entryId = `kompetenzen-einfuehrung-${Date.now()}`;
+                        await db.collection('portfolios').doc(userCode).collection('entries').doc(entryId).set(completedEntry);
+                        console.log('✅ Previous run saved to Firebase');
+                    } else {
+                        let portfolio = JSON.parse(localStorage.getItem('abuEbaPortfolio') || '[]');
+                        portfolio.push(completedEntry);
+                        localStorage.setItem('abuEbaPortfolio', JSON.stringify(portfolio));
+                        console.log('✅ Previous run saved to localStorage');
+                    }
+                } catch (error) {
+                    console.error('❌ Error saving previous run:', error);
+                }
+            }
+
+            // Reset all states
+            exploredInteractive.clear();
+            exploredExamples.clear();
+            quizScore = 0;
+            selectedAnswers = {};
+
+            // Reset UI
+            interactiveElements.forEach(el => {
+                el.classList.remove('explored', 'active');
+            });
+
+            exampleElements.forEach(el => {
+                el.classList.remove('explored', 'open');
+            });
+
+            quizQuestions.forEach(question => {
+                const options = question.querySelectorAll('.quiz-option');
+                options.forEach(opt => {
+                    opt.classList.remove('selected', 'correct', 'wrong');
+                });
+                const feedback = question.querySelector('.quiz-feedback');
+                feedback.classList.remove('show');
+            });
+
+            document.getElementById('quizSubmit').style.display = 'block';
+            document.getElementById('quizSubmit').disabled = true;
+            document.getElementById('completionCard').style.display = 'none';
+            document.getElementById('reflection').value = '';
+            document.getElementById('savePortfolio').disabled = false;
+            document.getElementById('savePortfolio').textContent = '💾 Ins Portfolio speichern';
+            document.getElementById('savePortfolio').style.background = '';
+            document.getElementById('shareSection').style.display = 'none';
+            document.getElementById('emojiReactions').style.display = 'none';
+
+            // Reset progress
+            updateProgress();
+            updateActivityStats();
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Show Yoda encouragement
+            yodaQuote.textContent = "Erneut beginnen du tust. Weiser werden du wirst. 🧙‍♂️✨";
+            yodaSpeech.classList.add('show');
+            setTimeout(() => {
+                yodaSpeech.classList.remove('show');
+            }, 5000);
+        });
 
         console.log('🎯 Kompetenz-Einführung geladen');
         console.log('👤 User:', userName || 'Gast');
