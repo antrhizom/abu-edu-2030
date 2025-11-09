@@ -315,6 +315,66 @@
             max-height: 500px;
         }
 
+        .example-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            border-left: 3px solid var(--white);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .example-box:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateX(5px);
+            border-left-width: 5px;
+        }
+
+        .example-box.explored {
+            background: rgba(255, 255, 255, 0.4);
+            border-left: 5px solid #10B981;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .example-box .click-hint {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--ktzh-blue);
+            padding: 0.25rem 0.5rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .example-box:not(.explored):hover .click-hint {
+            opacity: 1;
+        }
+
+        .example-box.explored .click-hint {
+            opacity: 1;
+            background: #10B981;
+            color: var(--white);
+        }
+
+        .example-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .example-content {
+            font-size: 0.875rem;
+            font-style: italic;
+        }
+
         .checkmark {
             position: absolute;
             top: 10px;
@@ -461,7 +521,7 @@
         }
 
         .accordion-item.open .accordion-body {
-            max-height: 1000px;
+            max-height: 2000px;
         }
 
         .accordion-body-content {
@@ -472,6 +532,112 @@
 
         .accordion-body-content strong {
             color: var(--ktzh-blue);
+        }
+
+        /* Clickable Example in Accordion */
+        .accordion-example {
+            background: var(--ktzh-lightblue);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+            border-left: 4px solid var(--ktzh-cyan);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .accordion-example:hover {
+            background: #D0E8F2;
+            border-left-width: 6px;
+            transform: translateX(5px);
+        }
+
+        .accordion-example.explored {
+            background: #C5E6D5;
+            border-left: 6px solid var(--green);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .accordion-example-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .accordion-example-title {
+            font-weight: 700;
+            color: var(--ktzh-blue);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .accordion-example.explored .accordion-example-title {
+            color: var(--green);
+        }
+
+        .example-toggle {
+            background: rgba(0, 102, 204, 0.1);
+            color: var(--ktzh-blue);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-example:hover .example-toggle {
+            background: var(--ktzh-blue);
+            color: var(--white);
+        }
+
+        .accordion-example.explored .example-toggle {
+            background: var(--green);
+            color: var(--white);
+        }
+
+        .accordion-example-content {
+            color: var(--ktzh-darkgray);
+            font-size: 0.938rem;
+            line-height: 1.6;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .accordion-example.example-open .accordion-example-content {
+            max-height: 1000px;
+            opacity: 1;
+            margin-top: 0.75rem;
+        }
+
+        .accordion-example.example-open .example-toggle {
+            background: var(--ktzh-cyan);
+            color: var(--white);
+        }
+
+        .accordion-example.explored.example-open .example-toggle {
+            background: var(--green);
+            color: var(--white);
+        }
+
+        .example-checkmark {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            opacity: 0;
+            transform: scale(0) rotate(-180deg);
+            transition: all 0.4s ease;
+        }
+
+        .accordion-example.explored .example-checkmark {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
         }
 
         /* Modules Grid */
@@ -716,6 +882,12 @@
                     <p class="hero-card-preview">Die Eisberg-Metapher...</p>
                     <div class="hero-card-detail">
                         <strong>Performanz</strong> (was du tust) ist nur die Spitze. Darunter liegen <strong>Kompetenzen</strong>: Wissen, Können, Wollen. Wir machen das Unsichtbare sichtbar!
+                        <div class="example-box">
+                            <div class="example-title">💼 Beispiel aus deinem Alltag:</div>
+                            <div class="example-content">
+                                Du kannst im Betrieb professionell telefonieren (Performanz). Dahinter steckt: Fachwissen über dein Produkt, Höflichkeit, Selbstsicherheit, und der Wille, Kunden gut zu betreuen. Das sind deine Kompetenzen!
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="hero-card" data-interactive>
@@ -725,6 +897,12 @@
                     <p class="hero-card-preview">Kompetenzen kehren wieder...</p>
                     <div class="hero-card-detail">
                         Kompetenzen begegnen dir <strong>immer wieder</strong> – in verschiedenen Themen, neuen Kontexten. Du lernst nicht isoliert, sondern <strong>vernetzt</strong>.
+                        <div class="example-box">
+                            <div class="example-title">🎯 Beispiel aus deinem Alltag:</div>
+                            <div class="example-content">
+                                "Kooperation" lernst du beim Lehrvertrag (mit Berufsbildner zusammenarbeiten), bei Budget (mit Familie über Geld sprechen) und bei Nachhaltigkeit (gemeinsam Lösungen finden). Jedes Mal wird's komplexer!
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="hero-card" data-interactive>
@@ -733,7 +911,13 @@
                     <h3>3 Dimensionen</h3>
                     <p class="hero-card-preview">Gesellschaft + Sprache + Schlüssel...</p>
                     <div class="hero-card-detail">
-                        Jedes Thema verbindet <strong>Gesellschaft</strong> (Wissen), <strong>Sprache</strong> (Kommunikation) und <strong>Schlüsselkompetenzen</strong> (überfachliche Fähigkeiten).
+                        Jedes Thema verbindet <strong>Gesellschaft</strong> (Wissen), <strong>Sprache</strong> (Kommunikation, inkl. digitale Kompetenzen) und <strong>Schlüsselkompetenzen</strong> (überfachliche Fähigkeiten).
+                        <div class="example-box">
+                            <div class="example-title">📱 Beispiel aus deinem Alltag:</div>
+                            <div class="example-content">
+                                Beim Thema "Budget": Du lernst über Steuern (Gesellschaft), schreibst ein Budget mit Excel (Sprache/digitale Kompetenz) und planst voraus (Schlüsselkompetenz Selbstmanagement). Alles zusammen macht dich kompetent!
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="hero-card" data-interactive>
@@ -743,6 +927,12 @@
                     <p class="hero-card-preview">Erkenne den Mehrwert...</p>
                     <div class="hero-card-detail">
                         <strong>Warum</strong> lernst du das? Weil es für dein Leben, deinen Beruf, deine Zukunft relevant ist. Du erkennst den <strong>Bezug</strong> zu deinem Alltag.
+                        <div class="example-box">
+                            <div class="example-title">💰 Beispiel aus deinem Alltag:</div>
+                            <div class="example-content">
+                                Du lernst über Schulden nicht "für die Prüfung", sondern weil 30% der jungen Erwachsenen in der Schweiz verschuldet sind. Du willst nicht dazugehören – also lernst du Budget-Management. Das ist Sinn!
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -792,6 +982,22 @@
                     <div class="accordion-body-content">
                         <p><strong>Performanz</strong> (was du tust) ist nur die Spitze des Eisbergs. Darunter liegen <strong>Kompetenzen</strong>: Wissen, Können, Wollen. Wir machen das Unsichtbare sichtbar – du verstehst, was dich befähigt, bestimmte Dinge zu tun.</p>
                         <p style="margin-top: 1rem;">Mit der Eisberg-Metapher erkennst du die <strong>Tiefe</strong> deines Lernens: Es geht nicht nur darum, etwas zu tun, sondern zu verstehen, warum und wie du es kannst.</p>
+                        
+                        <div class="accordion-example" data-example-interactive>
+                            <span class="example-checkmark">✓</span>
+                            <div class="accordion-example-header">
+                                <div class="accordion-example-title">🎮 Konkretes Beispiel: Gaming & Streaming</div>
+                                <div class="example-toggle">Klick mich!</div>
+                            </div>
+                            <div class="accordion-example-content">
+                                <strong>Sichtbar (Performanz):</strong> Du streamst auf Twitch und hast 500 Follower.<br><br>
+                                <strong>Unsichtbar (Kompetenzen):</strong><br>
+                                • <strong>Wissen:</strong> Du kennst die Twitch-Algorithmen, weißt wie man moderiert<br>
+                                • <strong>Können:</strong> Du bedienst OBS, sprichst frei vor der Kamera, reagierst auf Chat<br>
+                                • <strong>Wollen:</strong> Du bist motiviert, regelmäßig zu streamen, nimmst Kritik an<br><br>
+                                👉 Das Lehrmittel zeigt dir: Diese Kompetenzen brauchst du auch im Beruf!
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -809,6 +1015,21 @@
                     <div class="accordion-body-content">
                         <p>Kompetenzen begegnen dir <strong>immer wieder</strong> – in verschiedenen Themen, neuen Kontexten. Du lernst nicht isoliert, sondern <strong>vernetzt</strong>. Jedes Thema baut auf vorherigen auf und vertieft dein Verständnis.</p>
                         <p style="margin-top: 1rem;">Das <strong>Spiralcurriculum</strong> bedeutet: Du durchläufst Kompetenzen mehrfach – jedes Mal tiefer, komplexer, selbstständiger.</p>
+                        
+                        <div class="accordion-example" data-example-interactive>
+                            <span class="example-checkmark">✓</span>
+                            <div class="accordion-example-header">
+                                <div class="accordion-example-title">📱 Konkretes Beispiel: Social Media & Kommunikation</div>
+                                <div class="example-toggle">Klick mich!</div>
+                            </div>
+                            <div class="accordion-example-content">
+                                Die Kompetenz <strong>"Digitale Kommunikation"</strong> kommt immer wieder:<br><br>
+                                <strong>Thema 1 (Berufseinstieg):</strong> WhatsApp-Nachrichten an Berufsbildner – was geht, was nicht?<br><br>
+                                <strong>Thema 2 (Budget):</strong> Banking-App bedienen, Zahlungen tätigen<br><br>
+                                <strong>Thema 6 (Digitale Welt):</strong> Fake News auf Instagram erkennen, Datenschutz bei TikTok<br><br>
+                                👉 Jedes Mal wird's komplexer – aber du baust auf dem vorherigen Wissen auf!
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -826,9 +1047,34 @@
                     <div class="accordion-body-content">
                         <p>Jedes Thema verbindet drei wichtige Bereiche:</p>
                         <p style="margin-top: 0.5rem;"><strong>📚 Gesellschaft:</strong> Wissen über gesellschaftliche Zusammenhänge</p>
-                        <p style="margin-top: 0.5rem;"><strong>💬 Sprache:</strong> Kommunikation in verschiedenen Modi</p>
+                        <p style="margin-top: 0.5rem;"><strong>💬 Sprache:</strong> Kommunikation in verschiedenen Modi (inkl. digitale Kompetenzen integriert)</p>
                         <p style="margin-top: 0.5rem;"><strong>🔑 Schlüsselkompetenzen:</strong> Überfachliche Fähigkeiten wie Selbstmanagement, Kooperation</p>
                         <p style="margin-top: 1rem;">Du siehst, wie alles zusammenhängt und sich gegenseitig verstärkt!</p>
+                        
+                        <div class="accordion-example" data-example-interactive>
+                            <span class="example-checkmark">✓</span>
+                            <div class="accordion-example-header">
+                                <div class="accordion-example-title">🎧 Konkretes Beispiel: Dein erster Lohn</div>
+                                <div class="example-toggle">Klick mich!</div>
+                            </div>
+                            <div class="accordion-example-content">
+                                <strong>📚 Gesellschaft (Wissen):</strong><br>
+                                • Wie funktioniert das Steuersystem in der Schweiz?<br>
+                                • Was sind AHV, IV, ALV? Warum wird das abgezogen?<br><br>
+                                
+                                <strong>💬 Sprache (Kommunikation + Digital):</strong><br>
+                                • Lohnabrechnung lesen und verstehen<br>
+                                • Mit Chef über Lohnerhöhung sprechen<br>
+                                • Budget-Tabelle in Excel erstellen (digitale Kompetenz!)<br>
+                                • Banking-App nutzen für Überweisungen<br><br>
+                                
+                                <strong>🔑 Schlüsselkompetenzen:</strong><br>
+                                • Selbstmanagement: Geld einteilen, nicht alles sofort ausgeben<br>
+                                • Kritisches Denken: Brauche ich das neue iPhone wirklich?<br><br>
+                                
+                                👉 Alle 3 Dimensionen zusammen machen dich finanziell kompetent!
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -846,6 +1092,28 @@
                     <div class="accordion-body-content">
                         <p><strong>Warum</strong> lernst du das? Weil es für dein Leben, deinen Beruf, deine Zukunft relevant ist. Du erkennst den <strong>Bezug</strong> zu deinem Alltag und verstehst den Mehrwert jedes Lerninhalts.</p>
                         <p style="margin-top: 1rem;">Das Lehrmittel zeigt dir <strong>transparent</strong>, welche Kompetenzen du gerade aufbaust. Du siehst den <strong>roten Faden</strong> und verstehst die Struktur hinter dem Lernen.</p>
+                        
+                        <div class="accordion-example" data-example-interactive>
+                            <span class="example-checkmark">✓</span>
+                            <div class="accordion-example-header">
+                                <div class="accordion-example-title">🏠 Konkretes Beispiel: Warum lerne ich über Mietverträge?</div>
+                                <div class="example-toggle">Klick mich!</div>
+                            </div>
+                            <div class="accordion-example-content">
+                                <strong>Nicht sinnvoll:</strong> "Lern das halt, kommt an der Prüfung."<br><br>
+                                
+                                <strong>Sinnvoll (so machen wir's):</strong><br>
+                                📊 <strong>Statistik:</strong> Mit 20 ziehen 60% der jungen Erwachsenen in der Schweiz aus. Das bist bald DU!<br><br>
+                                
+                                💰 <strong>Reale Situation:</strong> Deine erste eigene Wohnung kostet in Zürich ca. CHF 1200.-/Monat. Bei CHF 1000.- Lehrlingslohn ein Problem!<br><br>
+                                
+                                ⚠️ <strong>Häufiger Fehler:</strong> Kündigungsfrist verpasst → Du zahlst 3 Monate doppelt Miete (CHF 3'600.-)!<br><br>
+                                
+                                ✅ <strong>Dein Nutzen:</strong> Du weißt jetzt, worauf du achten musst. Du sparst Geld und Stress.<br><br>
+                                
+                                👉 DAS ist Sinnhaftigkeit: Nicht "für die Schule" lernen, sondern fürs Leben!
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -861,7 +1129,7 @@
             </div>
 
             <div class="modules-grid">
-                <a href="kompetenzen-einfuehrung.html" class="module-card" data-interactive>
+                <a href="kompetenzen-einfuehrung.html" class="module-card">
                     <div class="module-header">
                         <div class="module-icon">🎯</div>
                         <div class="module-badge">★ Start hier!</div>
@@ -870,7 +1138,7 @@
                     <p>Eisberg-Metapher, 3 Dimensionen, Zirkularität – verstehe die Grundlagen!</p>
                 </a>
 
-                <div class="module-card" data-interactive>
+                <div class="module-card">
                     <div class="module-header">
                         <div class="module-icon">💼</div>
                         <div class="module-badge">Thema 1</div>
@@ -879,7 +1147,7 @@
                     <p>Lehrvertrag, Kommunikation, Orientierung im Betrieb und Schule.</p>
                 </div>
 
-                <div class="module-card" data-interactive>
+                <div class="module-card">
                     <div class="module-header">
                         <div class="module-icon">💰</div>
                         <div class="module-badge">Thema 2</div>
@@ -888,7 +1156,7 @@
                     <p>Budget erstellen, Konsumentscheidungen treffen, Schulden vermeiden.</p>
                 </div>
 
-                <div class="module-card" data-interactive>
+                <div class="module-card">
                     <div class="module-header">
                         <div class="module-icon">🌍</div>
                         <div class="module-badge">Thema 3</div>
@@ -897,7 +1165,7 @@
                     <p>Ökologie, nachhaltiger Konsum, Ressourcen schonen.</p>
                 </div>
 
-                <div class="module-card" data-interactive>
+                <div class="module-card">
                     <div class="module-header">
                         <div class="module-icon">🗳️</div>
                         <div class="module-badge">Thema 4</div>
@@ -906,7 +1174,7 @@
                     <p>Demokratie, Partizipation, politische Prozesse verstehen.</p>
                 </div>
 
-                <div class="module-card" data-interactive>
+                <div class="module-card">
                     <div class="module-header">
                         <div class="module-icon">👥</div>
                         <div class="module-badge">Thema 5</div>
@@ -915,7 +1183,7 @@
                     <p>Identität, Kultur, Vielfalt, Konfliktlösung.</p>
                 </div>
 
-                <div class="module-card" data-interactive>
+                <div class="module-card">
                     <div class="module-header">
                         <div class="module-icon">💻</div>
                         <div class="module-badge">Thema 6</div>
@@ -924,7 +1192,7 @@
                     <p>Medienbildung, Datenschutz, Fake News erkennen.</p>
                 </div>
 
-                <div class="module-card" data-interactive>
+                <div class="module-card">
                     <div class="module-header">
                         <div class="module-icon">🏥</div>
                         <div class="module-badge">Thema 7</div>
@@ -980,17 +1248,21 @@
 
         // Progress Tracking
         const interactiveElements = document.querySelectorAll('[data-interactive]');
-        const totalElements = interactiveElements.length;
+        const exampleElements = document.querySelectorAll('[data-example-interactive]');
+        const totalElements = interactiveElements.length + exampleElements.length;
         let exploredElements = new Set();
+        let exploredExamples = new Set();
 
         function updateProgress() {
-            const percentage = Math.round((exploredElements.size / totalElements) * 100);
+            const totalExplored = exploredElements.size + exploredExamples.size;
+            const percentage = Math.round((totalExplored / totalElements) * 100);
             document.getElementById('progressFill').style.width = percentage + '%';
             document.getElementById('progressPercentage').textContent = percentage + '%';
             
             // Save to localStorage
             localStorage.setItem('abuEbaIndexProgress', JSON.stringify({
                 explored: Array.from(exploredElements),
+                exploredExamples: Array.from(exploredExamples),
                 percentage: percentage
             }));
         }
@@ -1001,12 +1273,20 @@
             try {
                 const data = JSON.parse(savedProgress);
                 exploredElements = new Set(data.explored || []);
+                exploredExamples = new Set(data.exploredExamples || []);
                 updateProgress();
                 
                 // Mark explored elements
                 exploredElements.forEach(index => {
                     if (interactiveElements[index]) {
                         interactiveElements[index].classList.add('explored');
+                    }
+                });
+
+                // Mark explored examples
+                exploredExamples.forEach(index => {
+                    if (exampleElements[index]) {
+                        exampleElements[index].classList.add('explored');
                     }
                 });
             } catch (e) {
@@ -1017,6 +1297,11 @@
         // Track clicks on interactive elements
         interactiveElements.forEach((element, index) => {
             element.addEventListener('click', function(e) {
+                // Don't mark as explored if clicking on example inside
+                if (e.target.closest('[data-example-interactive]')) {
+                    return;
+                }
+                
                 if (!exploredElements.has(index)) {
                     exploredElements.add(index);
                     element.classList.add('explored');
@@ -1030,10 +1315,32 @@
             });
         });
 
+        // Track clicks on example boxes
+        exampleElements.forEach((element, index) => {
+            element.addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevent accordion from toggling
+                
+                // Toggle example open state
+                element.classList.toggle('example-open');
+                
+                // Mark as explored
+                if (!exploredExamples.has(index)) {
+                    exploredExamples.add(index);
+                    element.classList.add('explored');
+                    updateProgress();
+                }
+            });
+        });
+
         // Accordion functionality
         const accordionHeaders = document.querySelectorAll('.accordion-header');
         accordionHeaders.forEach(header => {
-            header.addEventListener('click', function() {
+            header.addEventListener('click', function(e) {
+                // Don't close if clicking on example
+                if (e.target.closest('[data-example-interactive]')) {
+                    return;
+                }
+                
                 const item = this.parentElement;
                 const wasOpen = item.classList.contains('open');
                 
@@ -1089,8 +1396,9 @@
             });
         });
 
-        console.log('🎓 ABU EBA Digital - Interaktive Version geladen!');
-        console.log('📊 Fortschritt:', exploredElements.size, '/', totalElements, 'Elemente erkundet');
+        console.log('🎓 ABU EBA Digital - Interaktive Version v2.0 geladen!');
+        console.log('📊 Tracking:', totalElements, 'interaktive Elemente');
+        console.log('💡 NEU: Beispiele in Accordeons sind jetzt auch klickbar!');
     </script>
 </body>
 </html>
