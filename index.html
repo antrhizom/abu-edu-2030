@@ -572,6 +572,79 @@
             opacity: 0.9;
         }
 
+        /* Video Section */
+        .video-section {
+            padding: 6rem 2rem;
+            background: var(--white);
+        }
+
+        .video-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .video-container {
+            background: var(--ktzh-lightblue);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .video-container.explored {
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+            border: 2px solid var(--ktzh-blue);
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            background: #000;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-progress {
+            margin-top: 1.5rem;
+        }
+
+        .video-progress-text {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        #videoStatus {
+            font-weight: 600;
+            color: var(--ktzh-blue);
+            font-size: 0.938rem;
+        }
+
+        .video-progress-bar {
+            background: rgba(0, 102, 204, 0.1);
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .video-progress-fill {
+            background: linear-gradient(90deg, var(--ktzh-blue), var(--ktzh-cyan));
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
         /* Accordion Sections */
         .accordion-section {
             padding: 6rem 2rem;
@@ -1074,6 +1147,40 @@
         </div>
     </section>
 
+    <!-- Video Section -->
+    <section class="video-section" id="video" data-section>
+        <div class="video-content">
+            <div class="section-header">
+                <h2>📺 Verstehe das Konzept</h2>
+                <p>Schaue dir dieses Video an, um das Lehrmittel besser zu verstehen</p>
+            </div>
+
+            <div class="video-container" data-interactive>
+                <span class="checkmark">✓</span>
+                <div class="video-wrapper" id="videoWrapper">
+                    <iframe 
+                        id="youtubeVideo"
+                        width="100%" 
+                        height="100%" 
+                        src="https://www.youtube.com/embed/v-yyGnWRS1c?enablejsapi=1&rel=0&modestbranding=1" 
+                        title="ABU EBA Lehrmittel" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="video-progress" id="videoProgress">
+                    <div class="video-progress-text">
+                        <span id="videoStatus">▶️ Video starten</span>
+                    </div>
+                    <div class="video-progress-bar">
+                        <div class="video-progress-fill" id="videoProgressFill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Accordion Section: Why -->
     <section class="accordion-section" id="why" data-section>
         <div class="accordion-content">
@@ -1439,6 +1546,96 @@
         let exploredElements = new Set();
         let exploredExamples = new Set();
 
+        // YouTube Video Tracking (NACH interactiveElements Deklaration!)
+        let player;
+        let videoWatched = false;
+        let videoCompleted = false;
+        let videoCheckInterval;
+        const videoContainerIndex = Array.from(interactiveElements).findIndex(el => 
+            el.classList.contains('video-container')
+        );
+
+        // Load YouTube IFrame API
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        // YouTube API Ready Callback
+        window.onYouTubeIframeAPIReady = function() {
+            player = new YT.Player('youtubeVideo', {
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        };
+
+        function onPlayerReady(event) {
+            console.log('📺 YouTube Player ready');
+        }
+
+        function onPlayerStateChange(event) {
+            const videoStatus = document.getElementById('videoStatus');
+            const videoProgressFill = document.getElementById('videoProgressFill');
+            
+            // Playing
+            if (event.data == YT.PlayerState.PLAYING) {
+                videoStatus.textContent = '▶️ Video läuft...';
+                videoWatched = true;
+                
+                // Start tracking progress
+                if (!videoCheckInterval) {
+                    videoCheckInterval = setInterval(() => {
+                        if (player && player.getCurrentTime && player.getDuration) {
+                            const currentTime = player.getCurrentTime();
+                            const duration = player.getDuration();
+                            const progress = (currentTime / duration) * 100;
+                            
+                            videoProgressFill.style.width = progress + '%';
+                            
+                            // Video completed (watched at least 95%)
+                            if (progress >= 95 && !videoCompleted) {
+                                videoCompleted = true;
+                                videoStatus.textContent = '✅ Video komplett angeschaut!';
+                                
+                                // Mark as explored
+                                if (videoContainerIndex !== -1 && !exploredElements.has(videoContainerIndex)) {
+                                    exploredElements.add(videoContainerIndex);
+                                    document.querySelector('.video-container').classList.add('explored');
+                                    updateProgress();
+                                }
+                                
+                                clearInterval(videoCheckInterval);
+                                videoCheckInterval = null;
+                            }
+                        }
+                    }, 1000);
+                }
+            }
+            // Paused
+            else if (event.data == YT.PlayerState.PAUSED) {
+                videoStatus.textContent = '⏸️ Video pausiert';
+            }
+            // Ended
+            else if (event.data == YT.PlayerState.ENDED) {
+                videoStatus.textContent = '✅ Video komplett angeschaut!';
+                videoCompleted = true;
+                
+                // Mark as explored
+                if (videoContainerIndex !== -1 && !exploredElements.has(videoContainerIndex)) {
+                    exploredElements.add(videoContainerIndex);
+                    document.querySelector('.video-container').classList.add('explored');
+                    updateProgress();
+                }
+                
+                if (videoCheckInterval) {
+                    clearInterval(videoCheckInterval);
+                    videoCheckInterval = null;
+                }
+            }
+        }
+
         function updateProgress() {
             const totalExplored = exploredElements.size + exploredExamples.size;
             const percentage = Math.round((totalExplored / totalElements) * 100);
@@ -1571,35 +1768,6 @@
                 }
             });
         });
-
-        // Floating Wise Woman
-        const floatingWise = document.getElementById('floatingWise');
-        const wiseSpeech = document.getElementById('wiseSpeech');
-        const wiseQuote = document.getElementById('wiseQuote');
-
-        floatingWise.addEventListener('click', function() {
-            wiseQuote.textContent = wiseQuotes[currentWiseQuoteIndex];
-            wiseSpeech.classList.add('show');
-            
-            currentWiseQuoteIndex = (currentWiseQuoteIndex + 1) % wiseQuotes.length;
-            
-            setTimeout(() => {
-                wiseSpeech.classList.remove('show');
-            }, 5000);
-        });
-
-        // Auto-show wise woman on first visit
-        setTimeout(() => {
-            if (!localStorage.getItem('wiseGreeted')) {
-                wiseQuote.textContent = "👋 Willkommen! Erkunde alle Bereiche um den Start-Button freizuschalten!";
-                wiseSpeech.classList.add('show');
-                localStorage.setItem('wiseGreeted', 'true');
-                
-                setTimeout(() => {
-                    wiseSpeech.classList.remove('show');
-                }, 5000);
-            }
-        }, 2000);
 
         // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
