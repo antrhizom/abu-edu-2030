@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ABU EBA - Die 8 Themen</title>
+    <title>Themenübersicht | ABU EBA Digital</title>
     <style>
         * {
             margin: 0;
@@ -18,156 +18,419 @@
             --ktzh-darkgray: #3C3C3B;
             --ktzh-gray: #767676;
             --white: #FFFFFF;
-            --theme1: #FF6B6B;
-            --theme2: #4ECDC4;
-            --theme3: #45B7D1;
-            --theme4: #FFA07A;
-            --theme5: #98D8C8;
-            --theme6: #F7DC6F;
-            --theme7: #BB8FCE;
-            --theme8: #85C1E2;
+            --green: #10B981;
+            --yellow: #F59E0B;
+            --purple: #8B5CF6;
+            --orange: #FF8C42;
+            --pink: #FF6B9D;
         }
 
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f9fc 0%, #ffffff 100%);
             color: var(--ktzh-darkgray);
             line-height: 1.6;
-            background: linear-gradient(180deg, var(--white) 0%, var(--ktzh-lightblue) 100%);
-            min-height: 100vh;
         }
 
-        .header {
-            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
+        /* Top Navigation */
+        .top-nav {
+            background: var(--white);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .top-nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ktzh-blue);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            color: var(--ktzh-cyan);
+        }
+
+        .logo-icon {
+            font-size: 1.75rem;
+        }
+
+        .current-page {
+            color: var(--ktzh-gray);
+            font-weight: 600;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 0.938rem;
+        }
+
+        .nav-btn-primary {
+            background: var(--ktzh-blue);
             color: var(--white);
-            padding: 3rem 2rem;
+        }
+
+        .nav-btn-primary:hover {
+            background: var(--ktzh-cyan);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn-secondary {
+            background: transparent;
+            color: var(--ktzh-blue);
+            border: 2px solid var(--ktzh-blue);
+        }
+
+        .nav-btn-secondary:hover {
+            background: var(--ktzh-lightblue);
+        }
+
+        /* Progress Badge */
+        .progress-badge {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 999;
+            font-weight: 600;
+            color: var(--ktzh-blue);
+            font-size: 0.875rem;
             text-align: center;
         }
 
-        .header h1 {
+        .progress-badge .percentage {
+            font-size: 1.5rem;
+            color: var(--ktzh-cyan);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Floating Characters */
+        .floating-character {
+            position: fixed;
+            bottom: 30px;
+            z-index: 997;
+            cursor: pointer;
+        }
+
+        .floating-wise {
+            left: 30px;
+            animation: float-wise 3s ease-in-out infinite;
+        }
+
+        .floating-robot {
+            right: 30px;
+            animation: float-robot 3.5s ease-in-out infinite;
+        }
+
+        @keyframes float-wise {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes float-robot {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .character-icon {
+            font-size: 4rem;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .floating-character:hover .character-icon {
+            transform: scale(1.2);
+        }
+
+        .character-speech {
+            position: absolute;
+            bottom: 100%;
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+            min-width: 280px;
+            max-width: 350px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .floating-wise .character-speech {
+            left: 0;
+            border-left: 4px solid var(--purple);
+        }
+
+        .floating-wise .character-speech::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 30px;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid var(--white);
+        }
+
+        .floating-robot .character-speech {
+            right: 0;
+            border-left: 4px solid var(--ktzh-cyan);
+        }
+
+        .floating-robot .character-speech::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 30px;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid var(--white);
+        }
+
+        .character-speech.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .character-speech p {
+            font-weight: 600;
+            font-size: 0.938rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .floating-wise .character-speech p {
+            color: var(--purple);
+        }
+
+        .floating-robot .character-speech p {
+            color: var(--ktzh-blue);
+        }
+
+        .character-speech .term {
+            font-weight: 700;
+            color: var(--ktzh-cyan);
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .character-speech .explanation {
+            color: var(--ktzh-darkgray);
+            font-weight: 500;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
+            color: var(--white);
+            padding: 4rem 2rem 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '📚';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.1;
+            right: -3rem;
+            top: -3rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        header h1 {
             font-size: 2.75rem;
             margin-bottom: 1rem;
             font-weight: 700;
         }
 
-        .header p {
-            font-size: 1.25rem;
+        header p {
+            font-size: 1.125rem;
             opacity: 0.95;
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 700px;
         }
 
+        /* Container */
         .container {
             max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
+            margin: -2rem auto 3rem;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
         }
 
-        .intro {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 2.5rem;
-            margin-bottom: 3rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            border-left: 5px solid var(--ktzh-blue);
-        }
-
-        .intro h2 {
-            color: var(--ktzh-blue);
-            font-size: 1.75rem;
-            margin-bottom: 1rem;
-        }
-
-        .intro p {
-            font-size: 1.125rem;
-            line-height: 1.8;
-            color: var(--ktzh-gray);
-        }
-
-        .themes-grid {
+        /* Theme Grid */
+        .theme-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 2rem;
+            margin-bottom: 3rem;
         }
 
         .theme-card {
             background: var(--white);
             border-radius: 20px;
-            padding: 2.5rem;
+            padding: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
             cursor: pointer;
-            text-decoration: none;
-            color: var(--ktzh-darkgray);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             position: relative;
             overflow: hidden;
         }
 
-        .theme-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            transition: height 0.3s ease;
-        }
-
         .theme-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 102, 204, 0.15);
         }
 
-        .theme-card:hover::before {
-            height: 8px;
+        .theme-card.explored {
+            box-shadow: 0 8px 20px rgba(0, 102, 204, 0.25);
+            border: 2px solid var(--ktzh-blue);
         }
-
-        .theme-card.theme1::before { background: var(--theme1); }
-        .theme-card.theme2::before { background: var(--theme2); }
-        .theme-card.theme3::before { background: var(--theme3); }
-        .theme-card.theme4::before { background: var(--theme4); }
-        .theme-card.theme5::before { background: var(--theme5); }
-        .theme-card.theme6::before { background: var(--theme6); }
-        .theme-card.theme7::before { background: var(--theme7); }
-        .theme-card.theme8::before { background: var(--theme8); }
 
         .theme-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--pink), var(--orange));
+            padding: 2rem;
+            color: var(--white);
+            position: relative;
+        }
+
+        .theme-card:nth-child(2) .theme-header {
+            background: linear-gradient(135deg, var(--green), var(--ktzh-cyan));
+        }
+
+        .theme-card:nth-child(3) .theme-header {
+            background: linear-gradient(135deg, var(--yellow), var(--orange));
+        }
+
+        .theme-card:nth-child(4) .theme-header {
+            background: linear-gradient(135deg, var(--purple), var(--pink));
+        }
+
+        .theme-card:nth-child(5) .theme-header {
+            background: linear-gradient(135deg, var(--ktzh-cyan), var(--ktzh-blue));
+        }
+
+        .theme-card:nth-child(6) .theme-header {
+            background: linear-gradient(135deg, var(--orange), var(--pink));
+        }
+
+        .theme-card:nth-child(7) .theme-header {
+            background: linear-gradient(135deg, var(--green), var(--ktzh-cyan));
+        }
+
+        .theme-card:nth-child(8) .theme-header {
+            background: linear-gradient(135deg, var(--ktzh-blue), var(--purple));
         }
 
         .theme-icon {
             font-size: 3rem;
-        }
-
-        .theme-number {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--ktzh-cyan);
-            letter-spacing: 1px;
-        }
-
-        .theme-card h3 {
-            font-size: 1.5rem;
-            color: var(--ktzh-blue);
             margin-bottom: 0.5rem;
-            font-weight: 700;
+            transition: transform 0.3s ease;
         }
 
-        .theme-card .subtitle {
-            font-size: 1rem;
+        .theme-card:hover .theme-icon {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .theme-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .theme-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0;
+        }
+
+        .theme-body {
+            padding: 1.5rem;
+        }
+
+        .theme-description {
             color: var(--ktzh-gray);
-            margin-bottom: 1.5rem;
+            font-size: 0.938rem;
             line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .theme-details {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .theme-card.active .theme-details {
+            max-height: 800px;
+            opacity: 1;
+            margin-top: 1rem;
         }
 
         .theme-meta {
             display: flex;
             gap: 1rem;
-            flex-wrap: wrap;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
             border-top: 1px solid var(--ktzh-lightblue);
         }
 
@@ -180,245 +443,650 @@
         }
 
         .meta-icon {
-            font-size: 1rem;
+            font-size: 1.25rem;
         }
 
-        .back-link {
+        .lerninhalte-list {
+            background: var(--ktzh-lightblue);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        .lerninhalte-title {
+            font-weight: 700;
+            color: var(--ktzh-blue);
+            margin-bottom: 0.75rem;
+            font-size: 0.938rem;
+        }
+
+        .lerninhalt-item {
+            background: var(--white);
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lerninhalt-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 2rem;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .theme-card.explored .checkmark {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* CTA Button */
+        .theme-cta {
+            background: var(--ktzh-blue);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: 600;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            color: var(--ktzh-blue);
-            text-decoration: none;
-            font-weight: 600;
-            margin-bottom: 2rem;
+            margin-top: 1rem;
             transition: all 0.3s ease;
         }
 
-        .back-link:hover {
-            gap: 0.75rem;
+        .theme-cta:hover {
+            background: var(--ktzh-cyan);
+            transform: translateX(5px);
         }
 
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
+        /* Footer */
+        footer {
+            background: var(--ktzh-darkgray);
+            color: var(--white);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
 
-            .themes-grid {
+        footer p {
+            opacity: 0.8;
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .theme-grid {
                 grid-template-columns: 1fr;
             }
 
-            .theme-card {
-                padding: 2rem;
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .progress-badge {
+                top: 80px;
+                right: 10px;
+                padding: 0.75rem 1rem;
+            }
+
+            .floating-character {
+                bottom: 20px;
+            }
+
+            .floating-wise {
+                left: 20px;
+            }
+
+            .floating-robot {
+                right: 20px;
+            }
+
+            .character-icon {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .top-nav-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-right {
+                flex-wrap: wrap;
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Die 8 Themen des ABU EBA</h1>
-        <p>Kompetenzorientierte Lerninhalte für deine berufliche Grundbildung</p>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="top-nav-content">
+            <div class="nav-left">
+                <a href="index.html" class="logo">
+                    <span class="logo-icon">🎓</span>
+                    <span>ABU EBA Digital</span>
+                </a>
+            </div>
+            <div class="nav-right">
+                <a href="startzweig.html" class="nav-btn nav-btn-secondary">← Zurück zu Mein Lernpfad</a>
+                <a href="index.html" class="nav-btn nav-btn-secondary">🏠 Startseite</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Progress Badge -->
+    <div class="progress-badge">
+        <span class="percentage" id="progressPercentage">0%</span>
+        <div>erkundet</div>
     </div>
 
-    <div class="container">
-        <a href="../startzweig.html" class="back-link">
-            ← Zurück zur Startauswahl
-        </a>
-
-        <div class="intro">
-            <h2>💡 Wie sind die Themen aufgebaut?</h2>
-            <p>
-                Jedes Thema ist <strong>kompetenzorientiert</strong> strukturiert und verbindet 
-                <strong>individuelle Lebensbezüge</strong> mit konkreten <strong>Lerninhalten</strong>. 
-                Pro Lebensbezug findest du zwei Kompetenzformulierungen, die dir helfen, 
-                dich in der Berufs- und Lebenswelt zurechtzufinden.
-            </p>
+    <!-- Floating Characters -->
+    <div class="floating-character floating-wise" id="floatingWise">
+        <div class="character-speech" id="wiseSpeech">
+            <p id="wiseQuote">Klick mich für Weisheiten! 🧙‍♀️</p>
         </div>
+        <div class="character-icon">🧙‍♀️</div>
+    </div>
 
-        <div class="themes-grid">
+    <div class="floating-character floating-robot" id="floatingRobot">
+        <div class="character-speech" id="robotSpeech">
+            <p id="robotExplanation">Klick mich für Begriffshilfe! 🤖</p>
+        </div>
+        <div class="character-icon">🤖</div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <h1>📚 Alle Themen im Überblick</h1>
+            <p>Entdecke die 8 Themen des ABU EBA Unterrichts. Jedes Thema verbindet Gesellschaft, Sprache und Schlüsselkompetenzen. Klicke auf eine Karte für mehr Details!</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="theme-grid">
             <!-- Thema 1 -->
-            <a href="thema1/" class="theme-card theme1">
-                <div class="theme-number">THEMA 1</div>
+            <div class="theme-card" data-interactive>
+                <span class="checkmark">✓</span>
                 <div class="theme-header">
                     <div class="theme-icon">💼</div>
+                    <div class="theme-badge">Thema 1 • 1. Jahr</div>
+                    <h3>Ins Berufsleben einsteigen</h3>
                 </div>
-                <h3>Ins Berufsleben einsteigen</h3>
-                <p class="subtitle">
-                    Lehrvertrag verstehen, im Betrieb orientieren, Kommunikation aufbauen 
-                    und Lernstrategien entwickeln.
-                </p>
-                <div class="theme-meta">
-                    <div class="meta-item">
-                        <span class="meta-icon">⏱️</span>
-                        <span>22 Lektionen</span>
+                <div class="theme-body">
+                    <p class="theme-description">
+                        Du findest dich im Betrieb und in der Berufsschule zurecht, kennst Lernstrategien und arbeitest konstruktiv mit anderen zusammen.
+                    </p>
+                    <div class="theme-meta">
+                        <div class="meta-item">
+                            <span class="meta-icon">📖</span>
+                            <span>22 Lektionen</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">🎯</span>
+                            <span>2 Lebensbezüge</span>
+                        </div>
                     </div>
-                    <div class="meta-item">
-                        <span class="meta-icon">🎯</span>
-                        <span>2 Lebensbezüge</span>
+                    <div class="theme-details">
+                        <div class="lerninhalte-list">
+                            <div class="lerninhalte-title">📋 Lerninhalte:</div>
+                            <div class="lerninhalt-item">📄 1.1 • Lehrvertrag verstehen</div>
+                            <div class="lerninhalt-item">🧠 1.2 • Lernstrategien entwickeln</div>
+                            <div class="lerninhalt-item">💬 2.1 • Konstruktiv kommunizieren</div>
+                            <div class="lerninhalt-item">🤝 2.2 • Konflikte lösen</div>
+                        </div>
+                        <a href="thema1/index.html" class="theme-cta">Zum Thema →</a>
                     </div>
                 </div>
-            </a>
+            </div>
 
             <!-- Thema 2 -->
-            <a href="thema2/" class="theme-card theme2">
-                <div class="theme-number">THEMA 2</div>
+            <div class="theme-card" data-interactive>
+                <span class="checkmark">✓</span>
                 <div class="theme-header">
                     <div class="theme-icon">💰</div>
+                    <div class="theme-badge">Thema 2 • 1. Jahr</div>
+                    <h3>Bewusst konsumieren</h3>
                 </div>
-                <h3>Bewusst konsumieren und handeln</h3>
-                <p class="subtitle">
-                    Budget erstellen, Konsumentscheidungen treffen, nachhaltiges Handeln 
-                    und wirtschaftliche Zusammenhänge verstehen.
-                </p>
-                <div class="theme-meta">
-                    <div class="meta-item">
-                        <span class="meta-icon">⏱️</span>
-                        <span>22 Lektionen</span>
+                <div class="theme-body">
+                    <p class="theme-description">
+                        Du planst dein Budget, triffst bewusste Konsumentscheidungen und kennst die Risiken von Schulden.
+                    </p>
+                    <div class="theme-meta">
+                        <div class="meta-item">
+                            <span class="meta-icon">📖</span>
+                            <span>18 Lektionen</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">🎯</span>
+                            <span>2 Lebensbezüge</span>
+                        </div>
                     </div>
-                    <div class="meta-item">
-                        <span class="meta-icon">🎯</span>
-                        <span>2 Lebensbezüge</span>
+                    <div class="theme-details">
+                        <div class="lerninhalte-list">
+                            <div class="lerninhalte-title">📋 Lerninhalte:</div>
+                            <div class="lerninhalt-item">💵 1.1 • Budget erstellen</div>
+                            <div class="lerninhalt-item">🛒 1.2 • Konsumverhalten reflektieren</div>
+                            <div class="lerninhalt-item">⚠️ 2.1 • Schuldenrisiken kennen</div>
+                            <div class="lerninhalt-item">💳 2.2 • Zahlungsmittel verstehen</div>
+                        </div>
+                        <a href="thema2/index.html" class="theme-cta">Zum Thema →</a>
                     </div>
                 </div>
-            </a>
+            </div>
 
             <!-- Thema 3 -->
-            <a href="thema3/" class="theme-card theme3">
-                <div class="theme-number">THEMA 3</div>
+            <div class="theme-card" data-interactive>
+                <span class="checkmark">✓</span>
                 <div class="theme-header">
-                    <div class="theme-icon">⚠️</div>
+                    <div class="theme-icon">🌱</div>
+                    <div class="theme-badge">Thema 3 • 1. Jahr</div>
+                    <h3>Nachhaltig handeln</h3>
                 </div>
-                <h3>Risiko und Sicherheit</h3>
-                <p class="subtitle">
-                    Risiken einschätzen, Versicherungen verstehen, Sicherheit im Alltag 
-                    und präventive Maßnahmen kennen.
-                </p>
-                <div class="theme-meta">
-                    <div class="meta-item">
-                        <span class="meta-icon">⏱️</span>
-                        <span>22 Lektionen</span>
+                <div class="theme-body">
+                    <p class="theme-description">
+                        Du verstehst ökologische Zusammenhänge, handelst nachhaltig und schonst Ressourcen im Alltag.
+                    </p>
+                    <div class="theme-meta">
+                        <div class="meta-item">
+                            <span class="meta-icon">📖</span>
+                            <span>20 Lektionen</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">🎯</span>
+                            <span>2 Lebensbezüge</span>
+                        </div>
                     </div>
-                    <div class="meta-item">
-                        <span class="meta-icon">🎯</span>
-                        <span>2 Lebensbezüge</span>
+                    <div class="theme-details">
+                        <div class="lerninhalte-list">
+                            <div class="lerninhalte-title">📋 Lerninhalte:</div>
+                            <div class="lerninhalt-item">🌍 1.1 • Ökologie verstehen</div>
+                            <div class="lerninhalt-item">♻️ 1.2 • Nachhaltiger Konsum</div>
+                            <div class="lerninhalt-item">🌿 2.1 • Ressourcen schonen</div>
+                            <div class="lerninhalt-item">🔋 2.2 • Energie sparen</div>
+                        </div>
+                        <a href="thema3/index.html" class="theme-cta">Zum Thema →</a>
                     </div>
                 </div>
-            </a>
+            </div>
 
             <!-- Thema 4 -->
-            <a href="thema4/" class="theme-card theme4">
-                <div class="theme-number">THEMA 4</div>
+            <div class="theme-card" data-interactive>
+                <span class="checkmark">✓</span>
                 <div class="theme-header">
-                    <div class="theme-icon">📱</div>
+                    <div class="theme-icon">💻</div>
+                    <div class="theme-badge">Thema 4 • 1. Jahr</div>
+                    <h3>Digitale Welt verstehen</h3>
                 </div>
-                <h3>Medien und digitale Welt</h3>
-                <p class="subtitle">
-                    Medienbildung entwickeln, Datenschutz verstehen, Fake News erkennen 
-                    und digital kompetent handeln.
-                </p>
-                <div class="theme-meta">
-                    <div class="meta-item">
-                        <span class="meta-icon">⏱️</span>
-                        <span>22 Lektionen</span>
+                <div class="theme-body">
+                    <p class="theme-description">
+                        Du nutzt digitale Werkzeuge sicher, erkennst Fake News und schützt deine Daten im Internet.
+                    </p>
+                    <div class="theme-meta">
+                        <div class="meta-item">
+                            <span class="meta-icon">📖</span>
+                            <span>18 Lektionen</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">🎯</span>
+                            <span>2 Lebensbezüge</span>
+                        </div>
                     </div>
-                    <div class="meta-item">
-                        <span class="meta-icon">🎯</span>
-                        <span>2 Lebensbezüge</span>
+                    <div class="theme-details">
+                        <div class="lerninhalte-list">
+                            <div class="lerninhalte-title">📋 Lerninhalte:</div>
+                            <div class="lerninhalt-item">🔧 1.1 • Digitale Werkzeuge nutzen</div>
+                            <div class="lerninhalt-item">🤖 1.2 • KI verstehen</div>
+                            <div class="lerninhalt-item">📱 2.1 • Medien kritisch nutzen</div>
+                            <div class="lerninhalt-item">🔒 2.2 • Datenschutz beachten</div>
+                        </div>
+                        <a href="thema4/index.html" class="theme-cta">Zum Thema →</a>
                     </div>
                 </div>
-            </a>
+            </div>
 
             <!-- Thema 5 -->
-            <a href="thema5/" class="theme-card theme5">
-                <div class="theme-number">THEMA 5</div>
+            <div class="theme-card" data-interactive>
+                <span class="checkmark">✓</span>
                 <div class="theme-header">
                     <div class="theme-icon">🗳️</div>
+                    <div class="theme-badge">Thema 5 • 2. Jahr</div>
+                    <h3>Mitbestimmen & Politik</h3>
                 </div>
-                <h3>Meinung bilden, akzeptieren und mitgestalten</h3>
-                <p class="subtitle">
-                    Politische Prozesse verstehen, Meinungen bilden, demokratisch 
-                    partizipieren und respektvoll diskutieren.
-                </p>
-                <div class="theme-meta">
-                    <div class="meta-item">
-                        <span class="meta-icon">⏱️</span>
-                        <span>22 Lektionen</span>
+                <div class="theme-body">
+                    <p class="theme-description">
+                        Du verstehst demokratische Prozesse, bildest deine Meinung und kannst politisch mitbestimmen.
+                    </p>
+                    <div class="theme-meta">
+                        <div class="meta-item">
+                            <span class="meta-icon">📖</span>
+                            <span>16 Lektionen</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">🎯</span>
+                            <span>2 Lebensbezüge</span>
+                        </div>
                     </div>
-                    <div class="meta-item">
-                        <span class="meta-icon">🎯</span>
-                        <span>2 Lebensbezüge</span>
+                    <div class="theme-details">
+                        <div class="lerninhalte-list">
+                            <div class="lerninhalte-title">📋 Lerninhalte:</div>
+                            <div class="lerninhalt-item">🏛️ 1.1 • Demokratie verstehen</div>
+                            <div class="lerninhalt-item">🗨️ 1.2 • Meinung bilden</div>
+                            <div class="lerninhalt-item">✅ 2.1 • Abstimmen & Wählen</div>
+                            <div class="lerninhalt-item">🤝 2.2 • Partizipation leben</div>
+                        </div>
+                        <a href="thema5/index.html" class="theme-cta">Zum Thema →</a>
                     </div>
                 </div>
-            </a>
+            </div>
 
             <!-- Thema 6 -->
-            <a href="thema6/" class="theme-card theme6">
-                <div class="theme-number">THEMA 6</div>
+            <div class="theme-card" data-interactive>
+                <span class="checkmark">✓</span>
                 <div class="theme-header">
-                    <div class="theme-icon">📋</div>
+                    <div class="theme-icon">👥</div>
+                    <div class="theme-badge">Thema 6 • 2. Jahr</div>
+                    <h3>Zusammenleben gestalten</h3>
                 </div>
-                <h3>Verträge verstehen – fair handeln</h3>
-                <p class="subtitle">
-                    Vertragsarten kennen, rechtliche Grundlagen verstehen, eigene Rechte 
-                    wahrnehmen und verantwortungsvoll handeln.
-                </p>
-                <div class="theme-meta">
-                    <div class="meta-item">
-                        <span class="meta-icon">⏱️</span>
-                        <span>22 Lektionen</span>
+                <div class="theme-body">
+                    <p class="theme-description">
+                        Du respektierst Vielfalt, gehst konstruktiv mit Konflikten um und gestaltest das Zusammenleben aktiv mit.
+                    </p>
+                    <div class="theme-meta">
+                        <div class="meta-item">
+                            <span class="meta-icon">📖</span>
+                            <span>20 Lektionen</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">🎯</span>
+                            <span>2 Lebensbezüge</span>
+                        </div>
                     </div>
-                    <div class="meta-item">
-                        <span class="meta-icon">🎯</span>
-                        <span>2 Lebensbezüge</span>
+                    <div class="theme-details">
+                        <div class="lerninhalte-list">
+                            <div class="lerninhalte-title">📋 Lerninhalte:</div>
+                            <div class="lerninhalt-item">🌍 1.1 • Identität & Kultur</div>
+                            <div class="lerninhalt-item">🌈 1.2 • Vielfalt wertschätzen</div>
+                            <div class="lerninhalt-item">🤝 2.1 • Konflikte lösen</div>
+                            <div class="lerninhalt-item">💬 2.2 • Kommunikation verbessern</div>
+                        </div>
+                        <a href="thema6/index.html" class="theme-cta">Zum Thema →</a>
                     </div>
                 </div>
-            </a>
+            </div>
 
             <!-- Thema 7 -->
-            <a href="thema7/" class="theme-card theme7">
-                <div class="theme-number">THEMA 7</div>
+            <div class="theme-card" data-interactive>
+                <span class="checkmark">✓</span>
                 <div class="theme-header">
-                    <div class="theme-icon">💼</div>
+                    <div class="theme-icon">🏥</div>
+                    <div class="theme-badge">Thema 7 • 2. Jahr</div>
+                    <h3>Gesundheit fördern</h3>
                 </div>
-                <h3>Arbeit und Steuerpflicht</h3>
-                <p class="subtitle">
-                    Arbeitsrecht verstehen, Steuersystem kennen, Lohnabrechnung lesen 
-                    und finanzielle Verpflichtungen erfüllen.
-                </p>
-                <div class="theme-meta">
-                    <div class="meta-item">
-                        <span class="meta-icon">⏱️</span>
-                        <span>22 Lektionen</span>
+                <div class="theme-body">
+                    <p class="theme-description">
+                        Du achtest auf deine Gesundheit, kennst Präventionsmöglichkeiten und verstehst das Gesundheitssystem.
+                    </p>
+                    <div class="theme-meta">
+                        <div class="meta-item">
+                            <span class="meta-icon">📖</span>
+                            <span>16 Lektionen</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">🎯</span>
+                            <span>2 Lebensbezüge</span>
+                        </div>
                     </div>
-                    <div class="meta-item">
-                        <span class="meta-icon">🎯</span>
-                        <span>2 Lebensbezüge</span>
+                    <div class="theme-details">
+                        <div class="lerninhalte-list">
+                            <div class="lerninhalte-title">📋 Lerninhalte:</div>
+                            <div class="lerninhalt-item">💪 1.1 • Wohlbefinden stärken</div>
+                            <div class="lerninhalt-item">🛡️ 1.2 • Prävention verstehen</div>
+                            <div class="lerninhalt-item">🏥 2.1 • Gesundheitssystem nutzen</div>
+                            <div class="lerninhalt-item">🧘 2.2 • Work-Life-Balance</div>
+                        </div>
+                        <a href="thema7/index.html" class="theme-cta">Zum Thema →</a>
                     </div>
                 </div>
-            </a>
+            </div>
 
             <!-- Thema 8 -->
-            <a href="thema8/" class="theme-card theme8">
-                <div class="theme-number">THEMA 8</div>
+            <div class="theme-card" data-interactive>
+                <span class="checkmark">✓</span>
                 <div class="theme-header">
-                    <div class="theme-icon">🎨</div>
+                    <div class="theme-icon">💼</div>
+                    <div class="theme-badge">Thema 8 • 2. Jahr</div>
+                    <h3>Arbeitswelt & Steuern</h3>
                 </div>
-                <h3>Kunst und Kultur</h3>
-                <p class="subtitle">
-                    Kulturelle Vielfalt erleben, künstlerische Ausdrucksformen kennen, 
-                    eigene Kreativität entwickeln und kulturell teilhaben.
-                </p>
-                <div class="theme-meta">
-                    <div class="meta-item">
-                        <span class="meta-icon">⏱️</span>
-                        <span>22 Lektionen</span>
+                <div class="theme-body">
+                    <p class="theme-description">
+                        Du kennst deine Rechte und Pflichten als Arbeitnehmer, verstehst das Steuersystem und die Sozialversicherungen.
+                    </p>
+                    <div class="theme-meta">
+                        <div class="meta-item">
+                            <span class="meta-icon">📖</span>
+                            <span>18 Lektionen</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">🎯</span>
+                            <span>2 Lebensbezüge</span>
+                        </div>
                     </div>
-                    <div class="meta-item">
-                        <span class="meta-icon">🎯</span>
-                        <span>2 Lebensbezüge</span>
+                    <div class="theme-details">
+                        <div class="lerninhalte-list">
+                            <div class="lerninhalte-title">📋 Lerninhalte:</div>
+                            <div class="lerninhalt-item">⚖️ 1.1 • Arbeitsrecht kennen</div>
+                            <div class="lerninhalt-item">📋 1.2 • Vertrag verstehen</div>
+                            <div class="lerninhalt-item">💰 2.1 • Steuern verstehen</div>
+                            <div class="lerninhalt-item">🛡️ 2.2 • Sozialversicherungen</div>
+                        </div>
+                        <a href="thema8/index.html" class="theme-cta">Zum Thema →</a>
                     </div>
                 </div>
-            </a>
+            </div>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>ABU EBA Digital | Digital Learning Hub Zürich | © 2024</p>
+    </footer>
+
+    <script>
+        // Wise Woman Quotes
+        const wiseQuotes = [
+            "🧠 Jedes Thema ist ein Baustein für deine Zukunft!",
+            "💡 Kompetenzen entwickeln sich über alle Themen hinweg!",
+            "🎯 Du siehst jetzt die ganze Reise – wie aufregend!",
+            "🔄 Themen bauen aufeinander auf – erkennst du die Verbindungen?",
+            "✨ In jedem Thema steckt ein Teil von dir!",
+            "📚 Wissen ist Macht – besonders wenn du es verknüpfst!",
+            "🌟 Große Ziele erreicht man Thema für Thema!",
+            "⚡ Jedes Thema macht dich ein Stück kompetenter!",
+            "🎨 Die Vielfalt der Themen spiegelt das Leben wider!",
+            "🧩 Am Ende fügt sich alles zu einem großen Ganzen zusammen!",
+            "💪 Du wächst mit jedem Thema!",
+            "🌈 Vielfalt in den Themen = Vielfalt in deinen Kompetenzen!",
+            "🔥 Bleib neugierig – jedes Thema hat Überraschungen!",
+            "🎓 Bildung ist wie ein Mosaik – jedes Thema ein Steinchen!",
+            "✨ Der Überblick zeigt: Du lernst fürs Leben!"
+        ];
+
+        // Robot Explanations
+        const robotExplanations = [
+            {
+                term: "📚 Thema",
+                text: "Ein Thema ist ein großer Lernbereich, der mehrere Wochen dauert. Es verbindet Gesellschaft, Sprache und Schlüsselkompetenzen."
+            },
+            {
+                term: "🎯 Lebensbezug",
+                text: "Ein Lebensbezug ist eine konkrete Situation aus deinem Alltag. Pro Thema gibt es 2 Lebensbezüge mit je 2 Lerninhalten."
+            },
+            {
+                term: "📖 Lerninhalt",
+                text: "Ein Lerninhalt ist eine konkrete Lerneinheit (ca. 2-4 Lektionen). Du lernst spezifisches Wissen und Können."
+            },
+            {
+                term: "🔄 Zirkularität",
+                text: "Kompetenzen kehren in verschiedenen Themen wieder – jedes Mal auf einem höheren Niveau. Das ist das Spiralprinzip!"
+            },
+            {
+                term: "🎭 1. Jahr vs. 2. Jahr",
+                text: "Die Themen sind auf 2 Jahre verteilt. Im 1. Jahr legst du Grundlagen, im 2. Jahr vertiefst und erweiterst du."
+            },
+            {
+                term: "📊 Lektionen",
+                text: "Eine Lektion = 45 Minuten Unterricht. Die Anzahl zeigt, wie umfangreich ein Thema ist."
+            },
+            {
+                term: "🎯 Umsetzungsbeispiel",
+                text: "Eine konkrete Aufgabe oder Situation, in der du zeigst, was du gelernt hast. Hier kommen alle Kompetenzen zusammen!"
+            },
+            {
+                term: "🌐 Gesellschaft",
+                text: "Du lernst über gesellschaftliche Zusammenhänge: Politik, Wirtschaft, Recht, Kultur. Das 'Wissen' über die Welt."
+            },
+            {
+                term: "💬 Sprache & Digital",
+                text: "Du kommunizierst in verschiedenen Formen: sprechen, schreiben, digital. Sprache ist in allen Themen wichtig!"
+            },
+            {
+                term: "🔑 Schlüsselkompetenzen",
+                text: "Überfachliche Fähigkeiten wie Selbstmanagement, Kooperation, kritisches Denken. Sie helfen dir überall!"
+            }
+        ];
+
+        let currentWiseQuoteIndex = 0;
+        let currentRobotExplanationIndex = 0;
+        let wiseTimeout = null;
+        let robotTimeout = null;
+
+        // Progress Tracking
+        const interactiveElements = document.querySelectorAll('[data-interactive]');
+        const totalElements = interactiveElements.length;
+        let exploredElements = new Set();
+
+        function updateProgress() {
+            const percentage = Math.round((exploredElements.size / totalElements) * 100);
+            document.getElementById('progressPercentage').textContent = percentage + '%';
+            
+            // Save progress
+            localStorage.setItem('themenUebersichtProgress', JSON.stringify({
+                explored: Array.from(exploredElements),
+                percentage: percentage
+            }));
+        }
+
+        // Load saved progress
+        const savedProgress = localStorage.getItem('themenUebersichtProgress');
+        if (savedProgress) {
+            try {
+                const data = JSON.parse(savedProgress);
+                exploredElements = new Set(data.explored || []);
+                updateProgress();
+                
+                exploredElements.forEach(index => {
+                    if (interactiveElements[index]) {
+                        interactiveElements[index].classList.add('explored');
+                    }
+                });
+            } catch (e) {
+                console.log('Could not load progress');
+            }
+        }
+
+        // Track clicks on theme cards
+        interactiveElements.forEach((element, index) => {
+            element.addEventListener('click', function(e) {
+                // Don't mark as explored if clicking on CTA link
+                if (e.target.closest('.theme-cta')) {
+                    return;
+                }
+                
+                // Toggle details
+                element.classList.toggle('active');
+                
+                // Mark as explored
+                if (!exploredElements.has(index)) {
+                    exploredElements.add(index);
+                    element.classList.add('explored');
+                    updateProgress();
+                }
+            });
+        });
+
+        // Weise Frau
+        const floatingWise = document.getElementById('floatingWise');
+        const wiseSpeech = document.getElementById('wiseSpeech');
+        const wiseQuote = document.getElementById('wiseQuote');
+
+        floatingWise.addEventListener('click', function() {
+            if (wiseTimeout) clearTimeout(wiseTimeout);
+            
+            wiseQuote.textContent = wiseQuotes[currentWiseQuoteIndex];
+            wiseSpeech.classList.add('show');
+            
+            currentWiseQuoteIndex = (currentWiseQuoteIndex + 1) % wiseQuotes.length;
+            
+            wiseTimeout = setTimeout(() => {
+                wiseSpeech.classList.remove('show');
+            }, 20000);
+        });
+
+        // Robot
+        const floatingRobot = document.getElementById('floatingRobot');
+        const robotSpeech = document.getElementById('robotSpeech');
+        const robotExplanation = document.getElementById('robotExplanation');
+
+        floatingRobot.addEventListener('click', function() {
+            if (robotTimeout) clearTimeout(robotTimeout);
+            
+            const current = robotExplanations[currentRobotExplanationIndex];
+            robotExplanation.innerHTML = `<span class="term">${current.term}</span><span class="explanation">${current.text}</span>`;
+            robotSpeech.classList.add('show');
+            
+            currentRobotExplanationIndex = (currentRobotExplanationIndex + 1) % robotExplanations.length;
+            
+            robotTimeout = setTimeout(() => {
+                robotSpeech.classList.remove('show');
+            }, 20000);
+        });
+
+        // Auto-greeting
+        setTimeout(() => {
+            if (!localStorage.getItem('themenUebersichtGreeted')) {
+                wiseQuote.textContent = "👋 Willkommen zur Themenübersicht! Klicke auf die Karten, um mehr zu erfahren!";
+                wiseSpeech.classList.add('show');
+                localStorage.setItem('themenUebersichtGreeted', 'true');
+                
+                setTimeout(() => {
+                    wiseSpeech.classList.remove('show');
+                }, 8000);
+            }
+        }, 2000);
+
+        // Initial progress update
+        updateProgress();
+
+        console.log('📚 Themenübersicht geladen!');
+        console.log('🎯 Tracking:', totalElements, 'Themen');
+        console.log('🧙‍♀️ Weise Frau bereit!');
+        console.log('🤖 Robot bereit!');
+    </script>
 </body>
 </html>
