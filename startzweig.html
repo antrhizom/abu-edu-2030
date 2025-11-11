@@ -31,7 +31,7 @@
             line-height: 1.6;
         }
 
-        /* NEUE Navigation mit Link zur Startseite */
+        /* Navigation - Genau wie im hochgeladenen Dokument */
         .top-nav {
             background: var(--white);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -237,7 +237,7 @@
         /* Theme Grid */
         .theme-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
             margin-bottom: 3rem;
         }
@@ -294,6 +294,13 @@
             color: var(--ktzh-gray);
             font-size: 0.938rem;
             line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .theme-lerninhalte {
+            color: var(--ktzh-gray);
+            font-size: 0.813rem;
+            margin-bottom: 1rem;
         }
 
         .theme-progress {
@@ -306,6 +313,14 @@
             font-size: 0.75rem;
             color: var(--ktzh-gray);
             margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-percentage {
+            font-weight: 700;
+            color: var(--ktzh-blue);
         }
 
         .progress-bar-bg {
@@ -322,48 +337,41 @@
             transition: width 0.5s ease;
         }
 
-        /* Coming Soon */
-        .coming-soon-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .coming-soon-card {
-            background: var(--white);
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            opacity: 0.7;
+        /* Year Divider */
+        .year-divider {
+            text-align: center;
+            margin: 4rem 0 3rem;
             position: relative;
         }
 
-        .coming-soon-badge {
+        .year-divider::before,
+        .year-divider::after {
+            content: '';
             position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: var(--yellow);
+            top: 50%;
+            width: 35%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--ktzh-cyan));
+        }
+
+        .year-divider::before {
+            left: 0;
+        }
+
+        .year-divider::after {
+            right: 0;
+            background: linear-gradient(90deg, var(--ktzh-cyan), transparent);
+        }
+
+        .year-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--ktzh-blue), var(--ktzh-cyan));
             color: var(--white);
-            padding: 0.25rem 0.75rem;
-            border-radius: 10px;
-            font-size: 0.75rem;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            font-size: 1.25rem;
             font-weight: 700;
-        }
-
-        .coming-soon-card .theme-icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .coming-soon-card h4 {
-            font-size: 1.125rem;
-            color: var(--ktzh-blue);
-            margin-bottom: 0.5rem;
-        }
-
-        .coming-soon-card p {
-            font-size: 0.875rem;
-            color: var(--ktzh-gray);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
         }
 
         /* Footer */
@@ -391,6 +399,8 @@
             .nav-left {
                 flex-direction: column;
                 gap: 0.5rem;
+                width: 100%;
+                text-align: center;
             }
 
             .nav-divider {
@@ -400,6 +410,7 @@
             .nav-right {
                 flex-wrap: wrap;
                 justify-content: center;
+                width: 100%;
             }
 
             header h1 {
@@ -413,15 +424,19 @@
                 padding: 1rem;
             }
 
-            .theme-grid,
-            .coming-soon-grid {
+            .theme-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .year-divider::before,
+            .year-divider::after {
+                width: 25%;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Top Navigation -->
+    <!-- Top Navigation - genau wie im hochgeladenen Dokument -->
     <nav class="top-nav">
         <div class="top-nav-content">
             <div class="nav-left">
@@ -458,7 +473,7 @@
         <div class="header-content">
             <div class="welcome-back">Willkommen zurück,</div>
             <h1><span id="headerUserName">USER</span>! 👋</h1>
-            <p>Wähle ein Thema aus, um mit dem Lernen zu beginnen. Dein Fortschritt wird automatisch gespeichert.</p>
+            <p>Wählen Sie ein Thema aus, um mit dem Lernen zu beginnen. Ihr Fortschritt wird automatisch gespeichert.</p>
         </div>
     </header>
 
@@ -487,92 +502,171 @@
         <h2 class="section-title">📚 Verfügbare Themen (1. Jahr)</h2>
 
         <div class="theme-grid">
-            <!-- Thema 1 -->
-            <div class="theme-card" onclick="window.location.href='thema1.html'">
+            <!-- Thema 1: Ins Berufsleben einsteigen -->
+            <div class="theme-card" data-theme="1">
                 <div class="theme-icon">💼</div>
-                <div class="theme-badge">Thema 1</div>
+                <div class="theme-badge">Thema 1 • 22 Lektionen</div>
                 <h3>Ins Berufsleben einsteigen</h3>
-                <p>Lehrvertrag verstehen, Lernstrategien entwickeln, dich im Betrieb und in der Schule zurechtfinden.</p>
+                <p>Sie finden sich im Betrieb und in der Berufsfachschule zurecht, kennen Lernstrategien und kommunizieren konstruktiv.</p>
+                <div class="theme-lerninhalte">
+                    📋 2 Lebensbezüge • 4 Lerninhalte
+                </div>
                 <div class="theme-progress">
-                    <div class="progress-label">Fortschritt: 0%</div>
+                    <div class="progress-label">
+                        <span>Fortschritt</span>
+                        <span class="progress-percentage" id="progress-1">0%</span>
+                    </div>
                     <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" style="width: 0%"></div>
+                        <div class="progress-bar-fill" style="width: 0%" id="progress-bar-1"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Thema 2 -->
-            <div class="theme-card" onclick="alert('Thema 2 wird bald verfügbar sein!')">
+            <!-- Thema 2: Budget erstellen und bewusste Konsumentscheidungen treffen -->
+            <div class="theme-card" data-theme="2">
                 <div class="theme-icon">💰</div>
-                <div class="theme-badge">Thema 2</div>
-                <h3>Budget & Finanzen</h3>
-                <p>Budget erstellen, bewusste Konsumentscheidungen treffen, Schulden vermeiden.</p>
+                <div class="theme-badge">Thema 2 • 22 Lektionen</div>
+                <h3>Budget erstellen und bewusste Konsumentscheidungen treffen</h3>
+                <p>Sie erstellen ein persönliches Budget, treffen bewusste Konsumentscheidungen und vermeiden Überschuldung.</p>
+                <div class="theme-lerninhalte">
+                    📋 2 Lebensbezüge • 4 Lerninhalte
+                </div>
                 <div class="theme-progress">
-                    <div class="progress-label">Fortschritt: 0%</div>
+                    <div class="progress-label">
+                        <span>Fortschritt</span>
+                        <span class="progress-percentage" id="progress-2">0%</span>
+                    </div>
                     <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" style="width: 0%"></div>
+                        <div class="progress-bar-fill" style="width: 0%" id="progress-bar-2"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Thema 3 -->
-            <div class="theme-card" onclick="alert('Thema 3 wird bald verfügbar sein!')">
+            <!-- Thema 3: Nachhaltig konsumieren und handeln -->
+            <div class="theme-card" data-theme="3">
                 <div class="theme-icon">🌱</div>
-                <div class="theme-badge">Thema 3</div>
-                <h3>Nachhaltigkeit</h3>
-                <p>Ökologie verstehen, nachhaltig konsumieren, Ressourcen schonen.</p>
+                <div class="theme-badge">Thema 3 • 22 Lektionen</div>
+                <h3>Nachhaltig konsumieren und handeln</h3>
+                <p>Sie setzen sich mit Ökologie auseinander, konsumieren nachhaltig und schonen Ressourcen im Alltag.</p>
+                <div class="theme-lerninhalte">
+                    📋 2 Lebensbezüge • 4 Lerninhalte
+                </div>
                 <div class="theme-progress">
-                    <div class="progress-label">Fortschritt: 0%</div>
+                    <div class="progress-label">
+                        <span>Fortschritt</span>
+                        <span class="progress-percentage" id="progress-3">0%</span>
+                    </div>
                     <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" style="width: 0%"></div>
+                        <div class="progress-bar-fill" style="width: 0%" id="progress-bar-3"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Thema 4 -->
-            <div class="theme-card" onclick="alert('Thema 4 wird bald verfügbar sein!')">
+            <!-- Thema 4: Digitale Kommunikation und Medienbildung -->
+            <div class="theme-card" data-theme="4">
                 <div class="theme-icon">💻</div>
-                <div class="theme-badge">Thema 4</div>
-                <h3>Digitale Welt</h3>
-                <p>Medienbildung, Datenschutz, Fake News erkennen, digitale Kompetenzen aufbauen.</p>
+                <div class="theme-badge">Thema 4 • 22 Lektionen</div>
+                <h3>Digitale Kommunikation und Medienbildung</h3>
+                <p>Sie entwickeln Medienkompetenz, schützen Ihre Daten und erkennen Fake News in digitalen Medien.</p>
+                <div class="theme-lerninhalte">
+                    📋 2 Lebensbezüge • 4 Lerninhalte
+                </div>
                 <div class="theme-progress">
-                    <div class="progress-label">Fortschritt: 0%</div>
+                    <div class="progress-label">
+                        <span>Fortschritt</span>
+                        <span class="progress-percentage" id="progress-4">0%</span>
+                    </div>
                     <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" style="width: 0%"></div>
+                        <div class="progress-bar-fill" style="width: 0%" id="progress-bar-4"></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <h2 class="section-title" style="margin-top: 4rem;">🔜 Weitere Themen (2. Jahr)</h2>
+        <!-- Year Divider -->
+        <div class="year-divider">
+            <span class="year-badge">📅 2. Lehrjahr</span>
+        </div>
 
-        <div class="coming-soon-grid">
-            <div class="coming-soon-card">
-                <span class="coming-soon-badge">Bald</span>
+        <div class="theme-grid">
+            <!-- Thema 5: Meinung bilden, akzeptieren und mitgestalten -->
+            <div class="theme-card" data-theme="5">
                 <div class="theme-icon">🗳️</div>
-                <h4>Thema 5: Politik</h4>
-                <p>Demokratie, Mitbestimmung, politische Prozesse</p>
+                <div class="theme-badge">Thema 5 • 22 Lektionen</div>
+                <h3>Meinung bilden, akzeptieren und mitgestalten</h3>
+                <p>Sie bilden sich eine fundierte Meinung zu politischen Themen, verteten diese respektvoll und beteiligen sich an Diskussionen.</p>
+                <div class="theme-lerninhalte">
+                    📋 2 Lebensbezüge • 6 Lerninhalte
+                </div>
+                <div class="theme-progress">
+                    <div class="progress-label">
+                        <span>Fortschritt</span>
+                        <span class="progress-percentage" id="progress-5">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width: 0%" id="progress-bar-5"></div>
+                    </div>
+                </div>
             </div>
 
-            <div class="coming-soon-card">
-                <span class="coming-soon-badge">Bald</span>
+            <!-- Thema 6: Identität entwickeln und Zusammenleben gestalten -->
+            <div class="theme-card" data-theme="6">
                 <div class="theme-icon">👥</div>
-                <h4>Thema 6: Zusammenleben</h4>
-                <p>Identität, Kultur, Vielfalt, Konfliktlösung</p>
+                <div class="theme-badge">Thema 6 • 22 Lektionen</div>
+                <h3>Identität entwickeln und Zusammenleben gestalten</h3>
+                <p>Sie reflektieren Ihre Identität, respektieren Vielfalt und gestalten ein konstruktives Zusammenleben.</p>
+                <div class="theme-lerninhalte">
+                    📋 2 Lebensbezüge • 4 Lerninhalte
+                </div>
+                <div class="theme-progress">
+                    <div class="progress-label">
+                        <span>Fortschritt</span>
+                        <span class="progress-percentage" id="progress-6">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width: 0%" id="progress-bar-6"></div>
+                    </div>
+                </div>
             </div>
 
-            <div class="coming-soon-card">
-                <span class="coming-soon-badge">Bald</span>
+            <!-- Thema 7: Gesundheit fördern und erhalten -->
+            <div class="theme-card" data-theme="7">
                 <div class="theme-icon">🏥</div>
-                <h4>Thema 7: Gesundheit</h4>
-                <p>Wohlbefinden, Prävention, Gesundheitssystem</p>
+                <div class="theme-badge">Thema 7 • 22 Lektionen</div>
+                <h3>Gesundheit fördern und erhalten</h3>
+                <p>Sie fördern Ihr Wohlbefinden, kennen Präventionsmassnahmen und verstehen das Gesundheitssystem.</p>
+                <div class="theme-lerninhalte">
+                    📋 2 Lebensbezüge • 4 Lerninhalte
+                </div>
+                <div class="theme-progress">
+                    <div class="progress-label">
+                        <span>Fortschritt</span>
+                        <span class="progress-percentage" id="progress-7">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width: 0%" id="progress-bar-7"></div>
+                    </div>
+                </div>
             </div>
 
-            <div class="coming-soon-card">
-                <span class="coming-soon-badge">Bald</span>
-                <div class="theme-icon">💼</div>
-                <h4>Thema 8: Arbeitswelt</h4>
-                <p>Arbeitsrecht, Steuern, Sozialversicherungen</p>
+            <!-- Thema 8: Sich in der Arbeitswelt orientieren -->
+            <div class="theme-card" data-theme="8">
+                <div class="theme-icon">⚖️</div>
+                <div class="theme-badge">Thema 8 • 22 Lektionen</div>
+                <h3>Sich in der Arbeitswelt orientieren</h3>
+                <p>Sie kennen Ihre Rechte und Pflichten in der Arbeitswelt, verstehen Arbeitsverträge und Sozialversicherungen.</p>
+                <div class="theme-lerninhalte">
+                    📋 2 Lebensbezüge • 4 Lerninhalte
+                </div>
+                <div class="theme-progress">
+                    <div class="progress-label">
+                        <span>Fortschritt</span>
+                        <span class="progress-percentage" id="progress-8">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width: 0%" id="progress-bar-8"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -583,6 +677,58 @@
     </footer>
 
     <script>
+        // Theme Data - basierend auf SLPEBALJ1 und SLPEBALJ2
+        const themeData = {
+            1: { 
+                title: "Ins Berufsleben einsteigen",
+                lerninhalte: 4,
+                lektionen: 22,
+                url: "thema1.html"
+            },
+            2: { 
+                title: "Budget erstellen und bewusste Konsumentscheidungen treffen",
+                lerninhalte: 4,
+                lektionen: 22,
+                url: "#"
+            },
+            3: { 
+                title: "Nachhaltig konsumieren und handeln",
+                lerninhalte: 4,
+                lektionen: 22,
+                url: "#"
+            },
+            4: { 
+                title: "Digitale Kommunikation und Medienbildung",
+                lerninhalte: 4,
+                lektionen: 22,
+                url: "#"
+            },
+            5: { 
+                title: "Meinung bilden, akzeptieren und mitgestalten",
+                lerninhalte: 6,
+                lektionen: 22,
+                url: "#"
+            },
+            6: { 
+                title: "Identität entwickeln und Zusammenleben gestalten",
+                lerninhalte: 4,
+                lektionen: 22,
+                url: "#"
+            },
+            7: { 
+                title: "Gesundheit fördern und erhalten",
+                lerninhalte: 4,
+                lektionen: 22,
+                url: "#"
+            },
+            8: { 
+                title: "Sich in der Arbeitswelt orientieren",
+                lerninhalte: 4,
+                lektionen: 22,
+                url: "#"
+            }
+        };
+
         // Load user data
         const userCode = localStorage.getItem('abuEbaCode');
         const userName = localStorage.getItem('abuEbaName');
@@ -603,19 +749,94 @@
 
         // Logout functionality
         document.getElementById('logoutBtn').addEventListener('click', function() {
-            if (confirm('Möchtest du dich wirklich abmelden?')) {
+            if (confirm('Möchten Sie sich wirklich abmelden?')) {
                 localStorage.removeItem('abuEbaCode');
                 localStorage.removeItem('abuEbaName');
                 window.location.href = 'index.html';
             }
         });
 
-        // TODO: Load actual progress data from localStorage/Firebase
-        // For now, using placeholder values
-        document.getElementById('totalProgress').textContent = '0%';
-        document.getElementById('completedThemes').textContent = '0/8';
-        document.getElementById('totalPoints').textContent = '0';
-        document.getElementById('streak').textContent = '0🔥';
+        // Load progress data from localStorage
+        function loadProgressData() {
+            const progressKey = `abuEba_${userCode}_progress`;
+            const savedProgress = localStorage.getItem(progressKey);
+            
+            if (savedProgress) {
+                try {
+                    return JSON.parse(savedProgress);
+                } catch (e) {
+                    console.error('Fehler beim Laden der Fortschrittsdaten:', e);
+                    return {};
+                }
+            }
+            return {};
+        }
+
+        // Calculate theme progress
+        function calculateThemeProgress(themeId) {
+            const progressData = loadProgressData();
+            const themeProgress = progressData[`theme${themeId}`] || {};
+            
+            if (!themeData[themeId]) return 0;
+            
+            const totalLerninhalte = themeData[themeId].lerninhalte;
+            const completedLerninhalte = Object.keys(themeProgress).filter(key => 
+                themeProgress[key] === true
+            ).length;
+            
+            return Math.round((completedLerninhalte / totalLerninhalte) * 100);
+        }
+
+        // Update UI with progress data
+        function updateProgressUI() {
+            let totalCompleted = 0;
+            let totalThemes = 8;
+            let totalProgressSum = 0;
+
+            for (let i = 1; i <= 8; i++) {
+                const progress = calculateThemeProgress(i);
+                const progressElement = document.getElementById(`progress-${i}`);
+                const progressBarElement = document.getElementById(`progress-bar-${i}`);
+                
+                if (progressElement) {
+                    progressElement.textContent = `${progress}%`;
+                }
+                if (progressBarElement) {
+                    progressBarElement.style.width = `${progress}%`;
+                }
+                
+                totalProgressSum += progress;
+                if (progress === 100) {
+                    totalCompleted++;
+                }
+            }
+
+            // Update stats
+            const overallProgress = Math.round(totalProgressSum / 8);
+            document.getElementById('totalProgress').textContent = `${overallProgress}%`;
+            document.getElementById('completedThemes').textContent = `${totalCompleted}/8`;
+            
+            // Points: 10 points per completed theme
+            const totalPoints = totalCompleted * 10;
+            document.getElementById('totalPoints').textContent = totalPoints;
+        }
+
+        // Add click handlers to theme cards
+        document.querySelectorAll('.theme-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const themeId = this.dataset.theme;
+                const theme = themeData[themeId];
+                
+                if (theme && theme.url !== '#') {
+                    window.location.href = theme.url;
+                } else {
+                    alert('Dieses Thema ist noch nicht verfügbar. Es wird bald freigeschaltet!');
+                }
+            });
+        });
+
+        // Initialize
+        updateProgressUI();
 
         console.log('✅ ABU EBA - Themenübersicht geladen');
         console.log('👤 Eingeloggt als:', userName);
