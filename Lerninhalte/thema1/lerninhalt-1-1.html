@@ -1,1 +1,1872 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lehrvertrag & Konfliktmanagement - ABU EBA</title>
 
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --ktzh-blue: #0066CC;
+            --ktzh-cyan: #00A0E0;
+            --ktzh-lightblue: #E8F4F8;
+            --ktzh-darkgray: #3C3C3B;
+            --ktzh-gray: #767676;
+            --white: #FFFFFF;
+            --green: #10B981;
+            --yellow: #F59E0B;
+            --red: #EF4444;
+            --purple: #8B5CF6;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: var(--ktzh-darkgray);
+            line-height: 1.6;
+            background: linear-gradient(180deg, var(--white) 0%, var(--ktzh-lightblue) 100%);
+            min-height: 100vh;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(0, 102, 204, 0.1);
+            z-index: 9999;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ktzh-blue), var(--ktzh-cyan));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Progress Badge */
+        .progress-badge {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 9998;
+            font-weight: 600;
+            color: var(--ktzh-blue);
+            font-size: 0.875rem;
+        }
+
+        .progress-badge .percentage {
+            font-size: 1.5rem;
+            color: var(--ktzh-cyan);
+        }
+
+        /* Floating Assistants */
+        .floating-robot {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9997;
+            cursor: pointer;
+            animation: float-robot 3s ease-in-out infinite;
+        }
+
+        .floating-wise {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 9997;
+            cursor: pointer;
+            animation: float-wise 4s ease-in-out infinite;
+        }
+
+        @keyframes float-robot {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes float-wise {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(-3deg); }
+        }
+
+        .robot-icon, .wise-icon {
+            font-size: 4rem;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .floating-robot:hover .robot-icon {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .floating-wise:hover .wise-icon {
+            transform: scale(1.2) rotate(-10deg);
+        }
+
+        .robot-speech, .wise-speech {
+            position: absolute;
+            bottom: 100%;
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+            min-width: 250px;
+            max-width: 300px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .robot-speech {
+            right: 0;
+        }
+
+        .wise-speech {
+            left: 0;
+            background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+            border: 2px solid var(--green);
+        }
+
+        .robot-speech::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 30px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid var(--white);
+        }
+
+        .wise-speech::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 30px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #DCFCE7;
+        }
+
+        .robot-speech.show, .wise-speech.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .robot-speech p, .wise-speech p {
+            color: var(--ktzh-blue);
+            font-weight: 600;
+            font-size: 0.938rem;
+            line-height: 1.5;
+        }
+
+        .wise-speech p {
+            color: var(--green);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
+            color: var(--white);
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-title h1 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .header-icon {
+            font-size: 3rem;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .user-info {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.938rem;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: var(--white);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .breadcrumb a {
+            color: var(--ktzh-cyan);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: var(--ktzh-gray);
+            margin: 0 0.5rem;
+        }
+
+        /* Intro Card */
+        .intro-card {
+            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
+            color: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.2);
+        }
+
+        .intro-card h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .intro-card p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+        }
+
+        .intro-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .highlight-item {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--white);
+        }
+
+        .highlight-item h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Content Section */
+        .content-section {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .content-section:hover {
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            cursor: pointer;
+        }
+
+        .section-number {
+            background: linear-gradient(135deg, var(--ktzh-blue), var(--ktzh-cyan));
+            color: var(--white);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .section-title h3 {
+            font-size: 1.75rem;
+            color: var(--ktzh-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            color: var(--ktzh-gray);
+            font-size: 1rem;
+        }
+
+        /* Interactive Contract Analogy */
+        .analogy-box {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            border: 3px solid var(--yellow);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .analogy-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(245, 158, 11, 0.3);
+        }
+
+        .analogy-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .analogy-box h4 {
+            font-size: 1.5rem;
+            color: var(--yellow);
+            margin-bottom: 1rem;
+        }
+
+        .analogy-content {
+            color: var(--ktzh-darkgray);
+            font-size: 1.125rem;
+            line-height: 1.8;
+        }
+
+        .analogy-detail {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--yellow);
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .analogy-box.active .analogy-detail {
+            max-height: 2000px;
+            opacity: 1;
+        }
+
+        /* Interactive Contract Builder */
+        .contract-builder {
+            background: var(--ktzh-lightblue);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .contract-builder h4 {
+            color: var(--ktzh-blue);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .contract-element {
+            background: var(--white);
+            border: 2px solid var(--ktzh-cyan);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .contract-element:hover {
+            transform: translateX(10px);
+            box-shadow: 0 4px 12px rgba(0, 160, 224, 0.2);
+        }
+
+        .contract-element.checked {
+            background: linear-gradient(135deg, var(--ktzh-lightblue) 0%, var(--white) 100%);
+            border-color: var(--green);
+        }
+
+        .contract-element-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .contract-element-title {
+            font-weight: 700;
+            color: var(--ktzh-blue);
+            font-size: 1.125rem;
+        }
+
+        .checkbox {
+            width: 30px;
+            height: 30px;
+            border: 3px solid var(--ktzh-cyan);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .contract-element.checked .checkbox {
+            background: var(--green);
+            border-color: var(--green);
+            color: var(--white);
+        }
+
+        .contract-element-detail {
+            color: var(--ktzh-gray);
+            font-size: 0.938rem;
+            line-height: 1.6;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .contract-element.checked .contract-element-detail {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 1rem;
+        }
+
+        /* Conflict Resolution Scenarios */
+        .scenario-card {
+            background: var(--white);
+            border: 3px solid var(--purple);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .scenario-card:hover {
+            box-shadow: 0 12px 32px rgba(139, 92, 246, 0.2);
+        }
+
+        .scenario-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .scenario-emoji {
+            font-size: 3rem;
+        }
+
+        .scenario-content h4 {
+            color: var(--purple);
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .scenario-content p {
+            color: var(--ktzh-darkgray);
+            font-size: 1.125rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .solution-option {
+            background: var(--ktzh-lightblue);
+            padding: 1.25rem;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .solution-option:hover {
+            border-color: var(--ktzh-cyan);
+            transform: translateX(5px);
+        }
+
+        .solution-option.selected {
+            background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+            border-color: var(--green);
+        }
+
+        .solution-option.wrong {
+            background: #FEE2E2;
+            border-color: var(--red);
+            opacity: 0.6;
+        }
+
+        .solution-feedback {
+            background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+            border: 2px solid var(--green);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .solution-feedback.show {
+            display: block;
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Digital Tools Section */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .tool-card {
+            background: var(--white);
+            border: 3px solid var(--ktzh-cyan);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 32px rgba(0, 160, 224, 0.3);
+        }
+
+        .tool-card.explored {
+            background: linear-gradient(135deg, var(--ktzh-lightblue) 0%, var(--white) 100%);
+            border-color: var(--green);
+        }
+
+        .tool-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-card h4 {
+            color: var(--ktzh-blue);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-card p {
+            color: var(--ktzh-gray);
+            font-size: 0.938rem;
+            line-height: 1.6;
+        }
+
+        .tool-detail {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--ktzh-lightblue);
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .tool-card.active .tool-detail {
+            max-height: 1000px;
+            opacity: 1;
+        }
+
+        /* Interactive Quiz */
+        .quiz-section {
+            background: linear-gradient(135deg, var(--purple) 0%, var(--ktzh-blue) 100%);
+            color: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .quiz-section h3 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .quiz-question {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-question h4 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .quiz-option {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(5px);
+        }
+
+        .quiz-option.selected {
+            background: rgba(255, 255, 255, 0.4);
+            border-color: var(--white);
+        }
+
+        .quiz-option.correct {
+            background: var(--green);
+            border-color: var(--white);
+        }
+
+        .quiz-option.wrong {
+            background: var(--red);
+            border-color: var(--white);
+            opacity: 0.6;
+        }
+
+        .quiz-feedback {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--ktzh-darkgray);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        .quiz-submit {
+            background: var(--white);
+            color: var(--ktzh-blue);
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            border: none;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .quiz-submit:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .quiz-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Completion Card */
+        .completion-card {
+            background: linear-gradient(135deg, var(--green) 0%, var(--ktzh-cyan) 100%);
+            color: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            margin: 3rem 0;
+            display: none;
+        }
+
+        .completion-card.show {
+            display: block;
+        }
+
+        .completion-card h3 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .completion-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Portfolio Section */
+        .portfolio-section {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .portfolio-section h4 {
+            color: var(--ktzh-blue);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .reflection-area {
+            margin-top: 1.5rem;
+        }
+
+        .reflection-area label {
+            display: block;
+            color: var(--ktzh-blue);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .reflection-area textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            border: 2px solid var(--ktzh-lightblue);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .reflection-area textarea:focus {
+            outline: none;
+            border-color: var(--ktzh-cyan);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.125rem;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--ktzh-blue), var(--ktzh-cyan));
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--ktzh-blue);
+            border: 2px solid var(--ktzh-blue);
+        }
+
+        .btn-secondary:hover {
+            background: var(--ktzh-blue);
+            color: var(--white);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Checkmark */
+        .checkmark {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 2rem;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+
+        .explored .checkmark,
+        .checked .checkmark {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-nav {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .nav-link {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .intro-card h2 {
+                font-size: 2rem;
+            }
+
+            .section-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .completion-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- Progress Badge -->
+    <div class="progress-badge">
+        <div class="percentage" id="progressPercentage">0%</div>
+        <div style="font-size: 0.75rem; margin-top: 0.25rem;">erkundet</div>
+    </div>
+
+    <!-- Floating Wise Person -->
+    <div class="floating-wise" id="floatingWise">
+        <div class="wise-speech" id="wiseSpeech">
+            <p id="wiseQuote">Klicke mich für weise Gedanken! 🧙‍♀️</p>
+        </div>
+        <div class="wise-icon">🧙‍♀️</div>
+    </div>
+
+    <!-- Floating Robot -->
+    <div class="floating-robot" id="floatingRobot">
+        <div class="robot-speech" id="robotSpeech">
+            <p id="robotQuote">Klicke mich für Erklärungen! 🤖</p>
+        </div>
+        <div class="robot-icon">🤖</div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-title">
+                <span class="header-icon">📋</span>
+                <h1>Lehrvertrag & Konfliktmanagement</h1>
+            </div>
+            <div class="header-nav">
+                <a href="index.html" class="nav-link">🏠 Startseite</a>
+                <a href="startzweig.html" class="nav-link">📚 Themen</a>
+                <a href="portfolio.html" class="nav-link">📁 Portfolio</a>
+                <div class="user-info">
+                    <span id="userDisplay">👤 Gast</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="index.html">Startseite</a>
+            <span>›</span>
+            <a href="startzweig.html">Themen</a>
+            <span>›</span>
+            <strong>1.1 Lehrvertrag & Konfliktmanagement</strong>
+        </div>
+
+        <!-- Intro -->
+        <div class="intro-card">
+            <h2>🎯 Ich finde mich im Betrieb zurecht</h2>
+            <p>
+                Willkommen in Ihrer Lehre! Der Lehrvertrag ist Ihr wichtigstes Dokument – er regelt Ihre Rechte und Pflichten. 
+                Und wenn es mal schwierig wird? Dann helfen Ihnen Konfliktlösungsstrategien weiter.
+            </p>
+            <div class="intro-highlights">
+                <div class="highlight-item">
+                    <h3>📋 Lehrvertrag verstehen</h3>
+                    <p>Was steht drin? Was bedeutet es für Sie?</p>
+                </div>
+                <div class="highlight-item">
+                    <h3>⚖️ Ihre Rechte kennen</h3>
+                    <p>Arbeitszeit, Lohn, Ferien – alles geregelt!</p>
+                </div>
+                <div class="highlight-item">
+                    <h3>🤝 Konflikte lösen</h3>
+                    <p>Probleme ansprechen und gemeinsam Lösungen finden</p>
+                </div>
+                <div class="highlight-item">
+                    <h3>📱 Digital organisiert</h3>
+                    <p>E-Mail, Kalender & Co. professionell nutzen</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 1: Lehrvertrag Analogie -->
+        <div class="content-section">
+            <div class="section-header">
+                <div class="section-number">1</div>
+                <div class="section-title">
+                    <h3>🏠 Der Lehrvertrag – Wie ein Mietvertrag für Ihre Ausbildung</h3>
+                    <div class="section-subtitle">Eine Analogie zum besseren Verstehen</div>
+                </div>
+            </div>
+
+            <div class="analogy-box" data-interactive>
+                <span class="checkmark">✓</span>
+                <div class="analogy-icon">🏠</div>
+                <h4>Stellen Sie sich vor: Ihr Lehrvertrag ist wie ein Mietvertrag</h4>
+                <div class="analogy-content">
+                    <p>
+                        <strong>Bei einer Wohnung</strong> unterschreiben Sie einen Mietvertrag. Dort steht drin: 
+                        Wie hoch ist die Miete? Wann zahlen Sie? Wer darf einziehen? Was dürfen Sie in der Wohnung machen?
+                    </p>
+                    <p>
+                        <strong>Bei der Lehre</strong> unterschreiben Sie einen Lehrvertrag. Dort steht drin: 
+                        Wie viel verdienen Sie? Wann arbeiten Sie? Welchen Beruf lernen Sie? Was sind Ihre Aufgaben?
+                    </p>
+                </div>
+                <div class="analogy-detail">
+                    <h4 style="color: var(--yellow); margin-top: 1rem;">🔍 Die Parallelen im Detail:</h4>
+                    <p><strong>Mietvertrag:</strong></p>
+                    <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                        <li>Mietzins CHF 1200/Monat</li>
+                        <li>Kündigungsfrist: 3 Monate</li>
+                        <li>Hausordnung einhalten</li>
+                        <li>Vermieter muss Wohnung instand halten</li>
+                    </ul>
+
+                    <p><strong>Lehrvertrag:</strong></p>
+                    <ul style="margin-left: 1.5rem;">
+                        <li>Lehrlingslohn CHF 800/Monat (1. Lehrjahr)</li>
+                        <li>Probezeit: 3 Monate</li>
+                        <li>Betriebsregeln einhalten</li>
+                        <li>Lehrbetrieb muss Sie ausbilden</li>
+                    </ul>
+
+                    <p style="margin-top: 1rem; padding: 1rem; background: rgba(255, 255, 255, 0.5); border-radius: 8px;">
+                        <strong>💡 Merken Sie was?</strong> Beide Verträge regeln <strong>Rechte UND Pflichten</strong> 
+                        für beide Seiten. Sie sind rechtlich bindend – deshalb immer genau durchlesen!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Lehrvertrag Elemente -->
+        <div class="content-section">
+            <div class="section-header">
+                <div class="section-number">2</div>
+                <div class="section-title">
+                    <h3>📋 Was muss im Lehrvertrag stehen?</h3>
+                    <div class="section-subtitle">Interaktiv: Klicken Sie jedes Element an!</div>
+                </div>
+            </div>
+
+            <div class="contract-builder">
+                <h4>🔨 Bauen Sie Ihren Lehrvertrag – Element für Element</h4>
+                <p style="color: var(--ktzh-gray); margin-bottom: 1.5rem;">
+                    Klicken Sie auf jedes Element, um mehr zu erfahren. Alle müssen vorhanden sein!
+                </p>
+
+                <div class="contract-element" data-contract-element>
+                    <div class="contract-element-header">
+                        <div class="contract-element-title">1️⃣ Berufsbezeichnung</div>
+                        <div class="checkbox"></div>
+                    </div>
+                    <div class="contract-element-detail">
+                        <p><strong>Was steht drin:</strong> Ihre genaue Berufsbezeichnung (z.B. "Detailhandelsfachfrau EBA")</p>
+                        <p><strong>Warum wichtig:</strong> Bestimmt, welche Tätigkeiten Sie lernen und welche Prüfungen Sie machen</p>
+                        <p><strong>Beispiel:</strong> Sie lernen Verkauf, nicht Buchhaltung – das steht hier fest!</p>
+                    </div>
+                </div>
+
+                <div class="contract-element" data-contract-element>
+                    <div class="contract-element-header">
+                        <div class="contract-element-title">2️⃣ Dauer der Lehre</div>
+                        <div class="checkbox"></div>
+                    </div>
+                    <div class="contract-element-detail">
+                        <p><strong>Was steht drin:</strong> Start- und Enddatum Ihrer Lehre</p>
+                        <p><strong>Warum wichtig:</strong> EBA dauert 2 Jahre – das muss klar sein</p>
+                        <p><strong>Beispiel:</strong> "01.08.2025 bis 31.07.2027" – danach haben Sie Ihren Abschluss!</p>
+                    </div>
+                </div>
+
+                <div class="contract-element" data-contract-element>
+                    <div class="contract-element-header">
+                        <div class="contract-element-title">3️⃣ Probezeit</div>
+                        <div class="checkbox"></div>
+                    </div>
+                    <div class="contract-element-detail">
+                        <p><strong>Was steht drin:</strong> Länge der Probezeit (1-3 Monate)</p>
+                        <p><strong>Warum wichtig:</strong> In dieser Zeit können beide Seiten einfacher kündigen</p>
+                        <p><strong>Beispiel:</strong> 3 Monate Probezeit – danach ist die Lehrstelle sicherer</p>
+                    </div>
+                </div>
+
+                <div class="contract-element" data-contract-element>
+                    <div class="contract-element-header">
+                        <div class="contract-element-title">4️⃣ Arbeitszeit</div>
+                        <div class="checkbox"></div>
+                    </div>
+                    <div class="contract-element-detail">
+                        <p><strong>Was steht drin:</strong> Wie viele Stunden Sie pro Woche arbeiten</p>
+                        <p><strong>Warum wichtig:</strong> Jugendliche dürfen max. 9 Stunden/Tag arbeiten</p>
+                        <p><strong>Beispiel:</strong> "42 Stunden/Woche inkl. Berufsschule" – Überstunden sind verboten!</p>
+                    </div>
+                </div>
+
+                <div class="contract-element" data-contract-element>
+                    <div class="contract-element-header">
+                        <div class="contract-element-title">5️⃣ Lehrlingslohn</div>
+                        <div class="checkbox"></div>
+                    </div>
+                    <div class="contract-element-detail">
+                        <p><strong>Was steht drin:</strong> Ihr monatlicher Lohn pro Lehrjahr</p>
+                        <p><strong>Warum wichtig:</strong> Muss fair sein – vergleichen Sie mit Empfehlungen!</p>
+                        <p><strong>Beispiel:</strong> "1. Jahr CHF 800, 2. Jahr CHF 1000" – steigt jedes Jahr</p>
+                    </div>
+                </div>
+
+                <div class="contract-element" data-contract-element>
+                    <div class="contract-element-header">
+                        <div class="contract-element-title">6️⃣ Ferien</div>
+                        <div class="checkbox"></div>
+                    </div>
+                    <div class="contract-element-detail">
+                        <p><strong>Was steht drin:</strong> Wie viele Ferientage Sie haben</p>
+                        <p><strong>Warum wichtig:</strong> Unter 20 Jahren: MINDESTENS 5 Wochen!</p>
+                        <p><strong>Beispiel:</strong> "5 Wochen Ferien pro Jahr" – das ist Ihr Recht!</p>
+                    </div>
+                </div>
+
+                <div class="contract-element" data-contract-element>
+                    <div class="contract-element-header">
+                        <div class="contract-element-title">7️⃣ Berufsbildner/in</div>
+                        <div class="checkbox"></div>
+                    </div>
+                    <div class="contract-element-detail">
+                        <p><strong>Was steht drin:</strong> Wer Sie im Betrieb ausbildet</p>
+                        <p><strong>Warum wichtig:</strong> Diese Person ist Ihre Hauptansprechperson</p>
+                        <p><strong>Beispiel:</strong> "Herr Müller" – bei Fragen gehen Sie zu ihm!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); border: 2px solid var(--green); border-radius: 12px; padding: 1.5rem; margin-top: 2rem;">
+                <h4 style="color: var(--green); margin-bottom: 1rem;">✅ Haben Sie alle Elemente angeklickt?</h4>
+                <p style="color: var(--ktzh-darkgray);">
+                    Perfekt! Diese 7 Punkte <strong>MÜSSEN</strong> in jedem Lehrvertrag stehen. 
+                    Fehlt etwas? → Nachfragen! Der Vertrag wird beim Kanton geprüft.
+                </p>
+            </div>
+        </div>
+
+        <!-- Section 3: Konfliktmanagement Szenarien -->
+        <div class="content-section">
+            <div class="section-header">
+                <div class="section-number">3</div>
+                <div class="section-title">
+                    <h3>⚖️ Was tun, wenn es Probleme gibt?</h3>
+                    <div class="section-subtitle">Konfliktlösungsstrategien für den Berufsalltag</div>
+                </div>
+            </div>
+
+            <div class="analogy-box" data-interactive>
+                <span class="checkmark">✓</span>
+                <div class="analogy-icon">🎮</div>
+                <h4>Konflikte sind wie Bugs in einem Videospiel</h4>
+                <div class="analogy-content">
+                    <p>
+                        <strong>Im Spiel:</strong> Plötzlich funktioniert etwas nicht. Sie könnten das Spiel schließen (aufgeben) 
+                        oder den Bug melden und auf einen Fix warten.
+                    </p>
+                    <p>
+                        <strong>Im Betrieb:</strong> Es gibt ein Problem mit Ihrem Chef oder Kollegen. Sie könnten kündigen (aufgeben) 
+                        oder das Problem ansprechen und gemeinsam eine Lösung finden.
+                    </p>
+                </div>
+                <div class="analogy-detail">
+                    <h4 style="color: var(--yellow); margin-top: 1rem;">🎯 Die Parallelen:</h4>
+                    <ul style="margin-left: 1.5rem; color: var(--ktzh-darkgray);">
+                        <li><strong>Bug ignorieren:</strong> Problem wird schlimmer → <strong>Konflikt ignorieren:</strong> Wird unerträglich</li>
+                        <li><strong>Bug melden:</strong> Entwickler fixen es → <strong>Problem ansprechen:</strong> Lösung finden</li>
+                        <li><strong>Patch abwarten:</strong> Braucht Zeit → <strong>Lösung braucht Geduld:</strong> Nicht sofort perfekt</li>
+                        <li><strong>Community fragen:</strong> Andere helfen → <strong>Vertrauensperson fragen:</strong> Berufsbildner, Lehrperson</li>
+                    </ul>
+
+                    <p style="margin-top: 1rem; padding: 1rem; background: rgba(255, 255, 255, 0.5); border-radius: 8px;">
+                        <strong>💡 Wichtig:</strong> Konflikte sind <strong>normal</strong>! Niemand ist perfekt. 
+                        Entscheidend ist, wie Sie damit umgehen.
+                    </p>
+                </div>
+            </div>
+
+            <h4 style="color: var(--ktzh-blue); font-size: 1.5rem; margin: 2rem 0 1rem 0;">
+                🎭 Realistische Szenarien – Was würden Sie tun?
+            </h4>
+
+            <!-- Scenario 1 -->
+            <div class="scenario-card" data-scenario="1">
+                <div class="scenario-header">
+                    <div class="scenario-emoji">😓</div>
+                    <div class="scenario-content">
+                        <h4>Szenario 1: Zu viele Überstunden</h4>
+                        <p>
+                            Sie arbeiten regelmäßig bis 19 Uhr, obwohl im Vertrag 17 Uhr steht. 
+                            Ihr Chef sagt: "In der Lehre muss man flexibel sein." 
+                            Sie sind müde und gestresst. Was tun Sie?
+                        </p>
+                    </div>
+                </div>
+
+                <div class="solution-options">
+                    <div class="solution-option" data-answer="wrong">
+                        A) Ich sage nichts und arbeite weiter – will ja die Lehrstelle nicht verlieren
+                    </div>
+                    <div class="solution-option" data-answer="correct">
+                        B) Ich spreche meinen Berufsbildner an: "Mir fällt auf, dass ich oft länger arbeite. Können wir darüber sprechen?"
+                    </div>
+                    <div class="solution-option" data-answer="wrong">
+                        C) Ich beschwere mich bei Kollegen, aber nicht beim Chef
+                    </div>
+                </div>
+
+                <div class="solution-feedback">
+                    <strong style="color: var(--green); font-size: 1.25rem;">✅ Richtig!</strong>
+                    <p style="color: var(--ktzh-darkgray); margin-top: 0.5rem;">
+                        <strong>Das direkte, höfliche Gespräch ist der beste Weg.</strong> 
+                        Wichtig: Sachlich bleiben, keine Vorwürfe. Sagen Sie, was Sie beobachten ("Mir fällt auf...") 
+                        und wie es Ihnen geht ("Ich bin müde"). Oft ist dem Chef nicht bewusst, dass es ein Problem ist.
+                    </p>
+                    <p style="margin-top: 1rem; padding: 1rem; background: var(--ktzh-lightblue); border-radius: 8px;">
+                        <strong>📱 Tipp:</strong> Dokumentieren Sie Ihre Arbeitszeiten digital (z.B. Excel, Notiz-App). 
+                        So haben Sie Fakten für das Gespräch.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Scenario 2 -->
+            <div class="scenario-card" data-scenario="2">
+                <div class="scenario-header">
+                    <div class="scenario-emoji">😠</div>
+                    <div class="scenario-content">
+                        <h4>Szenario 2: Konflikt mit einem Kollegen</h4>
+                        <p>
+                            Ein Kollege macht ständig Witze über Sie. Sie haben mehrmals gesagt, dass es Sie nervt, 
+                            aber er hört nicht auf. Die Situation belastet Sie. Was tun Sie?
+                        </p>
+                    </div>
+                </div>
+
+                <div class="solution-options">
+                    <div class="solution-option" data-answer="wrong">
+                        A) Ich mache zurück Witze über ihn – Auge um Auge
+                    </div>
+                    <div class="solution-option" data-answer="wrong">
+                        B) Ich ertrage es weiter – irgendwann hört er auf
+                    </div>
+                    <div class="solution-option" data-answer="correct">
+                        C) Ich suche das Gespräch mit meinem Berufsbildner und erkläre die Situation
+                    </div>
+                </div>
+
+                <div class="solution-feedback">
+                    <strong style="color: var(--green); font-size: 1.25rem;">✅ Richtig!</strong>
+                    <p style="color: var(--ktzh-darkgray); margin-top: 0.5rem;">
+                        <strong>Holen Sie sich Unterstützung!</strong> Sie haben direkt mit dem Kollegen gesprochen – 
+                        das ist gut. Wenn es nicht hilft, ist der Berufsbildner die nächste Instanz. 
+                        Er kann vermitteln oder klare Regeln setzen.
+                    </p>
+                    <p style="margin-top: 1rem; padding: 1rem; background: var(--ktzh-lightblue); border-radius: 8px;">
+                        <strong>📞 Externe Hilfe:</strong> Wenn auch das nicht hilft → Berufsbildungsamt Zürich (043 259 78 00). 
+                        Die helfen kostenlos und vertraulich!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Scenario 3 -->
+            <div class="scenario-card" data-scenario="3">
+                <div class="scenario-header">
+                    <div class="scenario-emoji">🤔</div>
+                    <div class="scenario-content">
+                        <h4>Szenario 3: Unklare Aufgaben</h4>
+                        <p>
+                            Sie wissen oft nicht, was Sie tun sollen. Niemand erklärt Ihnen die Aufgaben richtig. 
+                            Sie fühlen sich überfordert und nutzlos. Was tun Sie?
+                        </p>
+                    </div>
+                </div>
+
+                <div class="solution-options">
+                    <div class="solution-option" data-answer="wrong">
+                        A) Ich mache einfach irgendwas – besser als nichts
+                    </div>
+                    <div class="solution-option" data-answer="correct">
+                        B) Ich bitte um ein Gespräch: "Können Sie mir bitte genauer erklären, was meine Aufgaben sind?"
+                    </div>
+                    <div class="solution-option" data-answer="wrong">
+                        C) Ich google die Aufgaben – der Chef merkt nichts
+                    </div>
+                </div>
+
+                <div class="solution-feedback">
+                    <strong style="color: var(--green); font-size: 1.25rem;">✅ Richtig!</strong>
+                    <p style="color: var(--ktzh-darkgray); margin-top: 0.5rem;">
+                        <strong>Nachfragen ist kein Zeichen von Schwäche!</strong> Im Gegenteil: Es zeigt, 
+                        dass Sie es richtig machen wollen. Gute Berufsbildner freuen sich über Fragen. 
+                        Schlagen Sie vor: "Können wir einen Wochenplan machen?"
+                    </p>
+                    <p style="margin-top: 1rem; padding: 1rem; background: var(--ktzh-lightblue); border-radius: 8px;">
+                        <strong>📅 Digital-Tipp:</strong> Nutzen Sie einen geteilten Kalender (z.B. Google Calendar, Outlook). 
+                        Dann sehen beide, welche Aufgaben anstehen!
+                    </p>
+                </div>
+            </div>
+
+            <div style="background: var(--yellow); color: var(--white); border-radius: 12px; padding: 2rem; margin-top: 2rem;">
+                <h4 style="font-size: 1.5rem; margin-bottom: 1rem;">🛡️ Die 4-Stufen-Eskalation bei Konflikten</h4>
+                <ol style="margin-left: 1.5rem; line-height: 2;">
+                    <li><strong>Stufe 1:</strong> Direkt mit der Person sprechen (höflich, sachlich)</li>
+                    <li><strong>Stufe 2:</strong> Berufsbildner/in einbeziehen (vermittelt)</li>
+                    <li><strong>Stufe 3:</strong> Geschäftsführung / HR ansprechen</li>
+                    <li><strong>Stufe 4:</strong> Berufsbildungsamt Zürich kontaktieren (043 259 78 00)</li>
+                </ol>
+                <p style="margin-top: 1rem; background: rgba(255, 255, 255, 0.2); padding: 1rem; border-radius: 8px;">
+                    <strong>⚠️ Wichtig:</strong> Immer erst Stufe 1 versuchen! Direkt zu Stufe 4 springen wirkt unprofessionell.
+                </p>
+            </div>
+        </div>
+
+        <!-- Section 4: Digital Tools -->
+        <div class="content-section">
+            <div class="section-header">
+                <div class="section-number">4</div>
+                <div class="section-title">
+                    <h3>📱 Digital organisiert im Betrieb</h3>
+                    <div class="section-subtitle">Ihre digitalen Werkzeuge für den Alltag</div>
+                </div>
+            </div>
+
+            <p style="color: var(--ktzh-gray); font-size: 1.125rem; margin-bottom: 2rem;">
+                Im Betrieb kommunizieren Sie digital – per E-Mail, Kalender, Chat. 
+                Lernen Sie die wichtigsten Tools kennen!
+            </p>
+
+            <div class="tools-grid">
+                <div class="tool-card" data-tool-interactive>
+                    <span class="checkmark">✓</span>
+                    <div class="tool-icon">📧</div>
+                    <h4>E-Mail richtig nutzen</h4>
+                    <p>Professionell kommunizieren mit Kunden und Kollegen</p>
+                    <div class="tool-detail">
+                        <h5 style="color: var(--ktzh-blue); margin-bottom: 0.75rem;">Was Sie lernen:</h5>
+                        <ul style="text-align: left; margin-left: 1rem; color: var(--ktzh-gray);">
+                            <li>Betreffzeile formulieren</li>
+                            <li>Höfliche Anrede & Grussformel</li>
+                            <li>CC vs. BCC</li>
+                            <li>Anhänge richtig benennen</li>
+                            <li>Antwortzeiten einhalten</li>
+                        </ul>
+                        <p style="margin-top: 1rem; padding: 0.75rem; background: var(--ktzh-lightblue); border-radius: 8px; text-align: left;">
+                            <strong>📝 Tipp:</strong> "Sehr geehrte/r" für externe, "Hallo" für interne E-Mails!
+                        </p>
+                    </div>
+                </div>
+
+                <div class="tool-card" data-tool-interactive>
+                    <span class="checkmark">✓</span>
+                    <div class="tool-icon">📅</div>
+                    <h4>Kalender & Termine</h4>
+                    <p>Zeit einteilen und Deadlines einhalten</p>
+                    <div class="tool-detail">
+                        <h5 style="color: var(--ktzh-blue); margin-bottom: 0.75rem;">Was Sie lernen:</h5>
+                        <ul style="text-align: left; margin-left: 1rem; color: var(--ktzh-gray);">
+                            <li>Termine eintragen (Outlook, Google)</li>
+                            <li>Erinnerungen setzen</li>
+                            <li>Kalender teilen</li>
+                            <li>Verfügbarkeit anzeigen</li>
+                            <li>Arbeitszeit planen</li>
+                        </ul>
+                        <p style="margin-top: 1rem; padding: 0.75rem; background: var(--ktzh-lightblue); border-radius: 8px; text-align: left;">
+                            <strong>⏰ Tipp:</strong> Setzen Sie Erinnerungen 1 Tag vorher – so vergessen Sie nichts!
+                        </p>
+                    </div>
+                </div>
+
+                <div class="tool-card" data-tool-interactive>
+                    <span class="checkmark">✓</span>
+                    <div class="tool-icon">💬</div>
+                    <h4>Chat & Kollaboration</h4>
+                    <p>Teams, Slack, WhatsApp Business richtig nutzen</p>
+                    <div class="tool-detail">
+                        <h5 style="color: var(--ktzh-blue); margin-bottom: 0.75rem;">Was Sie lernen:</h5>
+                        <ul style="text-align: left; margin-left: 1rem; color: var(--ktzh-gray);">
+                            <li>Wann Chat, wann E-Mail?</li>
+                            <li>Emojis im Beruf: Ja oder Nein?</li>
+                            <li>Schnell antworten vs. durchdacht</li>
+                            <li>Gruppenchats organisieren</li>
+                            <li>Status-Updates setzen</li>
+                        </ul>
+                        <p style="margin-top: 1rem; padding: 0.75rem; background: var(--ktzh-lightblue); border-radius: 8px; text-align: left;">
+                            <strong>🚫 Tipp:</strong> Nach 18 Uhr keine Arbeitsnachrichten mehr schreiben – Freizeit ist Freizeit!
+                        </p>
+                    </div>
+                </div>
+
+                <div class="tool-card" data-tool-interactive>
+                    <span class="checkmark">✓</span>
+                    <div class="tool-icon">📂</div>
+                    <h4>Dateiverwaltung</h4>
+                    <p>Dokumente strukturiert ablegen und wiederfinden</p>
+                    <div class="tool-detail">
+                        <h5 style="color: var(--ktzh-blue); margin-bottom: 0.75rem;">Was Sie lernen:</h5>
+                        <ul style="text-align: left; margin-left: 1rem; color: var(--ktzh-gray);">
+                            <li>Ordnerstruktur erstellen</li>
+                            <li>Dateien sinnvoll benennen</li>
+                            <li>Cloud-Dienste nutzen (OneDrive, Google Drive)</li>
+                            <li>Versionierung verstehen</li>
+                            <li>Zugriffsrechte setzen</li>
+                        </ul>
+                        <p style="margin-top: 1rem; padding: 0.75rem; background: var(--ktzh-lightblue); border-radius: 8px; text-align: left;">
+                            <strong>📁 Tipp:</strong> Benennung: "2025-03-15_Projekt_Version1.pdf" – Datum zuerst!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Section -->
+        <div class="quiz-section">
+            <h3>🎯 Wissens-Check: Lehrvertrag & Konflikte</h3>
+
+            <div class="quiz-question" data-question="1">
+                <h4>1. Was MUSS im Lehrvertrag stehen?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-answer="wrong">
+                        Nur die Berufsbezeichnung und der Lohn
+                    </div>
+                    <div class="quiz-option" data-answer="correct">
+                        Berufsbezeichnung, Dauer, Probezeit, Arbeitszeit, Lohn, Ferien und Berufsbildner/in
+                    </div>
+                    <div class="quiz-option" data-answer="wrong">
+                        Alles, was der Lehrbetrieb wichtig findet
+                    </div>
+                </div>
+                <div class="quiz-feedback">
+                    <strong>✅ Richtig!</strong> Diese 7 Elemente sind Pflicht. Fehlt etwas, ist der Vertrag ungültig!
+                </div>
+            </div>
+
+            <div class="quiz-question" data-question="2">
+                <h4>2. Wie viele Ferientage haben Sie unter 20 Jahren mindestens?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-answer="wrong">
+                        4 Wochen (20 Tage)
+                    </div>
+                    <div class="quiz-option" data-answer="correct">
+                        5 Wochen (25 Tage)
+                    </div>
+                    <div class="quiz-option" data-answer="wrong">
+                        6 Wochen (30 Tage)
+                    </div>
+                </div>
+                <div class="quiz-feedback">
+                    <strong>✅ Richtig!</strong> Unter 20 Jahren haben Sie Anspruch auf mindestens 5 Wochen Ferien pro Jahr.
+                </div>
+            </div>
+
+            <div class="quiz-question" data-question="3">
+                <h4>3. Was ist der beste erste Schritt bei einem Konflikt im Betrieb?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-answer="wrong">
+                        Sofort das Berufsbildungsamt anrufen
+                    </div>
+                    <div class="quiz-option" data-answer="correct">
+                        Das direkte, höfliche Gespräch mit der betroffenen Person suchen
+                    </div>
+                    <div class="quiz-option" data-answer="wrong">
+                        Abwarten und hoffen, dass es sich von selbst löst
+                    </div>
+                </div>
+                <div class="quiz-feedback">
+                    <strong>✅ Richtig!</strong> Immer erst das direkte Gespräch – sachlich und höflich. Eskalieren können Sie später immer noch.
+                </div>
+            </div>
+
+            <div class="quiz-question" data-question="4">
+                <h4>4. Wann sollten Sie im Betrieb eher E-Mails statt Chat nutzen?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-answer="wrong">
+                        Nie, Chat ist immer besser
+                    </div>
+                    <div class="quiz-option" data-answer="correct">
+                        Für wichtige, formelle Anfragen und wenn Sie es schriftlich brauchen
+                    </div>
+                    <div class="quiz-option" data-answer="wrong">
+                        Nur wenn der Chef es verlangt
+                    </div>
+                </div>
+                <div class="quiz-feedback">
+                    <strong>✅ Richtig!</strong> E-Mail für Wichtiges (Urlaubsanträge, offizielle Anfragen), Chat für schnelle Rückfragen.
+                </div>
+            </div>
+
+            <button class="quiz-submit" id="quizSubmit" disabled>Quiz auswerten</button>
+        </div>
+
+        <!-- Completion Card -->
+        <div class="completion-card" id="completionCard">
+            <h3>🎉 Gratulation – Modul abgeschlossen!</h3>
+            <p>Sie haben Lehrvertrag und Konfliktmanagement gemeistert!</p>
+
+            <div class="completion-stats">
+                <div class="stat-item">
+                    <span class="stat-value">✓</span>
+                    <span class="stat-label">Lehrvertrag verstanden</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">✓</span>
+                    <span class="stat-label">Konflikte lösen können</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">✓</span>
+                    <span class="stat-label">Digital organisiert</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="quizScore">0/4</span>
+                    <span class="stat-label">Quiz-Punkte</span>
+                </div>
+            </div>
+
+            <div class="portfolio-section">
+                <h4>📝 Reflexion für Ihr Portfolio</h4>
+                <p style="color: var(--ktzh-gray);">
+                    Was haben Sie gelernt? Wie hilft Ihnen das in Ihrer Lehre?
+                </p>
+
+                <div class="reflection-area">
+                    <label for="reflection">💭 Ihre Reflexion</label>
+                    <textarea id="reflection" placeholder="Schreiben Sie hier Ihre Reflexion...
+
+Zum Beispiel:
+- Was war neu für mich beim Thema Lehrvertrag?
+- Welche Konfliktlösungsstrategie finde ich am hilfreichsten?
+- Welche digitalen Tools nutze ich bereits, welche möchte ich ausprobieren?
+- Was nehme ich konkret mit in meinen Berufsalltag?"></textarea>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="savePortfolio">
+                        💾 Ins Portfolio speichern
+                    </button>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="startzweig.html" class="btn btn-secondary">📚 Zu den Themen</a>
+                <a href="portfolio.html" class="btn btn-secondary">📁 Mein Portfolio</a>
+                <a href="lerninhalt-1-2.html" class="btn btn-primary">➡️ Nächster Lerninhalt</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simplified setup - uses localStorage
+        // Firebase can be added later if needed
+        let useFirebase = false;
+        
+        // User Info
+        const userCode = localStorage.getItem('abuEbaCode');
+        const userName = localStorage.getItem('abuEbaName');
+        
+        if (userCode && userName) {
+            document.getElementById('userDisplay').textContent = `👤 ${userName}`;
+        }
+
+        // Wise Quotes
+        const wiseQuotes = [
+            "Ein Vertrag schützt beide Seiten. Lesen Sie ihn genau! 📋",
+            "Konflikte sind Chancen zu wachsen. Mut zum Gespräch! 🌱",
+            "Digital sein heißt nicht, immer erreichbar zu sein. 🔕",
+            "Wer fragt, zeigt Interesse. Wer schweigt, bleibt unwissend. 🗣️",
+            "Ihre Rechte sind wichtig. Kennen Sie sie! ⚖️",
+            "Höflichkeit im Konflikt ist keine Schwäche, sondern Stärke. 💪",
+            "Dokumentieren Sie Probleme – Fakten helfen bei Lösungen. 📝",
+            "Pause machen ist kein Luxus, sondern ein Recht. ☕",
+            "Gute Kommunikation ist die Basis für alles. 💬",
+            "Fehler machen ist menschlich. Daraus lernen ist klug. 🧠"
+        ];
+
+        // Robot Explanations
+        const robotExplanations = [
+            "💡 <strong>Lehrvertrag?</strong> Wie ein Mietvertrag – regelt Rechte & Pflichten!",
+            "⚖️ <strong>Konflikt?</strong> Problem zwischen Personen. Lösung: Gespräch!",
+            "📧 <strong>E-Mail?</strong> Elektronische Post – formeller als Chat!",
+            "📅 <strong>Kalender?</strong> Digitaler Terminplaner – nie mehr vergessen!",
+            "🤝 <strong>Berufsbildner?</strong> Ihre Haupt-Ansprechperson im Betrieb!",
+            "⏰ <strong>Probezeit?</strong> Erste 1-3 Monate – Kennenlernen für beide Seiten!",
+            "💰 <strong>Lehrlingslohn?</strong> Was Sie monatlich verdienen – steigt jedes Jahr!",
+            "🏖️ <strong>Ferien?</strong> Unter 20 Jahre = mindestens 5 Wochen!",
+            "🔔 <strong>Überstunden?</strong> Für Jugendliche eigentlich verboten!",
+            "📱 <strong>Digital?</strong> Mit Computer, Handy, Apps arbeiten!"
+        ];
+
+        let currentQuoteIndex = 0;
+        let currentRobotIndex = 0;
+        let wiseSpeechVisible = false;
+        let robotSpeechVisible = false;
+
+        // Floating Wise Person
+        const floatingWise = document.getElementById('floatingWise');
+        const wiseSpeech = document.getElementById('wiseSpeech');
+        const wiseQuote = document.getElementById('wiseQuote');
+
+        floatingWise.addEventListener('click', function() {
+            if (!wiseSpeechVisible) {
+                wiseQuote.textContent = wiseQuotes[currentQuoteIndex];
+                wiseSpeech.classList.add('show');
+                wiseSpeechVisible = true;
+            } else {
+                currentQuoteIndex = (currentQuoteIndex + 1) % wiseQuotes.length;
+                wiseQuote.textContent = wiseQuotes[currentQuoteIndex];
+            }
+        });
+
+        // Floating Robot
+        const floatingRobot = document.getElementById('floatingRobot');
+        const robotSpeech = document.getElementById('robotSpeech');
+        const robotQuote = document.getElementById('robotQuote');
+
+        floatingRobot.addEventListener('click', function() {
+            if (!robotSpeechVisible) {
+                robotQuote.innerHTML = robotExplanations[currentRobotIndex];
+                robotSpeech.classList.add('show');
+                robotSpeechVisible = true;
+            } else {
+                currentRobotIndex = (currentRobotIndex + 1) % robotExplanations.length;
+                robotQuote.innerHTML = robotExplanations[currentRobotIndex];
+            }
+        });
+
+        // Progress Tracking
+        const interactiveElements = document.querySelectorAll('[data-interactive], [data-contract-element], [data-tool-interactive]');
+        const totalInteractive = interactiveElements.length;
+        let exploredCount = 0;
+
+        function updateProgress() {
+            const percentage = Math.round((exploredCount / totalInteractive) * 100);
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressPercentage').textContent = percentage + '%';
+        }
+
+        // Analogy Boxes
+        document.querySelectorAll('[data-interactive]').forEach(element => {
+            element.addEventListener('click', function() {
+                this.classList.toggle('active');
+                if (!this.classList.contains('explored')) {
+                    this.classList.add('explored');
+                    exploredCount++;
+                    updateProgress();
+                }
+            });
+        });
+
+        // Contract Elements
+        document.querySelectorAll('[data-contract-element]').forEach(element => {
+            element.addEventListener('click', function() {
+                this.classList.toggle('checked');
+                if (!this.classList.contains('explored')) {
+                    this.classList.add('explored');
+                    exploredCount++;
+                    updateProgress();
+                }
+            });
+        });
+
+        // Tool Cards
+        document.querySelectorAll('[data-tool-interactive]').forEach(element => {
+            element.addEventListener('click', function() {
+                this.classList.toggle('active');
+                if (!this.classList.contains('explored')) {
+                    this.classList.add('explored');
+                    exploredCount++;
+                    updateProgress();
+                }
+            });
+        });
+
+        // Scenario Solutions
+        document.querySelectorAll('.scenario-card').forEach((card, index) => {
+            const options = card.querySelectorAll('.solution-option');
+            const feedback = card.querySelector('.solution-feedback');
+
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    options.forEach(opt => {
+                        opt.classList.remove('selected');
+                        if (opt.dataset.answer === 'wrong' && opt !== this) {
+                            opt.classList.add('wrong');
+                        }
+                    });
+                    
+                    this.classList.add('selected');
+                    
+                    if (this.dataset.answer === 'correct') {
+                        feedback.classList.add('show');
+                    }
+                });
+            });
+        });
+
+        // Quiz Logic
+        const quizQuestions = document.querySelectorAll('.quiz-question');
+        const quizSubmit = document.getElementById('quizSubmit');
+        let selectedAnswers = {};
+        let quizScore = 0;
+
+        quizQuestions.forEach((question, qIndex) => {
+            const options = question.querySelectorAll('.quiz-option');
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    options.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedAnswers[qIndex + 1] = this.dataset.answer;
+                    
+                    if (Object.keys(selectedAnswers).length === quizQuestions.length) {
+                        quizSubmit.disabled = false;
+                    }
+                });
+            });
+        });
+
+        quizSubmit.addEventListener('click', function() {
+            let correctCount = 0;
+            
+            quizQuestions.forEach((question, qIndex) => {
+                const options = question.querySelectorAll('.quiz-option');
+                const feedback = question.querySelector('.quiz-feedback');
+                
+                options.forEach(option => {
+                    const isCorrect = option.dataset.answer === 'correct';
+                    const isSelected = option.classList.contains('selected');
+                    
+                    if (isCorrect) {
+                        option.classList.add('correct');
+                        if (isSelected) correctCount++;
+                    } else if (isSelected) {
+                        option.classList.add('wrong');
+                    }
+                });
+                
+                feedback.classList.add('show');
+            });
+
+            quizScore = correctCount;
+            document.getElementById('quizScore').textContent = `${correctCount}/4`;
+            
+            document.getElementById('completionCard').classList.add('show');
+            document.getElementById('completionCard').scrollIntoView({ behavior: 'smooth' });
+            
+            quizSubmit.style.display = 'none';
+        });
+
+        // Portfolio Save
+        document.getElementById('savePortfolio').addEventListener('click', async function() {
+            const reflection = document.getElementById('reflection').value;
+            
+            if (!reflection.trim()) {
+                alert('Bitte schreiben Sie zuerst eine Reflexion! 📝');
+                return;
+            }
+
+            if (!userCode) {
+                alert('⚠️ Bitte loggen Sie sich zuerst ein!');
+                return;
+            }
+
+            this.disabled = true;
+            this.textContent = '⏳ Speichere...';
+
+            const portfolioEntry = {
+                type: 'lerninhalt',
+                module: 'Lehrvertrag & Konfliktmanagement',
+                theme: 'Thema 1.1',
+                completed: true,
+                date: new Date().toISOString(),
+                reflection: reflection,
+                activity: {
+                    interactiveExplored: exploredCount,
+                    totalInteractive: totalInteractive,
+                    quizScore: quizScore,
+                    quizTotal: 4,
+                    progressPercentage: Math.round((exploredCount / totalInteractive) * 100)
+                },
+                quizAnswers: selectedAnswers
+            };
+
+            try {
+                // Save to localStorage
+                let portfolio = JSON.parse(localStorage.getItem('abuEbaPortfolio') || '[]');
+                portfolio.push(portfolioEntry);
+                localStorage.setItem('abuEbaPortfolio', JSON.stringify(portfolio));
+                
+                console.log('✅ Saved to localStorage');
+
+                this.textContent = '✓ Gespeichert';
+                this.style.background = 'var(--green)';
+
+            } catch (error) {
+                console.error('❌ Error saving:', error);
+                alert('⚠️ Fehler beim Speichern. Bitte versuchen Sie es erneut.');
+                this.disabled = false;
+                this.textContent = '💾 Ins Portfolio speichern';
+            }
+        });
+
+        // Auto-show assistants
+        setTimeout(() => {
+            if (!localStorage.getItem('wiseGreetedLerninhalt1')) {
+                wiseQuote.textContent = "Willkommen! Ihr Lehrvertrag ist wichtig – lernen Sie ihn kennen! 🧙‍♀️";
+                wiseSpeech.classList.add('show');
+                wiseSpeechVisible = true;
+                localStorage.setItem('wiseGreetedLerninhalt1', 'true');
+            }
+        }, 2000);
+
+        console.log('📋 Lerninhalt 1.1 geladen');
+        console.log('👤 User:', userName || 'Gast');
+        console.log('📊 Interaktive Elemente:', totalInteractive);
+    </script>
+</body>
+</html>
