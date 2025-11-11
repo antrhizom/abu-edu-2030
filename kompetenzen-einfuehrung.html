@@ -213,6 +213,31 @@
             font-size: 3rem;
         }
 
+        .header-nav {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
         .user-info {
             background: rgba(255, 255, 255, 0.2);
             padding: 0.75rem 1.5rem;
@@ -967,12 +992,12 @@
                 text-align: center;
             }
 
-            .header-content > div {
+            .header-nav {
                 flex-direction: column;
                 width: 100%;
             }
 
-            .header-content a {
+            .nav-link {
                 width: 100%;
                 justify-content: center;
             }
@@ -1069,8 +1094,11 @@
                 <span class="header-icon">🎯</span>
                 <h1>Kompetenzen verstehen</h1>
             </div>
-            <div style="display: flex; gap: 1rem; align-items: center;">
-                <a href="portfolio.html" style="background: rgba(255, 255, 255, 0.2); color: var(--white); padding: 0.75rem 1.5rem; border-radius: 20px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; display: flex; align-items: center; gap: 0.5rem;" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">
+            <div class="header-nav">
+                <a href="index.html" class="nav-link">
+                    🏠 Startseite
+                </a>
+                <a href="portfolio.html" class="nav-link">
                     📁 Mein Portfolio
                 </a>
                 <div class="user-info">
