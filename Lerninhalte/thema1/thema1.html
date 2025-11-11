@@ -1,1 +1,1532 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thema 1: Ins Berufsleben einsteigen - ABU EBA</title>
 
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --ktzh-blue: #0066CC;
+            --ktzh-cyan: #00A0E0;
+            --ktzh-lightblue: #E8F4F8;
+            --ktzh-darkgray: #3C3C3B;
+            --ktzh-gray: #767676;
+            --white: #FFFFFF;
+            --green: #10B981;
+            --yellow: #F59E0B;
+            --red: #EF4444;
+            --purple: #8B5CF6;
+            --orange: #FF8C42;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: var(--ktzh-darkgray);
+            line-height: 1.6;
+            background: linear-gradient(180deg, var(--white) 0%, var(--ktzh-lightblue) 100%);
+            min-height: 100vh;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(0, 102, 204, 0.1);
+            z-index: 9999;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ktzh-blue), var(--ktzh-cyan));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Floating Assistants */
+        .floating-robot {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9997;
+            cursor: pointer;
+            animation: float-robot 3s ease-in-out infinite;
+        }
+
+        .floating-wise {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 9997;
+            cursor: pointer;
+            animation: float-wise 4s ease-in-out infinite;
+        }
+
+        @keyframes float-robot {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes float-wise {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(-3deg); }
+        }
+
+        .robot-icon, .wise-icon {
+            font-size: 4rem;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .floating-robot:hover .robot-icon {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .floating-wise:hover .wise-icon {
+            transform: scale(1.2) rotate(-10deg);
+        }
+
+        .robot-speech, .wise-speech {
+            position: absolute;
+            bottom: 100%;
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+            min-width: 250px;
+            max-width: 300px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .robot-speech {
+            right: 0;
+        }
+
+        .wise-speech {
+            left: 0;
+            background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+            border: 2px solid var(--green);
+        }
+
+        .robot-speech::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 30px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid var(--white);
+        }
+
+        .wise-speech::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 30px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #DCFCE7;
+        }
+
+        .robot-speech.show, .wise-speech.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .robot-speech p, .wise-speech p {
+            color: var(--ktzh-blue);
+            font-weight: 600;
+            font-size: 0.938rem;
+            line-height: 1.5;
+        }
+
+        .wise-speech p {
+            color: var(--green);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
+            color: var(--white);
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-title h1 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .header-icon {
+            font-size: 3rem;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .user-info {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.938rem;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: var(--white);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .breadcrumb a {
+            color: var(--ktzh-cyan);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: var(--ktzh-gray);
+            margin: 0 0.5rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
+            color: var(--white);
+            border-radius: 20px;
+            padding: 4rem 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.2);
+            text-align: center;
+        }
+
+        .hero-section h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-section .theme-number {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-section .theme-description {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto 2rem auto;
+            opacity: 0.95;
+        }
+
+        .theme-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Video Section */
+        .video-section {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .video-section h3 {
+            color: var(--ktzh-blue);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-description {
+            margin-top: 1.5rem;
+            text-align: center;
+            color: var(--ktzh-gray);
+            font-size: 1rem;
+        }
+
+        /* Interactive Overview */
+        .overview-section {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .overview-section h3 {
+            color: var(--ktzh-blue);
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .lebensbezug-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .lebensbezug-card {
+            background: linear-gradient(135deg, var(--ktzh-lightblue) 0%, var(--white) 100%);
+            border: 3px solid var(--ktzh-cyan);
+            border-radius: 16px;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .lebensbezug-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 32px rgba(0, 160, 224, 0.3);
+        }
+
+        .lebensbezug-card.explored {
+            background: linear-gradient(135deg, #DCFCE7 0%, var(--white) 100%);
+            border-color: var(--green);
+        }
+
+        .lebensbezug-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .lebensbezug-card h4 {
+            color: var(--ktzh-blue);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .lebensbezug-card p {
+            color: var(--ktzh-gray);
+            font-size: 0.938rem;
+            line-height: 1.6;
+        }
+
+        .lebensbezug-detail {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--ktzh-cyan);
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .lebensbezug-card.active .lebensbezug-detail {
+            max-height: 1000px;
+            opacity: 1;
+        }
+
+        /* Learning Content Cards */
+        .content-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .content-card {
+            background: var(--white);
+            border: 3px solid var(--ktzh-blue);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--ktzh-blue), var(--ktzh-cyan));
+        }
+
+        .content-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 32px rgba(0, 102, 204, 0.3);
+        }
+
+        .content-card.completed {
+            border-color: var(--green);
+        }
+
+        .content-card.completed::before {
+            background: var(--green);
+        }
+
+        .content-number {
+            background: linear-gradient(135deg, var(--ktzh-blue), var(--ktzh-cyan));
+            color: var(--white);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-card.completed .content-number {
+            background: var(--green);
+        }
+
+        .content-card h4 {
+            color: var(--ktzh-blue);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .content-card p {
+            color: var(--ktzh-gray);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-highlights {
+            background: var(--ktzh-lightblue);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-highlights ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .content-highlights li {
+            padding: 0.5rem 0;
+            color: var(--ktzh-darkgray);
+            font-size: 0.938rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-highlights li::before {
+            content: '✓';
+            color: var(--ktzh-cyan);
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            border: none;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--ktzh-blue), var(--ktzh-cyan));
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.4);
+        }
+
+        .btn-success {
+            background: var(--green);
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+        }
+
+        .completion-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--green);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: none;
+        }
+
+        .content-card.completed .completion-badge {
+            display: block;
+        }
+
+        /* Floating Info Icons */
+        .info-icon {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .info-icon.kompetenz-icon {
+            background: linear-gradient(135deg, var(--purple), var(--ktzh-blue));
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        .info-icon.umsetzung-icon {
+            background: linear-gradient(135deg, var(--orange), var(--yellow));
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
+        }
+
+        .info-icon:hover {
+            transform: scale(1.1);
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .info-popup {
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+            min-width: 350px;
+            max-width: 450px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .info-popup::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 12px solid var(--white);
+        }
+
+        .info-icon:hover .info-popup {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .info-popup.kompetenz-popup {
+            border: 3px solid var(--purple);
+        }
+
+        .info-popup.umsetzung-popup {
+            border: 3px solid var(--orange);
+        }
+
+        .info-popup h5 {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-popup.kompetenz-popup h5 {
+            color: var(--purple);
+        }
+
+        .info-popup.umsetzung-popup h5 {
+            color: var(--orange);
+        }
+
+        .info-popup p {
+            color: var(--ktzh-darkgray);
+            font-size: 0.938rem;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-popup ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+        }
+
+        .info-popup ul li {
+            padding: 0.5rem 0;
+            color: var(--ktzh-darkgray);
+            font-size: 0.875rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .info-popup ul li::before {
+            content: '✓';
+            color: var(--purple);
+            font-weight: 700;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .info-popup.umsetzung-popup ul li::before {
+            content: '💡';
+        }
+
+        .kompetenz-badge {
+            display: inline-block;
+            background: var(--purple);
+            color: var(--white);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .umsetzung-badge {
+            display: inline-block;
+            background: var(--orange);
+            color: var(--white);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        /* Kompetenzstrategie Info Box */
+        .kompetenz-info-section {
+            background: linear-gradient(135deg, #F3E8FF 0%, #E9D5FF 100%);
+            border: 3px solid var(--purple);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .kompetenz-info-section::before {
+            content: '🎯';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 3rem;
+            background: var(--white);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid var(--purple);
+        }
+
+        .kompetenz-info-section h3 {
+            color: var(--purple);
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .kompetenz-info-content {
+            color: var(--ktzh-darkgray);
+            font-size: 1.125rem;
+            line-height: 1.8;
+        }
+
+        .kompetenz-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .kompetenz-item {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--purple);
+        }
+
+        .kompetenz-item h4 {
+            color: var(--purple);
+            font-size: 1.125rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .kompetenz-item p {
+            color: var(--ktzh-gray);
+            font-size: 0.938rem;
+            line-height: 1.6;
+        }
+
+        .kompetenz-types {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+        }
+
+        .kompetenz-types h4 {
+            color: var(--purple);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .kompetenz-types ul {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            list-style: none;
+            padding: 0;
+        }
+
+        .kompetenz-types li {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 8px;
+            color: var(--ktzh-darkgray);
+            font-size: 0.938rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .kompetenz-types li::before {
+            content: '📚';
+            font-size: 1.5rem;
+        }
+
+        .kompetenz-types li:nth-child(2)::before {
+            content: '💬';
+        }
+
+        .kompetenz-types li:nth-child(3)::before {
+            content: '🔑';
+        }
+
+        /* Checkmark */
+        .checkmark {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 2rem;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+
+        .explored .checkmark {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-nav {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .nav-link {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero-section h2 {
+                font-size: 2rem;
+            }
+
+            .theme-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .content-cards,
+            .lebensbezug-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- Floating Wise Person -->
+    <div class="floating-wise" id="floatingWise">
+        <div class="wise-speech" id="wiseSpeech">
+            <p id="wiseQuote">Klicke mich für weise Gedanken! 🧙‍♀️</p>
+        </div>
+        <div class="wise-icon">🧙‍♀️</div>
+    </div>
+
+    <!-- Floating Robot -->
+    <div class="floating-robot" id="floatingRobot">
+        <div class="robot-speech" id="robotSpeech">
+            <p id="robotQuote">Klicke mich für Erklärungen! 🤖</p>
+        </div>
+        <div class="robot-icon">🤖</div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-title">
+                <span class="header-icon">🚀</span>
+                <h1>Ins Berufsleben einsteigen</h1>
+            </div>
+            <div class="header-nav">
+                <a href="index.html" class="nav-link">🏠 Startseite</a>
+                <a href="startzweig.html" class="nav-link">📚 Alle Themen</a>
+                <a href="portfolio.html" class="nav-link">📁 Portfolio</a>
+                <div class="user-info">
+                    <span id="userDisplay">👤 Gast</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="index.html">Startseite</a>
+            <span>›</span>
+            <a href="startzweig.html">Themen</a>
+            <span>›</span>
+            <strong>Thema 1: Ins Berufsleben einsteigen</strong>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="theme-number">Thema 1 von 8</div>
+            <h2>🚀 Ins Berufsleben einsteigen</h2>
+            <p class="theme-description">
+                Willkommen in Ihrer Lehre! Der Beginn Ihrer beruflichen Grundbildung bedeutet mehr als der Start einer Ausbildung – 
+                es ist der Übergang in eine neue Lebensphase. Sie bewegen sich in einer mit zunächst fremden Umgebung, 
+                als respektvolle, lernende Fachperson im Betrieb und in der Schule. In diesem Thema lernen Sie, 
+                sich zu orientieren, Regeln und Kommunikationsformen zu verstehen und Ihren Platz zu finden.
+            </p>
+            <div class="theme-stats">
+                <div class="stat-item">
+                    <span class="stat-value">22</span>
+                    <span class="stat-label">Lektionen</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">4</span>
+                    <span class="stat-label">Lerninhalte</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">2</span>
+                    <span class="stat-label">Lebensbezüge</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Video Section -->
+        <div class="video-section">
+            <h3>📺 Einführungsvideo: Ihr Start ins Berufsleben</h3>
+            <div class="video-container">
+                <div class="video-wrapper">
+                    <!-- Placeholder für YouTube-Video - URL hier einfügen -->
+                    <iframe 
+                        src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                        title="Einführung: Ins Berufsleben einsteigen"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+            <p class="video-description">
+                In diesem Video erfahren Sie, was Sie in Thema 1 erwartet: Ihre Rechte und Pflichten im Lehrvertrag, 
+                wie Sie Konflikte konstruktiv lösen und wie Sie professionell kommunizieren.
+            </p>
+        </div>
+
+        <!-- Interactive Overview: Individuelle Lebensbezüge -->
+        <div class="overview-section">
+            <h3>🎯 Individuelle Lebensbezüge</h3>
+            <p style="text-align: center; color: var(--ktzh-gray); margin-bottom: 2rem; font-size: 1.125rem;">
+                Diese beiden Lebensbezüge zeigen, wie das Thema mit Ihrem Alltag verbunden ist. Klicken Sie auf jede Karte!
+            </p>
+
+            <div class="lebensbezug-grid">
+                <div class="lebensbezug-card" data-interactive>
+                    <span class="checkmark">✓</span>
+                    <div class="lebensbezug-icon">🏢</div>
+                    <h4>1.1 Ich finde mich im Betrieb und in der Berufsfachschule zurecht</h4>
+                    <p>
+                        Ich kenne Lernstrategien, achte auf mich und arbeite ressourcenschonend.
+                    </p>
+                    <div class="lebensbezug-detail">
+                        <p><strong>Konkret bedeutet das:</strong></p>
+                        <ul style="margin-left: 1.5rem; color: var(--ktzh-darkgray); line-height: 1.8;">
+                            <li>Sie orientieren sich in der Arbeits- und Ausbildungswelt</li>
+                            <li>Sie verstehen Ihren Lehrvertrag und kennen Ihre Rechte</li>
+                            <li>Sie wissen, an wen Sie sich bei Problemen wenden können</li>
+                            <li>Sie achten auf sich und arbeiten effizient</li>
+                            <li>Sie kennen verschiedene Lernstrategien</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lebensbezug-card" data-interactive>
+                    <span class="checkmark">✓</span>
+                    <div class="lebensbezug-icon">💬</div>
+                    <h4>1.2 Ich kommuniziere auf konstruktive Art und Weise</h4>
+                    <p>
+                        Ich kann mich verständlich, situationsgerecht und respektvoll ausdrücken.
+                    </p>
+                    <div class="lebensbezug-detail">
+                        <p><strong>Konkret bedeutet das:</strong></p>
+                        <ul style="margin-left: 1.5rem; color: var(--ktzh-darkgray); line-height: 1.8;">
+                            <li>Sie können sich in Schule und Betrieb verständlich ausdrücken</li>
+                            <li>Sie kommunizieren situationsgerecht und respektvoll</li>
+                            <li>Sie können Konflikte im Berufs- oder Schulalltag erkennen</li>
+                            <li>Sie reagieren adäquat auf Konflikte</li>
+                            <li>Sie respektieren die Grenzen anderer Menschen</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kompetenzstrategie Info Section -->
+        <div class="kompetenz-info-section">
+            <h3>🎯 Kompetenzstrategie & Kompetenzarten</h3>
+            <div class="kompetenz-info-content">
+                <p style="text-align: center; margin-bottom: 2rem;">
+                    <strong>Wie funktioniert dieses Lehrmittel?</strong> Sie begegnen den gleichen Kompetenzen immer wieder – 
+                    in verschiedenen Kontexten und auf unterschiedlichen Niveaus. Das nennen wir <strong>Spiralcurriculum</strong> 
+                    oder <strong>Zirkularität</strong>.
+                </p>
+
+                <div class="kompetenz-grid">
+                    <div class="kompetenz-item">
+                        <h4>📋 Verpflichtend:</h4>
+                        <p>
+                            Die <strong>Lerninhalte</strong> (1.1.1, 1.1.2, 1.2.1, 1.2.2) und die darin aufgeführten 
+                            <strong>Kompetenzformulierungen</strong> sind verpflichtend und müssen bearbeitet werden.
+                        </p>
+                    </div>
+
+                    <div class="kompetenz-item">
+                        <h4>💡 Optional:</h4>
+                        <p>
+                            Die <strong>Umsetzungsbeispiele</strong> sind <strong>nicht verpflichtend</strong>. 
+                            Sie zeigen mögliche Wege, wie die Kompetenzen trainiert werden können – 
+                            sind aber nur Vorschläge!
+                        </p>
+                    </div>
+                </div>
+
+                <div class="kompetenz-types">
+                    <h4>Die 3 Kompetenzarten in jedem Thema:</h4>
+                    <ul>
+                        <li>
+                            <strong>Gesellschaftliche Inhalte</strong><br>
+                            <span style="font-size: 0.875rem; color: var(--ktzh-gray);">Wissen über Gesellschaft, Recht, Wirtschaft, Ethik</span>
+                        </li>
+                        <li>
+                            <strong>Sprachmodi</strong><br>
+                            <span style="font-size: 0.875rem; color: var(--ktzh-gray);">Kommunikation in verschiedenen Formen (inkl. digital)</span>
+                        </li>
+                        <li>
+                            <strong>Schlüsselkompetenzen</strong><br>
+                            <span style="font-size: 0.875rem; color: var(--ktzh-gray);">Überfachliche Fähigkeiten für lebenslanges Lernen</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <p style="margin-top: 2rem; padding: 1.5rem; background: rgba(255, 255, 255, 0.7); border-radius: 12px; text-align: center;">
+                    <strong>💡 Tipp:</strong> Schauen Sie sich die schwebenden Info-Symbole 
+                    <span class="kompetenz-badge">🔍</span> und <span class="umsetzung-badge">💡</span> 
+                    bei den Lerninhalten an – sie zeigen Details zu Kompetenzen und Umsetzungsbeispielen!
+                </p>
+            </div>
+        </div>
+
+        <!-- Learning Content -->
+        <div class="overview-section">
+            <h3>📚 Lerninhalte in diesem Thema</h3>
+            <p style="text-align: center; color: var(--ktzh-gray); margin-bottom: 2rem; font-size: 1.125rem;">
+                Arbeiten Sie die Lerninhalte der Reihe nach durch. Ihr Fortschritt wird automatisch gespeichert.<br>
+                <strong>Wichtig:</strong> Lerninhalte und Kompetenzformulierungen sind verpflichtend. 
+                Umsetzungsbeispiele sind optional!
+            </p>
+
+            <div class="content-cards">
+                <!-- Lerninhalt 1.1.1 -->
+                <div class="content-card" id="content-1-1-1">
+                    <div class="completion-badge">✓ Abgeschlossen</div>
+                    <div class="content-number">1.1.1</div>
+                    
+                    <h4>
+                        Ich orientiere mich in der Arbeits- und Ausbildungswelt
+                        <div class="info-icon kompetenz-icon">
+                            🔍
+                            <div class="info-popup kompetenz-popup">
+                                <h5>📚 Kompetenzen (verpflichtend)</h5>
+                                <p><strong>Gesellschaftliche Inhalte:</strong></p>
+                                <ul>
+                                    <li>5.2.6.2 Recht: Lehrvertrag</li>
+                                    <li>5.2.6.3 Recht: Konfliktmanagement</li>
+                                </ul>
+                                <p><strong>Sprachmodi:</strong></p>
+                                <ul>
+                                    <li>4.2.1.3 Rezeption schriftlich und bildlich: Analyse des Lehrvertrags mittels digitaler Hilfsmittel (R1)</li>
+                                    <li>4.2.2.2 Produktion schriftlich und bildlich</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="info-icon umsetzung-icon">
+                            💡
+                            <div class="info-popup umsetzung-popup">
+                                <h5>💡 Umsetzungsbeispiele (optional)</h5>
+                                <p><strong>Mögliche Umsetzungen:</strong></p>
+                                <ul>
+                                    <li>Externe Lernorte: Schule und Umgebung kennenlernen</li>
+                                    <li>Stadtrundgang zur Orientierung</li>
+                                    <li>Analyse realer Lehrverträge</li>
+                                    <li>Rollenspiele zu Konfliktsituationen</li>
+                                </ul>
+                                <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(255, 140, 66, 0.1); border-radius: 8px; font-size: 0.813rem;">
+                                    <strong>Hinweis:</strong> Diese Beispiele sind Vorschläge. Die Lehrperson kann auch andere Wege wählen!
+                                </p>
+                            </div>
+                        </div>
+                    </h4>
+                    
+                    <p>
+                        Lernen Sie Ihren Lehrvertrag verstehen, Konflikte zu lösen und digital organisiert zu arbeiten.
+                    </p>
+                    
+                    <div class="content-highlights">
+                        <ul>
+                            <li>📋 Lehrvertrag verstehen & Rechte kennen</li>
+                            <li>⚖️ Konfliktmanagement im Berufsalltag</li>
+                            <li>📱 E-Mail, Kalender & digitale Tools</li>
+                        </ul>
+                    </div>
+
+                    <a href="lerninhalt-1-1.html" class="btn btn-primary" id="btn-1-1-1">
+                        🚀 Starten
+                    </a>
+                </div>
+
+                <!-- Lerninhalt 1.1.2 -->
+                <div class="content-card" id="content-1-1-2">
+                    <div class="completion-badge">✓ Abgeschlossen</div>
+                    <div class="content-number">1.1.2</div>
+                    
+                    <h4>
+                        Ich achte auf mich und arbeite effizient
+                        <div class="info-icon kompetenz-icon">
+                            🔍
+                            <div class="info-popup kompetenz-popup">
+                                <h5>📚 Kompetenzen (verpflichtend)</h5>
+                                <p><strong>Gesellschaftliche Inhalte:</strong></p>
+                                <ul>
+                                    <li>5.2.2.2 Identität und Sozialisation: Lernstrategien und Umgang mit neuen Lebenssituationen</li>
+                                </ul>
+                                <p><strong>Sprachmodi:</strong></p>
+                                <ul>
+                                    <li>4.2.1.3 Rezeption schriftlich und bildlich</li>
+                                    <li>4.2.3.3 Interaktion und Kollaboration digital (R1)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="info-icon umsetzung-icon">
+                            💡
+                            <div class="info-popup umsetzung-popup">
+                                <h5>💡 Umsetzungsbeispiele (optional)</h5>
+                                <p><strong>Mögliche Umsetzungen:</strong></p>
+                                <ul>
+                                    <li>Verschiedene Lernstrategien ausprobieren</li>
+                                    <li>Zeitmanagement-Tools kennenlernen</li>
+                                    <li>Stressbewältigungstechniken üben</li>
+                                    <li>Ressourcenschonendes Arbeiten reflektieren</li>
+                                </ul>
+                                <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(255, 140, 66, 0.1); border-radius: 8px; font-size: 0.813rem;">
+                                    <strong>Hinweis:</strong> Diese Beispiele sind Vorschläge. Die Lehrperson kann auch andere Wege wählen!
+                                </p>
+                            </div>
+                        </div>
+                    </h4>
+                    
+                    <p>
+                        Lernen Sie verschiedene Lernstrategien kennen und achten Sie auf Ihre Gesundheit und Ressourcen.
+                    </p>
+                    
+                    <div class="content-highlights">
+                        <ul>
+                            <li>🧠 Effektive Lernstrategien entwickeln</li>
+                            <li>⚡ Ressourcenschonend arbeiten</li>
+                            <li>💪 Auf sich selbst achten</li>
+                        </ul>
+                    </div>
+
+                    <a href="lerninhalt-1-1-2.html" class="btn btn-primary" id="btn-1-1-2">
+                        🔒 Freischalten (1.1.1 zuerst abschließen)
+                    </a>
+                </div>
+
+                <!-- Lerninhalt 1.2.1 -->
+                <div class="content-card" id="content-1-2-1">
+                    <div class="completion-badge">✓ Abgeschlossen</div>
+                    <div class="content-number">1.2.1</div>
+                    
+                    <h4>
+                        Ich kann mich verständlich und respektvoll ausdrücken
+                        <div class="info-icon kompetenz-icon">
+                            🔍
+                            <div class="info-popup kompetenz-popup">
+                                <h5>📚 Kompetenzen (verpflichtend)</h5>
+                                <p><strong>Gesellschaftliche Inhalte:</strong></p>
+                                <ul>
+                                    <li>5.2.1.1 Ethik: Beim eigenen Handeln Grenzen der anderen respektieren</li>
+                                </ul>
+                                <p><strong>Sprachmodi:</strong></p>
+                                <ul>
+                                    <li>4.2.1.3 Rezeption schriftlich und bildlich (R1)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="info-icon umsetzung-icon">
+                            💡
+                            <div class="info-popup umsetzung-popup">
+                                <h5>💡 Umsetzungsbeispiele (optional)</h5>
+                                <p><strong>Mögliche Umsetzungen:</strong></p>
+                                <ul>
+                                    <li>Kooperation mit Berufskunde möglich</li>
+                                    <li>Rollenspiele zu verschiedenen Kommunikationssituationen</li>
+                                    <li>Analyse von Gesprächssituationen</li>
+                                    <li>Feedback-Übungen in der Gruppe</li>
+                                </ul>
+                                <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(255, 140, 66, 0.1); border-radius: 8px; font-size: 0.813rem;">
+                                    <strong>Hinweis:</strong> Diese Beispiele sind Vorschläge. Die Lehrperson kann auch andere Wege wählen!
+                                </p>
+                            </div>
+                        </div>
+                    </h4>
+                    
+                    <p>
+                        Lernen Sie, sich in Schule und Betrieb situationsgerecht und respektvoll auszudrücken.
+                    </p>
+                    
+                    <div class="content-highlights">
+                        <ul>
+                            <li>💬 Situationsgerecht kommunizieren</li>
+                            <li>🤝 Respektvolle Ausdrucksweise</li>
+                            <li>🎯 Grenzen anderer respektieren</li>
+                        </ul>
+                    </div>
+
+                    <a href="lerninhalt-1-2-1.html" class="btn btn-primary" id="btn-1-2-1">
+                        🔒 Freischalten (1.1.2 zuerst abschließen)
+                    </a>
+                </div>
+
+                <!-- Lerninhalt 1.2.2 -->
+                <div class="content-card" id="content-1-2-2">
+                    <div class="completion-badge">✓ Abgeschlossen</div>
+                    <div class="content-number">1.2.2</div>
+                    
+                    <h4>
+                        Ich kann Konflikte erkennen und darauf reagieren
+                        <div class="info-icon kompetenz-icon">
+                            🔍
+                            <div class="info-popup kompetenz-popup">
+                                <h5>📚 Kompetenzen (verpflichtend)</h5>
+                                <p><strong>Gesellschaftliche Inhalte:</strong></p>
+                                <ul>
+                                    <li>5.2.2.2 Identität und Sozialisation: Psychische und physische Gesundheit pflegen</li>
+                                </ul>
+                                <p><strong>Sprachmodi:</strong></p>
+                                <ul>
+                                    <li>4.2.3.3 Interaktion und Kollaboration digital (R1)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="info-icon umsetzung-icon">
+                            💡
+                            <div class="info-popup umsetzung-popup">
+                                <h5>💡 Umsetzungsbeispiele (optional)</h5>
+                                <p><strong>Mögliche Umsetzungen:</strong></p>
+                                <ul>
+                                    <li>Kooperation mit Berufskunde möglich</li>
+                                    <li>Analyse von Konfliktsituationen</li>
+                                    <li>Lösungsstrategien entwickeln</li>
+                                    <li>Deeskalationstechniken üben</li>
+                                </ul>
+                                <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(255, 140, 66, 0.1); border-radius: 8px; font-size: 0.813rem;">
+                                    <strong>Hinweis:</strong> Diese Beispiele sind Vorschläge. Die Lehrperson kann auch andere Wege wählen!
+                                </p>
+                            </div>
+                        </div>
+                    </h4>
+                    
+                    <p>
+                        Lernen Sie, Konflikte im Berufs- oder Schulalltag frühzeitig zu erkennen und adäquat darauf zu reagieren.
+                    </p>
+                    
+                    <div class="content-highlights">
+                        <ul>
+                            <li>👁️ Konflikte früh erkennen</li>
+                            <li>⚖️ Angemessen reagieren</li>
+                            <li>💚 Gesundheit pflegen</li>
+                        </ul>
+                    </div>
+
+                    <a href="lerninhalt-1-2-2.html" class="btn btn-primary" id="btn-1-2-2">
+                        🔒 Freischalten (1.2.1 zuerst abschließen)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // User Info
+        const userCode = localStorage.getItem('abuEbaCode');
+        const userName = localStorage.getItem('abuEbaName');
+        
+        if (userCode && userName) {
+            document.getElementById('userDisplay').textContent = `👤 ${userName}`;
+        }
+
+        // Wise Quotes
+        const wiseQuotes = [
+            "Der Anfang ist die Hälfte des Ganzen. Starten Sie mutig! 🚀",
+            "Jede Lehre beginnt mit dem ersten Schritt. Sie sind bereit! 🌟",
+            "Vertrauen Sie dem Prozess. Lernen braucht Zeit und Geduld. ⏳",
+            "Fragen zeigen Interesse. Schweigen führt zu Unsicherheit. 💭",
+            "Ihre Rechte sind wichtig. Kennen Sie sie! ⚖️",
+            "Konflikte sind Chancen zu wachsen. Nutzen Sie sie! 🌱",
+            "Kommunikation ist der Schlüssel zu allem. Üben Sie! 🗝️",
+            "Fehler machen ist menschlich. Daraus lernen ist klug. 🧠",
+            "Respekt ist keine Einbahnstraße. Geben und nehmen! 🤝",
+            "Der Lehrvertrag schützt Sie. Verstehen Sie ihn! 📋"
+        ];
+
+        // Robot Explanations
+        const robotExplanations = [
+            "💡 <strong>Lehrvertrag?</strong> Wie ein Mietvertrag – regelt Rechte & Pflichten!",
+            "🚀 <strong>Berufseinstieg?</strong> Start Ihrer Ausbildung – aufregend und neu!",
+            "💬 <strong>Kommunikation?</strong> Wie Sie mit anderen sprechen und schreiben!",
+            "⚖️ <strong>Konflikt?</strong> Problem zwischen Personen – kann gelöst werden!",
+            "📱 <strong>Digital?</strong> Mit Computer, Handy, Apps arbeiten!",
+            "🎯 <strong>Lebensbezug?</strong> Wie das Thema mit Ihrem Alltag verbunden ist!",
+            "📋 <strong>Lerninhalt?</strong> Was Sie konkret lernen – Schritt für Schritt!",
+            "🤝 <strong>Respektvoll?</strong> Höflich, fair und aufmerksam sein!",
+            "🏢 <strong>Betrieb?</strong> Ihre Firma, wo Sie arbeiten und lernen!",
+            "📚 <strong>Berufsschule?</strong> Wo Sie die Theorie zu Ihrem Beruf lernen!"
+        ];
+
+        let currentQuoteIndex = 0;
+        let currentRobotIndex = 0;
+        let wiseSpeechVisible = false;
+        let robotSpeechVisible = false;
+
+        // Floating Wise Person
+        const floatingWise = document.getElementById('floatingWise');
+        const wiseSpeech = document.getElementById('wiseSpeech');
+        const wiseQuote = document.getElementById('wiseQuote');
+
+        floatingWise.addEventListener('click', function() {
+            if (!wiseSpeechVisible) {
+                wiseQuote.textContent = wiseQuotes[currentQuoteIndex];
+                wiseSpeech.classList.add('show');
+                wiseSpeechVisible = true;
+            } else {
+                currentQuoteIndex = (currentQuoteIndex + 1) % wiseQuotes.length;
+                wiseQuote.textContent = wiseQuotes[currentQuoteIndex];
+            }
+        });
+
+        // Floating Robot
+        const floatingRobot = document.getElementById('floatingRobot');
+        const robotSpeech = document.getElementById('robotSpeech');
+        const robotQuote = document.getElementById('robotQuote');
+
+        floatingRobot.addEventListener('click', function() {
+            if (!robotSpeechVisible) {
+                robotQuote.innerHTML = robotExplanations[currentRobotIndex];
+                robotSpeech.classList.add('show');
+                robotSpeechVisible = true;
+            } else {
+                currentRobotIndex = (currentRobotIndex + 1) % robotExplanations.length;
+                robotQuote.innerHTML = robotExplanations[currentRobotIndex];
+            }
+        });
+
+        // Progress Tracking for Lebensbezug Cards
+        const lebensbezugCards = document.querySelectorAll('[data-interactive]');
+        let exploredCount = 0;
+        const totalInteractive = lebensbezugCards.length;
+
+        function updateProgress() {
+            const percentage = Math.round((exploredCount / totalInteractive) * 100);
+            document.getElementById('progressFill').style.width = percentage + '%';
+        }
+
+        lebensbezugCards.forEach((card, index) => {
+            card.addEventListener('click', function() {
+                this.classList.toggle('active');
+                if (!this.classList.contains('explored')) {
+                    this.classList.add('explored');
+                    exploredCount++;
+                    updateProgress();
+                }
+            });
+        });
+
+        // Check completion status
+        function checkCompletionStatus() {
+            const portfolio = JSON.parse(localStorage.getItem('abuEbaPortfolio') || '[]');
+            
+            // Check 1.1.1
+            const completed111 = portfolio.some(entry => 
+                entry.module === 'Lehrvertrag & Konfliktmanagement' && entry.completed
+            );
+
+            if (completed111) {
+                const card111 = document.getElementById('content-1-1-1');
+                const btn111 = document.getElementById('btn-1-1-1');
+                card111.classList.add('completed');
+                btn111.textContent = '✓ Abgeschlossen';
+                btn111.classList.remove('btn-primary');
+                btn111.classList.add('btn-success');
+
+                // Unlock 1.1.2
+                const btn112 = document.getElementById('btn-1-1-2');
+                btn112.textContent = '🚀 Starten';
+                btn112.href = 'lerninhalt-1-1-2.html';
+            }
+
+            // Check 1.1.2
+            const completed112 = portfolio.some(entry => 
+                entry.module === 'Lernstrategien & Ressourcenmanagement' && entry.completed
+            );
+
+            if (completed112) {
+                const card112 = document.getElementById('content-1-1-2');
+                const btn112 = document.getElementById('btn-1-1-2');
+                card112.classList.add('completed');
+                btn112.textContent = '✓ Abgeschlossen';
+                btn112.classList.remove('btn-primary');
+                btn112.classList.add('btn-success');
+
+                // Unlock 1.2.1
+                const btn121 = document.getElementById('btn-1-2-1');
+                btn121.textContent = '🚀 Starten';
+                btn121.href = 'lerninhalt-1-2-1.html';
+            }
+
+            // Check 1.2.1
+            const completed121 = portfolio.some(entry => 
+                entry.module === 'Verständliche & respektvolle Kommunikation' && entry.completed
+            );
+
+            if (completed121) {
+                const card121 = document.getElementById('content-1-2-1');
+                const btn121 = document.getElementById('btn-1-2-1');
+                card121.classList.add('completed');
+                btn121.textContent = '✓ Abgeschlossen';
+                btn121.classList.remove('btn-primary');
+                btn121.classList.add('btn-success');
+
+                // Unlock 1.2.2
+                const btn122 = document.getElementById('btn-1-2-2');
+                btn122.textContent = '🚀 Starten';
+                btn122.href = 'lerninhalt-1-2-2.html';
+            }
+
+            // Check 1.2.2
+            const completed122 = portfolio.some(entry => 
+                entry.module === 'Konflikte erkennen & reagieren' && entry.completed
+            );
+
+            if (completed122) {
+                const card122 = document.getElementById('content-1-2-2');
+                const btn122 = document.getElementById('btn-1-2-2');
+                card122.classList.add('completed');
+                btn122.textContent = '✓ Abgeschlossen';
+                btn122.classList.remove('btn-primary');
+                btn122.classList.add('btn-success');
+            }
+        }
+
+        // Run on page load
+        checkCompletionStatus();
+
+        // Auto-show assistants
+        setTimeout(() => {
+            if (!localStorage.getItem('wiseGreetedThema1')) {
+                wiseQuote.textContent = "Willkommen zu Thema 1! Klicken Sie die Lebensbezüge an, um mehr zu erfahren. 🧙‍♀️";
+                wiseSpeech.classList.add('show');
+                wiseSpeechVisible = true;
+                localStorage.setItem('wiseGreetedThema1', 'true');
+            }
+        }, 2000);
+
+        console.log('🚀 Thema 1 Übersicht geladen');
+        console.log('👤 User:', userName || 'Gast');
+    </script>
+</body>
+</html>
