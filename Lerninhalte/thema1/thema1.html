@@ -412,6 +412,7 @@
             color: var(--ktzh-blue);
             font-size: 1.5rem;
             margin-bottom: 1rem;
+            line-height: 1.4;
         }
 
         .lebensbezug-card p {
@@ -591,133 +592,6 @@
             display: block;
         }
 
-        /* Floating Info Icons */
-        .info-icon {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.25rem;
-            transition: all 0.3s ease;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .info-icon.kompetenz-icon {
-            background: linear-gradient(135deg, var(--purple), var(--ktzh-blue));
-            color: var(--white);
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-        }
-
-        .info-icon.umsetzung-icon {
-            background: linear-gradient(135deg, var(--orange), var(--yellow));
-            color: var(--white);
-            box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
-        }
-
-        .info-icon:hover {
-            transform: scale(1.1);
-            animation: none;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .info-popup {
-            position: absolute;
-            bottom: 120%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--white);
-            border-radius: 16px;
-            padding: 1.5rem;
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
-            min-width: 350px;
-            max-width: 450px;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-
-        .info-popup::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 12px solid transparent;
-            border-right: 12px solid transparent;
-            border-top: 12px solid var(--white);
-        }
-
-        .info-icon:hover .info-popup {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .info-popup.kompetenz-popup {
-            border: 3px solid var(--purple);
-        }
-
-        .info-popup.umsetzung-popup {
-            border: 3px solid var(--orange);
-        }
-
-        .info-popup h5 {
-            font-size: 1.125rem;
-            margin-bottom: 1rem;
-        }
-
-        .info-popup.kompetenz-popup h5 {
-            color: var(--purple);
-        }
-
-        .info-popup.umsetzung-popup h5 {
-            color: var(--orange);
-        }
-
-        .info-popup p {
-            color: var(--ktzh-darkgray);
-            font-size: 0.938rem;
-            line-height: 1.6;
-            margin-bottom: 0.75rem;
-        }
-
-        .info-popup ul {
-            list-style: none;
-            padding: 0;
-            margin-top: 1rem;
-        }
-
-        .info-popup ul li {
-            padding: 0.5rem 0;
-            color: var(--ktzh-darkgray);
-            font-size: 0.875rem;
-            display: flex;
-            align-items: flex-start;
-            gap: 0.5rem;
-        }
-
-        .info-popup ul li::before {
-            content: '✓';
-            color: var(--purple);
-            font-weight: 700;
-            font-size: 1rem;
-            flex-shrink: 0;
-        }
-
-        .info-popup.umsetzung-popup ul li::before {
-            content: '💡';
-        }
-
         .kompetenz-badge {
             display: inline-block;
             background: var(--purple);
@@ -818,6 +692,24 @@
             color: var(--purple);
             font-size: 1.25rem;
             margin-bottom: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        .kompetenz-types h4:hover {
+            color: var(--ktzh-blue);
+        }
+
+        .kompetenz-types .toggle-icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .kompetenz-types.active .toggle-icon {
+            transform: rotate(180deg);
         }
 
         .kompetenz-types ul {
@@ -826,6 +718,16 @@
             gap: 1rem;
             list-style: none;
             padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .kompetenz-types.active ul {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 1rem;
         }
 
         .kompetenz-types li {
@@ -850,6 +752,149 @@
 
         .kompetenz-types li:nth-child(3)::before {
             content: '🔑';
+        }
+
+        /* Floating Paperclip Assistant */
+        .floating-paperclip {
+            position: fixed;
+            top: 50%;
+            right: 120px;
+            transform: translateY(-50%);
+            z-index: 9996;
+            cursor: pointer;
+            animation: paperclip-bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes paperclip-bounce {
+            0%, 100% { transform: translateY(-50%) rotate(-5deg); }
+            50% { transform: translateY(-60%) rotate(5deg); }
+        }
+
+        .paperclip-icon {
+            font-size: 3.5rem;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .floating-paperclip:hover .paperclip-icon {
+            transform: scale(1.2) rotate(15deg);
+        }
+
+        .paperclip-speech {
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            border: 3px solid var(--yellow);
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            margin-right: 15px;
+            min-width: 280px;
+            max-width: 320px;
+            opacity: 0;
+            transform: translateY(-50%) translateX(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .paperclip-speech::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 10px solid #FDE68A;
+        }
+
+        .paperclip-speech.show {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+            pointer-events: auto;
+        }
+
+        .paperclip-speech p {
+            color: var(--orange);
+            font-weight: 600;
+            font-size: 0.938rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .paperclip-speech strong {
+            color: var(--ktzh-darkgray);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Umsetzung Badge in Content Cards */
+        .umsetzung-hint {
+            background: linear-gradient(135deg, var(--yellow), var(--orange));
+            color: var(--white);
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .umsetzung-hint:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+        }
+
+        .umsetzung-detail {
+            background: rgba(255, 237, 213, 0.5);
+            border-left: 4px solid var(--orange);
+            padding: 0;
+            border-radius: 8px;
+            margin-top: 1rem;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .umsetzung-detail.show {
+            max-height: 500px;
+            opacity: 1;
+            padding: 1rem;
+        }
+
+        .umsetzung-detail h5 {
+            color: var(--orange);
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .umsetzung-detail ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .umsetzung-detail li {
+            padding: 0.5rem 0;
+            color: var(--ktzh-darkgray);
+            font-size: 0.875rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .umsetzung-detail li::before {
+            content: '💡';
+            font-size: 1rem;
+            flex-shrink: 0;
         }
 
         /* Checkmark */
@@ -923,6 +968,14 @@
         <div class="robot-icon">🤖</div>
     </div>
 
+    <!-- Floating Paperclip for Umsetzungsbeispiele -->
+    <div class="floating-paperclip" id="floatingPaperclip">
+        <div class="paperclip-speech" id="paperclipSpeech">
+            <p><strong>💡 Umsetzungsbeispiele</strong> Klicke auf die orangenen Hinweise bei den Lerninhalten, um optionale Umsetzungsbeispiele zu sehen!</p>
+        </div>
+        <div class="paperclip-icon">📎</div>
+    </div>
+
     <!-- Header -->
     <header class="header">
         <div class="header-content">
@@ -931,9 +984,9 @@
                 <h1>Ins Berufsleben einsteigen</h1>
             </div>
             <div class="header-nav">
-                <a href="index.html" class="nav-link">🏠 Startseite</a>
-                <a href="startzweig.html" class="nav-link">📚 Alle Themen</a>
-                <a href="portfolio.html" class="nav-link">📁 Portfolio</a>
+                <a href="../../index.html" class="nav-link">🏠 Startseite</a>
+                <a href="../../startzweig.html" class="nav-link">📚 Alle Themen</a>
+                <a href="../../portfolio.html" class="nav-link">📁 Portfolio</a>
                 <div class="user-info">
                     <span id="userDisplay">👤 Gast</span>
                 </div>
@@ -945,9 +998,9 @@
     <div class="container">
         <!-- Breadcrumb -->
         <div class="breadcrumb">
-            <a href="index.html">Startseite</a>
+            <a href="../../index.html">Startseite</a>
             <span>›</span>
-            <a href="startzweig.html">Themen</a>
+            <a href="../../startzweig.html">Themen</a>
             <span>›</span>
             <strong>Thema 1: Ins Berufsleben einsteigen</strong>
         </div>
@@ -958,7 +1011,7 @@
             <h2>🚀 Ins Berufsleben einsteigen</h2>
             <p class="theme-description">
                 Willkommen in Ihrer Lehre! Der Beginn Ihrer beruflichen Grundbildung bedeutet mehr als der Start einer Ausbildung – 
-                es ist der Übergang in eine neue Lebensphase. Sie bewegen sich in einer mit zunächst fremden Umgebung, 
+                es ist der Übergang in eine neue Lebensphase. Sie bewegen sich in einer zunächst fremden Umgebung, 
                 als respektvolle, lernende Fachperson im Betrieb und in der Schule. In diesem Thema lernen Sie, 
                 sich zu orientieren, Regeln und Kommunikationsformen zu verstehen und Ihren Platz zu finden.
             </p>
@@ -1075,8 +1128,11 @@
                     </div>
                 </div>
 
-                <div class="kompetenz-types">
-                    <h4>Die 3 Kompetenzarten in jedem Thema:</h4>
+                <div class="kompetenz-types" id="kompetenzTypes">
+                    <h4>
+                        Die 3 Kompetenzarten in jedem Thema 
+                        <span class="toggle-icon">🔽</span>
+                    </h4>
                     <ul>
                         <li>
                             <strong>Gesellschaftliche Inhalte</strong><br>
@@ -1092,12 +1148,6 @@
                         </li>
                     </ul>
                 </div>
-
-                <p style="margin-top: 2rem; padding: 1.5rem; background: rgba(255, 255, 255, 0.7); border-radius: 12px; text-align: center;">
-                    <strong>💡 Tipp:</strong> Schauen Sie sich die schwebenden Info-Symbole 
-                    <span class="kompetenz-badge">🔍</span> und <span class="umsetzung-badge">💡</span> 
-                    bei den Lerninhalten an – sie zeigen Details zu Kompetenzen und Umsetzungsbeispielen!
-                </p>
             </div>
         </div>
 
@@ -1105,9 +1155,7 @@
         <div class="overview-section">
             <h3>📚 Lerninhalte in diesem Thema</h3>
             <p style="text-align: center; color: var(--ktzh-gray); margin-bottom: 2rem; font-size: 1.125rem;">
-                Arbeiten Sie die Lerninhalte der Reihe nach durch. Ihr Fortschritt wird automatisch gespeichert.<br>
-                <strong>Wichtig:</strong> Lerninhalte und Kompetenzformulierungen sind verpflichtend. 
-                Umsetzungsbeispiele sind optional!
+                Arbeiten Sie die Lerninhalte der Reihe nach durch. Ihr Fortschritt wird automatisch gespeichert.
             </p>
 
             <div class="content-cards">
@@ -1116,41 +1164,7 @@
                     <div class="completion-badge">✓ Abgeschlossen</div>
                     <div class="content-number">1.1.1</div>
                     
-                    <h4>
-                        Ich orientiere mich in der Arbeits- und Ausbildungswelt
-                        <div class="info-icon kompetenz-icon">
-                            🔍
-                            <div class="info-popup kompetenz-popup">
-                                <h5>📚 Kompetenzen (verpflichtend)</h5>
-                                <p><strong>Gesellschaftliche Inhalte:</strong></p>
-                                <ul>
-                                    <li>5.2.6.2 Recht: Lehrvertrag</li>
-                                    <li>5.2.6.3 Recht: Konfliktmanagement</li>
-                                </ul>
-                                <p><strong>Sprachmodi:</strong></p>
-                                <ul>
-                                    <li>4.2.1.3 Rezeption schriftlich und bildlich: Analyse des Lehrvertrags mittels digitaler Hilfsmittel (R1)</li>
-                                    <li>4.2.2.2 Produktion schriftlich und bildlich</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="info-icon umsetzung-icon">
-                            💡
-                            <div class="info-popup umsetzung-popup">
-                                <h5>💡 Umsetzungsbeispiele (optional)</h5>
-                                <p><strong>Mögliche Umsetzungen:</strong></p>
-                                <ul>
-                                    <li>Externe Lernorte: Schule und Umgebung kennenlernen</li>
-                                    <li>Stadtrundgang zur Orientierung</li>
-                                    <li>Analyse realer Lehrverträge</li>
-                                    <li>Rollenspiele zu Konfliktsituationen</li>
-                                </ul>
-                                <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(255, 140, 66, 0.1); border-radius: 8px; font-size: 0.813rem;">
-                                    <strong>Hinweis:</strong> Diese Beispiele sind Vorschläge. Die Lehrperson kann auch andere Wege wählen!
-                                </p>
-                            </div>
-                        </div>
-                    </h4>
+                    <h4>Ich orientiere mich in der Arbeits- und Ausbildungswelt</h4>
                     
                     <p>
                         Lernen Sie Ihren Lehrvertrag verstehen, Konflikte zu lösen und digital organisiert zu arbeiten.
@@ -1167,6 +1181,23 @@
                     <a href="lerninhalt-1-1.html" class="btn btn-primary" id="btn-1-1-1">
                         🚀 Starten
                     </a>
+
+                    <!-- Umsetzungsbeispiele -->
+                    <div class="umsetzung-hint" onclick="toggleUmsetzung('umsetzung-1-1-1')">
+                        💡 Umsetzungsbeispiele anzeigen (optional)
+                    </div>
+                    <div class="umsetzung-detail" id="umsetzung-1-1-1">
+                        <h5>💡 Mögliche Umsetzungen:</h5>
+                        <ul>
+                            <li>Externe Lernorte: Schule und Umgebung kennenlernen</li>
+                            <li>Stadtrundgang zur Orientierung</li>
+                            <li>Analyse realer Lehrverträge</li>
+                            <li>Rollenspiele zu Konfliktsituationen</li>
+                        </ul>
+                        <p style="margin-top: 0.75rem; font-size: 0.813rem; font-style: italic;">
+                            <strong>Hinweis:</strong> Diese Beispiele sind Vorschläge. Die Lehrperson kann auch andere Wege wählen!
+                        </p>
+                    </div>
                 </div>
 
                 <!-- Lerninhalt 1.1.2 -->
@@ -1174,40 +1205,7 @@
                     <div class="completion-badge">✓ Abgeschlossen</div>
                     <div class="content-number">1.1.2</div>
                     
-                    <h4>
-                        Ich achte auf mich und arbeite effizient
-                        <div class="info-icon kompetenz-icon">
-                            🔍
-                            <div class="info-popup kompetenz-popup">
-                                <h5>📚 Kompetenzen (verpflichtend)</h5>
-                                <p><strong>Gesellschaftliche Inhalte:</strong></p>
-                                <ul>
-                                    <li>5.2.2.2 Identität und Sozialisation: Lernstrategien und Umgang mit neuen Lebenssituationen</li>
-                                </ul>
-                                <p><strong>Sprachmodi:</strong></p>
-                                <ul>
-                                    <li>4.2.1.3 Rezeption schriftlich und bildlich</li>
-                                    <li>4.2.3.3 Interaktion und Kollaboration digital (R1)</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="info-icon umsetzung-icon">
-                            💡
-                            <div class="info-popup umsetzung-popup">
-                                <h5>💡 Umsetzungsbeispiele (optional)</h5>
-                                <p><strong>Mögliche Umsetzungen:</strong></p>
-                                <ul>
-                                    <li>Verschiedene Lernstrategien ausprobieren</li>
-                                    <li>Zeitmanagement-Tools kennenlernen</li>
-                                    <li>Stressbewältigungstechniken üben</li>
-                                    <li>Ressourcenschonendes Arbeiten reflektieren</li>
-                                </ul>
-                                <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(255, 140, 66, 0.1); border-radius: 8px; font-size: 0.813rem;">
-                                    <strong>Hinweis:</strong> Diese Beispiele sind Vorschläge. Die Lehrperson kann auch andere Wege wählen!
-                                </p>
-                            </div>
-                        </div>
-                    </h4>
+                    <h4>Ich achte auf mich und arbeite effizient</h4>
                     
                     <p>
                         Lernen Sie verschiedene Lernstrategien kennen und achten Sie auf Ihre Gesundheit und Ressourcen.
@@ -1224,6 +1222,23 @@
                     <a href="lerninhalt-1-1-2.html" class="btn btn-primary" id="btn-1-1-2">
                         🔒 Freischalten (1.1.1 zuerst abschließen)
                     </a>
+
+                    <!-- Umsetzungsbeispiele -->
+                    <div class="umsetzung-hint" onclick="toggleUmsetzung('umsetzung-1-1-2')">
+                        💡 Umsetzungsbeispiele anzeigen (optional)
+                    </div>
+                    <div class="umsetzung-detail" id="umsetzung-1-1-2">
+                        <h5>💡 Mögliche Umsetzungen:</h5>
+                        <ul>
+                            <li>Verschiedene Lernstrategien ausprobieren</li>
+                            <li>Zeitmanagement-Tools kennenlernen</li>
+                            <li>Stressbewältigungstechniken üben</li>
+                            <li>Ressourcenschonendes Arbeiten reflektieren</li>
+                        </ul>
+                        <p style="margin-top: 0.75rem; font-size: 0.813rem; font-style: italic;">
+                            <strong>Hinweis:</strong> Diese Beispiele sind Vorschläge. Die Lehrperson kann auch andere Wege wählen!
+                        </p>
+                    </div>
                 </div>
 
                 <!-- Lerninhalt 1.2.1 -->
@@ -1231,39 +1246,7 @@
                     <div class="completion-badge">✓ Abgeschlossen</div>
                     <div class="content-number">1.2.1</div>
                     
-                    <h4>
-                        Ich kann mich verständlich und respektvoll ausdrücken
-                        <div class="info-icon kompetenz-icon">
-                            🔍
-                            <div class="info-popup kompetenz-popup">
-                                <h5>📚 Kompetenzen (verpflichtend)</h5>
-                                <p><strong>Gesellschaftliche Inhalte:</strong></p>
-                                <ul>
-                                    <li>5.2.1.1 Ethik: Beim eigenen Handeln Grenzen der anderen respektieren</li>
-                                </ul>
-                                <p><strong>Sprachmodi:</strong></p>
-                                <ul>
-                                    <li>4.2.1.3 Rezeption schriftlich und bildlich (R1)</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="info-icon umsetzung-icon">
-                            💡
-                            <div class="info-popup umsetzung-popup">
-                                <h5>💡 Umsetzungsbeispiele (optional)</h5>
-                                <p><strong>Mögliche Umsetzungen:</strong></p>
-                                <ul>
-                                    <li>Kooperation mit Berufskunde möglich</li>
-                                    <li>Rollenspiele zu verschiedenen Kommunikationssituationen</li>
-                                    <li>Analyse von Gesprächssituationen</li>
-                                    <li>Feedback-Übungen in der Gruppe</li>
-                                </ul>
-                                <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(255, 140, 66, 0.1); border-radius: 8px; font-size: 0.813rem;">
-                                    <strong>Hinweis:</strong> Diese Beispiele sind Vorschläge. Die Lehrperson kann auch andere Wege wählen!
-                                </p>
-                            </div>
-                        </div>
-                    </h4>
+                    <h4>Ich kann mich verständlich und respektvoll ausdrücken</h4>
                     
                     <p>
                         Lernen Sie, sich in Schule und Betrieb situationsgerecht und respektvoll auszudrücken.
@@ -1280,6 +1263,23 @@
                     <a href="lerninhalt-1-2-1.html" class="btn btn-primary" id="btn-1-2-1">
                         🔒 Freischalten (1.1.2 zuerst abschließen)
                     </a>
+
+                    <!-- Umsetzungsbeispiele -->
+                    <div class="umsetzung-hint" onclick="toggleUmsetzung('umsetzung-1-2-1')">
+                        💡 Umsetzungsbeispiele anzeigen (optional)
+                    </div>
+                    <div class="umsetzung-detail" id="umsetzung-1-2-1">
+                        <h5>💡 Mögliche Umsetzungen:</h5>
+                        <ul>
+                            <li>Kooperation mit Berufskunde möglich</li>
+                            <li>Rollenspiele zu verschiedenen Kommunikationssituationen</li>
+                            <li>Analyse von Gesprächssituationen</li>
+                            <li>Feedback-Übungen in der Gruppe</li>
+                        </ul>
+                        <p style="margin-top: 0.75rem; font-size: 0.813rem; font-style: italic;">
+                            <strong>Hinweis:</strong> Diese Beispiele sind Vorschläge. Die Lehrperson kann auch andere Wege wählen!
+                        </p>
+                    </div>
                 </div>
 
                 <!-- Lerninhalt 1.2.2 -->
@@ -1287,39 +1287,7 @@
                     <div class="completion-badge">✓ Abgeschlossen</div>
                     <div class="content-number">1.2.2</div>
                     
-                    <h4>
-                        Ich kann Konflikte erkennen und darauf reagieren
-                        <div class="info-icon kompetenz-icon">
-                            🔍
-                            <div class="info-popup kompetenz-popup">
-                                <h5>📚 Kompetenzen (verpflichtend)</h5>
-                                <p><strong>Gesellschaftliche Inhalte:</strong></p>
-                                <ul>
-                                    <li>5.2.2.2 Identität und Sozialisation: Psychische und physische Gesundheit pflegen</li>
-                                </ul>
-                                <p><strong>Sprachmodi:</strong></p>
-                                <ul>
-                                    <li>4.2.3.3 Interaktion und Kollaboration digital (R1)</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="info-icon umsetzung-icon">
-                            💡
-                            <div class="info-popup umsetzung-popup">
-                                <h5>💡 Umsetzungsbeispiele (optional)</h5>
-                                <p><strong>Mögliche Umsetzungen:</strong></p>
-                                <ul>
-                                    <li>Kooperation mit Berufskunde möglich</li>
-                                    <li>Analyse von Konfliktsituationen</li>
-                                    <li>Lösungsstrategien entwickeln</li>
-                                    <li>Deeskalationstechniken üben</li>
-                                </ul>
-                                <p style="margin-top: 1rem; padding: 0.75rem; background: rgba(255, 140, 66, 0.1); border-radius: 8px; font-size: 0.813rem;">
-                                    <strong>Hinweis:</strong> Diese Beispiele sind Vorschläge. Die Lehrperson kann auch andere Wege wählen!
-                                </p>
-                            </div>
-                        </div>
-                    </h4>
+                    <h4>Ich kann Konflikte erkennen und darauf reagieren</h4>
                     
                     <p>
                         Lernen Sie, Konflikte im Berufs- oder Schulalltag frühzeitig zu erkennen und adäquat darauf zu reagieren.
@@ -1336,6 +1304,23 @@
                     <a href="lerninhalt-1-2-2.html" class="btn btn-primary" id="btn-1-2-2">
                         🔒 Freischalten (1.2.1 zuerst abschließen)
                     </a>
+
+                    <!-- Umsetzungsbeispiele -->
+                    <div class="umsetzung-hint" onclick="toggleUmsetzung('umsetzung-1-2-2')">
+                        💡 Umsetzungsbeispiele anzeigen (optional)
+                    </div>
+                    <div class="umsetzung-detail" id="umsetzung-1-2-2">
+                        <h5>💡 Mögliche Umsetzungen:</h5>
+                        <ul>
+                            <li>Kooperation mit Berufskunde möglich</li>
+                            <li>Analyse von Konfliktsituationen</li>
+                            <li>Lösungsstrategien entwickeln</li>
+                            <li>Deeskalationstechniken üben</li>
+                        </ul>
+                        <p style="margin-top: 0.75rem; font-size: 0.813rem; font-style: italic;">
+                            <strong>Hinweis:</strong> Diese Beispiele sind Vorschläge. Die Lehrperson kann auch andere Wege wählen!
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1414,6 +1399,47 @@
                 robotQuote.innerHTML = robotExplanations[currentRobotIndex];
             }
         });
+
+        // Floating Paperclip
+        const floatingPaperclip = document.getElementById('floatingPaperclip');
+        const paperclipSpeech = document.getElementById('paperclipSpeech');
+        let paperclipSpeechVisible = false;
+
+        floatingPaperclip.addEventListener('click', function() {
+            paperclipSpeech.classList.toggle('show');
+            paperclipSpeechVisible = !paperclipSpeechVisible;
+        });
+
+        // Auto-show paperclip hint after 5 seconds
+        setTimeout(() => {
+            if (!localStorage.getItem('paperclipShownThema1')) {
+                paperclipSpeech.classList.add('show');
+                paperclipSpeechVisible = true;
+                localStorage.setItem('paperclipShownThema1', 'true');
+                
+                // Hide after 8 seconds
+                setTimeout(() => {
+                    paperclipSpeech.classList.remove('show');
+                    paperclipSpeechVisible = false;
+                }, 8000);
+            }
+        }, 5000);
+
+        // Toggle Kompetenzarten
+        const kompetenzTypes = document.getElementById('kompetenzTypes');
+        if (kompetenzTypes) {
+            kompetenzTypes.querySelector('h4').addEventListener('click', function() {
+                kompetenzTypes.classList.toggle('active');
+            });
+        }
+
+        // Toggle Umsetzungsbeispiele
+        function toggleUmsetzung(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.classList.toggle('show');
+            }
+        }
 
         // Progress Tracking for Lebensbezug Cards
         const lebensbezugCards = document.querySelectorAll('[data-interactive]');
