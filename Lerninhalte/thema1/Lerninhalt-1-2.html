@@ -1,1 +1,302 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lernstrategien - Kommt bald! - ABU EBA Digital</title>
 
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --ktzh-blue: #0066CC;
+            --ktzh-cyan: #00A0E0;
+            --ktzh-lightblue: #E8F4F8;
+            --ktzh-darkgray: #3C3C3B;
+            --ktzh-gray: #767676;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: var(--ktzh-darkgray);
+            line-height: 1.6;
+            background: linear-gradient(180deg, var(--white) 0%, var(--ktzh-lightblue) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .placeholder-container {
+            max-width: 800px;
+            text-align: center;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .construction-icon {
+            font-size: 8rem;
+            margin-bottom: 2rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .main-card {
+            background: var(--white);
+            border-radius: 30px;
+            padding: 4rem 3rem;
+            box-shadow: 0 8px 32px rgba(0, 102, 204, 0.15);
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--ktzh-blue);
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--ktzh-cyan);
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        .wise-quote {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            border-left: 5px solid #F59E0B;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            font-size: 1.25rem;
+            font-style: italic;
+            color: var(--ktzh-darkgray);
+            line-height: 1.8;
+        }
+
+        .wise-quote::before {
+            content: '"';
+            font-size: 3rem;
+            color: #F59E0B;
+            font-family: Georgia, serif;
+            line-height: 0;
+            margin-right: 0.5rem;
+        }
+
+        .wise-quote::after {
+            content: '"';
+            font-size: 3rem;
+            color: #F59E0B;
+            font-family: Georgia, serif;
+            line-height: 0;
+            margin-left: 0.5rem;
+        }
+
+        .fun-facts {
+            background: var(--ktzh-lightblue);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .fun-facts h3 {
+            color: var(--ktzh-blue);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .fun-facts ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .fun-facts li {
+            padding: 0.75rem 0;
+            padding-left: 2rem;
+            position: relative;
+            font-size: 1.125rem;
+        }
+
+        .fun-facts li::before {
+            content: '🧠';
+            position: absolute;
+            left: 0;
+            font-size: 1.5rem;
+        }
+
+        .coming-soon {
+            background: linear-gradient(135deg, var(--ktzh-blue), var(--ktzh-cyan));
+            color: var(--white);
+            padding: 1.5rem 3rem;
+            border-radius: 50px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: inline-block;
+            margin: 2rem 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--ktzh-blue), var(--ktzh-cyan));
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--ktzh-blue);
+            border: 2px solid var(--ktzh-blue);
+        }
+
+        .btn-secondary:hover {
+            background: var(--ktzh-blue);
+            color: var(--white);
+        }
+
+        .easter-egg {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+            border-radius: 15px;
+            border: 2px dashed #10B981;
+        }
+
+        .easter-egg p {
+            color: #10B981;
+            font-weight: 600;
+            font-size: 0.938rem;
+        }
+
+        @media (max-width: 768px) {
+            .construction-icon {
+                font-size: 5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .main-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .wise-quote {
+                font-size: 1.125rem;
+                padding: 1.5rem;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="placeholder-container">
+        <div class="construction-icon">🏗️</div>
+
+        <div class="main-card">
+            <h1>Lernstrategien & Selbstorganisation</h1>
+            <div class="subtitle">Lerninhalt 1.2 - Kommt bald!</div>
+
+            <p style="font-size: 1.125rem; color: var(--ktzh-gray); margin: 2rem 0;">
+                Dieser Lerninhalt ist noch in Entwicklung. Aber keine Sorge – 
+                wir haben schon weise Worte für Sie vorbereitet! 😊
+            </p>
+
+            <div class="wise-quote">
+                Wer früher lernt, hat später mehr Zeit zum Zocken. 
+                Aber wer klug lernt, hat noch mehr Zeit! 🎮
+            </div>
+
+            <div class="fun-facts">
+                <h3>💡 Was Sie hier lernen werden:</h3>
+                <ul>
+                    <li>Wie Sie Ihren Lerntyp entdecken (visuell? auditiv? kinästhetisch?)</li>
+                    <li>Die Pomodoro-Technik: 25 Minuten lernen, 5 Minuten TikTok – äh, Pause!</li>
+                    <li>Mind-Mapping: Notizen, die nicht wie Spaghetti aussehen</li>
+                    <li>Zeitmanagement: Prokrastinieren wie ein Profi (Spoiler: gar nicht!)</li>
+                    <li>Digitale Tools: Von Notion bis zu "Wo war nochmal die Datei?"</li>
+                </ul>
+            </div>
+
+            <div class="wise-quote">
+                Das Gehirn ist wie ein Muskel – je mehr man es trainiert, 
+                desto stärker wird es. Nur Muskelkater gibt's keinen. 💪🧠
+            </div>
+
+            <div class="coming-soon">
+                🚀 Launching Soon!
+            </div>
+
+            <div class="nav-buttons">
+                <a href="thema1.html" class="btn btn-secondary">
+                    ← Zurück zu Thema 1
+                </a>
+                <a href="lerninhalt-1-1.html" class="btn btn-primary">
+                    📋 Zu Lerninhalt 1.1
+                </a>
+                <a href="startzweig.html" class="btn btn-secondary">
+                    🏠 Zum Lernraum
+                </a>
+            </div>
+
+            <div class="easter-egg">
+                <p>
+                    🎯 <strong>Fun Fact:</strong> Wussten Sie, dass Ihr Gehirn etwa 20% 
+                    Ihrer gesamten Energie verbraucht? Kein Wunder, dass Lernen hungrig macht! 🍕
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
