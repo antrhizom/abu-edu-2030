@@ -1528,7 +1528,7 @@
         </div>
     </div>
 
-    <!-- Motivations-Modal -->
+    <!-- Motivations-Modal - ERFASSUNG -->
     <div class="motivation-modal" id="motivationModal">
         <div class="motivation-modal-content">
             <button class="motivation-modal-close" id="motivationModalClose">×</button>
@@ -1572,9 +1572,18 @@
             <button class="motivation-submit" id="motivationSubmit" disabled>
                 Motivation teilen
             </button>
+        </div>
+    </div>
+
+    <!-- Motivations-Ergebnis-Modal - STATISTIKEN -->
+    <div class="motivation-modal" id="motivationResultsModal">
+        <div class="motivation-modal-content">
+            <button class="motivation-modal-close" id="motivationResultsClose">×</button>
+            
+            <h2>📊 Community Stimmung</h2>
+            <p class="motivation-modal-subtitle">So motiviert ist die ABU EBA Digital Community!</p>
 
             <div class="motivation-stats" id="motivationStats">
-                <h3>📊 Community Stimmung</h3>
                 <div class="motivation-stats-grid">
                     <div class="motivation-stat-item">
                         <div class="motivation-stat-item-title">Heute</div>
@@ -1594,6 +1603,12 @@
                         <div class="motivation-distribution-segment high" id="segmentHigh" style="width: 33.4%">34%</div>
                     </div>
                 </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; padding: 1rem; background: var(--ktzh-lightblue); border-radius: 12px; text-align: center;">
+                <p style="color: var(--ktzh-blue); font-weight: 600; margin: 0;">
+                    💡 Deine Motivation zählt! Gemeinsam bleiben wir am Ball.
+                </p>
             </div>
         </div>
     </div>
@@ -2432,29 +2447,56 @@
                 deviceId: getDeviceId() // Für anonyme Tracking
             };
 
+            console.log('💾 Attempting to save motivation:', motivationData);
+
             // Push zu Firebase
-            const newMotivationRef = push(motivationsRef);
-            set(newMotivationRef, motivationData)
-                .then(() => {
-                    console.log('✅ Motivation saved to Firebase:', motivationData);
-                    
-                    // Fallback: Auch im LocalStorage speichern für Offline-Zugriff
-                    if (!userCode) {
-                        const localMotivations = userMotivationsCache;
-                        localMotivations.push(motivationData);
+            try {
+                const newMotivationRef = push(motivationsRef);
+                console.log('📝 Firebase reference created:', newMotivationRef.key);
+                
+                set(newMotivationRef, motivationData)
+                    .then(() => {
+                        console.log('✅ Motivation saved to Firebase successfully!');
+                        console.log('   Firebase key:', newMotivationRef.key);
+                        console.log('   Data:', motivationData);
+                        
+                        // Fallback: Auch im LocalStorage speichern für Offline-Zugriff
+                        if (!userCode) {
+                            const localMotivations = [...userMotivationsCache, motivationData];
+                            localStorage.setItem('abuEbaMotivations', JSON.stringify(localMotivations));
+                            console.log('💾 Also saved to LocalStorage for anonymous user');
+                        }
+                        
+                        // Manuell Cache aktualisieren
+                        allMotivationsCache.push({
+                            id: newMotivationRef.key,
+                            ...motivationData
+                        });
+                        
+                        // Statistiken aktualisieren
+                        updateStatistics();
+                    })
+                    .catch((error) => {
+                        console.error('❌ Error saving to Firebase:', error);
+                        console.error('   Error code:', error.code);
+                        console.error('   Error message:', error.message);
+                        
+                        // Fallback zu LocalStorage
+                        const localMotivations = [...userMotivationsCache, motivationData];
                         localStorage.setItem('abuEbaMotivations', JSON.stringify(localMotivations));
-                    }
-                    
-                    // Statistiken werden automatisch durch onValue aktualisiert
-                })
-                .catch((error) => {
-                    console.error('❌ Error saving motivation:', error);
-                    // Fallback zu LocalStorage
-                    const localMotivations = userMotivationsCache;
-                    localMotivations.push(motivationData);
-                    localStorage.setItem('abuEbaMotivations', JSON.stringify(localMotivations));
-                    updateStatistics();
-                });
+                        userMotivationsCache = localMotivations;
+                        console.log('💾 Saved to LocalStorage as fallback');
+                        updateStatistics();
+                    });
+            } catch (error) {
+                console.error('❌ Exception in saveMotivation:', error);
+                // Fallback zu LocalStorage
+                const localMotivations = [...userMotivationsCache, motivationData];
+                localStorage.setItem('abuEbaMotivations', JSON.stringify(localMotivations));
+                userMotivationsCache = localMotivations;
+                updateStatistics();
+            }
+        }
         }
 
         // Device ID für anonymes Tracking
@@ -2558,37 +2600,47 @@
             }
         }
 
-        // Open Modal
+        // Badge Click - Öffne entweder Abstimmung ODER Ergebnisse
         motivationBadge.addEventListener('click', function() {
-            motivationModal.classList.add('show');
             loadUserMotivations();
-            updateStatistics();
             
-            // Disable voting if already voted today
             if (hasVotedToday()) {
-                motivationOptions.forEach(option => {
-                    option.style.opacity = '0.6';
-                    option.style.cursor = 'not-allowed';
-                });
-                motivationSubmit.textContent = 'Du hast heute schon abgestimmt';
-                motivationSubmit.disabled = true;
+                // Zeige nur Ergebnisse
+                motivationResultsModal.classList.add('show');
+                updateStatistics();
             } else {
+                // Zeige Abstimmung
+                motivationModal.classList.add('show');
                 motivationOptions.forEach(option => {
                     option.style.opacity = '1';
                     option.style.cursor = 'pointer';
                 });
                 motivationSubmit.textContent = 'Motivation teilen';
+                motivationSubmit.disabled = true;
             }
         });
 
-        // Close Modal
+        // Close Modals
+        const motivationResultsModal = document.getElementById('motivationResultsModal');
+        const motivationResultsClose = document.getElementById('motivationResultsClose');
+
         motivationModalClose.addEventListener('click', function() {
             motivationModal.classList.remove('show');
+        });
+
+        motivationResultsClose.addEventListener('click', function() {
+            motivationResultsModal.classList.remove('show');
         });
 
         motivationModal.addEventListener('click', function(e) {
             if (e.target === motivationModal) {
                 motivationModal.classList.remove('show');
+            }
+        });
+
+        motivationResultsModal.addEventListener('click', function(e) {
+            if (e.target === motivationResultsModal) {
+                motivationResultsModal.classList.remove('show');
             }
         });
 
@@ -2612,49 +2664,67 @@
         // Submit Motivation
         motivationSubmit.addEventListener('click', function() {
             if (selectedMotivation && !hasVotedToday()) {
+                // Show loading state
+                motivationSubmit.textContent = '⏳ Speichern...';
+                motivationSubmit.disabled = true;
+                
                 saveMotivation(selectedMotivation);
                 
-                // Show success feedback
-                motivationSubmit.textContent = '✅ Gespeichert! Danke!';
-                motivationSubmit.style.background = '#10B981';
-                
-                // Update badge
+                // Wait a moment for Firebase to save
                 setTimeout(() => {
-                    updateBadgeText();
-                }, 500);
-                
-                // Close modal after 2 seconds
-                setTimeout(() => {
-                    motivationModal.classList.remove('show');
+                    // Show success feedback
+                    motivationSubmit.textContent = '✅ Gespeichert! Danke!';
+                    motivationSubmit.style.background = '#10B981';
                     
-                    // Reset submit button
+                    // Update badge
+                    updateBadgeText();
+                    
+                    // Close voting modal after 1 second
                     setTimeout(() => {
+                        motivationModal.classList.remove('show');
+                        
+                        // Reset submit button for next time
                         motivationSubmit.textContent = 'Motivation teilen';
                         motivationSubmit.style.background = '';
+                        motivationSubmit.disabled = true;
                         selectedMotivation = null;
                         motivationOptions.forEach(opt => opt.classList.remove('selected'));
-                    }, 500);
-                }, 2000);
+                        
+                        // Show results modal
+                        setTimeout(() => {
+                            motivationResultsModal.classList.add('show');
+                            updateStatistics();
+                        }, 300);
+                        
+                        // Show character reaction AFTER modal transition
+                        setTimeout(() => {
+                            const reactionMessages = {
+                                1: "🧙‍♀️ Auch ein Faultier erreicht seine Ziele – Schritt für Schritt!",
+                                2: "🤖 Langsam starten ist besser als gar nicht zu starten!",
+                                3: "🧙‍♀️ Wie die Schildkröte – beständig zum Erfolg!",
+                                4: "🤖 Clever wie ein Fuchs – du findest deinen Weg!",
+                                5: "🧙‍♀️ Mit Geparden-Tempo zum Ziel! Fantastisch!",
+                                6: "🤖 Adler-Energie! Du wirst Großes erreichen!"
+                            };
 
-                // Characters react
-                const reactionMessages = {
-                    1: "🧙‍♀️ Auch ein Faultier erreicht seine Ziele – Schritt für Schritt!",
-                    2: "🤖 Langsam starten ist besser als gar nicht zu starten!",
-                    3: "🧙‍♀️ Wie die Schildkröte – beständig zum Erfolg!",
-                    4: "🤖 Clever wie ein Fuchs – du findest deinen Weg!",
-                    5: "🧙‍♀️ Mit Geparden-Tempo zum Ziel! Fantastisch!",
-                    6: "🤖 Adler-Energie! Du wirst Großes erreichen!"
-                };
+                            const savedMotivation = parseInt(document.querySelector('.motivation-option.selected')?.dataset.value || selectedMotivation || 3);
 
-                if (selectedMotivation <= 3) {
-                    wiseQuote.textContent = reactionMessages[selectedMotivation];
-                    wiseSpeech.classList.add('show');
-                    setTimeout(() => wiseSpeech.classList.remove('show'), 5000);
-                } else {
-                    robotExplanation.innerHTML = `<span class="term">Motivation erfasst!</span><span class="explanation">${reactionMessages[selectedMotivation]}</span>`;
-                    robotSpeech.classList.add('show');
-                    setTimeout(() => robotSpeech.classList.remove('show'), 5000);
-                }
+                            if (savedMotivation <= 3) {
+                                wiseQuote.textContent = reactionMessages[savedMotivation];
+                                wiseSpeech.classList.add('show');
+                                // Bleibt 10 Sekunden sichtbar
+                                setTimeout(() => wiseSpeech.classList.remove('show'), 10000);
+                            } else {
+                                robotExplanation.innerHTML = `<span class="term">Motivation erfasst!</span><span class="explanation">${reactionMessages[savedMotivation]}</span>`;
+                                robotSpeech.classList.add('show');
+                                // Bleibt 10 Sekunden sichtbar
+                                setTimeout(() => robotSpeech.classList.remove('show'), 10000);
+                            }
+                        }, 800);
+                        
+                    }, 1000);
+                    
+                }, 500);
             }
         });
 
