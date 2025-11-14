@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teamwork & Zusammenarbeit - Kommt bald! - ABU EBA Digital</title>
+    <title>Teamwork & Konfliktlösung - ABU EBA Digital</title>
 
     <style>
         * {
@@ -19,6 +19,10 @@
             --ktzh-darkgray: #3C3C3B;
             --ktzh-gray: #767676;
             --white: #FFFFFF;
+            --green: #10B981;
+            --yellow: #F59E0B;
+            --red: #EF4444;
+            --purple: #8B5CF6;
         }
 
         body {
@@ -27,189 +31,459 @@
             line-height: 1.6;
             background: linear-gradient(180deg, var(--white) 0%, var(--ktzh-lightblue) 100%);
             min-height: 100vh;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(0, 102, 204, 0.1);
+            z-index: 9998;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ktzh-blue), var(--ktzh-cyan));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Progress Badge */
+        .progress-badge {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 9997;
+            font-weight: 600;
+            color: var(--ktzh-blue);
+            font-size: 0.875rem;
+        }
+
+        .progress-badge .percentage {
+            font-size: 1.5rem;
+            color: var(--ktzh-cyan);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
+            color: var(--white);
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-title {
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 2rem;
+            gap: 1rem;
         }
 
-        .placeholder-container {
-            max-width: 800px;
-            text-align: center;
-            animation: fadeIn 0.6s ease;
+        .header-title h1 {
+            font-size: 2rem;
+            font-weight: 700;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .header-icon {
+            font-size: 3rem;
         }
 
-        .construction-icon {
-            font-size: 8rem;
-            margin-bottom: 2rem;
-            animation: teamwork 4s ease-in-out infinite;
+        .header-nav {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
-        @keyframes teamwork {
-            0%, 100% { transform: scale(1) rotate(0deg); }
-            25% { transform: scale(1.1) rotate(-5deg); }
-            50% { transform: scale(1) rotate(0deg); }
-            75% { transform: scale(1.1) rotate(5deg); }
+        .nav-link {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .main-card {
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .user-info {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.938rem;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            padding-bottom: 8rem;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
             background: var(--white);
-            border-radius: 30px;
-            padding: 4rem 3rem;
-            box-shadow: 0 8px 32px rgba(0, 102, 204, 0.15);
+            padding: 1rem 2rem;
+            border-radius: 12px;
             margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
-        h1 {
+        .breadcrumb a {
+            color: var(--ktzh-cyan);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: var(--ktzh-gray);
+            margin: 0 0.5rem;
+        }
+
+        /* Intro Card */
+        .intro-card {
+            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
+            color: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.2);
+        }
+
+        .intro-card h2 {
             font-size: 2.5rem;
-            color: var(--ktzh-blue);
             margin-bottom: 1rem;
         }
 
-        .subtitle {
+        .intro-card p {
             font-size: 1.25rem;
-            color: var(--ktzh-cyan);
-            font-weight: 600;
+            opacity: 0.95;
+            margin-bottom: 1rem;
+        }
+
+        .ai-assistant-notice {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .ai-assistant-notice .icon {
+            font-size: 3rem;
+        }
+
+        /* Content Section */
+        .content-section {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .content-section:hover {
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
             margin-bottom: 2rem;
         }
 
-        .wise-quote {
-            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
-            border-left: 5px solid #F59E0B;
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 2rem 0;
-            font-size: 1.25rem;
-            font-style: italic;
-            color: var(--ktzh-darkgray);
-            line-height: 1.8;
+        .section-number {
+            background: linear-gradient(135deg, var(--ktzh-blue), var(--ktzh-cyan));
+            color: var(--white);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
         }
 
-        .wise-quote::before {
-            content: '"';
-            font-size: 3rem;
-            color: #F59E0B;
-            font-family: Georgia, serif;
-            line-height: 0;
-            margin-right: 0.5rem;
+        .section-title h3 {
+            font-size: 1.75rem;
+            color: var(--ktzh-blue);
+            margin-bottom: 0.5rem;
         }
 
-        .wise-quote::after {
-            content: '"';
-            font-size: 3rem;
-            color: #F59E0B;
-            font-family: Georgia, serif;
-            line-height: 0;
-            margin-left: 0.5rem;
+        .section-subtitle {
+            color: var(--ktzh-gray);
+            font-size: 1rem;
         }
 
-        .team-roles {
+        /* Role Cards */
+        .role-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             margin: 2rem 0;
         }
 
         .role-card {
             background: var(--ktzh-lightblue);
-            padding: 1.5rem;
-            border-radius: 15px;
+            border: 2px solid var(--ktzh-cyan);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
         }
 
         .role-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 102, 204, 0.2);
+            box-shadow: 0 8px 24px rgba(0, 160, 224, 0.3);
+        }
+
+        .role-card.selected {
+            background: linear-gradient(135deg, var(--ktzh-blue), var(--ktzh-cyan));
+            color: var(--white);
+            border-color: var(--ktzh-blue);
         }
 
         .role-card .icon {
-            font-size: 3rem;
-            margin-bottom: 0.5rem;
+            font-size: 4rem;
+            margin-bottom: 1rem;
         }
 
         .role-card h4 {
-            color: var(--ktzh-blue);
-            font-size: 1rem;
-            margin-bottom: 0.25rem;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
         }
 
         .role-card p {
-            color: var(--ktzh-gray);
-            font-size: 0.875rem;
+            font-size: 0.938rem;
+            opacity: 0.9;
         }
 
-        .fun-facts {
-            background: var(--ktzh-lightblue);
-            border-radius: 20px;
+        .checkmark {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 2rem;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+
+        .role-card.selected .checkmark {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Scenario Cards */
+        .scenario-card {
+            background: var(--white);
+            border: 3px solid var(--purple);
+            border-radius: 16px;
             padding: 2rem;
             margin: 2rem 0;
-            text-align: left;
+            transition: all 0.3s ease;
         }
 
-        .fun-facts h3 {
-            color: var(--ktzh-blue);
-            margin-bottom: 1rem;
+        .scenario-card:hover {
+            box-shadow: 0 12px 32px rgba(139, 92, 246, 0.2);
+        }
+
+        .scenario-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .scenario-emoji {
+            font-size: 3rem;
+        }
+
+        .scenario-content h4 {
+            color: var(--purple);
             font-size: 1.5rem;
+            margin-bottom: 0.75rem;
         }
 
-        .fun-facts ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .fun-facts li {
-            padding: 0.75rem 0;
-            padding-left: 2rem;
-            position: relative;
+        .scenario-content p {
+            color: var(--ktzh-darkgray);
             font-size: 1.125rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
         }
 
-        .fun-facts li::before {
-            content: '🤝';
-            position: absolute;
-            left: 0;
-            font-size: 1.5rem;
+        .response-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
         }
 
-        .coming-soon {
-            background: linear-gradient(135deg, var(--ktzh-blue), var(--ktzh-cyan));
+        .response-option {
+            background: var(--ktzh-lightblue);
+            padding: 1.25rem;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .response-option:hover {
+            border-color: var(--ktzh-cyan);
+            transform: translateX(5px);
+        }
+
+        .response-option.selected {
+            background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+            border-color: var(--green);
+        }
+
+        .response-option.wrong {
+            background: #FEE2E2;
+            border-color: var(--red);
+            opacity: 0.6;
+        }
+
+        .response-role {
+            display: inline-block;
+            background: var(--ktzh-blue);
             color: var(--white);
-            padding: 1.5rem 3rem;
-            border-radius: 50px;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .feedback-box {
+            background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+            border: 2px solid var(--green);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .feedback-box.show {
+            display: block;
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* AI Practice Button */
+        .ai-practice-btn {
+            background: linear-gradient(135deg, var(--purple), var(--ktzh-blue));
+            color: var(--white);
+            padding: 1.5rem 2.5rem;
+            border-radius: 30px;
+            border: none;
             font-size: 1.25rem;
             font-weight: 700;
-            display: inline-block;
-            margin: 2rem 0;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .nav-buttons {
+            cursor: pointer;
+            transition: all 0.3s ease;
             display: flex;
+            align-items: center;
             gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 2rem;
+            margin: 2rem auto;
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
         }
 
+        .ai-practice-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 32px rgba(139, 92, 246, 0.4);
+        }
+
+        .ai-practice-btn .icon {
+            font-size: 2rem;
+            animation: wave 2s infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(20deg); }
+            75% { transform: rotate(-20deg); }
+        }
+
+        /* Completion Card */
+        .completion-card {
+            background: linear-gradient(135deg, var(--green) 0%, var(--ktzh-cyan) 100%);
+            color: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            margin: 3rem 0;
+            display: none;
+        }
+
+        .completion-card.show {
+            display: block;
+        }
+
+        .completion-card h3 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Buttons */
         .btn {
-            padding: 1rem 2rem;
-            border-radius: 25px;
-            text-decoration: none;
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
             font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            font-size: 1.125rem;
+            border: none;
         }
 
         .btn-primary {
@@ -220,7 +494,7 @@
 
         .btn-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.4);
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.4);
         }
 
         .btn-secondary {
@@ -234,43 +508,40 @@
             color: var(--white);
         }
 
-        .easter-egg {
-            margin-top: 3rem;
-            padding: 1.5rem;
-            background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
-            border-radius: 15px;
-            border: 2px dashed #10B981;
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
-        .easter-egg p {
-            color: #10B981;
-            font-weight: 600;
-            font-size: 0.938rem;
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
-            .construction-icon {
-                font-size: 5rem;
+            .header-content {
+                flex-direction: column;
+                text-align: center;
             }
 
-            h1 {
+            .header-nav {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .nav-link {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .intro-card h2 {
                 font-size: 2rem;
             }
 
-            .main-card {
-                padding: 2rem 1.5rem;
+            .role-grid {
+                grid-template-columns: 1fr;
             }
 
-            .wise-quote {
-                font-size: 1.125rem;
-                padding: 1.5rem;
-            }
-
-            .team-roles {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .nav-buttons {
+            .action-buttons {
                 flex-direction: column;
             }
 
@@ -282,97 +553,484 @@
     </style>
 </head>
 <body>
-    <div class="placeholder-container">
-        <div class="construction-icon">🤝</div>
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
 
-        <div class="main-card">
-            <h1>Teamwork & Zusammenarbeit</h1>
-            <div class="subtitle">Lerninhalt 2.2 - Kommt bald!</div>
+    <!-- Progress Badge -->
+    <div class="progress-badge">
+        <div class="percentage" id="progressPercentage">0%</div>
+        <div style="font-size: 0.75rem; margin-top: 0.25rem;">erkundet</div>
+    </div>
 
-            <p style="font-size: 1.125rem; color: var(--ktzh-gray); margin: 2rem 0;">
-                Alleine ist man schnell, zusammen kommt man weiter – 
-                oder so ähnlich. Hier lernen Sie, wie Teams wirklich funktionieren! 🚀
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-title">
+                <span class="header-icon">🤝</span>
+                <h1>Teamwork & Konfliktlösung</h1>
+            </div>
+            <div class="header-nav">
+                <a href="index.html" class="nav-link">🏠 Startseite</a>
+                <a href="startzweig.html" class="nav-link">📚 Lernraum</a>
+                <a href="portfolio.html" class="nav-link">📁 Portfolio</a>
+                <div class="user-info">
+                    <span id="userDisplay">👤 Gast</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="index.html">Startseite</a>
+            <span>›</span>
+            <a href="startzweig.html">Lernraum</a>
+            <span>›</span>
+            <a href="thema1.html">Thema 1: Berufseinstieg</a>
+            <span>›</span>
+            <strong>2.2 Teamwork & Konfliktlösung</strong>
+        </div>
+
+        <!-- Intro -->
+        <div class="intro-card">
+            <h2>🤝 Erfolgreich im Team arbeiten</h2>
+            <p>
+                Teamwork macht den Dream work – aber nur wenn man weiss, wie's geht! 
+                In diesem Lerninhalt üben Sie Konfliktgespräche, lernen verschiedene 
+                Kommunikationsstile kennen und trainieren mit unserer KI-Assistentin Judy.
             </p>
 
-            <div class="wise-quote">
-                Ein Team ist wie eine Fußballmannschaft: Wenn alle nur Stürmer sein wollen, 
-                kassiert man viele Tore – aber nicht die richtigen! ⚽
+            <div class="ai-assistant-notice">
+                <div class="icon">👩‍🏫</div>
+                <div>
+                    <strong style="font-size: 1.125rem;">Neu: KI-Assistentin Judy</strong>
+                    <p style="margin-top: 0.5rem; opacity: 0.9;">
+                        Judy hilft Ihnen, Konfliktgespräche zu üben. Klicken Sie auf den 
+                        Avatar unten links, um mit ihr zu sprechen!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 1: Team Rollen -->
+        <div class="content-section">
+            <div class="section-header">
+                <div class="section-number">1</div>
+                <div class="section-title">
+                    <h3>🎭 Welche Rolle spielen Sie im Team?</h3>
+                    <div class="section-subtitle">Teamrollen nach Belbin</div>
+                </div>
             </div>
 
-            <div class="team-roles">
-                <div class="role-card">
+            <p style="font-size: 1.125rem; color: var(--ktzh-gray); margin-bottom: 2rem;">
+                Jedes Teammitglied hat Stärken und bevorzugte Arbeitsweisen. 
+                Klicken Sie auf die Rollen, die am besten zu Ihnen passen:
+            </p>
+
+            <div class="role-grid">
+                <div class="role-card" data-role="thinker">
+                    <span class="checkmark">✓</span>
                     <div class="icon">🧠</div>
                     <h4>Der Denker</h4>
-                    <p>Ideen & Strategie</p>
+                    <p>Strategisch, analytisch, plant voraus</p>
                 </div>
-                <div class="role-card">
+
+                <div class="role-card" data-role="doer">
+                    <span class="checkmark">✓</span>
                     <div class="icon">⚡</div>
                     <h4>Der Macher</h4>
-                    <p>Umsetzung & Action</p>
+                    <p>Pragmatisch, effizient, setzt um</p>
                 </div>
-                <div class="role-card">
+
+                <div class="role-card" data-role="creative">
+                    <span class="checkmark">✓</span>
                     <div class="icon">🎨</div>
                     <h4>Der Kreative</h4>
-                    <p>Innovation & Design</p>
+                    <p>Innovativ, originell, denkt anders</p>
                 </div>
-                <div class="role-card">
+
+                <div class="role-card" data-role="organizer">
+                    <span class="checkmark">✓</span>
                     <div class="icon">📊</div>
                     <h4>Der Organisator</h4>
-                    <p>Struktur & Planung</p>
+                    <p>Strukturiert, plant, koordiniert</p>
                 </div>
-                <div class="role-card">
+
+                <div class="role-card" data-role="mediator">
+                    <span class="checkmark">✓</span>
                     <div class="icon">🤗</div>
                     <h4>Der Vermittler</h4>
-                    <p>Harmonie & Support</p>
+                    <p>Empathisch, harmonisiert, unterstützt</p>
                 </div>
-                <div class="role-card">
+
+                <div class="role-card" data-role="critic">
+                    <span class="checkmark">✓</span>
                     <div class="icon">🔍</div>
                     <h4>Der Kritiker</h4>
-                    <p>Qualität & Kontrolle</p>
+                    <p>Qualitätsbewusst, prüfend, hinterfragt</p>
                 </div>
             </div>
 
-            <div class="fun-facts">
-                <h3>💡 Was Sie hier lernen werden:</h3>
-                <ul>
-                    <li>Teamrollen nach Belbin: Welcher Typ sind Sie? (Spoiler: Meistens eine Mischung!)</li>
-                    <li>Gruppendynamik: Warum Teams manchmal verrückt spielen (Forming, Storming, Norming...)</li>
-                    <li>Konfliktlösung im Team: Drama vermeiden, Probleme lösen</li>
-                    <li>Delegation: Wie man Aufgaben verteilt, ohne Chef zu sein</li>
-                    <li>Remote-Teamwork: Zusammenarbeiten, wenn jeder woanders ist 🌍</li>
-                </ul>
-            </div>
-
-            <div class="wise-quote">
-                Gute Teams haben keine perfekten Mitglieder, 
-                sondern Mitglieder, die perfekt zusammenarbeiten. 
-                Wie ein Schweizer Uhrwerk – nur mit mehr Kaffee! ⏰☕
-            </div>
-
-            <div class="coming-soon">
-                👥 Coming Soon!
-            </div>
-
-            <div class="nav-buttons">
-                <a href="thema1.html" class="btn btn-secondary">
-                    ← Zurück zu Thema 1
-                </a>
-                <a href="lerninhalt-1-1.html" class="btn btn-primary">
-                    📋 Zu Lerninhalt 1.1
-                </a>
-                <a href="startzweig.html" class="btn btn-secondary">
-                    🏠 Zum Lernraum
-                </a>
-            </div>
-
-            <div class="easter-egg">
-                <p>
-                    🎯 <strong>Fun Fact:</strong> Die ideale Teamgröße ist 5-7 Personen. 
-                    Warum? Bei mehr wird's chaotisch, bei weniger fehlt die Vielfalt. 
-                    Die Schweiz mit ihren 7 Bundesräten wusste das schon lange! 🇨🇭
+            <div style="background: var(--ktzh-lightblue); padding: 1.5rem; border-radius: 12px; margin-top: 2rem;">
+                <p style="color: var(--ktzh-blue); font-weight: 600;">
+                    💡 <strong>Wichtig:</strong> Die meisten Menschen vereinen mehrere Rollen! 
+                    Ein gutes Team braucht Vielfalt – nicht alle sollten gleich sein.
                 </p>
             </div>
         </div>
+
+        <!-- Section 2: Kommunikationsstile -->
+        <div class="content-section">
+            <div class="section-header">
+                <div class="section-number">2</div>
+                <div class="section-title">
+                    <h3>💬 Kommunikationsstile im Konflikt</h3>
+                    <div class="section-subtitle">Wie reagieren Sie unter Druck?</div>
+                </div>
+            </div>
+
+            <p style="font-size: 1.125rem; color: var(--ktzh-gray); margin-bottom: 2rem;">
+                In Konfliktsituationen zeigen Menschen unterschiedliche Kommunikationsstile. 
+                Lernen Sie, diese zu erkennen und angemessen zu reagieren:
+            </p>
+
+            <!-- Scenario 1: Passive Communication -->
+            <div class="scenario-card" data-scenario="1">
+                <div class="scenario-header">
+                    <div class="scenario-emoji">😶</div>
+                    <div class="scenario-content">
+                        <h4>Situation: Passiver Kollege</h4>
+                        <p>
+                            Ihr Kollege Max sagt nie etwas, wenn ihm etwas nicht passt. 
+                            Im Team-Meeting stimmt er allem zu, aber später beschwert er sich 
+                            bei anderen. Ein wichtiges Projekt droht zu scheitern, weil Max 
+                            seine Bedenken nicht äussert.
+                        </p>
+                        <p style="color: var(--purple); font-weight: 600;">
+                            ❓ Wie sprechen Sie Max an?
+                        </p>
+                    </div>
+                </div>
+
+                <div class="response-options">
+                    <div class="response-option" data-answer="aggressive">
+                        <div class="response-role">❌ AGGRESSIV</div>
+                        <p>"Max, jetzt sag endlich mal was! Immer diese Spielchen mit dir. 
+                        Entweder du redest oder halt die Klappe – aber hör auf, hinterrücks zu lästern!"</p>
+                    </div>
+
+                    <div class="response-option" data-answer="assertive">
+                        <div class="response-role">✅ ASSERTIV (richtig!)</div>
+                        <p>"Max, mir fällt auf, dass du im Meeting oft zustimmst, aber später Bedenken äusserst. 
+                        Deine Meinung ist wichtig für uns. Kannst du im nächsten Meeting direkt sagen, 
+                        was du denkst? Wir brauchen deine ehrliche Einschätzung."</p>
+                    </div>
+
+                    <div class="response-option" data-answer="passive">
+                        <div class="response-role">❌ PASSIV</div>
+                        <p>"Ähm, also... ich weiss nicht... vielleicht könntest du ja... 
+                        wenn du willst... also nur wenn es für dich okay ist... mehr sagen?"</p>
+                    </div>
+                </div>
+
+                <div class="feedback-box">
+                    <strong style="color: var(--green); font-size: 1.25rem;">✅ Perfekt!</strong>
+                    <p style="color: var(--ktzh-darkgray); margin-top: 0.5rem;">
+                        <strong>Assertive Kommunikation</strong> ist der beste Weg: Sie sprechen das Problem 
+                        direkt an, ohne anzugreifen. Sie zeigen Wertschätzung ("Deine Meinung ist wichtig") 
+                        und bieten eine konkrete Lösung an.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Scenario 2: Aggressive Communication -->
+            <div class="scenario-card" data-scenario="2">
+                <div class="scenario-header">
+                    <div class="scenario-emoji">😤</div>
+                    <div class="scenario-content">
+                        <h4>Situation: Aggressiver Vorgesetzter</h4>
+                        <p>
+                            Ihr Berufsbildner ruft vor allen anderen: "Was soll das? 
+                            Das ist doch Kindergarten-Niveau! Haben Sie beim Arbeiten Ihr Hirn abgeschaltet?"
+                        </p>
+                        <p style="color: var(--purple); font-weight: 600;">
+                            ❓ Wie reagieren Sie?
+                        </p>
+                    </div>
+                </div>
+
+                <div class="response-options">
+                    <div class="response-option" data-answer="aggressive">
+                        <div class="response-role">❌ AGGRESSIV</div>
+                        <p>"Und Sie haben wohl vergessen, wie man Lernende behandelt! 
+                        Vielleicht sollten SIE mal zur Weiterbildung!"</p>
+                    </div>
+
+                    <div class="response-option" data-answer="passive">
+                        <div class="response-role">❌ PASSIV</div>
+                        <p>*Sagt nichts, wird rot, schluckt Tränen runter, 
+                        arbeitet weiter wie nichts gewesen wäre*</p>
+                    </div>
+
+                    <div class="response-option" data-answer="assertive">
+                        <div class="response-role">✅ ASSERTIV (richtig!)</div>
+                        <p>"Ich verstehe, dass Sie mit meiner Arbeit unzufrieden sind. 
+                        Können wir unter vier Augen darüber sprechen? Ich möchte verstehen, 
+                        was genau nicht passt, damit ich es verbessern kann."</p>
+                    </div>
+                </div>
+
+                <div class="feedback-box">
+                    <strong style="color: var(--green); font-size: 1.25rem;">✅ Richtig!</strong>
+                    <p style="color: var(--ktzh-darkgray); margin-top: 0.5rem;">
+                        Sie bleiben professionell, auch wenn der andere es nicht ist. 
+                        Wichtig: <strong>Unter vier Augen</strong> besprechen – nicht vor dem ganzen Team. 
+                        Das schützt Ihre Würde und gibt dem Chef die Chance, sich zu beruhigen.
+                    </p>
+                    <p style="margin-top: 1rem; padding: 1rem; background: #FFF7ED; border-radius: 8px;">
+                        <strong>📞 Wenn es eskaliert:</strong> Bei wiederholtem verbalen Missbrauch 
+                        → Berufsbildungsamt Zürich kontaktieren (043 259 78 00)
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: AI Practice -->
+        <div class="content-section">
+            <div class="section-header">
+                <div class="section-number">3</div>
+                <div class="section-title">
+                    <h3>👩‍🏫 Mit KI-Assistentin Judy üben</h3>
+                    <div class="section-subtitle">Realistische Konfliktgespräche simulieren</div>
+                </div>
+            </div>
+
+            <p style="font-size: 1.125rem; color: var(--ktzh-gray); margin-bottom: 2rem;">
+                Jetzt wird's interaktiv! Üben Sie Konfliktgespräche mit unserer KI-Assistentin Judy. 
+                Sie spielt verschiedene Rollen (Kollege, Chef, Kunde) und gibt Ihnen direktes Feedback.
+            </p>
+
+            <div style="background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); 
+                        border: 2px solid var(--green); border-radius: 16px; padding: 2rem; margin: 2rem 0;">
+                <h4 style="color: var(--green); font-size: 1.25rem; margin-bottom: 1rem;">
+                    🎯 So funktioniert's:
+                </h4>
+                <ol style="margin-left: 1.5rem; line-height: 2; color: var(--ktzh-darkgray);">
+                    <li><strong>Klicken Sie auf Judy</strong> (Avatar unten links)</li>
+                    <li><strong>Wählen Sie ein Szenario</strong> (z.B. "Ich habe einen Konflikt mit einem Kollegen")</li>
+                    <li><strong>Sprechen Sie</strong> oder schreiben Sie Ihre Reaktion</li>
+                    <li><strong>Judy antwortet</strong> und gibt Ihnen Feedback zu Ihrer Kommunikation</li>
+                    <li><strong>Üben Sie mehrmals</strong> – Übung macht den Meister!</li>
+                </ol>
+            </div>
+
+            <button class="ai-practice-btn" onclick="openJudyChat()">
+                <span class="icon">👩‍🏫</span>
+                <span>Jetzt mit Judy üben</span>
+            </button>
+
+            <div style="background: #FFF7ED; padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--yellow);">
+                <p style="color: var(--ktzh-darkgray); line-height: 1.8;">
+                    <strong>💡 Tipp:</strong> Judy kann verschiedene Szenarien spielen:
+                </p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--ktzh-gray);">
+                    <li>Konflikte mit Kollegen (z.B. ungerechte Arbeitsverteilung)</li>
+                    <li>Schwierige Gespräche mit Vorgesetzten (z.B. Feedback einfordern)</li>
+                    <li>Kundengespräche bei Reklamationen</li>
+                    <li>Team-Meetings mit unterschiedlichen Meinungen</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Completion Card -->
+        <div class="completion-card" id="completionCard">
+            <h3>🎉 Gratulation – Sie haben's drauf!</h3>
+            <p>Sie haben die wichtigsten Teamwork- und Konfliktlösungs-Skills gelernt!</p>
+
+            <div class="action-buttons">
+                <a href="thema1.html" class="btn btn-secondary">📚 Zurück zu Thema 1</a>
+                <a href="portfolio.html" class="btn btn-secondary">📁 Mein Portfolio</a>
+                <a href="startzweig.html" class="btn btn-primary">🏠 Zum Lernraum</a>
+            </div>
+        </div>
     </div>
+
+    <!-- HeyGen AI Avatar Script -->
+    <script>
+    !function(window){
+        const host="https://labs.heygen.com",
+        url=host+"/guest/streaming-embed?share=eyJxdWFsaXR5IjoiaGlnaCIsImF2YXRhck5hbWUiOiJKdWR5X1RlYWNoZXJfU3RhbmRpbmdfcHVi%0D%0AbGljIiwicHJldmlld0ltZyI6Imh0dHBzOi8vZmlsZXMyLmhleWdlbi5haS9hdmF0YXIvdjMvNmNk%0D%0ANzAzMWFhOTdlNDk2ODk3MzkxZGQ0NGRhZTU2YmVfNDU2MzAvcHJldmlld190YWxrXzEud2VicCIs%0D%0AIm5lZWRSZW1vdmVCYWNrZ3JvdW5kIjpmYWxzZSwia25vd2xlZGdlQmFzZUlkIjoiYWJmNzQxNTUw%0D%0AMGQ4NDJkNDg3NWQ1YzEzZmQzNTZlZTciLCJ1c2VybmFtZSI6ImM2NmY4NmU0M2U0YTRlMWZhMWFh%0D%0AYmU1YjdhMDU5NzI0In0%3D&inIFrame=1",
+        clientWidth=document.body.clientWidth,
+        wrapDiv=document.createElement("div");
+        wrapDiv.id="heygen-streaming-embed";
+        
+        const container=document.createElement("div");
+        container.id="heygen-streaming-container";
+        
+        const stylesheet=document.createElement("style");
+        stylesheet.innerHTML=`
+            #heygen-streaming-embed {
+                z-index: 9999;
+                position: fixed;
+                left: 40px;
+                bottom: 40px;
+                width: 200px;
+                height: 200px;
+                border-radius: 50%;
+                border: 2px solid #fff;
+                box-shadow: 0px 8px 24px 0px rgba(0, 0, 0, 0.12);
+                transition: all linear 0.1s;
+                overflow: hidden;
+                opacity: 0;
+                visibility: hidden;
+            }
+            #heygen-streaming-embed.show {
+                opacity: 1;
+                visibility: visible;
+            }
+            #heygen-streaming-embed.expand {
+                ${clientWidth<540?"height: 266px; width: 96%; left: 50%; transform: translateX(-50%);":"height: 366px; width: calc(366px * 16 / 9);"}
+                border: 0;
+                border-radius: 8px;
+            }
+            #heygen-streaming-container {
+                width: 100%;
+                height: 100%;
+            }
+            #heygen-streaming-container iframe {
+                width: 100%;
+                height: 100%;
+                border: 0;
+            }
+        `;
+        
+        const iframe=document.createElement("iframe");
+        iframe.allowFullscreen=false;
+        iframe.title="Streaming Embed";
+        iframe.role="dialog";
+        iframe.allow="microphone";
+        iframe.src=url;
+        
+        let visible=false;
+        let initial=false;
+        
+        window.addEventListener("message",(e=>{
+            if(e.origin===host && e.data && e.data.type && "streaming-embed"===e.data.type){
+                if("init"===e.data.action){
+                    initial=true;
+                    wrapDiv.classList.toggle("show",initial);
+                } else if("show"===e.data.action){
+                    visible=true;
+                    wrapDiv.classList.toggle("expand",visible);
+                } else if("hide"===e.data.action){
+                    visible=false;
+                    wrapDiv.classList.toggle("expand",visible);
+                }
+            }
+        }));
+        
+        container.appendChild(iframe);
+        wrapDiv.appendChild(stylesheet);
+        wrapDiv.appendChild(container);
+        document.body.appendChild(wrapDiv);
+    }(globalThis);
+    </script>
+
+    <!-- Main App Script -->
+    <script>
+        // User Info
+        const userCode = localStorage.getItem('abuEbaCode');
+        const userName = localStorage.getItem('abuEbaName');
+        
+        if (userCode && userName) {
+            document.getElementById('userDisplay').textContent = `👤 ${userName}`;
+        }
+
+        // Progress Tracking
+        let exploredCount = 0;
+        const totalInteractive = 8; // 6 roles + 2 scenarios
+
+        function updateProgress() {
+            const percentage = Math.round((exploredCount / totalInteractive) * 100);
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressPercentage').textContent = percentage + '%';
+
+            if (percentage === 100) {
+                setTimeout(() => {
+                    document.getElementById('completionCard').classList.add('show');
+                    document.getElementById('completionCard').scrollIntoView({ behavior: 'smooth' });
+                }, 500);
+            }
+        }
+
+        // Role Selection
+        document.querySelectorAll('.role-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const wasSelected = this.classList.contains('selected');
+                
+                if (!wasSelected) {
+                    this.classList.add('selected');
+                    exploredCount++;
+                } else {
+                    this.classList.remove('selected');
+                    exploredCount--;
+                }
+                
+                updateProgress();
+            });
+        });
+
+        // Scenario Responses
+        document.querySelectorAll('.scenario-card').forEach(card => {
+            const options = card.querySelectorAll('.response-option');
+            const feedback = card.querySelector('.feedback-box');
+            let scenarioCompleted = false;
+
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    if (scenarioCompleted) return;
+
+                    options.forEach(opt => {
+                        opt.classList.remove('selected');
+                        if (opt.dataset.answer !== 'assertive') {
+                            opt.classList.add('wrong');
+                        }
+                    });
+                    
+                    this.classList.add('selected');
+                    
+                    if (this.dataset.answer === 'assertive') {
+                        feedback.classList.add('show');
+                        if (!scenarioCompleted) {
+                            exploredCount++;
+                            scenarioCompleted = true;
+                            updateProgress();
+                        }
+                    }
+                });
+            });
+        });
+
+        // Open Judy Chat
+        function openJudyChat() {
+            const judyEmbed = document.getElementById('heygen-streaming-embed');
+            if (judyEmbed) {
+                // Trigger show event
+                const iframe = judyEmbed.querySelector('iframe');
+                if (iframe) {
+                    // The HeyGen embed will handle the show/hide via postMessage
+                    alert('💡 Klicken Sie auf den Avatar unten links, um mit Judy zu sprechen!');
+                }
+            }
+        }
+
+        console.log('🤝 Lerninhalt 2.2 geladen');
+        console.log('👤 User:', userName || 'Gast');
+        console.log('👩‍🏫 Judy Avatar: Bereit!');
+    </script>
 </body>
 </html>
