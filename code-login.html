@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ABU EBA - Login</title>
+    <title>ABU EBA - Login erstellen (mit Firebase)</title>
     <style>
         * {
             margin: 0;
@@ -38,7 +38,7 @@
             background: var(--white);
             border-radius: 30px;
             padding: 3rem;
-            max-width: 600px;
+            max-width: 700px;
             width: 100%;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
@@ -76,26 +76,77 @@
             font-size: 1rem;
         }
 
-        .form-group input {
+        .form-group input,
+        .form-group select {
             width: 100%;
             padding: 1rem;
             border: 2px solid var(--ktzh-lightblue);
             border-radius: 15px;
             font-size: 1rem;
             transition: all 0.3s ease;
-            font-family: 'Courier New', monospace;
+            font-family: inherit;
         }
 
-        .form-group input:focus {
+        .form-group input:focus,
+        .form-group select:focus {
             outline: none;
             border-color: var(--ktzh-blue);
             box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.1);
         }
 
-        .helper-text {
+        .symbol-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .symbol-option {
+            font-size: 1.75rem;
+            padding: 0.5rem;
+            border: 2px solid var(--ktzh-lightblue);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1;
+            line-height: 1;
+        }
+
+        .symbol-option:hover {
+            transform: scale(1.1);
+            border-color: var(--ktzh-cyan);
+        }
+
+        .symbol-option.selected {
+            background: var(--ktzh-blue);
+            border-color: var(--ktzh-blue);
+            transform: scale(1.15);
+        }
+
+        .code-preview {
+            background: var(--ktzh-lightblue);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .code-preview p {
             font-size: 0.875rem;
             color: var(--ktzh-gray);
-            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .code-preview .code {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ktzh-blue);
+            font-family: 'Courier New', monospace;
         }
 
         .btn {
@@ -147,51 +198,38 @@
             border: 2px solid var(--success);
         }
 
-        .links {
-            margin-top: 2rem;
-            text-align: center;
+        .helper-text {
+            font-size: 0.875rem;
+            color: var(--ktzh-gray);
+            margin-top: 0.5rem;
         }
 
-        .link {
+        .back-link {
             display: block;
-            margin-top: 1rem;
+            text-align: center;
+            margin-top: 1.5rem;
             color: var(--ktzh-blue);
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s ease;
         }
 
-        .link:hover {
+        .back-link:hover {
             color: var(--ktzh-cyan);
-        }
-
-        .divider {
-            margin: 2rem 0;
-            text-align: center;
-            position: relative;
-        }
-
-        .divider::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            width: 100%;
-            height: 1px;
-            background: var(--ktzh-lightblue);
-        }
-
-        .divider span {
-            position: relative;
-            background: var(--white);
-            padding: 0 1rem;
-            color: var(--ktzh-gray);
-            font-size: 0.875rem;
         }
 
         @media (max-width: 768px) {
             .login-container {
                 padding: 2rem;
+            }
+
+            .symbol-grid {
+                grid-template-columns: repeat(8, 1fr);
+            }
+
+            .symbol-option {
+                font-size: 1.4rem;
+                padding: 0.3rem;
             }
         }
     </style>
@@ -199,86 +237,295 @@
 <body>
     <div class="login-container">
         <div class="logo">
-            <div class="logo-icon">🔐</div>
-            <h1>Login</h1>
-            <p>Melde dich mit deinem Code an</p>
+            <div class="logo-icon">ðŸŽ“</div>
+            <h1>Login erstellen</h1>
+            <p>Erstelle deinen persÃ¶nlichen Zugang</p>
         </div>
 
         <form id="loginForm">
-            <!-- Code Input -->
+            <!-- Name -->
             <div class="form-group">
-                <label for="code">Dein Code</label>
+                <label for="name">Dein Vorname</label>
                 <input 
                     type="text" 
-                    id="code" 
-                    placeholder="NAME-25-🚀-1234" 
+                    id="name" 
+                    placeholder="z.B. Anna" 
                     required
+                    maxlength="20"
                     autocomplete="off"
                 >
-                <div class="helper-text">Format: NAME-JAHR-SYMBOL-PIN</div>
+                <div class="helper-text">Nur dein Vorname (ohne Sonderzeichen)</div>
+            </div>
+
+            <!-- Lehrstart -->
+            <div class="form-group">
+                <label for="year">Lehrstart (Jahr)</label>
+                <select id="year" required>
+                    <option value="">Bitte wÃ¤hlen...</option>
+                    <option value="23">2023</option>
+                    <option value="24">2024</option>
+                    <option value="25">2025</option>
+                    <option value="26">2026</option>
+                    <option value="27">2027</option>
+                    <option value="28">2028</option>
+                    <option value="29">2029</option>
+                    <option value="30">2030</option>
+                </select>
+            </div>
+
+            <!-- Symbol -->
+            <div class="form-group">
+                <label>WÃ¤hle dein Symbol (50 zur Auswahl)</label>
+                <div class="symbol-grid" id="symbolGrid"></div>
+                <input type="hidden" id="symbol" required>
+                <div class="helper-text">WÃ¤hle ein Symbol, das dir gefÃ¤llt</div>
+            </div>
+
+            <!-- PIN -->
+            <div class="form-group">
+                <label for="pin">Deine 4-stellige PIN</label>
+                <input 
+                    type="password" 
+                    id="pin" 
+                    placeholder="z.B. 1234" 
+                    required
+                    maxlength="4"
+                    pattern="[0-9]{4}"
+                    inputmode="numeric"
+                    autocomplete="off"
+                >
+                <div class="helper-text">4 Zahlen, die du dir gut merken kannst</div>
+            </div>
+
+            <!-- Code Preview -->
+            <div class="code-preview">
+                <p>Dein generierter Code:</p>
+                <div class="code" id="codePreview">---</div>
             </div>
 
             <!-- Submit Button -->
-            <button type="submit" class="btn btn-primary" id="submitBtn">
-                🚀 Einloggen
+            <button type="submit" class="btn btn-primary" id="submitBtn" disabled>
+                Code erstellen & einloggen
             </button>
 
             <!-- Message -->
             <div id="message" class="message"></div>
         </form>
 
-        <div class="divider">
-            <span>oder</span>
-        </div>
-
-        <div class="links">
-            <a href="./code-erstellen-firebase.html" class="link">✨ Neuen Code erstellen</a>
-            <a href="welcome-back.html" class="link">← Zurück</a>
-        </div>
+        <a href="welcome-back.html" class="back-link">â† ZurÃ¼ck</a>
     </div>
 
+    <!-- Firebase SDK (Compat version - works without module) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
     <script>
-        const form = document.getElementById('loginForm');
-        const codeInput = document.getElementById('code');
+        // 50 diverse Symbole
+        const symbols = [
+            'ðŸ¦', 'ðŸŒŸ', 'âš¡', 'ðŸŽ¨', 'ðŸš€', 'ðŸ’Ž', 'ðŸŒˆ', 'ðŸ”¥', 'ðŸŒº', 'ðŸŽ¯',
+            'ðŸ¯', 'ðŸ¦„', 'ðŸŒ¸', 'â­', 'ðŸ’«', 'ðŸŽ­', 'ðŸŽª', 'ðŸŽ¬', 'ðŸŽµ', 'ðŸŽ¸',
+            'âš½', 'ðŸ€', 'ðŸŽ¾', 'ðŸ†', 'ðŸŽ®', 'ðŸŽ²', 'ðŸ§©', 'ðŸŽ°', 'ðŸŽ³', 'ðŸŽ¯',
+            'ðŸŒ', 'ðŸŒ™', 'â˜€ï¸', 'â›…', 'ðŸŒŠ', 'ðŸ”ï¸', 'ðŸŒ´', 'ðŸ€', 'ðŸŒ»', 'ðŸŒ¹',
+            'ðŸ¦‹', 'ðŸ', 'ðŸž', 'ðŸ¦œ', 'ðŸ¬', 'ðŸ¦ˆ', 'ðŸ™', 'ðŸ¦€', 'ðŸ¢', 'ðŸ¦Ž'
+        ];
+
+        const symbolGrid = document.getElementById('symbolGrid');
+        const symbolInput = document.getElementById('symbol');
+        const nameInput = document.getElementById('name');
+        const yearSelect = document.getElementById('year');
+        const pinInput = document.getElementById('pin');
+        const codePreview = document.getElementById('codePreview');
+        const submitBtn = document.getElementById('submitBtn');
         const messageDiv = document.getElementById('message');
+        const form = document.getElementById('loginForm');
+
+        // Render symbols FIRST (before Firebase)
+        console.log('ðŸŽ¨ Rendering 50 symbols...');
+        symbols.forEach(symbol => {
+            const div = document.createElement('div');
+            div.className = 'symbol-option';
+            div.textContent = symbol;
+            div.addEventListener('click', () => selectSymbol(symbol, div));
+            symbolGrid.appendChild(div);
+        });
+        console.log('âœ… Symbols rendered!');
+
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDPWkwiCptXi_Ky-yUgrvxrtpRzH1HGd_0",
+            authDomain: "abu-edu-2030.firebaseapp.com",
+            projectId: "abu-edu-2030",
+            storageBucket: "abu-edu-2030.firebasestorage.app",
+            messagingSenderId: "895317724223",
+            appId: "1:895317724223:web:de551267b1431bea947c8a"
+        };
+
+        let auth, db, useFirebase = false;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            auth = firebase.auth();
+            db = firebase.firestore();
+            useFirebase = true;
+            console.log('ðŸ”¥ Firebase initialized!');
+        } catch (error) {
+            console.warn('âš ï¸ Firebase not available, using localStorage');
+        }
+
+        function selectSymbol(symbol, element) {
+            document.querySelectorAll('.symbol-option').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            element.classList.add('selected');
+            symbolInput.value = symbol;
+            
+            updatePreview();
+            checkFormValidity();
+        }
+
+        function updatePreview() {
+            const name = nameInput.value.trim().toUpperCase() || '---';
+            const year = yearSelect.value || '--';
+            const symbol = symbolInput.value || 'â“';
+            const pin = pinInput.value ? 'â€¢â€¢â€¢â€¢' : '----';
+            
+            codePreview.textContent = `${name}-${year}-${symbol}-${pin}`;
+        }
+
+        function checkFormValidity() {
+            const isValid = 
+                nameInput.value.trim() !== '' &&
+                yearSelect.value !== '' &&
+                symbolInput.value !== '' &&
+                pinInput.value.length === 4 &&
+                /^[0-9]{4}$/.test(pinInput.value);
+            
+            submitBtn.disabled = !isValid;
+        }
+
+        nameInput.addEventListener('input', () => {
+            nameInput.value = nameInput.value.replace(/[^a-zA-ZÃ¤Ã¶Ã¼Ã„Ã–Ãœ]/g, '');
+            updatePreview();
+            checkFormValidity();
+        });
+
+        yearSelect.addEventListener('change', () => {
+            updatePreview();
+            checkFormValidity();
+        });
+
+        pinInput.addEventListener('input', () => {
+            pinInput.value = pinInput.value.replace(/[^0-9]/g, '');
+            updatePreview();
+            checkFormValidity();
+        });
+
+        // Simple PIN hash
+        function hashPin(pin) {
+            let hash = 0;
+            const str = pin + 'ABU_EBA_SALT_2024';
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return hash.toString(36);
+        }
 
         // Form submission
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const code = codeInput.value.trim();
+            const name = nameInput.value.trim().toUpperCase();
+            const year = yearSelect.value;
+            const symbol = symbolInput.value;
+            const pin = pinInput.value;
+            const code = `${name}-${year}-${symbol}-${pin}`;
             
-            // Validate format
-            const codeParts = code.split('-');
-            if (codeParts.length !== 4) {
-                showMessage('error', '❌ Ungültiges Code-Format. Bitte verwende: NAME-JAHR-SYMBOL-PIN');
-                return;
-            }
-
-            const [name, year, symbol, pin] = codeParts;
-
-            // Basic validation
-            if (name.length === 0 || year.length !== 2 || pin.length !== 4 || !/^[0-9]{4}$/.test(pin)) {
-                showMessage('error', '❌ Ungültiger Code. Bitte überprüfe deine Eingabe.');
-                return;
-            }
-
-            // Check if code exists
-            const existingCodes = JSON.parse(localStorage.getItem('abuEbaCodes') || '[]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'â³ Erstelle Code...';
             
-            if (existingCodes.includes(code)) {
-                showMessage('success', '✅ Login erfolgreich! Du wirst weitergeleitet...');
+            try {
+                if (useFirebase && auth && db) {
+                    // Firebase path
+                    console.log('ðŸ”¥ Using Firebase...');
+                    const codeDoc = await db.collection('userCodes').doc(code).get();
+                    
+                    if (codeDoc.exists) {
+                        throw new Error('CODE_EXISTS');
+                    }
+                    
+                    const userCredential = await auth.signInAnonymously();
+                    const uid = userCredential.user.uid;
+                    
+                    await db.collection('userCodes').doc(code).set({
+                        code, name, year, symbol,
+                        pinHash: hashPin(pin),
+                        uid,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    
+                    await db.collection('users').doc(uid).set({
+                        name, code, symbol, year,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        progress: { completedTopics: [], portfolioEntries: 0, points: 0, badges: [] }
+                    });
+                    
+                    localStorage.setItem('abuEbaCode', code);
+                    localStorage.setItem('abuEbaName', name);
+                    localStorage.setItem('abuEbaUid', uid);
+                    
+                    showMessage('success', 'âœ… Code in Firebase erstellt!');
+                    console.log('âœ… Firebase UID:', uid);
+                } else {
+                    // localStorage fallback
+                    console.log('ðŸ“¦ Using localStorage...');
+                    const existingCodes = JSON.parse(localStorage.getItem('abuEbaCodes') || '[]');
+                    
+                    if (existingCodes.includes(code)) {
+                        throw new Error('CODE_EXISTS');
+                    }
+                    
+                    existingCodes.push(code);
+                    localStorage.setItem('abuEbaCodes', JSON.stringify(existingCodes));
+                    localStorage.setItem('abuEbaCode', code);
+                    localStorage.setItem('abuEbaName', name);
+                    
+                    showMessage('success', 'âœ… Code erstellt (localStorage)!');
+                }
                 
-                // Store code
-                localStorage.setItem('abuEbaCode', code);
-                localStorage.setItem('abuEbaName', name);
-                
-                // Redirect after 1.5 seconds
+                // TRIAGE-LOGIK: Prüfe ob User Kompetenzen-Einführung schon gemacht hat
                 setTimeout(() => {
-                    window.location.href = 'startzweig.html';
-                }, 1500);
-            } else {
-                showMessage('error', '❌ Code nicht gefunden. Hast du bereits einen Code erstellt?');
+                    const kompetenzEinfuehrungDone = localStorage.getItem('kompetenzEinfuehrungCompleted');
+                    
+                    if (kompetenzEinfuehrungDone === 'true') {
+                        // User hat Einführung schon gemacht -> direkt zu Lernraum
+                        console.log('✅ Kompetenzen-Einführung bereits abgeschlossen → startzweig.html');
+                        window.location.href = 'startzweig.html';
+                    } else {
+                        // Neuer User -> erst Einführung
+                        console.log('🎓 Neue Anmeldung → kompetenzen-einfuehrung.html');
+                        window.location.href = 'kompetenzen-einfuehrung.html';
+                    }
+                }, 2000);
+                
+            } catch (error) {
+                console.error('âŒ Error:', error);
+                
+                let msg = 'âŒ Fehler aufgetreten';
+                if (error.message === 'CODE_EXISTS') {
+                    msg = 'âŒ Code bereits vergeben. WÃ¤hle anderes Symbol/PIN.';
+                } else if (error.code === 'permission-denied') {
+                    msg = 'âŒ Firebase-Berechtigung fehlt';
+                } else if (error.code === 'unavailable') {
+                    msg = 'âŒ Firebase nicht erreichbar';
+                }
+                
+                showMessage('error', msg);
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Code erstellen & einloggen';
             }
         });
 
@@ -287,21 +534,6 @@
             messageDiv.textContent = text;
             messageDiv.style.display = 'block';
         }
-
-        // Format code input (automatically add dashes)
-        codeInput.addEventListener('input', (e) => {
-            let value = e.target.value;
-            
-            // Remove all non-alphanumeric characters except emoji and dashes
-            // This is a simplified approach - in production, you might want more sophisticated emoji handling
-            
-            // Auto-capitalize the name part if it's the first segment
-            const parts = value.split('-');
-            if (parts[0]) {
-                parts[0] = parts[0].toUpperCase();
-                e.target.value = parts.join('-');
-            }
-        });
     </script>
 </body>
 </html>
