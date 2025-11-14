@@ -48,6 +48,365 @@
             display: block;
         }
 
+        /* Motivations-Badge - MITTE UNTEN zwischen den Charakteren */
+        .motivation-badge {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9996;
+            background: var(--white);
+            padding: 0.875rem 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            max-width: 300px;
+        }
+
+        .motivation-badge:hover {
+            transform: translateX(-50%) translateY(-5px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .motivation-badge-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .motivation-badge-icon {
+            font-size: 1.75rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .motivation-badge-text {
+            flex: 1;
+        }
+
+        .motivation-badge-text h4 {
+            font-size: 0.875rem;
+            color: var(--ktzh-blue);
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .motivation-badge-text p {
+            font-size: 0.75rem;
+            color: var(--ktzh-gray);
+            margin: 0;
+        }
+
+        /* Motivations-Modal */
+        .motivation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .motivation-modal.show {
+            display: flex;
+        }
+
+        .motivation-modal-content {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 2rem 2.5rem;
+            max-width: 550px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: slideUp 0.4s ease;
+            margin: auto;
+        }
+
+        /* Scrollbar Styling */
+        .motivation-modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .motivation-modal-content::-webkit-scrollbar-track {
+            background: var(--ktzh-lightblue);
+            border-radius: 10px;
+        }
+
+        .motivation-modal-content::-webkit-scrollbar-thumb {
+            background: var(--ktzh-cyan);
+            border-radius: 10px;
+        }
+
+        .motivation-modal-content::-webkit-scrollbar-thumb:hover {
+            background: var(--ktzh-blue);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .motivation-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.75rem;
+            cursor: pointer;
+            color: var(--ktzh-gray);
+            transition: all 0.3s ease;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            line-height: 1;
+        }
+
+        .motivation-modal-close:hover {
+            background: var(--ktzh-lightblue);
+            color: var(--ktzh-blue);
+            transform: rotate(90deg);
+        }
+
+        .motivation-modal h2 {
+            font-size: 1.75rem;
+            color: var(--ktzh-blue);
+            margin-bottom: 0.5rem;
+            padding-right: 2rem;
+        }
+
+        .motivation-modal-subtitle {
+            font-size: 0.938rem;
+            color: var(--ktzh-gray);
+            margin-bottom: 1.75rem;
+        }
+
+        .motivation-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.875rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .motivation-option {
+            background: var(--ktzh-lightblue);
+            border: 3px solid transparent;
+            border-radius: 16px;
+            padding: 1.25rem 0.75rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .motivation-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .motivation-option.selected {
+            border-color: var(--ktzh-blue);
+            background: var(--white);
+            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.2);
+        }
+
+        .motivation-option-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .motivation-option:hover .motivation-option-emoji {
+            transform: scale(1.15) rotate(8deg);
+        }
+
+        .motivation-option.selected .motivation-option-emoji {
+            animation: bounce 0.6s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .motivation-option-label {
+            font-weight: 700;
+            color: var(--ktzh-blue);
+            font-size: 0.813rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .motivation-option-sublabel {
+            font-size: 0.688rem;
+            color: var(--ktzh-gray);
+        }
+
+        /* Farben für Motivationslevel */
+        .motivation-option[data-level="low"] {
+            background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+        }
+
+        .motivation-option[data-level="medium"] {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+        }
+
+        .motivation-option[data-level="high"] {
+            background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+        }
+
+        .motivation-option[data-level="low"].selected {
+            border-color: #DC2626;
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.3);
+        }
+
+        .motivation-option[data-level="medium"].selected {
+            border-color: #F59E0B;
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .motivation-option[data-level="high"].selected {
+            border-color: #10B981;
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .motivation-submit {
+            width: 100%;
+            padding: 0.875rem 1.75rem;
+            background: var(--ktzh-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 18px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1.25rem;
+        }
+
+        .motivation-submit:hover:not(:disabled) {
+            background: var(--ktzh-cyan);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 102, 204, 0.3);
+        }
+
+        .motivation-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Statistiken */
+        .motivation-stats {
+            background: var(--ktzh-lightblue);
+            border-radius: 14px;
+            padding: 1.25rem;
+            margin-top: 1.5rem;
+        }
+
+        .motivation-stats h3 {
+            font-size: 0.938rem;
+            color: var(--ktzh-blue);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .motivation-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.875rem;
+        }
+
+        .motivation-stat-item {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 0.875rem;
+            text-align: center;
+        }
+
+        .motivation-stat-item-title {
+            font-size: 0.688rem;
+            color: var(--ktzh-gray);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .motivation-stat-item-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .motivation-stat-item-label {
+            font-size: 0.813rem;
+            color: var(--ktzh-blue);
+        }
+
+        .motivation-distribution {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .motivation-distribution-bar {
+            flex: 1;
+            height: 28px;
+            background: var(--white);
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .motivation-distribution-segment {
+            height: 100%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.688rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .motivation-distribution-segment.low {
+            background: #DC2626;
+        }
+
+        .motivation-distribution-segment.medium {
+            background: #F59E0B;
+        }
+
+        .motivation-distribution-segment.high {
+            background: #10B981;
+        }
+
         .status-content {
             display: flex;
             align-items: center;
@@ -552,7 +911,6 @@
 
         .stat-item {
             padding: 1rem;
-            cursor: pointer;
             transition: transform 0.3s ease;
             position: relative;
         }
@@ -973,6 +1331,32 @@
                 min-width: 240px;
                 max-width: 280px;
             }
+
+            .motivation-badge {
+                bottom: 15px;
+                max-width: 260px;
+                padding: 0.75rem 1.25rem;
+            }
+
+            .motivation-badge-icon {
+                font-size: 1.5rem;
+            }
+
+            .motivation-badge-text h4 {
+                font-size: 0.813rem;
+            }
+
+            .motivation-badge-text p {
+                font-size: 0.688rem;
+            }
+
+            .motivation-modal-content {
+                padding: 2rem;
+            }
+
+            .motivation-options {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 768px) {
@@ -992,6 +1376,98 @@
             .stats-content {
                 grid-template-columns: 1fr;
                 gap: 2rem;
+            }
+
+            .motivation-badge {
+                bottom: 10px;
+                max-width: 90%;
+                padding: 0.625rem 1rem;
+            }
+
+            .motivation-badge-icon {
+                font-size: 1.25rem;
+            }
+
+            .motivation-badge-text h4 {
+                font-size: 0.75rem;
+            }
+
+            .motivation-badge-text p {
+                font-size: 0.625rem;
+            }
+
+            .motivation-modal {
+                padding: 0.5rem;
+            }
+
+            .motivation-modal-content {
+                padding: 1.5rem;
+                max-height: 85vh;
+                border-radius: 20px;
+            }
+
+            .motivation-modal h2 {
+                font-size: 1.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .motivation-modal-subtitle {
+                font-size: 0.875rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .motivation-options {
+                gap: 0.75rem;
+            }
+
+            .motivation-option {
+                padding: 1rem 0.5rem;
+            }
+
+            .motivation-option-emoji {
+                font-size: 2rem;
+            }
+
+            .motivation-option-label {
+                font-size: 0.75rem;
+            }
+
+            .motivation-option-sublabel {
+                font-size: 0.625rem;
+            }
+
+            .motivation-submit {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.938rem;
+            }
+
+            .motivation-stats {
+                padding: 1rem;
+            }
+
+            .motivation-stats h3 {
+                font-size: 0.875rem;
+            }
+
+            .motivation-stats-grid {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .motivation-stat-item {
+                padding: 0.75rem;
+            }
+
+            .motivation-stat-item-value {
+                font-size: 1.5rem;
+            }
+
+            .motivation-distribution-bar {
+                height: 24px;
+            }
+
+            .motivation-distribution-segment {
+                font-size: 0.625rem;
             }
         }
     </style>
@@ -1039,6 +1515,87 @@
             <p id="robotExplanation">Klick mich für Begriffshilfe! 🤖</p>
         </div>
         <div class="character-icon">🤖</div>
+    </div>
+
+    <!-- Motivations-Badge - Unten rechts -->
+    <div class="motivation-badge" id="motivationBadge">
+        <div class="motivation-badge-header">
+            <div class="motivation-badge-icon">💪</div>
+            <div class="motivation-badge-text">
+                <h4>Wie motiviert bist du heute?</h4>
+                <p>Teile deine Stimmung mit uns!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Motivations-Modal -->
+    <div class="motivation-modal" id="motivationModal">
+        <div class="motivation-modal-content">
+            <button class="motivation-modal-close" id="motivationModalClose">×</button>
+            
+            <h2>💪 Wie motiviert bist du?</h2>
+            <p class="motivation-modal-subtitle">Wähle das Tier, das am besten zu deiner heutigen Motivation passt!</p>
+
+            <div class="motivation-options">
+                <div class="motivation-option" data-level="low" data-value="1">
+                    <span class="motivation-option-emoji">🦥</span>
+                    <div class="motivation-option-label">Faultier</div>
+                    <div class="motivation-option-sublabel">Eher müde</div>
+                </div>
+                <div class="motivation-option" data-level="low" data-value="2">
+                    <span class="motivation-option-emoji">🐌</span>
+                    <div class="motivation-option-label">Schnecke</div>
+                    <div class="motivation-option-sublabel">Langsam ran</div>
+                </div>
+                <div class="motivation-option" data-level="medium" data-value="3">
+                    <span class="motivation-option-emoji">🐢</span>
+                    <div class="motivation-option-label">Schildkröte</div>
+                    <div class="motivation-option-sublabel">Geht so</div>
+                </div>
+                <div class="motivation-option" data-level="medium" data-value="4">
+                    <span class="motivation-option-emoji">🦊</span>
+                    <div class="motivation-option-label">Fuchs</div>
+                    <div class="motivation-option-sublabel">Ganz okay</div>
+                </div>
+                <div class="motivation-option" data-level="high" data-value="5">
+                    <span class="motivation-option-emoji">🐆</span>
+                    <div class="motivation-option-label">Gepard</div>
+                    <div class="motivation-option-sublabel">Gut drauf!</div>
+                </div>
+                <div class="motivation-option" data-level="high" data-value="6">
+                    <span class="motivation-option-emoji">🦅</span>
+                    <div class="motivation-option-label">Adler</div>
+                    <div class="motivation-option-sublabel">Mega motiviert!</div>
+                </div>
+            </div>
+
+            <button class="motivation-submit" id="motivationSubmit" disabled>
+                Motivation teilen
+            </button>
+
+            <div class="motivation-stats" id="motivationStats">
+                <h3>📊 Community Stimmung</h3>
+                <div class="motivation-stats-grid">
+                    <div class="motivation-stat-item">
+                        <div class="motivation-stat-item-title">Heute</div>
+                        <div class="motivation-stat-item-value" id="todayAverage">--</div>
+                        <div class="motivation-stat-item-label" id="todayAnimal">Noch keine Daten</div>
+                    </div>
+                    <div class="motivation-stat-item">
+                        <div class="motivation-stat-item-title">Gesamt</div>
+                        <div class="motivation-stat-item-value" id="weekAverage">--</div>
+                        <div class="motivation-stat-item-label" id="weekAnimal">Noch keine Daten</div>
+                    </div>
+                </div>
+                <div class="motivation-distribution">
+                    <div class="motivation-distribution-bar" id="distributionBar">
+                        <div class="motivation-distribution-segment low" id="segmentLow" style="width: 33.3%">33%</div>
+                        <div class="motivation-distribution-segment medium" id="segmentMedium" style="width: 33.3%">33%</div>
+                        <div class="motivation-distribution-segment high" id="segmentHigh" style="width: 33.4%">34%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Hero Section -->
@@ -1126,23 +1683,19 @@
     <!-- Stats -->
     <section class="stats" data-section>
         <div class="stats-content">
-            <div class="stat-item" data-interactive>
-                <span class="checkmark" style="color: var(--ktzh-cyan);">✓</span>
+            <div class="stat-item">
                 <div class="stat-number">16</div>
                 <div class="stat-label">Lerninhalte</div>
             </div>
-            <div class="stat-item" data-interactive>
-                <span class="checkmark" style="color: var(--ktzh-cyan);">✓</span>
+            <div class="stat-item">
                 <div class="stat-number">8</div>
                 <div class="stat-label">Umsetzungsbeispiele</div>
             </div>
-            <div class="stat-item" data-interactive>
-                <span class="checkmark" style="color: var(--ktzh-cyan);">✓</span>
+            <div class="stat-item">
                 <div class="stat-number">12</div>
                 <div class="stat-label">Schlüsselkompetenzen</div>
             </div>
-            <div class="stat-item" data-interactive>
-                <span class="checkmark" style="color: var(--ktzh-cyan);">✓</span>
+            <div class="stat-item">
                 <div class="stat-number">100%</div>
                 <div class="stat-label">Digital & Interaktiv</div>
             </div>
@@ -1369,7 +1922,29 @@
         <p>ABU EBA Digital | Digital Learning Hub Zürich | © 2024</p>
     </footer>
 
-    <script>
+    <script type="module">
+        // ===== FIREBASE CONFIGURATION =====
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+        import { getDatabase, ref, push, set, onValue, query, orderByChild, equalTo } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js';
+
+        // Firebase configuration (aus firebase-config.js)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDIT0kMu76HP3R2S3dReqELVUVMyr6sp2g",
+            authDomain: "abu-eba-digital.firebaseapp.com",
+            databaseURL: "https://abu-eba-digital-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "abu-eba-digital",
+            storageBucket: "abu-eba-digital.firebasestorage.app",
+            messagingSenderId: "105172004414",
+            appId: "1:105172004414:web:4d92eae32d48baf30b4bcf"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        console.log('🔥 Firebase initialized for Motivation Tracking');
+
         // WICHTIG: KEIN automatischer Redirect - nur Login-Status anzeigen!
         const userCode = localStorage.getItem('abuEbaCode');
         const userName = localStorage.getItem('abuEbaName');
@@ -1548,9 +2123,9 @@
         let exploredElements = new Set();
         let exploredExamples = new Set();
 
-        // YouTube Video Tracking (NACH interactiveElements Deklaration!)
+        // YouTube Video Tracking
         let player;
-        let videoWatched = false;
+        let videoStarted = false; // ✅ FIX: Track if video has started
         let videoCompleted = false;
         let videoCheckInterval;
         const videoContainerIndex = Array.from(interactiveElements).findIndex(el => 
@@ -1581,10 +2156,18 @@
             const videoStatus = document.getElementById('videoStatus');
             const videoProgressFill = document.getElementById('videoProgressFill');
             
-            // Playing
-            if (event.data == YT.PlayerState.PLAYING) {
+            // ✅ FIX: Mark as explored when video STARTS playing
+            if (event.data == YT.PlayerState.PLAYING && !videoStarted) {
+                videoStarted = true;
                 videoStatus.textContent = '▶️ Video läuft...';
-                videoWatched = true;
+                
+                // Mark video container as explored immediately
+                if (videoContainerIndex !== -1 && !exploredElements.has(videoContainerIndex)) {
+                    exploredElements.add(videoContainerIndex);
+                    document.querySelector('.video-container').classList.add('explored');
+                    updateProgress();
+                    console.log('✅ Video gestartet - als erkundet markiert!');
+                }
                 
                 // Start tracking progress
                 if (!videoCheckInterval) {
@@ -1601,13 +2184,6 @@
                                 videoCompleted = true;
                                 videoStatus.textContent = '✅ Video komplett angeschaut!';
                                 
-                                // Mark as explored
-                                if (videoContainerIndex !== -1 && !exploredElements.has(videoContainerIndex)) {
-                                    exploredElements.add(videoContainerIndex);
-                                    document.querySelector('.video-container').classList.add('explored');
-                                    updateProgress();
-                                }
-                                
                                 clearInterval(videoCheckInterval);
                                 videoCheckInterval = null;
                             }
@@ -1623,13 +2199,6 @@
             else if (event.data == YT.PlayerState.ENDED) {
                 videoStatus.textContent = '✅ Video komplett angeschaut!';
                 videoCompleted = true;
-                
-                // Mark as explored
-                if (videoContainerIndex !== -1 && !exploredElements.has(videoContainerIndex)) {
-                    exploredElements.add(videoContainerIndex);
-                    document.querySelector('.video-container').classList.add('explored');
-                    updateProgress();
-                }
                 
                 if (videoCheckInterval) {
                     clearInterval(videoCheckInterval);
@@ -1785,11 +2354,323 @@
         // Initial progress update
         updateProgress();
 
+        // ===== MOTIVATIONS-TRACKING SYSTEM MIT FIREBASE =====
+        
+        const motivationBadge = document.getElementById('motivationBadge');
+        const motivationModal = document.getElementById('motivationModal');
+        const motivationModalClose = document.getElementById('motivationModalClose');
+        const motivationSubmit = document.getElementById('motivationSubmit');
+        const motivationOptions = document.querySelectorAll('.motivation-option');
+
+        let selectedMotivation = null;
+        let allMotivationsCache = []; // Cache für alle Community-Daten
+        let userMotivationsCache = []; // Cache für User-spezifische Daten
+
+        // Tier-Emoji Mapping
+        const animalEmojis = {
+            1: '🦥', 2: '🐌', 3: '🐢', 4: '🦊', 5: '🐆', 6: '🦅'
+        };
+
+        const animalNames = {
+            1: 'Faultier', 2: 'Schnecke', 3: 'Schildkröte', 
+            4: 'Fuchs', 5: 'Gepard', 6: 'Adler'
+        };
+
+        // Firebase Reference
+        const motivationsRef = ref(database, 'motivations');
+
+        // Lade ALLE Motivationen aus Firebase (Community-Daten)
+        function loadAllMotivations() {
+            return new Promise((resolve) => {
+                onValue(motivationsRef, (snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        allMotivationsCache = Object.entries(data).map(([id, value]) => ({
+                            id,
+                            ...value
+                        }));
+                    } else {
+                        allMotivationsCache = [];
+                    }
+                    console.log('📊 Loaded', allMotivationsCache.length, 'total motivations from Firebase');
+                    updateStatistics();
+                    resolve(allMotivationsCache);
+                }, { onlyOnce: false }); // Real-time updates
+            });
+        }
+
+        // Lade User-spezifische Motivationen (falls eingeloggt)
+        function loadUserMotivations() {
+            const userCode = localStorage.getItem('abuEbaCode');
+            if (!userCode) {
+                // Fallback: LocalStorage für nicht-eingeloggte User
+                const stored = localStorage.getItem('abuEbaMotivations');
+                if (stored) {
+                    try {
+                        userMotivationsCache = JSON.parse(stored);
+                    } catch (e) {
+                        userMotivationsCache = [];
+                    }
+                }
+                return;
+            }
+
+            // Filter aus allMotivationsCache
+            userMotivationsCache = allMotivationsCache.filter(m => m.userCode === userCode);
+        }
+
+        // Speichere Motivation in Firebase
+        function saveMotivation(value) {
+            const now = new Date();
+            const userCode = localStorage.getItem('abuEbaCode');
+            
+            const motivationData = {
+                value: value,
+                timestamp: now.toISOString(),
+                date: now.toISOString().split('T')[0], // YYYY-MM-DD
+                userCode: userCode || 'anonymous', // Optional: User-Tracking
+                deviceId: getDeviceId() // Für anonyme Tracking
+            };
+
+            // Push zu Firebase
+            const newMotivationRef = push(motivationsRef);
+            set(newMotivationRef, motivationData)
+                .then(() => {
+                    console.log('✅ Motivation saved to Firebase:', motivationData);
+                    
+                    // Fallback: Auch im LocalStorage speichern für Offline-Zugriff
+                    if (!userCode) {
+                        const localMotivations = userMotivationsCache;
+                        localMotivations.push(motivationData);
+                        localStorage.setItem('abuEbaMotivations', JSON.stringify(localMotivations));
+                    }
+                    
+                    // Statistiken werden automatisch durch onValue aktualisiert
+                })
+                .catch((error) => {
+                    console.error('❌ Error saving motivation:', error);
+                    // Fallback zu LocalStorage
+                    const localMotivations = userMotivationsCache;
+                    localMotivations.push(motivationData);
+                    localStorage.setItem('abuEbaMotivations', JSON.stringify(localMotivations));
+                    updateStatistics();
+                });
+        }
+
+        // Device ID für anonymes Tracking
+        function getDeviceId() {
+            let deviceId = localStorage.getItem('abuEbaDeviceId');
+            if (!deviceId) {
+                deviceId = 'device_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+                localStorage.setItem('abuEbaDeviceId', deviceId);
+            }
+            return deviceId;
+        }
+
+        // Berechne Statistiken (basierend auf allMotivationsCache = Community-Daten)
+        function updateStatistics() {
+            const motivations = allMotivationsCache;
+            
+            if (motivations.length === 0) {
+                return;
+            }
+
+            const now = new Date();
+            const today = now.toISOString().split('T')[0];
+
+            // Heute (Community)
+            const todayMotivations = motivations.filter(m => m.date === today);
+            const todayAvg = todayMotivations.length > 0 
+                ? Math.round(todayMotivations.reduce((sum, m) => sum + m.value, 0) / todayMotivations.length)
+                : null;
+
+            // Gesamt (Alle Zeit - Community)
+            const allTimeAvg = motivations.length > 0
+                ? Math.round(motivations.reduce((sum, m) => sum + m.value, 0) / motivations.length)
+                : null;
+
+            // Distribution (Alle Zeit - Community)
+            const lowCount = motivations.filter(m => m.value <= 2).length;
+            const mediumCount = motivations.filter(m => m.value >= 3 && m.value <= 4).length;
+            const highCount = motivations.filter(m => m.value >= 5).length;
+            const total = motivations.length;
+
+            // Update UI
+            const todayAverageEl = document.getElementById('todayAverage');
+            const todayAnimalEl = document.getElementById('todayAnimal');
+            const weekAverageEl = document.getElementById('weekAverage');
+            const weekAnimalEl = document.getElementById('weekAnimal');
+
+            if (todayAvg) {
+                todayAverageEl.textContent = animalEmojis[todayAvg];
+                todayAnimalEl.textContent = animalNames[todayAvg] + ' (Community)';
+            } else {
+                todayAverageEl.textContent = '--';
+                todayAnimalEl.textContent = 'Noch keine Daten';
+            }
+
+            if (allTimeAvg) {
+                weekAverageEl.textContent = animalEmojis[allTimeAvg];
+                weekAnimalEl.textContent = animalNames[allTimeAvg] + ' (Community)';
+            } else {
+                weekAverageEl.textContent = '--';
+                weekAnimalEl.textContent = 'Noch keine Daten';
+            }
+
+            // Update Distribution Bar
+            if (total > 0) {
+                const lowPercent = (lowCount / total * 100).toFixed(0);
+                const mediumPercent = (mediumCount / total * 100).toFixed(0);
+                const highPercent = (highCount / total * 100).toFixed(0);
+
+                document.getElementById('segmentLow').style.width = lowPercent + '%';
+                document.getElementById('segmentLow').textContent = lowPercent > 10 ? lowPercent + '%' : '';
+                
+                document.getElementById('segmentMedium').style.width = mediumPercent + '%';
+                document.getElementById('segmentMedium').textContent = mediumPercent > 10 ? mediumPercent + '%' : '';
+                
+                document.getElementById('segmentHigh').style.width = highPercent + '%';
+                document.getElementById('segmentHigh').textContent = highPercent > 10 ? highPercent + '%' : '';
+            }
+
+            console.log('📊 Statistics updated:', {
+                today: todayAvg ? animalNames[todayAvg] : 'N/A',
+                allTime: allTimeAvg ? animalNames[allTimeAvg] : 'N/A',
+                total: total,
+                distribution: { low: lowCount, medium: mediumCount, high: highCount }
+            });
+        }
+
+        // Check if already voted today (check Firebase + LocalStorage)
+        function hasVotedToday() {
+            loadUserMotivations(); // Update user cache
+            const today = new Date().toISOString().split('T')[0];
+            return userMotivationsCache.some(m => m.date === today);
+        }
+
+        // Update Badge Text
+        function updateBadgeText() {
+            const badgeText = motivationBadge.querySelector('.motivation-badge-text');
+            if (hasVotedToday()) {
+                badgeText.innerHTML = '<h4>Danke für dein Feedback! 🎉</h4><p>Schau dir die Community-Stimmung an</p>';
+            } else {
+                badgeText.innerHTML = '<h4>Wie motiviert bist du heute?</h4><p>Teile deine Stimmung mit uns!</p>';
+            }
+        }
+
+        // Open Modal
+        motivationBadge.addEventListener('click', function() {
+            motivationModal.classList.add('show');
+            loadUserMotivations();
+            updateStatistics();
+            
+            // Disable voting if already voted today
+            if (hasVotedToday()) {
+                motivationOptions.forEach(option => {
+                    option.style.opacity = '0.6';
+                    option.style.cursor = 'not-allowed';
+                });
+                motivationSubmit.textContent = 'Du hast heute schon abgestimmt';
+                motivationSubmit.disabled = true;
+            } else {
+                motivationOptions.forEach(option => {
+                    option.style.opacity = '1';
+                    option.style.cursor = 'pointer';
+                });
+                motivationSubmit.textContent = 'Motivation teilen';
+            }
+        });
+
+        // Close Modal
+        motivationModalClose.addEventListener('click', function() {
+            motivationModal.classList.remove('show');
+        });
+
+        motivationModal.addEventListener('click', function(e) {
+            if (e.target === motivationModal) {
+                motivationModal.classList.remove('show');
+            }
+        });
+
+        // Select Option
+        motivationOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                if (hasVotedToday()) return; // Prevent voting twice
+
+                // Remove previous selection
+                motivationOptions.forEach(opt => opt.classList.remove('selected'));
+                
+                // Select current
+                this.classList.add('selected');
+                selectedMotivation = parseInt(this.dataset.value);
+                
+                // Enable submit button
+                motivationSubmit.disabled = false;
+            });
+        });
+
+        // Submit Motivation
+        motivationSubmit.addEventListener('click', function() {
+            if (selectedMotivation && !hasVotedToday()) {
+                saveMotivation(selectedMotivation);
+                
+                // Show success feedback
+                motivationSubmit.textContent = '✅ Gespeichert! Danke!';
+                motivationSubmit.style.background = '#10B981';
+                
+                // Update badge
+                setTimeout(() => {
+                    updateBadgeText();
+                }, 500);
+                
+                // Close modal after 2 seconds
+                setTimeout(() => {
+                    motivationModal.classList.remove('show');
+                    
+                    // Reset submit button
+                    setTimeout(() => {
+                        motivationSubmit.textContent = 'Motivation teilen';
+                        motivationSubmit.style.background = '';
+                        selectedMotivation = null;
+                        motivationOptions.forEach(opt => opt.classList.remove('selected'));
+                    }, 500);
+                }, 2000);
+
+                // Characters react
+                const reactionMessages = {
+                    1: "🧙‍♀️ Auch ein Faultier erreicht seine Ziele – Schritt für Schritt!",
+                    2: "🤖 Langsam starten ist besser als gar nicht zu starten!",
+                    3: "🧙‍♀️ Wie die Schildkröte – beständig zum Erfolg!",
+                    4: "🤖 Clever wie ein Fuchs – du findest deinen Weg!",
+                    5: "🧙‍♀️ Mit Geparden-Tempo zum Ziel! Fantastisch!",
+                    6: "🤖 Adler-Energie! Du wirst Großes erreichen!"
+                };
+
+                if (selectedMotivation <= 3) {
+                    wiseQuote.textContent = reactionMessages[selectedMotivation];
+                    wiseSpeech.classList.add('show');
+                    setTimeout(() => wiseSpeech.classList.remove('show'), 5000);
+                } else {
+                    robotExplanation.innerHTML = `<span class="term">Motivation erfasst!</span><span class="explanation">${reactionMessages[selectedMotivation]}</span>`;
+                    robotSpeech.classList.add('show');
+                    setTimeout(() => robotSpeech.classList.remove('show'), 5000);
+                }
+            }
+        });
+
+        // Initialize: Load all motivations from Firebase
+        loadAllMotivations().then(() => {
+            loadUserMotivations();
+            updateBadgeText();
+        });
+
         console.log('🎓 ABU EBA Digital - Interaktive Landing Page geladen!');
         console.log('📊 Tracking:', totalElements, 'interaktive Elemente');
         console.log('🔒 Start-Button wird bei 100% freigeschaltet');
         console.log('🧙‍♀️ Weise Frau (links) bereit für Weisheiten!');
         console.log('🤖 Robot (rechts) bereit für Begriffserklärungen!');
+        console.log('✅ Video wird als erkundet markiert sobald es startet!');
+        console.log('💪 Motivations-Tracking aktiviert!');
     </script>
 </body>
 </html>
