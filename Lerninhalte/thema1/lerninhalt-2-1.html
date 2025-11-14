@@ -1,1 +1,362 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Berufliche Kommunikation - Kommt bald! - ABU EBA Digital</title>
 
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --ktzh-blue: #0066CC;
+            --ktzh-cyan: #00A0E0;
+            --ktzh-lightblue: #E8F4F8;
+            --ktzh-darkgray: #3C3C3B;
+            --ktzh-gray: #767676;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: var(--ktzh-darkgray);
+            line-height: 1.6;
+            background: linear-gradient(180deg, var(--white) 0%, var(--ktzh-lightblue) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .placeholder-container {
+            max-width: 800px;
+            text-align: center;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .construction-icon {
+            font-size: 8rem;
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .main-card {
+            background: var(--white);
+            border-radius: 30px;
+            padding: 4rem 3rem;
+            box-shadow: 0 8px 32px rgba(0, 102, 204, 0.15);
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--ktzh-blue);
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--ktzh-cyan);
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        .wise-quote {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            border-left: 5px solid #F59E0B;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            font-size: 1.25rem;
+            font-style: italic;
+            color: var(--ktzh-darkgray);
+            line-height: 1.8;
+        }
+
+        .wise-quote::before {
+            content: '"';
+            font-size: 3rem;
+            color: #F59E0B;
+            font-family: Georgia, serif;
+            line-height: 0;
+            margin-right: 0.5rem;
+        }
+
+        .wise-quote::after {
+            content: '"';
+            font-size: 3rem;
+            color: #F59E0B;
+            font-family: Georgia, serif;
+            line-height: 0;
+            margin-left: 0.5rem;
+        }
+
+        .fun-facts {
+            background: var(--ktzh-lightblue);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .fun-facts h3 {
+            color: var(--ktzh-blue);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .fun-facts ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .fun-facts li {
+            padding: 0.75rem 0;
+            padding-left: 2rem;
+            position: relative;
+            font-size: 1.125rem;
+        }
+
+        .fun-facts li::before {
+            content: '💬';
+            position: absolute;
+            left: 0;
+            font-size: 1.5rem;
+        }
+
+        .communication-demo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .demo-card {
+            background: linear-gradient(135deg, var(--ktzh-lightblue), var(--white));
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 2px solid var(--ktzh-cyan);
+            text-align: center;
+        }
+
+        .demo-card .icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-card h4 {
+            color: var(--ktzh-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .coming-soon {
+            background: linear-gradient(135deg, var(--ktzh-blue), var(--ktzh-cyan));
+            color: var(--white);
+            padding: 1.5rem 3rem;
+            border-radius: 50px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: inline-block;
+            margin: 2rem 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--ktzh-blue), var(--ktzh-cyan));
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--ktzh-blue);
+            border: 2px solid var(--ktzh-blue);
+        }
+
+        .btn-secondary:hover {
+            background: var(--ktzh-blue);
+            color: var(--white);
+        }
+
+        .easter-egg {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+            border-radius: 15px;
+            border: 2px dashed #10B981;
+        }
+
+        .easter-egg p {
+            color: #10B981;
+            font-weight: 600;
+            font-size: 0.938rem;
+        }
+
+        @media (max-width: 768px) {
+            .construction-icon {
+                font-size: 5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .main-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .wise-quote {
+                font-size: 1.125rem;
+                padding: 1.5rem;
+            }
+
+            .communication-demo {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="placeholder-container">
+        <div class="construction-icon">💬</div>
+
+        <div class="main-card">
+            <h1>Berufliche Kommunikation</h1>
+            <div class="subtitle">Lerninhalt 2.1 - Kommt bald!</div>
+
+            <p style="font-size: 1.125rem; color: var(--ktzh-gray); margin: 2rem 0;">
+                Von "Sehr geehrte Damen und Herren" bis "Hey Chef" – 
+                hier lernen Sie, wie man im Beruf richtig kommuniziert! 🎯
+            </p>
+
+            <div class="wise-quote">
+                Man kann nicht nicht kommunizieren. Aber man kann 
+                sehr wohl schlecht kommunizieren – das lernen wir hier zu vermeiden! 😅
+            </div>
+
+            <div class="communication-demo">
+                <div class="demo-card">
+                    <div class="icon">📧</div>
+                    <h4>E-Mail-Etikette</h4>
+                    <p style="color: var(--ktzh-gray); font-size: 0.875rem;">
+                        Von Betreffzeile bis Signatur
+                    </p>
+                </div>
+                <div class="demo-card">
+                    <div class="icon">📞</div>
+                    <h4>Telefon-Skills</h4>
+                    <p style="color: var(--ktzh-gray); font-size: 0.875rem;">
+                        Professionell abheben & verbinden
+                    </p>
+                </div>
+                <div class="demo-card">
+                    <div class="icon">🤝</div>
+                    <h4>Small Talk</h4>
+                    <p style="color: var(--ktzh-gray); font-size: 0.875rem;">
+                        Networking ohne Awkwardness
+                    </p>
+                </div>
+                <div class="demo-card">
+                    <div class="icon">👔</div>
+                    <h4>Körpersprache</h4>
+                    <p style="color: var(--ktzh-gray); font-size: 0.875rem;">
+                        Was Sie nicht sagen, sagt viel aus
+                    </p>
+                </div>
+            </div>
+
+            <div class="fun-facts">
+                <h3>💡 Was Sie hier lernen werden:</h3>
+                <ul>
+                    <li>Die 4 Seiten einer Nachricht (Schulz von Thun war ein schlauer Typ!)</li>
+                    <li>Aktives Zuhören: Mehr als nur Nicken und "Mhm" sagen</li>
+                    <li>Feedback geben ohne Drama zu verursachen</li>
+                    <li>Business-Knigge: Wer grüßt wen zuerst? (Spoiler: Es gibt Regeln!)</li>
+                    <li>Digitale Kommunikation: Emojis im Büro – ja oder nein? 🤔</li>
+                </ul>
+            </div>
+
+            <div class="wise-quote">
+                Der Ton macht die Musik. Im Beruf idealerweise eine Symphonie, 
+                keine Heavy-Metal-Band. 🎵 (Außer Sie arbeiten in einer Heavy-Metal-Band!)
+            </div>
+
+            <div class="coming-soon">
+                🎤 Coming Soon!
+            </div>
+
+            <div class="nav-buttons">
+                <a href="thema1.html" class="btn btn-secondary">
+                    ← Zurück zu Thema 1
+                </a>
+                <a href="lerninhalt-1-1.html" class="btn btn-primary">
+                    📋 Zu Lerninhalt 1.1
+                </a>
+                <a href="startzweig.html" class="btn btn-secondary">
+                    🏠 Zum Lernraum
+                </a>
+            </div>
+
+            <div class="easter-egg">
+                <p>
+                    🎯 <strong>Pro-Tipp:</strong> In der Schweiz duzen sich viele schneller als in Deutschland – 
+                    aber im Zweifelsfall: Lieber einmal zu viel "Sie" als einmal zu wenig! 🇨🇭
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
