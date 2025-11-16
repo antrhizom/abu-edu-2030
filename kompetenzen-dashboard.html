@@ -392,43 +392,60 @@
     </div>
 
     <script type="module">
-        // User Authentication Check (localStorage-basiert)
+        // Firebase Imports
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+        import { getDatabase, ref, get, set } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js';
+
+        // Firebase Konfiguration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBLRconsultV5H4C_v2qKBh0vZ0k5q8MWcN70",
+            authDomain: "abueba.firebaseapp.com",
+            databaseURL: "https://abueba-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "abueba",
+            storageBucket: "abueba.appspot.com",
+            messagingSenderId: "668483480992",
+            appId: "1:668483480992:web:8e2fe3c2f1d5a5d5c5e5c5"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+
+        // ✅ GEÄNDERT: Prüfe ZUERST localStorage, dann Firebase
         const userCode = localStorage.getItem('abuEbaCode');
         const userName = localStorage.getItem('abuEbaName');
         
         if (!userCode || !userName) {
-            // Not logged in, redirect to index
-            window.location.href = 'index.html';
-        } else {
-            console.log('✅ User authenticated:', userName);
-            
-            // Optional: Firebase für zusätzliche Features (wenn verfügbar)
-            try {
-                import('https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js').then(({ initializeApp }) => {
-                    import('https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js').then(({ getDatabase, ref, set }) => {
-                        const firebaseConfig = {
-                            apiKey: "AIzaSyBLRconsultV5H4C_v2qKBh0vZ0k5q8MWcN70",
-                            authDomain: "abueba.firebaseapp.com",
-                            databaseURL: "https://abueba-default-rtdb.europe-west1.firebasedatabase.app",
-                            projectId: "abueba",
-                            storageBucket: "abueba.appspot.com",
-                            messagingSenderId: "668483480992",
-                            appId: "1:668483480992:web:8e2fe3c2f1d5a5d5c5e5c5"
-                        };
-                        
-                        const app = initializeApp(firebaseConfig);
-                        const db = getDatabase(app);
-                        
-                        // Speichere Dashboard-Besuch
-                        const progressRef = ref(db, `users/${userCode}/progress`);
-                        set(progressRef, {
-                            kompetenzDashboardVisited: true,
-                            lastVisit: new Date().toISOString()
-                        }).catch(err => console.log('Firebase optional:', err));
+            // Kein localStorage → Prüfe Firebase Auth
+            onAuthStateChanged(auth, (user) => {
+                if (!user) {
+                    // Auch kein Firebase User → Redirect to login
+                    window.location.href = 'index.html';
+                } else {
+                    // Firebase User vorhanden → Speichere Progress
+                    const progressRef = ref(db, `users/${user.uid}/progress`);
+                    get(progressRef).then((snapshot) => {
+                        const progress = snapshot.val() || {};
+                        progress.kompetenzDashboardVisited = true;
+                        progress.lastVisit = new Date().toISOString();
+                        set(progressRef, progress);
                     });
-                });
+                }
+            });
+        } else {
+            // localStorage vorhanden → User ist eingeloggt
+            console.log('✅ User authenticated via localStorage:', userName);
+            
+            // Optional: Speichere auch in Firebase (falls verfügbar)
+            try {
+                const progressRef = ref(db, `users/${userCode}/progress`);
+                set(progressRef, {
+                    kompetenzDashboardVisited: true,
+                    lastVisit: new Date().toISOString()
+                }).catch(err => console.log('Firebase optional:', err));
             } catch (e) {
-                console.log('Firebase optional nicht verfügbar');
+                console.log('Firebase tracking optional');
             }
         }
     </script>
