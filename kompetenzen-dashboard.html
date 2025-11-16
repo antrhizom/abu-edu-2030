@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kompetenzen-Dashboard | ABU EBA Digital</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --ktzh-blue: #0066CC;
+            --ktzh-cyan: #00A0E0;
+            --ktzh-lightblue: #E8F4F8;
+            --ktzh-darkgray: #3C3C3B;
+            --ktzh-gray: #767676;
+            --white: #FFFFFF;
+            --green: #10B981;
+            --yellow: #F59E0B;
+            --purple: #8B5CF6;
+            --orange: #FF8C42;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f9fc 0%, #ffffff 100%);
+            color: var(--ktzh-darkgray);
+            line-height: 1.6;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            background: var(--white);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .top-nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ktzh-blue);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            color: var(--ktzh-cyan);
+            transform: scale(1.05);
+        }
+
+        .logo-icon {
+            font-size: 1.75rem;
+        }
+
+        .nav-divider {
+            width: 1px;
+            height: 30px;
+            background: var(--ktzh-gray);
+            opacity: 0.3;
+        }
+
+        .current-page {
+            color: var(--ktzh-gray);
+            font-weight: 600;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 0.938rem;
+        }
+
+        .nav-btn-primary {
+            background: var(--ktzh-blue);
+            color: var(--white);
+        }
+
+        .nav-btn-primary:hover {
+            background: var(--ktzh-cyan);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+        }
+
+        .nav-btn-secondary {
+            background: transparent;
+            color: var(--ktzh-blue);
+            border: 2px solid var(--ktzh-blue);
+        }
+
+        .nav-btn-secondary:hover {
+            background: var(--ktzh-lightblue);
+        }
+
+        .user-badge {
+            background: var(--ktzh-lightblue);
+            color: var(--ktzh-blue);
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
+            color: var(--white);
+            padding: 4rem 2rem 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '🎯';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.1;
+            right: -3rem;
+            top: -3rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-back {
+            font-size: 1.125rem;
+            opacity: 0.95;
+            margin-bottom: 0.5rem;
+        }
+
+        header h1 {
+            font-size: 2.75rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: var(--white);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
+            margin: -2rem auto 3rem;
+            max-width: 1200px;
+            padding: 1.5rem 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--ktzh-cyan);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: var(--ktzh-gray);
+            font-size: 0.938rem;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: var(--ktzh-blue);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--ktzh-gray);
+            font-size: 1.125rem;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: var(--ktzh-lightblue);
+            border-left: 5px solid var(--ktzh-cyan);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 3rem;
+        }
+
+        .info-box h3 {
+            color: var(--ktzh-blue);
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box p {
+            color: var(--ktzh-darkgray);
+            line-height: 1.7;
+        }
+
+        /* Dimension Grid */
+        .dimension-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .dimension-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dimension-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 102, 204, 0.15);
+        }
+
+        .dimension-card.completed {
+            border: 3px solid var(--green);
+        }
+
+        .dimension-card.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .dimension-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+        }
+
+        .dimension-card[data-color="blue"]::before {
+            background: linear-gradient(90deg, var(--ktzh-blue), var(--ktzh-cyan));
+        }
+
+        .dimension-card[data-color="purple"]::before {
+            background: linear-gradient(90deg, var(--purple), #A78BFA);
+        }
+
+        .dimension-card[data-color="yellow"]::before {
+            background: linear-gradient(90deg, var(--yellow), #FBBF24);
+        }
+
+        .dimension-card[data-color="green"]::before {
+            background: linear-gradient(90deg, var(--green), #34D399);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .dimension-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .completion-badge {
+            background: var(--green);
+            color: var(--white);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: none;
+        }
+
+        .dimension-card.completed .completion-badge {
+            display: block;
+        }
+
+        .dimension-number {
+            background: var(--ktzh-lightblue);
+            color: var(--ktzh-blue);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        .dimension-card h3 {
+            font-size: 1.5rem;
+            color: var(--ktzh-blue);
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .dimension-card p {
+            color: var(--ktzh-gray);
+            font-size: 0.938rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .dimension-details {
+            color: var(--ktzh-gray);
+            font-size: 0.813rem;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: var(--ktzh-lightblue);
+            border-radius: 10px;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--ktzh-blue), var(--ktzh-cyan));
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.938rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+        }
+
+        .dimension-card.locked .cta-button {
+            background: var(--ktzh-gray);
+            cursor: not-allowed;
+        }
+
+        .dimension-card.completed .cta-button {
+            background: var(--green);
+        }
+
+        /* Continue Section */
+        .continue-section {
+            background: linear-gradient(135deg, var(--green) 0%, #34D399 100%);
+            color: var(--white);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 3rem;
+            display: none;
+        }
+
+        .continue-section.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .continue-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .continue-section p {
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .continue-btn {
+            background: var(--white);
+            color: var(--green);
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1.125rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .continue-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--ktzh-darkgray);
+            color: var(--white);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            opacity: 0.8;
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .top-nav-content {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-left {
+                flex-direction: column;
+                gap: 0.5rem;
+                width: 100%;
+                text-align: center;
+            }
+
+            .nav-divider {
+                display: none;
+            }
+
+            .nav-right {
+                flex-wrap: wrap;
+                justify-content: center;
+                width: 100%;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .stats-bar {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                margin: -1rem 1rem 2rem;
+                padding: 1rem;
+            }
+
+            .dimension-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .continue-section h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="top-nav-content">
+            <div class="nav-left">
+                <a href="index.html" class="logo">
+                    <span class="logo-icon">🎓</span>
+                    <span>ABU EBA Digital</span>
+                </a>
+                <div class="nav-divider"></div>
+                <span class="current-page">Kompetenz-Dimensionen</span>
+            </div>
+            <div class="nav-right">
+                <div class="user-badge" id="userBadge">
+                    <span id="userSymbol">🚀</span>
+                    <span id="userName">USER</span>
+                </div>
+                <a href="kompetenzen-einfuehrung.html" class="nav-btn nav-btn-secondary" title="Zurück zur Einführung">
+                    ← Einführung
+                </a>
+                <a href="portfolio.html" class="nav-btn nav-btn-secondary" title="Portfolio">
+                    💎 Portfolio
+                </a>
+                <a href="index.html" class="nav-btn nav-btn-secondary" title="Startseite">
+                    🏠 Startseite
+                </a>
+                <button class="nav-btn nav-btn-primary" id="logoutBtn">
+                    🚪 Abmelden
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="welcome-back">Bereit für die Details,</div>
+            <h1><span id="headerUserName">USER</span>? 🎯</h1>
+            <p>Erkunden Sie die 4 Dimensionen der Kompetenzen. Jede Dimension vertieft Ihr Verständnis!</p>
+        </div>
+    </header>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-number" id="totalProgress">0/4</div>
+            <div class="stat-label">Dimensionen abgeschlossen</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" id="overallPercentage">0%</div>
+            <div class="stat-label">Gesamtfortschritt</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" id="timeEstimate">~35 Min.</div>
+            <div class="stat-label">Geschätzte Zeit</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2 class="section-title">🧩 Die 4 Dimensionen der Kompetenzen</h2>
+        <p class="section-subtitle">
+            Jede Dimension hilft Ihnen, ein Puzzleteil des Gesamtbilds zu verstehen. 
+            Alle 4 zusammen ergeben das vollständige Bild – Ihr Kompetenzprofil.
+        </p>
+
+        <!-- Info Box -->
+        <div class="info-box">
+            <h3>💡 Wie funktioniert das?</h3>
+            <p>
+                Klicken Sie auf eine Dimension, um sie im Detail zu erkunden. Jede Dimension dauert ca. 8-10 Minuten. 
+                Sie können in beliebiger Reihenfolge vorgehen. Ihr Fortschritt wird automatisch gespeichert.
+                <strong>Sobald alle 4 abgeschlossen sind, können Sie zu den Lernthemen wechseln!</strong>
+            </p>
+        </div>
+
+        <!-- Dimension Cards -->
+        <div class="dimension-grid">
+            <!-- Dimension 1: Schlüsselkompetenzen -->
+            <div class="dimension-card" data-dimension="1" data-color="blue">
+                <div class="card-header">
+                    <div class="dimension-icon">🔑</div>
+                    <div>
+                        <div class="completion-badge">✓ Abgeschlossen</div>
+                        <div class="dimension-number">1</div>
+                    </div>
+                </div>
+                <h3>12 Schlüssel-kompetenzen</h3>
+                <p>
+                    Die Basis für lebenslanges Lernen: Kritisches Denken, Problemlösen, 
+                    Selbstmanagement, Kreativität und mehr. Diese 12 Kompetenzen begleiten 
+                    Sie ein Leben lang.
+                </p>
+                <div class="dimension-details">
+                    📚 12 Kompetenzen • ⏱️ ca. 8 Min.
+                </div>
+                <button class="cta-button" onclick="openDimension(1)">
+                    <span>Los geht's!</span>
+                    <span>→</span>
+                </button>
+            </div>
+
+            <!-- Dimension 2: Gesellschaftliche Aspekte -->
+            <div class="dimension-card" data-dimension="2" data-color="purple">
+                <div class="card-header">
+                    <div class="dimension-icon">🌍</div>
+                    <div>
+                        <div class="completion-badge">✓ Abgeschlossen</div>
+                        <div class="dimension-number">2</div>
+                    </div>
+                </div>
+                <h3>8 Gesellschaftliche Aspekte</h3>
+                <p>
+                    Verstehen Sie die Welt um sich herum: Kultur, Ethik, Recht, 
+                    Wirtschaft, Politik, Ökologie, Identität und Technologie. 
+                    Diese Blickwinkel helfen Ihnen, komplexe Situationen zu analysieren.
+                </p>
+                <div class="dimension-details">
+                    🌐 8 Aspekte • ⏱️ ca. 10 Min.
+                </div>
+                <button class="cta-button" onclick="openDimension(2)">
+                    <span>Entdecken</span>
+                    <span>→</span>
+                </button>
+            </div>
+
+            <!-- Dimension 3: Sprache & Kommunikation -->
+            <div class="dimension-card" data-dimension="3" data-color="yellow">
+                <div class="card-header">
+                    <div class="dimension-icon">💬</div>
+                    <div>
+                        <div class="completion-badge">✓ Abgeschlossen</div>
+                        <div class="dimension-number">3</div>
+                    </div>
+                </div>
+                <h3>9 Sprach- & Kommunikations-modi</h3>
+                <p>
+                    Sprache ist Ihr Werkzeug: Lesen, Schreiben, Sprechen, Hören, 
+                    audiovisuell und digital. Inklusive integrierte Digitalkompetenzen. 
+                    Lernen Sie, wie Sie in verschiedenen Modi kommunizieren.
+                </p>
+                <div class="dimension-details">
+                    💭 9 Modi • ⏱️ ca. 10 Min.
+                </div>
+                <button class="cta-button" onclick="openDimension(3)">
+                    <span>Verstehen</span>
+                    <span>→</span>
+                </button>
+            </div>
+
+            <!-- Dimension 4: Zirkularität -->
+            <div class="dimension-card" data-dimension="4" data-color="green">
+                <div class="card-header">
+                    <div class="dimension-icon">🔄</div>
+                    <div>
+                        <div class="completion-badge">✓ Abgeschlossen</div>
+                        <div class="dimension-number">4</div>
+                    </div>
+                </div>
+                <h3>Zirkularität & Spiralcurriculum</h3>
+                <p>
+                    Kompetenzen entwickeln sich spiralförmig: Sie begegnen Ihnen 
+                    immer wieder – jedes Mal tiefer, komplexer, selbstständiger. 
+                    Verstehen Sie das Prinzip des lebenslangen Lernens.
+                </p>
+                <div class="dimension-details">
+                    🌀 Konzept verstehen • ⏱️ ca. 6 Min.
+                </div>
+                <button class="cta-button" onclick="openDimension(4)">
+                    <span>Erfahren</span>
+                    <span>→</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Continue Section (appears when all 4 are completed) -->
+        <div class="continue-section" id="continueSection">
+            <h2>🎉 Fantastisch! Alle 4 Dimensionen abgeschlossen!</h2>
+            <p>
+                Sie haben jetzt ein solides Verständnis der Kompetenzstruktur. 
+                Zeit, loszulegen und Ihr Wissen in den Lernthemen anzuwenden!
+            </p>
+            <button class="continue-btn" onclick="goToThemes()">
+                <span>🚀</span>
+                <span>Zu den Lernthemen</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>ABU EBA Digital | Digital Learning Hub Zürich | © 2024</p>
+    </footer>
+
+    <script>
+        // URLs for the 4 dimensions
+        const dimensionURLs = {
+            1: 'kompetenzen-schluessel.html',
+            2: 'kompetenzen-gesellschaft.html',
+            3: 'kompetenzen-sprache.html',
+            4: 'kompetenzen-zirkularitaet.html'
+        };
+
+        // Load user data
+        const userCode = localStorage.getItem('abuEbaCode');
+        const userName = localStorage.getItem('abuEbaName');
+
+        if (!userCode || !userName) {
+            // Not logged in, redirect to index
+            window.location.href = 'index.html';
+        } else {
+            // Extract symbol from code
+            const codeParts = userCode.split('-');
+            const symbol = codeParts[2] || '🚀';
+
+            // Display user info
+            document.getElementById('userName').textContent = userName;
+            document.getElementById('headerUserName').textContent = userName;
+            document.getElementById('userSymbol').textContent = symbol;
+
+            // Logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                if (confirm('Möchten Sie sich wirklich abmelden?')) {
+                    localStorage.removeItem('abuEbaCode');
+                    localStorage.removeItem('abuEbaName');
+                    window.location.href = 'index.html';
+                }
+            });
+
+            // Load completion status
+            function loadCompletionStatus() {
+                const status = {
+                    dimension1: localStorage.getItem(`abuEba_${userCode}_dimension1_completed`) === 'true',
+                    dimension2: localStorage.getItem(`abuEba_${userCode}_dimension2_completed`) === 'true',
+                    dimension3: localStorage.getItem(`abuEba_${userCode}_dimension3_completed`) === 'true',
+                    dimension4: localStorage.getItem(`abuEba_${userCode}_dimension4_completed`) === 'true'
+                };
+                return status;
+            }
+
+            // Update UI based on completion status
+            function updateUI() {
+                const status = loadCompletionStatus();
+                let completedCount = 0;
+
+                // Update each dimension card
+                for (let i = 1; i <= 4; i++) {
+                    const card = document.querySelector(`[data-dimension="${i}"]`);
+                    const isCompleted = status[`dimension${i}`];
+                    
+                    if (isCompleted) {
+                        card.classList.add('completed');
+                        completedCount++;
+                    } else {
+                        card.classList.remove('completed');
+                    }
+                }
+
+                // Update stats
+                const percentage = Math.round((completedCount / 4) * 100);
+                document.getElementById('totalProgress').textContent = `${completedCount}/4`;
+                document.getElementById('overallPercentage').textContent = `${percentage}%`;
+
+                // Update time estimate (remaining dimensions * 10 min average)
+                const remainingTime = (4 - completedCount) * 9;
+                if (remainingTime > 0) {
+                    document.getElementById('timeEstimate').textContent = `~${remainingTime} Min.`;
+                } else {
+                    document.getElementById('timeEstimate').textContent = '✓ Fertig!';
+                }
+
+                // Show/hide continue section
+                const continueSection = document.getElementById('continueSection');
+                if (completedCount === 4) {
+                    continueSection.classList.add('active');
+                } else {
+                    continueSection.classList.remove('active');
+                }
+            }
+
+            // Open dimension
+            function openDimension(dimensionNumber) {
+                const url = dimensionURLs[dimensionNumber];
+                if (url) {
+                    window.location.href = url;
+                } else {
+                    alert('Diese Dimension ist noch nicht verfügbar. Sie wird bald freigeschaltet!');
+                }
+            }
+
+            // Go to themes
+            function goToThemes() {
+                window.location.href = 'startzweig.html';
+            }
+
+            // Make functions globally available
+            window.openDimension = openDimension;
+            window.goToThemes = goToThemes;
+
+            // Initialize
+            updateUI();
+
+            console.log('✅ Kompetenz-Dashboard geladen');
+            console.log('👤 Eingeloggt als:', userName);
+            console.log('🔑 Code:', userCode);
+        }
+    </script>
+</body>
+</html>
