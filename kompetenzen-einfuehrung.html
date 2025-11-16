@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kompetenzen verstehen - ABU EBA</title>
+    <title>Kompetenzen verstehen - ABU EBA Digital</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
@@ -41,10 +41,129 @@
             --orange: #FF8C42;
         }
 
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: var(--ktzh-darkgray);
+            line-height: 1.6;
+            background: linear-gradient(180deg, var(--white) 0%, var(--ktzh-lightblue) 100%);
+            min-height: 100vh;
+        }
+
+        /* ============================================
+           TOP NAVIGATION (wie in startzweig.html)
+           ============================================ */
+        .top-nav {
+            background: var(--white);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .top-nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ktzh-blue);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            color: var(--ktzh-cyan);
+            transform: scale(1.05);
+        }
+
+        .logo-icon {
+            font-size: 1.75rem;
+        }
+
+        .nav-divider {
+            width: 1px;
+            height: 30px;
+            background: var(--ktzh-gray);
+            opacity: 0.3;
+        }
+
+        .current-page {
+            color: var(--ktzh-gray);
+            font-weight: 600;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 0.938rem;
+        }
+
+        .nav-btn-primary {
+            background: var(--ktzh-blue);
+            color: var(--white);
+        }
+
+        .nav-btn-primary:hover {
+            background: var(--ktzh-cyan);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+        }
+
+        .nav-btn-secondary {
+            background: transparent;
+            color: var(--ktzh-blue);
+            border: 2px solid var(--ktzh-blue);
+        }
+
+        .nav-btn-secondary:hover {
+            background: var(--ktzh-lightblue);
+        }
+
+        .user-badge {
+            background: var(--ktzh-lightblue);
+            color: var(--ktzh-blue);
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
         /* Progress Badge */
         .progress-badge {
             position: fixed;
-            top: 20px;
+            top: 80px;
             right: 20px;
             background: var(--white);
             padding: 1rem 1.5rem;
@@ -172,82 +291,6 @@
             color: var(--green);
         }
 
-        body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            color: var(--ktzh-darkgray);
-            line-height: 1.6;
-            background: linear-gradient(180deg, var(--white) 0%, var(--ktzh-lightblue) 100%);
-            min-height: 100vh;
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
-            color: var(--white);
-            padding: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .header-title {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .header-title h1 {
-            font-size: 2rem;
-            font-weight: 700;
-        }
-
-        .header-icon {
-            font-size: 3rem;
-        }
-
-        .header-nav {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .nav-link {
-            background: rgba(255, 255, 255, 0.2);
-            color: var(--white);
-            padding: 0.75rem 1.5rem;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-link:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .user-info {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.75rem 1.5rem;
-            border-radius: 20px;
-            font-size: 0.938rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
         .progress-bar {
             position: fixed;
             top: 0;
@@ -265,6 +308,48 @@
             transition: width 0.3s ease;
         }
 
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
+            color: var(--white);
+            padding: 3rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '🎯';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.1;
+            right: -3rem;
+            top: -3rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-content h1 {
+            font-size: 2.75rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .header-content p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+        }
+
         /* Container */
         .container {
             max-width: 1200px;
@@ -272,7 +357,7 @@
             padding: 3rem 2rem;
         }
 
-        /* Intro Section */
+        /* Intro Card */
         .intro-card {
             background: var(--white);
             border-radius: 20px;
@@ -985,25 +1070,49 @@
             justify-content: center;
         }
 
+        /* Checkmark Animation */
+        .checkmark {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+
+        .explored .checkmark {
+            opacity: 1;
+            transform: scale(1);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
-            .header-content {
+            .top-nav-content {
                 flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-left {
+                flex-direction: column;
+                gap: 0.5rem;
+                width: 100%;
                 text-align: center;
             }
 
-            .header-nav {
-                flex-direction: column;
-                width: 100%;
+            .nav-divider {
+                display: none;
             }
 
-            .nav-link {
-                width: 100%;
+            .nav-right {
+                flex-wrap: wrap;
                 justify-content: center;
+                width: 100%;
             }
 
-            .header-title h1 {
-                font-size: 1.5rem;
+            .header-content h1 {
+                font-size: 2rem;
             }
 
             .intro-card h2 {
@@ -1040,22 +1149,12 @@
                 width: 100%;
                 justify-content: center;
             }
-        }
 
-        /* Checkmark Animation */
-        .checkmark {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 1.5rem;
-            opacity: 0;
-            transform: scale(0);
-            transition: all 0.3s ease;
-        }
-
-        .explored .checkmark {
-            opacity: 1;
-            transform: scale(1);
+            .progress-badge {
+                top: 70px;
+                right: 10px;
+                padding: 0.75rem 1rem;
+            }
         }
     </style>
 </head>
@@ -1064,6 +1163,35 @@
     <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
     </div>
+
+    <!-- Top Navigation (NEU) -->
+    <nav class="top-nav">
+        <div class="top-nav-content">
+            <div class="nav-left">
+                <a href="index.html" class="logo">
+                    <span class="logo-icon">🎓</span>
+                    <span>ABU EBA Digital</span>
+                </a>
+                <div class="nav-divider"></div>
+                <span class="current-page">Kompetenzen verstehen</span>
+            </div>
+            <div class="nav-right">
+                <div class="user-badge" id="userBadge">
+                    <span id="userSymbol">🚀</span>
+                    <span id="userName">USER</span>
+                </div>
+                <a href="portfolio.html" class="nav-btn nav-btn-secondary" title="Mein Portfolio">
+                    💎 Portfolio
+                </a>
+                <a href="index.html" class="nav-btn nav-btn-secondary" title="Zur Startseite">
+                    🏠 Startseite
+                </a>
+                <button class="nav-btn nav-btn-primary" id="logoutBtn">
+                    🚪 Abmelden
+                </button>
+            </div>
+        </div>
+    </nav>
 
     <!-- Progress Badge -->
     <div class="progress-badge">
@@ -1090,21 +1218,11 @@
     <!-- Header -->
     <header class="header">
         <div class="header-content">
-            <div class="header-title">
-                <span class="header-icon">🎯</span>
-                <h1>Kompetenzen verstehen</h1>
-            </div>
-            <div class="header-nav">
-                <a href="index.html" class="nav-link">
-                    🏠 Startseite
-                </a>
-                <a href="portfolio.html" class="nav-link">
-                    📁 Mein Portfolio
-                </a>
-                <div class="user-info">
-                    <span id="userDisplay">👤 Gast</span>
-                </div>
-            </div>
+            <h1>🎯 Kompetenzen verstehen</h1>
+            <p>
+                Bevor Sie mit den Themen starten, möchten wir Ihnen zeigen, <strong>wie dieses Lehrmittel funktioniert</strong> 
+                und <strong>warum</strong> wir Kompetenzen so wichtig finden.
+            </p>
         </div>
     </header>
 
@@ -1114,13 +1232,12 @@
         <div class="intro-card">
             <h2>🧊 Willkommen zur Kompetenz-Einführung!</h2>
             <p>
-                Bevor Sie mit den Themen starten, möchten wir Ihnen zeigen, <strong>wie dieses Lehrmittel funktioniert</strong> 
-                und <strong>warum</strong> wir Kompetenzen so wichtig finden.
+                Diese Einführung hilft Ihnen zu verstehen, was Kompetenzen sind, wie sie zusammenhängen 
+                und warum Sie ihnen in verschiedenen Themen immer wieder begegnen.
             </p>
             <div class="intro-highlight">
-                <strong>💡 Das Ziel:</strong> Sie verstehen, was Kompetenzen sind, wie sie zusammenhängen 
-                und warum Sie ihnen in verschiedenen Themen immer wieder begegnen. 
-                Am Ende wissen Sie genau, wie Sie mit diesem Lehrmittel lernen!
+                <strong>💡 Das Ziel:</strong> Nach dieser Einführung wissen Sie genau, wie Sie mit diesem Lehrmittel lernen 
+                und können die 4 Kompetenz-Dimensionen im Detail erkunden!
             </div>
         </div>
 
@@ -1550,7 +1667,8 @@ Zum Beispiel:
                     🔄 Nochmal durchgehen
                 </button>
                 <a href="index.html" class="btn btn-secondary">🏠 Zur Startseite</a>
-                <a href="startzweig.html" class="btn btn-primary">🚀 Zu den Themen</a>
+                <!-- ✅ GEÄNDERT: Statt direkt zu startzweig.html → Jetzt zum Kompetenz-Dashboard -->
+                <button class="btn btn-primary" id="continueToNext">🎯 Weiter zu den 4 Dimensionen</button>
             </div>
         </div>
     </div>
@@ -1581,7 +1699,7 @@ Zum Beispiel:
             }
         }, 100);
 
-        // Wise Quotes (einfache, weise Sprache - thematisch zu Kompetenzen)
+        // Wise Quotes
         const wiseQuotes = [
             "Nur die Spitze des Eisbergs ist sichtbar. Ihre wahre Kompetenz liegt darunter. 🧊",
             "Kompetenzen begegnen Ihnen immer wieder. Eine Spirale führt Sie nach oben. 🔄",
@@ -1600,7 +1718,7 @@ Zum Beispiel:
             "Vertrauen Sie dem Prozess. Kompetenz braucht Zeit. ⏳"
         ];
 
-        // Robot Explanations (Schwierige Wörter vereinfacht)
+        // Robot Explanations
         const robotExplanations = [
             "💡 <strong>Performanz?</strong> Das ist einfach: Was Sie tun, was man sehen kann!",
             "🔄 <strong>Zirkularität?</strong> Wie ein Kreis - Sie kommen immer wieder zurück, aber auf höherem Level!",
@@ -1628,8 +1746,26 @@ Zum Beispiel:
         const userCode = localStorage.getItem('abuEbaCode');
         const userName = localStorage.getItem('abuEbaName');
         
-        if (userCode && userName) {
-            document.getElementById('userDisplay').textContent = `👤 ${userName}`;
+        if (!userCode || !userName) {
+            // Not logged in, redirect to index
+            window.location.href = 'index.html';
+        } else {
+            // Extract symbol from code
+            const codeParts = userCode.split('-');
+            const symbol = codeParts[2] || '🚀';
+
+            // Display user info
+            document.getElementById('userName').textContent = userName;
+            document.getElementById('userSymbol').textContent = symbol;
+
+            // Logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                if (confirm('Möchten Sie sich wirklich abmelden?')) {
+                    localStorage.removeItem('abuEbaCode');
+                    localStorage.removeItem('abuEbaName');
+                    window.location.href = 'index.html';
+                }
+            });
         }
 
         // Check if viewing someone else's portfolio
@@ -1698,25 +1834,22 @@ Zum Beispiel:
             });
         });
 
-        // Floating Wise Person - Klick zum Umschalten
+        // Floating Wise Person
         const floatingWise = document.getElementById('floatingWise');
         const wiseSpeech = document.getElementById('wiseSpeech');
         const wiseQuote = document.getElementById('wiseQuote');
 
         floatingWise.addEventListener('click', function() {
             if (!wiseSpeechVisible) {
-                // Zeige Sprechblase
                 wiseQuote.textContent = wiseQuotes[currentQuoteIndex];
                 wiseSpeech.classList.add('show');
                 wiseSpeechVisible = true;
             } else {
-                // Wechsle zum nächsten Spruch
                 currentQuoteIndex = (currentQuoteIndex + 1) % wiseQuotes.length;
                 wiseQuote.textContent = wiseQuotes[currentQuoteIndex];
             }
         });
 
-        // Auto-show wise person on first visit
         setTimeout(() => {
             if (!localStorage.getItem('wiseGreetedKompetenzen')) {
                 wiseQuote.textContent = "Willkommen! Klicken Sie auf Elemente, um mehr zu erfahren. 🧙‍♂️";
@@ -1726,25 +1859,22 @@ Zum Beispiel:
             }
         }, 3000);
 
-        // Floating Robot - Klick zum Umschalten
+        // Floating Robot
         const floatingRobot = document.getElementById('floatingRobot');
         const robotSpeech = document.getElementById('robotSpeech');
         const robotQuote = document.getElementById('robotQuote');
 
         floatingRobot.addEventListener('click', function() {
             if (!robotSpeechVisible) {
-                // Zeige Sprechblase
                 robotQuote.innerHTML = robotExplanations[currentRobotIndex];
                 robotSpeech.classList.add('show');
                 robotSpeechVisible = true;
             } else {
-                // Wechsle zur nächsten Erklärung
                 currentRobotIndex = (currentRobotIndex + 1) % robotExplanations.length;
                 robotQuote.innerHTML = robotExplanations[currentRobotIndex];
             }
         });
 
-        // Auto-show robot on first visit
         setTimeout(() => {
             if (!localStorage.getItem('robotGreetedKompetenzen')) {
                 robotQuote.innerHTML = "👋 Hallo! Ich erkläre Ihnen schwierige Wörter. Klicken Sie mich an!";
@@ -1806,8 +1936,19 @@ Zum Beispiel:
             
             quizSubmit.style.display = 'none';
             
-            // Set completion flag for startzweig.html redirect
-            localStorage.setItem('abuEbaCompetencyCompleted', 'true');
+            // ✅ GEÄNDERT: Setze das richtige Flag
+            localStorage.setItem(`abuEba_${userCode}_seenCompetencyIntro`, 'true');
+            console.log('✅ Kompetenz-Einführung als gesehen markiert');
+        });
+
+        // ✅ NEU: Button für Weiterleitung zu den 4 Dimensionen
+        document.getElementById('continueToNext').addEventListener('click', function() {
+            // Setze Flag (redundant, aber sicher)
+            localStorage.setItem(`abuEba_${userCode}_seenCompetencyIntro`, 'true');
+            
+            // ✅ WICHTIG: Hier zur Übersichtsseite der 4 Dimensionen weiterleiten
+            // Diese Seite müssen wir noch erstellen!
+            window.location.href = 'kompetenzen-dashboard.html';
         });
 
         // Portfolio Save with Firebase
@@ -1816,11 +1957,6 @@ Zum Beispiel:
             
             if (!reflection.trim()) {
                 alert('Bitte schreiben Sie zuerst eine Reflexion! 📝');
-                return;
-            }
-
-            if (!userCode) {
-                alert('⚠️ Bitte loggen Sie sich zuerst ein!');
                 return;
             }
 
@@ -1847,34 +1983,27 @@ Zum Beispiel:
 
             try {
                 if (useFirebase && db) {
-                    // Save to Firebase
                     const entryId = `kompetenzen-einfuehrung-${Date.now()}`;
                     await db.collection('portfolios').doc(userCode).collection('entries').doc(entryId).set(portfolioEntry);
-                    
                     console.log('✅ Saved to Firebase');
                 } else {
-                    // Fallback to localStorage
                     let portfolio = JSON.parse(localStorage.getItem('abuEbaPortfolio') || '[]');
                     portfolio.push(portfolioEntry);
                     localStorage.setItem('abuEbaPortfolio', JSON.stringify(portfolio));
-                    
                     console.log('✅ Saved to localStorage');
                 }
 
                 this.textContent = '✓ Gespeichert';
                 this.style.background = 'var(--green)';
                 
-                // Show share section
                 const shareSection = document.getElementById('shareSection');
                 const emojiSection = document.getElementById('emojiReactions');
                 shareSection.style.display = 'block';
                 emojiSection.style.display = 'block';
                 
-                // Generate share link
                 const shareUrl = `${window.location.origin}${window.location.pathname}?view=${userCode}`;
                 document.getElementById('shareLink').value = shareUrl;
                 
-                // Load existing reactions
                 loadReactions();
 
             } catch (error) {
@@ -1919,14 +2048,11 @@ Zum Beispiel:
                             .collection('reactions')
                             .doc(userCode);
 
-                        // Toggle reaction
                         const existingReaction = await reactionRef.get();
                         
                         if (existingReaction.exists && existingReaction.data().emoji === emoji) {
-                            // Remove reaction
                             await reactionRef.delete();
                         } else {
-                            // Add/update reaction
                             await reactionRef.set({
                                 emoji: emoji,
                                 fromCode: userCode,
@@ -1935,7 +2061,6 @@ Zum Beispiel:
                             });
                         }
 
-                        // Reload reactions
                         loadReactions();
                     } else {
                         alert('🔥 Firebase benötigt für Reaktionen');
@@ -1975,7 +2100,6 @@ Zum Beispiel:
                     });
                 });
 
-                // Update counts
                 emojiButtons.forEach(button => {
                     const emoji = button.dataset.emoji;
                     const countSpan = button.querySelector('.emoji-count');
@@ -1983,7 +2107,6 @@ Zum Beispiel:
                     countSpan.textContent = count;
                     countSpan.dataset.count = count;
                     
-                    // Highlight if user reacted
                     const userReacted = reactionsList.some(r => r.code === userCode && r.emoji === emoji);
                     if (userReacted) {
                         button.classList.add('selected');
@@ -1992,7 +2115,6 @@ Zum Beispiel:
                     }
                 });
 
-                // Show reactions list
                 const reactionsListDiv = document.getElementById('reactionsList');
                 if (reactionsList.length > 0) {
                     reactionsListDiv.innerHTML = '<p style="font-size: 0.875rem; color: var(--ktzh-gray); margin-bottom: 0.5rem;">Reaktionen:</p>';
@@ -2024,13 +2146,12 @@ Zum Beispiel:
             loadReactions();
         }
 
-        // Reset Button - Nochmal durchgehen
+        // Reset Button
         document.getElementById('resetButton').addEventListener('click', async function() {
             if (!confirm('🔄 Möchten Sie das Modul nochmal durchgehen?\n\nIhr bisheriger Portfolio-Eintrag bleibt erhalten, aber es wird ein neuer Durchgang gestartet.')) {
                 return;
             }
 
-            // Save current state as completed entry if reflection exists
             const currentReflection = document.getElementById('reflection').value;
             if (currentReflection.trim() && userCode) {
                 const completedEntry = {
@@ -2067,13 +2188,11 @@ Zum Beispiel:
                 }
             }
 
-            // Reset all states
             exploredInteractive.clear();
             exploredExamples.clear();
             quizScore = 0;
             selectedAnswers = {};
 
-            // Reset UI
             interactiveElements.forEach(el => {
                 el.classList.remove('explored', 'active');
             });
@@ -2101,50 +2220,23 @@ Zum Beispiel:
             document.getElementById('shareSection').style.display = 'none';
             document.getElementById('emojiReactions').style.display = 'none';
 
-            // Reset progress
             updateProgress();
             updateActivityStats();
 
-            // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            // Show wise person encouragement
             wiseQuote.textContent = "Sie beginnen erneut. Jedes Mal werden Sie weiser. 🧙‍♂️✨";
             wiseSpeech.classList.add('show');
             wiseSpeechVisible = true;
         });
 
         console.log('🎯 Kompetenz-Einführung geladen');
-        console.log('👤 User:', userName || 'Gast');
+        console.log('👤 User:', userName);
         console.log('📊 Interaktive Elemente:', totalAll);
         console.log('🔥 Firebase:', useFirebase ? 'Aktiv' : 'LocalStorage Fallback');
         if (isViewer) {
             console.log('👁️ Viewing portfolio of:', viewingCode);
         }
-        // ✅ ZUSATZ: Button "Zu den Themen" mit Flag-Setzung
-document.addEventListener('DOMContentLoaded', function() {
-    // Warte bis DOM geladen ist, dann finde den Button
-    const themesButton = document.querySelector('a.btn-primary[href="startzweig.html"]');
-    
-    if (themesButton) {
-        themesButton.addEventListener('click', function(e) {
-            e.preventDefault(); // Verhindere direkte Navigation
-            
-            const userCode = localStorage.getItem('abuEbaCode');
-            
-            if (userCode) {
-                // ✅ Setze Flag: User hat Kompetenz-Einführung gesehen
-                localStorage.setItem(`abuEba_${userCode}_seenCompetencyIntro`, 'true');
-                console.log('✅ Kompetenz-Einführung als gesehen markiert für:', userCode);
-            }
-            
-            // Jetzt zur Themenübersicht weiterleiten
-            window.location.href = 'startzweig.html';
-        });
-        
-        console.log('✅ Kompetenz-Button Event-Listener registriert');
-    }
-});
     </script>
 </body>
 </html>
