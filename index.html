@@ -1341,7 +1341,7 @@
             <div class="cta-hint" id="ctaHint">
                 🔒 Erkunde erst alle Bereiche oben, dann wird der Button freigeschaltet!
             </div>
-            <a href="code-login.html" class="btn btn-primary disabled" id="startBtn">
+            <a href="code-erstellen-FINAL.html" class="btn btn-primary disabled" id="startBtn">
                 🚀 Jetzt starten (0% erkundet)
             </a>
         </div>
@@ -1349,10 +1349,42 @@
 
     <!-- Footer -->
     <footer data-section>
-        <p>ABU EBA Digital | Digital Learning Hub Zürich | © 2024</p>
+        <p>ABU EBA Digital | edu.ant | © 2024</p>
     </footer>
 
     <script>
+        // ========================================
+        // AUTO-REDIRECT LOGIK (ERSTE PRIORITÄT!)
+        // ========================================
+        (function() {
+            const userCode = localStorage.getItem('abuEbaCode');
+            const userName = localStorage.getItem('abuEbaName');
+            
+            if (userCode && userName) {
+                console.log('✅ User bereits eingeloggt:', userName);
+                
+                // Prüfe ob Kompetenz-Einführung bereits gesehen wurde
+                const hasSeenCompetencyIntro = localStorage.getItem(`abuEba_${userCode}_seenCompetencyIntro`);
+                
+                if (hasSeenCompetencyIntro === 'true') {
+                    console.log('✅ Kompetenz-Einführung bereits gesehen → Weiter zu Themenseiten');
+                    window.location.href = 'startzweig.html';
+                    return;
+                } else {
+                    console.log('⏳ Kompetenz-Einführung noch nicht gesehen → Weiter zur Einführung');
+                    window.location.href = 'kompetenzen-einfuehrung.html';
+                    return;
+                }
+            }
+            
+            console.log('👤 Kein User eingeloggt → Zeige Landing Page');
+        })();
+
+        // ========================================
+        // NORMALE SEITEN-FUNKTIONALITÄT
+        // (Wird nur ausgeführt wenn NICHT weitergeleitet wurde)
+        // ========================================
+        
         // Login Status
         const userCode = localStorage.getItem('abuEbaCode');
         const userName = localStorage.getItem('abuEbaName');
@@ -1508,7 +1540,7 @@
         let exploredElements = new Set();
         let exploredExamples = new Set();
 
-        // YouTube Video Tracking - GEÄNDERT: Zählt als erkundet sobald Video STARTET
+        // YouTube Video Tracking
         let player;
         let videoWatched = false;
         let videoCompleted = false;
@@ -1541,21 +1573,17 @@
             const videoStatus = document.getElementById('videoStatus');
             const videoProgressFill = document.getElementById('videoProgressFill');
             
-            // Playing - GEÄNDERT: Video zählt als erkundet sobald es STARTET
             if (event.data == YT.PlayerState.PLAYING) {
                 videoStatus.textContent = '▶️ Video läuft...';
                 videoWatched = true;
                 
-                // Mark as explored beim ersten Abspielen (NICHT erst bei 95%!)
                 if (videoContainerIndex !== -1 && !exploredElements.has(videoContainerIndex)) {
                     exploredElements.add(videoContainerIndex);
                     document.querySelector('.video-container').classList.add('explored');
                     videoStatus.textContent = '✅ Video gestartet!';
                     updateProgress();
-                    console.log('✅ Video als erkundet markiert (beim Start)');
                 }
                 
-                // Start tracking progress (nur visuell für Fortschrittsbalken)
                 if (!videoCheckInterval) {
                     videoCheckInterval = setInterval(() => {
                         if (player && player.getCurrentTime && player.getDuration) {
@@ -1565,7 +1593,6 @@
                             
                             videoProgressFill.style.width = progress + '%';
                             
-                            // Bei 95% Status aktualisieren (aber nicht mehr für Progress Tracking!)
                             if (progress >= 95 && !videoCompleted) {
                                 videoCompleted = true;
                                 videoStatus.textContent = '✅ Video komplett angeschaut!';
@@ -1576,11 +1603,9 @@
                     }, 1000);
                 }
             }
-            // Paused
             else if (event.data == YT.PlayerState.PAUSED) {
                 videoStatus.textContent = '⏸️ Video pausiert';
             }
-            // Ended
             else if (event.data == YT.PlayerState.ENDED) {
                 videoStatus.textContent = '✅ Video komplett angeschaut!';
                 videoCompleted = true;
@@ -1598,7 +1623,6 @@
             document.getElementById('progressFill').style.width = percentage + '%';
             document.getElementById('progressPercentage').textContent = percentage + '%';
             
-            // Update Start Button
             const startBtn = document.getElementById('startBtn');
             const ctaHint = document.getElementById('ctaHint');
             
@@ -1609,7 +1633,6 @@
                 ctaHint.textContent = '✅ Perfekt! Du hast alles erkundet. Jetzt kannst du starten!';
                 ctaHint.style.background = 'rgba(16, 185, 129, 0.3)';
                 
-                // Both characters congratulate
                 wiseQuote.textContent = "🎉 Wunderbar! Du hast 100% erreicht! Die Weisheit ist mit dir!";
                 wiseSpeech.classList.add('show');
                 
@@ -1628,7 +1651,6 @@
                 startBtn.style.pointerEvents = 'none';
             }
             
-            // Save to localStorage
             localStorage.setItem('abuEbaIndexProgress', JSON.stringify({
                 explored: Array.from(exploredElements),
                 exploredExamples: Array.from(exploredExamples),
@@ -1645,14 +1667,12 @@
                 exploredExamples = new Set(data.exploredExamples || []);
                 updateProgress();
                 
-                // Mark explored elements
                 exploredElements.forEach(index => {
                     if (interactiveElements[index]) {
                         interactiveElements[index].classList.add('explored');
                     }
                 });
 
-                // Mark explored examples
                 exploredExamples.forEach(index => {
                     if (exampleElements[index]) {
                         exampleElements[index].classList.add('explored');
@@ -1666,7 +1686,6 @@
         // Track clicks on interactive elements
         interactiveElements.forEach((element, index) => {
             element.addEventListener('click', function(e) {
-                // Don't mark as explored if clicking on example inside
                 if (e.target.closest('[data-example-interactive]')) {
                     return;
                 }
@@ -1677,7 +1696,6 @@
                     updateProgress();
                 }
                 
-                // Toggle active state for hero cards
                 if (element.classList.contains('hero-card')) {
                     element.classList.toggle('active');
                 }
@@ -1689,10 +1707,8 @@
             element.addEventListener('click', function(e) {
                 e.stopPropagation();
                 
-                // Toggle example open state
                 element.classList.toggle('example-open');
                 
-                // Mark as explored
                 if (!exploredExamples.has(index)) {
                     exploredExamples.add(index);
                     element.classList.add('explored');
@@ -1705,7 +1721,6 @@
         const accordionHeaders = document.querySelectorAll('.accordion-header');
         accordionHeaders.forEach(header => {
             header.addEventListener('click', function(e) {
-                // Don't close if clicking on example
                 if (e.target.closest('[data-example-interactive]')) {
                     return;
                 }
@@ -1713,12 +1728,10 @@
                 const item = this.parentElement;
                 const wasOpen = item.classList.contains('open');
                 
-                // Close all accordions
                 document.querySelectorAll('.accordion-item').forEach(acc => {
                     acc.classList.remove('open');
                 });
                 
-                // Open clicked one if it wasn't open
                 if (!wasOpen) {
                     item.classList.add('open');
                 }
@@ -1742,8 +1755,6 @@
         console.log('🎓 ABU EBA Digital - Interaktive Landing Page geladen!');
         console.log('📊 Tracking:', totalElements, 'interaktive Elemente');
         console.log('🔒 Start-Button wird bei 100% freigeschaltet');
-        console.log('🎬 VIDEO: Zählt als erkundet sobald es GESTARTET wird (nicht bei 95%)');
-        console.log('📈 STATISTIK-ZAHLEN: KEINE Interaktivität mehr');
     </script>
 </body>
 </html>
