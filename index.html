@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ABU EBA Digital - Dein digitales Lehrmittel</title>
+    <title>ABU EBA - Dein digitales Lehrmittel</title>
     <style>
         * {
             margin: 0;
@@ -18,230 +18,139 @@
             --ktzh-darkgray: #3C3C3B;
             --ktzh-gray: #767676;
             --white: #FFFFFF;
+            --green: #10B981;
+            --yellow: #F59E0B;
+            --purple: #8B5CF6;
+            --orange: #FF8C42;
         }
 
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             color: var(--ktzh-darkgray);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
-            color: var(--white);
-            min-height: 100vh;
+        /* Login Status Badge - Oben rechts, ÜBER Progress Badge */
+        .login-status {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9997;
+            display: none;
+            background: var(--white);
+            padding: 0.75rem 1.25rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .login-status.show {
+            display: block;
+        }
+
+        .status-content {
             display: flex;
             align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            top: -200px;
-            right: -200px;
-            animation: float 20s infinite ease-in-out;
-        }
-
-        .hero::after {
-            content: '';
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 50%;
-            bottom: -100px;
-            left: -100px;
-            animation: float 15s infinite ease-in-out reverse;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(30px, -50px) rotate(120deg); }
-            66% { transform: translate(-20px, 20px) rotate(240deg); }
-        }
-
-        .hero-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-            position: relative;
-            z-index: 1;
-            text-align: center;
-        }
-
-        .hero-content h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-        }
-
-        .hero-content .subtitle {
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-            opacity: 0.95;
-        }
-
-        .hero-content p {
-            font-size: 1.25rem;
-            opacity: 0.9;
-            margin-bottom: 2.5rem;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .btn {
-            padding: 1rem 2.5rem;
-            border-radius: 30px;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-block;
-            font-size: 1.125rem;
-            border: none;
-            background: var(--white);
-            color: var(--ktzh-blue);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Stats Section */
-        .stats {
-            background: var(--ktzh-darkgray);
-            color: var(--white);
-            padding: 3rem 2rem;
-        }
-
-        .stats-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 3rem;
-            text-align: center;
-        }
-
-        .stat-item {
-            padding: 1rem;
-        }
-
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--ktzh-cyan);
+            gap: 0.75rem;
             margin-bottom: 0.5rem;
         }
 
-        .stat-label {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-
-        /* Features Section */
-        .features {
-            padding: 6rem 2rem;
-            background: var(--white);
-        }
-
-        .features-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-header h2 {
-            font-size: 2.75rem;
-            color: var(--ktzh-blue);
-            margin-bottom: 1rem;
-        }
-
-        .section-header p {
-            font-size: 1.25rem;
-            color: var(--ktzh-gray);
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .feature-card {
-            background: var(--ktzh-lightblue);
-            padding: 2rem;
-            border-radius: 20px;
-            border-left: 4px solid var(--ktzh-blue);
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card h3 {
+        .status-symbol {
             font-size: 1.5rem;
-            color: var(--ktzh-blue);
-            margin-bottom: 1rem;
         }
 
-        .feature-card p {
+        .status-info {
+            flex-grow: 1;
+        }
+
+        .status-label {
+            font-size: 0.688rem;
             color: var(--ktzh-gray);
-            line-height: 1.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        /* CTA */
-        .cta {
-            background: linear-gradient(135deg, var(--ktzh-cyan) 0%, var(--ktzh-blue) 100%);
-            padding: 6rem 2rem;
-            text-align: center;
-            color: var(--white);
+        .status-name {
+            font-weight: 700;
+            color: var(--ktzh-blue);
+            font-size: 0.938rem;
         }
 
-        .cta h2 {
-            font-size: 2.75rem;
-            margin-bottom: 1.5rem;
+        .status-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
         }
 
-        .cta p {
-            font-size: 1.25rem;
-            margin-bottom: 2.5rem;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--ktzh-darkgray);
-            color: var(--white);
-            padding: 3rem 2rem;
+        .status-btn {
+            padding: 0.5rem 0.875rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            display: inline-block;
             text-align: center;
         }
 
-        footer p {
-            opacity: 0.8;
+        .status-btn-primary {
+            background: var(--ktzh-blue);
+            color: var(--white);
+        }
+
+        .status-btn-primary:hover {
+            background: var(--ktzh-cyan);
+            transform: translateY(-2px);
+        }
+
+        .status-btn-secondary {
+            background: transparent;
+            color: var(--ktzh-blue);
+            border: 1px solid var(--ktzh-blue);
+        }
+
+        .status-btn-secondary:hover {
+            background: var(--ktzh-lightblue);
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(0, 102, 204, 0.1);
+            z-index: 9999;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ktzh-blue), var(--ktzh-cyan));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-badge {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 9998;
+            font-weight: 600;
+            color: var(--ktzh-blue);
+            font-size: 0.875rem;
+        }
+
+        .progress-badge .percentage {
+            font-size: 1.5rem;
+            color: var(--ktzh-cyan);
         }
 
         /* Floating Characters */
@@ -353,11 +262,11 @@
         }
 
         .floating-wise .character-speech p {
-            color: #8B5CF6;
+            color: var(--purple);
         }
 
         .floating-wise .character-speech {
-            border-left: 4px solid #8B5CF6;
+            border-left: 4px solid var(--purple);
         }
 
         .floating-robot .character-speech p {
@@ -381,18 +290,655 @@
             font-weight: 500;
         }
 
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
+            color: var(--white);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -200px;
+            right: -200px;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            bottom: -100px;
+            left: -100px;
+            animation: float 15s infinite ease-in-out reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -50px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .hero-text .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .hero-text p {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.125rem;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--white);
+            color: var(--ktzh-blue);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary:hover:not(.disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: var(--ktzh-gray);
+            color: var(--white);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: var(--white);
+            color: var(--ktzh-blue);
+        }
+
+        .hero-visual {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        /* Clickable Hero Cards */
+        .hero-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .hero-card.explored {
+            border: 2px solid var(--white);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-card:hover .hero-card-icon {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .hero-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-card-preview {
+            font-size: 0.938rem;
+            opacity: 0.9;
+        }
+
+        .hero-card-detail {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            font-size: 0.875rem;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .hero-card.active .hero-card-detail {
+            opacity: 1;
+            max-height: 500px;
+        }
+
+        .example-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            border-left: 3px solid var(--white);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .example-box:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateX(5px);
+            border-left-width: 5px;
+        }
+
+        .example-box.explored {
+            background: rgba(255, 255, 255, 0.4);
+            border-left: 5px solid #10B981;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .example-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .example-content {
+            font-size: 0.875rem;
+            font-style: italic;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+
+        .hero-card.explored .checkmark,
+        .accordion-item.explored .checkmark {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Stats Section - KEINE Interaktivität */
+        .stats {
+            background: var(--ktzh-darkgray);
+            color: var(--white);
+            padding: 3rem 2rem;
+        }
+
+        .stats-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 1rem;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--ktzh-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Video Section */
+        .video-section {
+            padding: 6rem 2rem;
+            background: var(--white);
+        }
+
+        .video-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .video-container {
+            background: var(--ktzh-lightblue);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .video-container.explored {
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+            border: 2px solid var(--ktzh-blue);
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            background: #000;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-progress {
+            margin-top: 1.5rem;
+        }
+
+        .video-progress-text {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        #videoStatus {
+            font-weight: 600;
+            color: var(--ktzh-blue);
+            font-size: 0.938rem;
+        }
+
+        .video-progress-bar {
+            background: rgba(0, 102, 204, 0.1);
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .video-progress-fill {
+            background: linear-gradient(90deg, var(--ktzh-blue), var(--ktzh-cyan));
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Accordion Sections */
+        .accordion-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, var(--white) 0%, var(--ktzh-lightblue) 100%);
+        }
+
+        .accordion-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.75rem;
+            color: var(--ktzh-blue);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.25rem;
+            color: var(--ktzh-gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .accordion-item {
+            background: var(--white);
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .accordion-item.explored {
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+        }
+
+        .accordion-header {
+            padding: 2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-header:hover {
+            background: var(--ktzh-lightblue);
+        }
+
+        .accordion-icon {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+
+        .accordion-title {
+            flex-grow: 1;
+        }
+
+        .accordion-title h3 {
+            font-size: 1.5rem;
+            color: var(--ktzh-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .accordion-title .subtitle {
+            color: var(--ktzh-gray);
+            font-size: 0.938rem;
+        }
+
+        .accordion-toggle {
+            font-size: 2rem;
+            color: var(--ktzh-cyan);
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .accordion-item.open .accordion-toggle {
+            transform: rotate(180deg);
+        }
+
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .accordion-item.open .accordion-body {
+            max-height: 2000px;
+        }
+
+        .accordion-body-content {
+            padding: 0 2rem 2rem 2rem;
+            color: var(--ktzh-gray);
+            line-height: 1.8;
+        }
+
+        .accordion-body-content strong {
+            color: var(--ktzh-blue);
+        }
+
+        /* Clickable Example in Accordion */
+        .accordion-example {
+            background: var(--ktzh-lightblue);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+            border-left: 4px solid var(--ktzh-cyan);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .accordion-example:hover {
+            background: #D0E8F2;
+            border-left-width: 6px;
+            transform: translateX(5px);
+        }
+
+        .accordion-example.explored {
+            background: #C5E6D5;
+            border-left: 6px solid var(--green);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .accordion-example-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .accordion-example-title {
+            font-weight: 700;
+            color: var(--ktzh-blue);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .accordion-example.explored .accordion-example-title {
+            color: var(--green);
+        }
+
+        .example-toggle {
+            background: rgba(0, 102, 204, 0.1);
+            color: var(--ktzh-blue);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-example:hover .example-toggle {
+            background: var(--ktzh-blue);
+            color: var(--white);
+        }
+
+        .accordion-example.explored .example-toggle {
+            background: var(--green);
+            color: var(--white);
+        }
+
+        .accordion-example-content {
+            color: var(--ktzh-darkgray);
+            font-size: 0.938rem;
+            line-height: 1.6;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .accordion-example.example-open .accordion-example-content {
+            max-height: 1000px;
+            opacity: 1;
+            margin-top: 0.75rem;
+        }
+
+        .accordion-example.example-open .example-toggle {
+            background: var(--ktzh-cyan);
+            color: var(--white);
+        }
+
+        .accordion-example.explored.example-open .example-toggle {
+            background: var(--green);
+            color: var(--white);
+        }
+
+        .example-checkmark {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            opacity: 0;
+            transform: scale(0) rotate(-180deg);
+            transition: all 0.4s ease;
+        }
+
+        .accordion-example.explored .example-checkmark {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(135deg, var(--yellow) 0%, var(--orange) 100%);
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '🚀';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-size: 2.75rem;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-hint {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            color: var(--white);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--ktzh-darkgray);
+            color: var(--white);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        footer p {
+            opacity: 0.8;
+        }
+
         /* Responsive */
-        @media (max-width: 768px) {
-            .hero-content h1 {
+        @media (max-width: 968px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .hero-text h1 {
                 font-size: 2.5rem;
+            }
+
+            .hero-visual {
+                grid-template-columns: 1fr;
             }
 
             .section-header h2 {
                 font-size: 2rem;
             }
 
-            .features-grid {
-                grid-template-columns: 1fr;
+            .cta h2 {
+                font-size: 2rem;
+            }
+
+            .progress-badge {
+                top: 10px;
+                right: 10px;
+                padding: 0.5rem 1rem;
+            }
+
+            .login-status {
+                top: 70px;
+                right: 10px;
+                padding: 0.5rem 1rem;
             }
 
             .floating-character {
@@ -416,9 +962,57 @@
                 max-width: 280px;
             }
         }
+
+        @media (max-width: 768px) {
+            .hero-text h1 {
+                font-size: 2rem;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .stats-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- Progress Badge -->
+    <div class="progress-badge">
+        <div class="percentage" id="progressPercentage">0%</div>
+        <div style="font-size: 0.75rem; margin-top: 0.25rem;">erkundet</div>
+    </div>
+
+    <!-- Login Status Badge -->
+    <div class="login-status" id="loginStatus">
+        <div class="status-content">
+            <span class="status-symbol" id="statusSymbol">🚀</span>
+            <div class="status-info">
+                <div class="status-label">Eingeloggt als</div>
+                <div class="status-name" id="statusName">USER</div>
+            </div>
+        </div>
+        <div class="status-actions">
+            <a href="index.html" class="status-btn status-btn-secondary">🏠 Startseite</a>
+            <a href="startzweig.html" class="status-btn status-btn-primary">📚 Lernraum</a>
+            <a href="portfolio.html" class="status-btn status-btn-primary">💎 Portfolio</a>
+            <button class="status-btn status-btn-secondary" id="logoutBtn">🚪 Abmelden</button>
+        </div>
+    </div>
+
     <!-- Floating Characters -->
     <div class="floating-character floating-wise" id="floatingWise">
         <div class="character-speech" id="wiseSpeech">
@@ -435,30 +1029,97 @@
     </div>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" data-section>
         <div class="hero-content">
-            <h1>🎓 ABU EBA Digital</h1>
-            <div class="subtitle">Verstehe Kompetenzen. Entwickle dich.</div>
-            <p>
-                Nicht nur lernen – <strong>verstehen</strong>. Nicht nur wissen – <strong>können</strong>. 
-                Entdecke, wie Kompetenzen zusammenwirken und warum das für dein Leben wichtig ist.
-            </p>
-            <a href="code-erstellen-FINAL.html" class="btn" id="startBtn">
-                🎯 Code erstellen & loslegen
-            </a>
+            <div class="hero-text">
+                <h1>🎓 ABU EBA Digital</h1>
+                <div class="subtitle">Verstehe Kompetenzen. Entwickle dich.</div>
+                <p>
+                    Nicht nur lernen – <strong>verstehen</strong>. Nicht nur wissen – <strong>können</strong>. 
+                    Entdecke, wie Kompetenzen zusammenwirken und warum das für dein Leben wichtig ist.
+                </p>
+                <div class="hero-actions">
+                    <a href="#why" class="btn btn-secondary">
+                        🤔 Warum?
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="hero-card" data-interactive>
+                    <span class="checkmark">✓</span>
+                    <div class="hero-card-icon">🧊</div>
+                    <h3>Kompetenz verstehen</h3>
+                    <p class="hero-card-preview">Die Eisberg-Metapher...</p>
+                    <div class="hero-card-detail">
+                        <strong>Performanz</strong> (was du tust) ist nur die Spitze. Darunter liegen <strong>Kompetenzen</strong>: Wissen, Können, Wollen. Wir machen das Unsichtbare sichtbar!
+                        <div class="example-box">
+                            <div class="example-title">💼 Beispiel aus deinem Alltag:</div>
+                            <div class="example-content">
+                                Du kannst im Betrieb professionell telefonieren (Performanz). Dahinter steckt: Fachwissen über dein Produkt, Höflichkeit, Selbstsicherheit, und der Wille, Kunden gut zu betreuen. Das sind deine Kompetenzen!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-card" data-interactive>
+                    <span class="checkmark">✓</span>
+                    <div class="hero-card-icon">🔄</div>
+                    <h3>Zirkularität</h3>
+                    <p class="hero-card-preview">Kompetenzen kehren wieder...</p>
+                    <div class="hero-card-detail">
+                        Kompetenzen begegnen dir <strong>immer wieder</strong> – in verschiedenen Themen, neuen Kontexten. Du lernst nicht isoliert, sondern <strong>vernetzt</strong>.
+                        <div class="example-box">
+                            <div class="example-title">🎯 Beispiel aus deinem Alltag:</div>
+                            <div class="example-content">
+                                "Kooperation" lernst du beim Lehrvertrag (mit Berufsbildner zusammenarbeiten), bei Budget (mit Familie über Geld sprechen) und bei Nachhaltigkeit (gemeinsam Lösungen finden). Jedes Mal wird's komplexer!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-card" data-interactive>
+                    <span class="checkmark">✓</span>
+                    <div class="hero-card-icon">🎯</div>
+                    <h3>3 Dimensionen</h3>
+                    <p class="hero-card-preview">Gesellschaft + Sprache + Schlüssel...</p>
+                    <div class="hero-card-detail">
+                        Jedes Thema verbindet <strong>Gesellschaft</strong> (Wissen), <strong>Sprache</strong> (Kommunikation, inkl. digitale Kompetenzen) und <strong>Schlüsselkompetenzen</strong> (überfachliche Fähigkeiten).
+                        <div class="example-box">
+                            <div class="example-title">📱 Beispiel aus deinem Alltag:</div>
+                            <div class="example-content">
+                                Beim Thema "Budget": Du lernst über Steuern (Gesellschaft), schreibst ein Budget mit Excel (Sprache/digitale Kompetenz) und planst voraus (Schlüsselkompetenz Selbstmanagement). Alles zusammen macht dich kompetent!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-card" data-interactive>
+                    <span class="checkmark">✓</span>
+                    <div class="hero-card-icon">💡</div>
+                    <h3>Sinnhaftigkeit</h3>
+                    <p class="hero-card-preview">Erkenne den Mehrwert...</p>
+                    <div class="hero-card-detail">
+                        <strong>Warum</strong> lernst du das? Weil es für dein Leben, deinen Beruf, deine Zukunft relevant ist. Du erkennst den <strong>Bezug</strong> zu deinem Alltag.
+                        <div class="example-box">
+                            <div class="example-title">💰 Beispiel aus deinem Alltag:</div>
+                            <div class="example-content">
+                                Du lernst über Schulden nicht "für die Prüfung", sondern weil 30% der jungen Erwachsenen in der Schweiz verschuldet sind. Du willst nicht dazugehören – also lernst du Budget-Management. Das ist Sinn!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Stats -->
-    <section class="stats">
+    <!-- Stats - OHNE Interaktivität -->
+    <section class="stats" data-section>
         <div class="stats-content">
-            <div class="stat-item">
-                <div class="stat-number">8</div>
-                <div class="stat-label">Themen</div>
-            </div>
             <div class="stat-item">
                 <div class="stat-number">16</div>
                 <div class="stat-label">Lerninhalte</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">8</div>
+                <div class="stat-label">Umsetzungsbeispiele</div>
             </div>
             <div class="stat-item">
                 <div class="stat-number">12</div>
@@ -471,95 +1132,255 @@
         </div>
     </section>
 
-    <!-- Features -->
-    <section class="features">
-        <div class="features-content">
+    <!-- Video Section -->
+    <section class="video-section" id="video" data-section>
+        <div class="video-content">
             <div class="section-header">
-                <h2>🎯 Warum ABU EBA Digital?</h2>
-                <p>Verstehe das Konzept hinter deinem Lernen</p>
+                <h2>📺 Verstehe das Konzept</h2>
+                <p>Schaue dir dieses Video an, um das Lehrmittel besser zu verstehen</p>
             </div>
 
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🧊</div>
-                    <h3>Eisberg-Metapher</h3>
-                    <p>
-                        Performanz (was du tust) ist nur die Spitze. Darunter liegen Kompetenzen: 
-                        Wissen, Können, Wollen. Wir machen das Unsichtbare sichtbar!
-                    </p>
+            <div class="video-container" data-interactive>
+                <span class="checkmark">✓</span>
+                <div class="video-wrapper" id="videoWrapper">
+                    <iframe 
+                        id="youtubeVideo"
+                        width="100%" 
+                        height="100%" 
+                        src="https://www.youtube.com/embed/v-yyGnWRS1c?enablejsapi=1&rel=0&modestbranding=1" 
+                        title="ABU EBA Lehrmittel" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen>
+                    </iframe>
                 </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🔄</div>
-                    <h3>Zirkularität</h3>
-                    <p>
-                        Kompetenzen begegnen dir immer wieder – in verschiedenen Themen, 
-                        neuen Kontexten. Du lernst nicht isoliert, sondern vernetzt.
-                    </p>
+                <div class="video-progress" id="videoProgress">
+                    <div class="video-progress-text">
+                        <span id="videoStatus">▶️ Video starten</span>
+                    </div>
+                    <div class="video-progress-bar">
+                        <div class="video-progress-fill" id="videoProgressFill"></div>
+                    </div>
                 </div>
+            </div>
+        </div>
+    </section>
 
-                <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
-                    <h3>3 Dimensionen</h3>
-                    <p>
-                        Jedes Thema verbindet Gesellschaft (Wissen), Sprache (Kommunikation, 
-                        inkl. digitale Kompetenzen) und Schlüsselkompetenzen (überfachliche Fähigkeiten).
-                    </p>
+    <!-- Accordion Section: Why -->
+    <section class="accordion-section" id="why" data-section>
+        <div class="accordion-content">
+            <div class="section-header">
+                <h2>🤔 Warum dieses Lehrmittel?</h2>
+                <p>Klicke auf die Karten, um mehr zu erfahren</p>
+            </div>
+
+            <div class="accordion-item" data-interactive>
+                <span class="checkmark">✓</span>
+                <div class="accordion-header">
+                    <div class="accordion-icon">🧊</div>
+                    <div class="accordion-title">
+                        <h3>Die Eisberg-Metapher</h3>
+                        <div class="subtitle">Was du siehst vs. was dahinter steckt</div>
+                    </div>
+                    <div class="accordion-toggle">▼</div>
                 </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">💡</div>
-                    <h3>Sinnhaftigkeit</h3>
-                    <p>
-                        <strong>Warum</strong> lernst du das? Weil es für dein Leben, 
-                        deinen Beruf, deine Zukunft relevant ist. Du erkennst den Bezug zu deinem Alltag.
-                    </p>
+                <div class="accordion-body">
+                    <div class="accordion-body-content">
+                        <p><strong>Performanz</strong> (was du tust) ist nur die Spitze des Eisbergs. Darunter liegen <strong>Kompetenzen</strong>: Wissen, Können, Wollen. Wir machen das Unsichtbare sichtbar – du verstehst, was dich befähigt, bestimmte Dinge zu tun.</p>
+                        <p style="margin-top: 1rem;">Mit der Eisberg-Metapher erkennst du die <strong>Tiefe</strong> deines Lernens: Es geht nicht nur darum, etwas zu tun, sondern zu verstehen, warum und wie du es kannst.</p>
+                        
+                        <div class="accordion-example" data-example-interactive>
+                            <span class="example-checkmark">✓</span>
+                            <div class="accordion-example-header">
+                                <div class="accordion-example-title">🎮 Konkretes Beispiel: Gaming & Streaming</div>
+                                <div class="example-toggle">Klick mich!</div>
+                            </div>
+                            <div class="accordion-example-content">
+                                <strong>Sichtbar (Performanz):</strong> Du streamst auf Twitch und hast 500 Follower.<br><br>
+                                <strong>Unsichtbar (Kompetenzen):</strong><br>
+                                • <strong>Wissen:</strong> Du kennst die Twitch-Algorithmen, weißt wie man moderiert<br>
+                                • <strong>Können:</strong> Du bedienst OBS, sprichst frei vor der Kamera, reagierst auf Chat<br>
+                                • <strong>Wollen:</strong> Du bist motiviert, regelmäßig zu streamen, nimmst Kritik an<br><br>
+                                👉 Das Lehrmittel zeigt dir: Diese Kompetenzen brauchst du auch im Beruf!
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <div class="feature-card">
-                    <div class="feature-icon">📚</div>
-                    <h3>Portfolio-System</h3>
-                    <p>
-                        Dokumentiere deinen Lernfortschritt, schreibe Reflexionen und 
-                        teile dein Portfolio mit Lehrpersonen und Berufsbildnern.
-                    </p>
+            <div class="accordion-item" data-interactive>
+                <span class="checkmark">✓</span>
+                <div class="accordion-header">
+                    <div class="accordion-icon">🔄</div>
+                    <div class="accordion-title">
+                        <h3>Zirkularität erkennen</h3>
+                        <div class="subtitle">Kompetenzen kehren in neuen Kontexten wieder</div>
+                    </div>
+                    <div class="accordion-toggle">▼</div>
                 </div>
+                <div class="accordion-body">
+                    <div class="accordion-body-content">
+                        <p>Kompetenzen begegnen dir <strong>immer wieder</strong> – in verschiedenen Themen, neuen Kontexten. Du lernst nicht isoliert, sondern <strong>vernetzt</strong>. Jedes Thema baut auf vorherigen auf und vertieft dein Verständnis.</p>
+                        <p style="margin-top: 1rem;">Das <strong>Spiralcurriculum</strong> bedeutet: Du durchläufst Kompetenzen mehrfach – jedes Mal tiefer, komplexer, selbstständiger.</p>
+                        
+                        <div class="accordion-example" data-example-interactive>
+                            <span class="example-checkmark">✓</span>
+                            <div class="accordion-example-header">
+                                <div class="accordion-example-title">📱 Konkretes Beispiel: Social Media & Kommunikation</div>
+                                <div class="example-toggle">Klick mich!</div>
+                            </div>
+                            <div class="accordion-example-content">
+                                Die Kompetenz <strong>"Digitale Kommunikation"</strong> kommt immer wieder:<br><br>
+                                <strong>Thema 1 (Berufseinstieg):</strong> WhatsApp-Nachrichten an Berufsbildner – was geht, was nicht?<br><br>
+                                <strong>Thema 2 (Budget):</strong> Banking-App bedienen, Zahlungen tätigen<br><br>
+                                <strong>Thema 6 (Digitale Welt):</strong> Fake News auf Instagram erkennen, Datenschutz bei TikTok<br><br>
+                                👉 Jedes Mal wird's komplexer – aber du baust auf dem vorherigen Wissen auf!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                <div class="feature-card">
-                    <div class="feature-icon">🎮</div>
-                    <h3>Gamification</h3>
-                    <p>
-                        Sammle Punkte, schalte Achievements frei und verfolge 
-                        deinen Fortschritt. Lernen darf Spaß machen!
-                    </p>
+            <div class="accordion-item" data-interactive>
+                <span class="checkmark">✓</span>
+                <div class="accordion-header">
+                    <div class="accordion-icon">🎯</div>
+                    <div class="accordion-title">
+                        <h3>3 Dimensionen verstehen</h3>
+                        <div class="subtitle">Gesellschaft • Sprache • Schlüsselkompetenzen</div>
+                    </div>
+                    <div class="accordion-toggle">▼</div>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-body-content">
+                        <p>Jedes Thema verbindet drei wichtige Bereiche:</p>
+                        <p style="margin-top: 0.5rem;"><strong>📚 Gesellschaft:</strong> Wissen über gesellschaftliche Zusammenhänge</p>
+                        <p style="margin-top: 0.5rem;"><strong>💬 Sprache:</strong> Kommunikation in verschiedenen Modi (inkl. digitale Kompetenzen integriert)</p>
+                        <p style="margin-top: 0.5rem;"><strong>🔑 Schlüsselkompetenzen:</strong> Überfachliche Fähigkeiten wie Selbstmanagement, Kooperation</p>
+                        <p style="margin-top: 1rem;">Du siehst, wie alles zusammenhängt und sich gegenseitig verstärkt!</p>
+                        
+                        <div class="accordion-example" data-example-interactive>
+                            <span class="example-checkmark">✓</span>
+                            <div class="accordion-example-header">
+                                <div class="accordion-example-title">🎧 Konkretes Beispiel: Dein erster Lohn</div>
+                                <div class="example-toggle">Klick mich!</div>
+                            </div>
+                            <div class="accordion-example-content">
+                                <strong>📚 Gesellschaft (Wissen):</strong><br>
+                                • Wie funktioniert das Steuersystem in der Schweiz?<br>
+                                • Was sind AHV, IV, ALV? Warum wird das abgezogen?<br><br>
+                                
+                                <strong>💬 Sprache (Kommunikation + Digital):</strong><br>
+                                • Lohnabrechnung lesen und verstehen<br>
+                                • Mit Chef über Lohnerhöhung sprechen<br>
+                                • Budget-Tabelle in Excel erstellen (digitale Kompetenz!)<br>
+                                • Banking-App nutzen für Überweisungen<br><br>
+                                
+                                <strong>🔑 Schlüsselkompetenzen:</strong><br>
+                                • Selbstmanagement: Geld einteilen, nicht alles sofort ausgeben<br>
+                                • Kritisches Denken: Brauche ich das neue iPhone wirklich?<br><br>
+                                
+                                👉 Alle 3 Dimensionen zusammen machen dich finanziell kompetent!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-interactive>
+                <span class="checkmark">✓</span>
+                <div class="accordion-header">
+                    <div class="accordion-icon">💡</div>
+                    <div class="accordion-title">
+                        <h3>Sinnhaftigkeit erleben</h3>
+                        <div class="subtitle">Warum lerne ich das eigentlich?</div>
+                    </div>
+                    <div class="accordion-toggle">▼</div>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-body-content">
+                        <p><strong>Warum</strong> lernst du das? Weil es für dein Leben, deinen Beruf, deine Zukunft relevant ist. Du erkennst den <strong>Bezug</strong> zu deinem Alltag und verstehst den Mehrwert jedes Lerninhalts.</p>
+                        <p style="margin-top: 1rem;">Das Lehrmittel zeigt dir <strong>transparent</strong>, welche Kompetenzen du gerade aufbaust. Du siehst den <strong>roten Faden</strong> und verstehst die Struktur hinter dem Lernen.</p>
+                        
+                        <div class="accordion-example" data-example-interactive>
+                            <span class="example-checkmark">✓</span>
+                            <div class="accordion-example-header">
+                                <div class="accordion-example-title">🏠 Konkretes Beispiel: Warum lerne ich über Mietverträge?</div>
+                                <div class="example-toggle">Klick mich!</div>
+                            </div>
+                            <div class="accordion-example-content">
+                                <strong>Nicht sinnvoll:</strong> "Lern das halt, kommt an der Prüfung."<br><br>
+                                
+                                <strong>Sinnvoll (so machen wir's):</strong><br>
+                                📊 <strong>Statistik:</strong> Mit 20 ziehen 60% der jungen Erwachsenen in der Schweiz aus. Das bist bald DU!<br><br>
+                                
+                                💰 <strong>Reale Situation:</strong> Deine erste eigene Wohnung kostet in Zürich ca. CHF 1200.-/Monat. Bei CHF 1000.- Lehrlingslohn ein Problem!<br><br>
+                                
+                                ⚠️ <strong>Häufiger Fehler:</strong> Kündigungsfrist verpasst → Du zahlst 3 Monate doppelt Miete (CHF 3'600.-)!<br><br>
+                                
+                                ✅ <strong>Dein Nutzen:</strong> Du weißt jetzt, worauf du achten musst. Du sparst Geld und Stress.<br><br>
+                                
+                                👉 DAS ist Sinnhaftigkeit: Nicht "für die Schule" lernen, sondern fürs Leben!
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- CTA -->
-    <section class="cta">
+    <section class="cta" data-section>
         <div class="cta-content">
             <h2>Bereit, Kompetenzen zu verstehen?</h2>
             <p>
                 Tauche ein in ein Lehrmittel, das dir nicht nur sagt <strong>was</strong> du lernen sollst, 
-                sondern auch <strong>warum</strong> und <strong>wie</strong> alles zusammenhängt.
+                sondern auch <strong>warum</strong> und <strong>wie</strong> alles zusammenhängt. 
+                Starte jetzt deine Lernreise!
             </p>
-            <a href="code-erstellen-FINAL.html" class="btn">
-                🚀 Jetzt starten
+            <div class="cta-hint" id="ctaHint">
+                🔒 Erkunde erst alle Bereiche oben, dann wird der Button freigeschaltet!
+            </div>
+            <a href="code-login.html" class="btn btn-primary disabled" id="startBtn">
+                🚀 Jetzt starten (0% erkundet)
             </a>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer>
+    <footer data-section>
         <p>ABU EBA Digital | Digital Learning Hub Zürich | © 2024</p>
     </footer>
 
     <script>
-        // ========================================
-        // FLOATING CHARACTERS INTERAKTIVITÄT
-        // ========================================
+        // Login Status
+        const userCode = localStorage.getItem('abuEbaCode');
+        const userName = localStorage.getItem('abuEbaName');
+        
+        if (userCode && userName) {
+            const loginStatus = document.getElementById('loginStatus');
+            const statusSymbol = document.getElementById('statusSymbol');
+            const statusName = document.getElementById('statusName');
+            
+            const codeParts = userCode.split('-');
+            const symbol = codeParts[2] || '🚀';
+            
+            statusSymbol.textContent = symbol;
+            statusName.textContent = userName;
+            loginStatus.classList.add('show');
+        }
+        
+        // Logout
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function() {
+                if (confirm('Möchtest du dich wirklich abmelden?')) {
+                    localStorage.removeItem('abuEbaCode');
+                    localStorage.removeItem('abuEbaName');
+                    location.reload();
+                }
+            });
+        }
 
         // Wise Woman Quotes
         const wiseQuotes = [
@@ -588,7 +1409,7 @@
             },
             {
                 term: "🧊 Performanz",
-                text: "Performanz ist das, was du tust und was andere sehen können. Es ist die 'Spitze des Eisbergs'. Darunter liegen deine Kompetenzen, die dich befähigen."
+                text: "Performanz ist das, was du tust und was andere sehen können. Es ist die \"Spitze des Eisbergs\". Darunter liegen deine Kompetenzen, die dich befähigen."
             },
             {
                 term: "🔄 Zirkularität",
@@ -649,7 +1470,7 @@
             currentWiseQuoteIndex = (currentWiseQuoteIndex + 1) % wiseQuotes.length;
             wiseTimeout = setTimeout(() => {
                 wiseSpeech.classList.remove('show');
-            }, 8000);
+            }, 20000);
         });
 
         // Robot Click
@@ -665,53 +1486,246 @@
             currentRobotExplanationIndex = (currentRobotExplanationIndex + 1) % robotExplanations.length;
             robotTimeout = setTimeout(() => {
                 robotSpeech.classList.remove('show');
-            }, 12000);
+            }, 20000);
         });
 
         // Auto-show wise woman on first visit
         setTimeout(() => {
-            if (!localStorage.getItem('abuEbaWelcomeShown')) {
-                wiseQuote.textContent = "👋 Willkommen bei ABU EBA Digital! Klick mich für mehr Weisheiten!";
+            if (!localStorage.getItem('charactersGreeted')) {
+                wiseQuote.textContent = "👋 Willkommen! Erkunde alle Bereiche um den Start-Button freizuschalten!";
                 wiseSpeech.classList.add('show');
-                localStorage.setItem('abuEbaWelcomeShown', 'true');
+                localStorage.setItem('charactersGreeted', 'true');
                 setTimeout(() => {
                     wiseSpeech.classList.remove('show');
-                }, 6000);
+                }, 8000);
             }
         }, 2000);
 
-        // ========================================
-        // AUTO-REDIRECT LOGIK
-        // ========================================
-        // Prüft Login-Status und leitet entsprechend weiter
-        (function() {
-            const userCode = localStorage.getItem('abuEbaCode');
-            const userName = localStorage.getItem('abuEbaName');
+        // Progress Tracking
+        const interactiveElements = document.querySelectorAll('[data-interactive]');
+        const exampleElements = document.querySelectorAll('[data-example-interactive]');
+        const totalElements = interactiveElements.length + exampleElements.length;
+        let exploredElements = new Set();
+        let exploredExamples = new Set();
+
+        // YouTube Video Tracking - GEÄNDERT: Zählt als erkundet sobald Video STARTET
+        let player;
+        let videoWatched = false;
+        let videoCompleted = false;
+        let videoCheckInterval;
+        const videoContainerIndex = Array.from(interactiveElements).findIndex(el => 
+            el.classList.contains('video-container')
+        );
+
+        // Load YouTube IFrame API
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        // YouTube API Ready Callback
+        window.onYouTubeIframeAPIReady = function() {
+            player = new YT.Player('youtubeVideo', {
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        };
+
+        function onPlayerReady(event) {
+            console.log('📺 YouTube Player ready');
+        }
+
+        function onPlayerStateChange(event) {
+            const videoStatus = document.getElementById('videoStatus');
+            const videoProgressFill = document.getElementById('videoProgressFill');
             
-            if (userCode && userName) {
-                console.log('✅ User bereits eingeloggt:', userName);
+            // Playing - GEÄNDERT: Video zählt als erkundet sobald es STARTET
+            if (event.data == YT.PlayerState.PLAYING) {
+                videoStatus.textContent = '▶️ Video läuft...';
+                videoWatched = true;
                 
-                // Prüfe ob Kompetenz-Einführung bereits gesehen wurde
-                const hasSeenCompetencyIntro = localStorage.getItem(`abuEba_${userCode}_seenCompetencyIntro`);
-                
-                if (hasSeenCompetencyIntro === 'true') {
-                    console.log('✅ Kompetenz-Einführung bereits gesehen → Weiter zu Themenseiten');
-                    // User hat Einführung gesehen → Direkt zu Themenseiten
-                    window.location.href = 'startzweig.html';
-                } else {
-                    console.log('⏳ Kompetenz-Einführung noch nicht gesehen → Weiter zur Einführung');
-                    // User muss erst Einführung sehen
-                    window.location.href = 'kompetenzen-einfuehrung.html';
+                // Mark as explored beim ersten Abspielen (NICHT erst bei 95%!)
+                if (videoContainerIndex !== -1 && !exploredElements.has(videoContainerIndex)) {
+                    exploredElements.add(videoContainerIndex);
+                    document.querySelector('.video-container').classList.add('explored');
+                    videoStatus.textContent = '✅ Video gestartet!';
+                    updateProgress();
+                    console.log('✅ Video als erkundet markiert (beim Start)');
                 }
                 
-                // Verhindere, dass der Rest der Seite geladen wird
-                return;
+                // Start tracking progress (nur visuell für Fortschrittsbalken)
+                if (!videoCheckInterval) {
+                    videoCheckInterval = setInterval(() => {
+                        if (player && player.getCurrentTime && player.getDuration) {
+                            const currentTime = player.getCurrentTime();
+                            const duration = player.getDuration();
+                            const progress = (currentTime / duration) * 100;
+                            
+                            videoProgressFill.style.width = progress + '%';
+                            
+                            // Bei 95% Status aktualisieren (aber nicht mehr für Progress Tracking!)
+                            if (progress >= 95 && !videoCompleted) {
+                                videoCompleted = true;
+                                videoStatus.textContent = '✅ Video komplett angeschaut!';
+                                clearInterval(videoCheckInterval);
+                                videoCheckInterval = null;
+                            }
+                        }
+                    }, 1000);
+                }
+            }
+            // Paused
+            else if (event.data == YT.PlayerState.PAUSED) {
+                videoStatus.textContent = '⏸️ Video pausiert';
+            }
+            // Ended
+            else if (event.data == YT.PlayerState.ENDED) {
+                videoStatus.textContent = '✅ Video komplett angeschaut!';
+                videoCompleted = true;
+                
+                if (videoCheckInterval) {
+                    clearInterval(videoCheckInterval);
+                    videoCheckInterval = null;
+                }
+            }
+        }
+
+        function updateProgress() {
+            const totalExplored = exploredElements.size + exploredExamples.size;
+            const percentage = Math.round((totalExplored / totalElements) * 100);
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressPercentage').textContent = percentage + '%';
+            
+            // Update Start Button
+            const startBtn = document.getElementById('startBtn');
+            const ctaHint = document.getElementById('ctaHint');
+            
+            if (percentage === 100) {
+                startBtn.classList.remove('disabled');
+                startBtn.textContent = '🚀 Jetzt starten!';
+                startBtn.style.pointerEvents = 'auto';
+                ctaHint.textContent = '✅ Perfekt! Du hast alles erkundet. Jetzt kannst du starten!';
+                ctaHint.style.background = 'rgba(16, 185, 129, 0.3)';
+                
+                // Both characters congratulate
+                wiseQuote.textContent = "🎉 Wunderbar! Du hast 100% erreicht! Die Weisheit ist mit dir!";
+                wiseSpeech.classList.add('show');
+                
+                setTimeout(() => {
+                    robotExplanation.innerHTML = '<span class="term">🎊 Geschafft!</span><span class="explanation">Du hast alle Bereiche erkundet und verstehst nun das Konzept. Bereit für den Start!</span>';
+                    robotSpeech.classList.add('show');
+                }, 2000);
+                
+                setTimeout(() => {
+                    wiseSpeech.classList.remove('show');
+                    robotSpeech.classList.remove('show');
+                }, 10000);
+            } else {
+                startBtn.classList.add('disabled');
+                startBtn.textContent = `🚀 Jetzt starten (${percentage}% erkundet)`;
+                startBtn.style.pointerEvents = 'none';
             }
             
-            console.log('👤 Kein User eingeloggt → Zeige Landing Page');
-        })();
+            // Save to localStorage
+            localStorage.setItem('abuEbaIndexProgress', JSON.stringify({
+                explored: Array.from(exploredElements),
+                exploredExamples: Array.from(exploredExamples),
+                percentage: percentage
+            }));
+        }
 
-        // Smooth scroll für Anker-Links
+        // Load saved progress
+        const savedProgress = localStorage.getItem('abuEbaIndexProgress');
+        if (savedProgress) {
+            try {
+                const data = JSON.parse(savedProgress);
+                exploredElements = new Set(data.explored || []);
+                exploredExamples = new Set(data.exploredExamples || []);
+                updateProgress();
+                
+                // Mark explored elements
+                exploredElements.forEach(index => {
+                    if (interactiveElements[index]) {
+                        interactiveElements[index].classList.add('explored');
+                    }
+                });
+
+                // Mark explored examples
+                exploredExamples.forEach(index => {
+                    if (exampleElements[index]) {
+                        exampleElements[index].classList.add('explored');
+                    }
+                });
+            } catch (e) {
+                console.log('Could not load progress');
+            }
+        }
+
+        // Track clicks on interactive elements
+        interactiveElements.forEach((element, index) => {
+            element.addEventListener('click', function(e) {
+                // Don't mark as explored if clicking on example inside
+                if (e.target.closest('[data-example-interactive]')) {
+                    return;
+                }
+                
+                if (!exploredElements.has(index)) {
+                    exploredElements.add(index);
+                    element.classList.add('explored');
+                    updateProgress();
+                }
+                
+                // Toggle active state for hero cards
+                if (element.classList.contains('hero-card')) {
+                    element.classList.toggle('active');
+                }
+            });
+        });
+
+        // Track clicks on example boxes
+        exampleElements.forEach((element, index) => {
+            element.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                // Toggle example open state
+                element.classList.toggle('example-open');
+                
+                // Mark as explored
+                if (!exploredExamples.has(index)) {
+                    exploredExamples.add(index);
+                    element.classList.add('explored');
+                    updateProgress();
+                }
+            });
+        });
+
+        // Accordion functionality
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', function(e) {
+                // Don't close if clicking on example
+                if (e.target.closest('[data-example-interactive]')) {
+                    return;
+                }
+                
+                const item = this.parentElement;
+                const wasOpen = item.classList.contains('open');
+                
+                // Close all accordions
+                document.querySelectorAll('.accordion-item').forEach(acc => {
+                    acc.classList.remove('open');
+                });
+                
+                // Open clicked one if it wasn't open
+                if (!wasOpen) {
+                    item.classList.add('open');
+                }
+            });
+        });
+
+        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -721,6 +1735,15 @@
                 }
             });
         });
+
+        // Initial progress update
+        updateProgress();
+
+        console.log('🎓 ABU EBA Digital - Interaktive Landing Page geladen!');
+        console.log('📊 Tracking:', totalElements, 'interaktive Elemente');
+        console.log('🔒 Start-Button wird bei 100% freigeschaltet');
+        console.log('🎬 VIDEO: Zählt als erkundet sobald es GESTARTET wird (nicht bei 95%)');
+        console.log('📈 STATISTIK-ZAHLEN: KEINE Interaktivität mehr');
     </script>
 </body>
 </html>
