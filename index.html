@@ -244,6 +244,143 @@
             opacity: 0.8;
         }
 
+        /* Floating Characters */
+        .floating-character {
+            position: fixed;
+            bottom: 30px;
+            z-index: 9997;
+            cursor: pointer;
+        }
+
+        .floating-wise {
+            left: 30px;
+            animation: float-wise 3s ease-in-out infinite;
+        }
+
+        .floating-robot {
+            right: 30px;
+            animation: float-robot 3.5s ease-in-out infinite;
+        }
+
+        @keyframes float-wise {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(-5deg); }
+        }
+
+        @keyframes float-robot {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(3deg); }
+        }
+
+        .character-icon {
+            font-size: 4rem;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .floating-character:hover .character-icon {
+            transform: scale(1.2);
+        }
+
+        .floating-wise:hover .character-icon {
+            transform: scale(1.2) rotate(-10deg);
+        }
+
+        .floating-robot:hover .character-icon {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        /* Speech Bubbles */
+        .character-speech {
+            position: absolute;
+            bottom: 100%;
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+            min-width: 280px;
+            max-width: 350px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .floating-wise .character-speech {
+            left: 0;
+        }
+
+        .floating-wise .character-speech::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 30px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid var(--white);
+        }
+
+        .floating-robot .character-speech {
+            right: 0;
+        }
+
+        .floating-robot .character-speech::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 30px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid var(--white);
+        }
+
+        .character-speech.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .character-speech p {
+            font-weight: 600;
+            font-size: 0.938rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .floating-wise .character-speech p {
+            color: #8B5CF6;
+        }
+
+        .floating-wise .character-speech {
+            border-left: 4px solid #8B5CF6;
+        }
+
+        .floating-robot .character-speech p {
+            color: var(--ktzh-blue);
+        }
+
+        .floating-robot .character-speech {
+            border-left: 4px solid var(--ktzh-cyan);
+        }
+
+        .character-speech .term {
+            font-weight: 700;
+            color: var(--ktzh-cyan);
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .character-speech .explanation {
+            color: var(--ktzh-darkgray);
+            font-weight: 500;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hero-content h1 {
@@ -257,10 +394,46 @@
             .features-grid {
                 grid-template-columns: 1fr;
             }
+
+            .floating-character {
+                bottom: 20px;
+            }
+
+            .floating-wise {
+                left: 20px;
+            }
+
+            .floating-robot {
+                right: 20px;
+            }
+
+            .character-icon {
+                font-size: 3rem;
+            }
+
+            .character-speech {
+                min-width: 240px;
+                max-width: 280px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Floating Characters -->
+    <div class="floating-character floating-wise" id="floatingWise">
+        <div class="character-speech" id="wiseSpeech">
+            <p id="wiseQuote">Klick mich für Weisheiten! 🧙‍♀️</p>
+        </div>
+        <div class="character-icon">🧙‍♀️</div>
+    </div>
+
+    <div class="floating-character floating-robot" id="floatingRobot">
+        <div class="character-speech" id="robotSpeech">
+            <p id="robotExplanation">Klick mich für Begriffshilfe! 🤖</p>
+        </div>
+        <div class="character-icon">🤖</div>
+    </div>
+
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
@@ -384,7 +557,132 @@
     </footer>
 
     <script>
-        // ✅ AUTO-REDIRECT LOGIK
+        // ========================================
+        // FLOATING CHARACTERS INTERAKTIVITÄT
+        // ========================================
+
+        // Wise Woman Quotes
+        const wiseQuotes = [
+            "🧠 Weisheit kommt von Verstehen, nicht von Auswendiglernen!",
+            "💡 Jede Kompetenz ist ein Puzzleteil deiner Zukunft!",
+            "🎯 Der Weg ist das Ziel – genieße die Lernreise!",
+            "🔄 Wiederholung ist die Mutter des Lernens!",
+            "✨ Du bist fähiger als du denkst!",
+            "📚 Wissen teilen bedeutet Wissen verdoppeln!",
+            "🌟 Kleine Schritte führen zu großen Zielen!",
+            "⚡ Fehler sind Chancen zum Wachsen!",
+            "🎨 Kreativität entspringt dem Verstehen!",
+            "🧩 Alles hängt zusammen – erkenne die Verbindungen!",
+            "💪 Durchhalten lohnt sich immer!",
+            "🌈 Vielfalt bereichert dein Lernen!",
+            "🔥 Leidenschaft ist der beste Lehrmeister!",
+            "🎓 Bildung öffnet Türen zu neuen Welten!",
+            "✨ Neugier ist der Schlüssel zum Erfolg!"
+        ];
+
+        // Robot Explanations
+        const robotExplanations = [
+            {
+                term: "📘 Kompetenz",
+                text: "Eine Kompetenz ist die Fähigkeit, in einer Situation angemessen zu handeln. Sie besteht aus Wissen (ich weiß es), Können (ich kann es) und Wollen (ich will es)."
+            },
+            {
+                term: "🧊 Performanz",
+                text: "Performanz ist das, was du tust und was andere sehen können. Es ist die 'Spitze des Eisbergs'. Darunter liegen deine Kompetenzen, die dich befähigen."
+            },
+            {
+                term: "🔄 Zirkularität",
+                text: "Zirkularität bedeutet, dass Kompetenzen immer wiederkehren – in verschiedenen Themen und Kontexten. Du lernst nicht einmal, sondern vertiefst immer weiter."
+            },
+            {
+                term: "📚 Gesellschaft",
+                text: "Gesellschaftliches Wissen bedeutet: Du verstehst, wie unsere Gesellschaft funktioniert – Gesetze, Politik, Wirtschaft, soziale Zusammenhänge."
+            },
+            {
+                term: "💬 Sprachmodi",
+                text: "Sprachmodi sind verschiedene Arten zu kommunizieren: schriftlich, mündlich, visuell, audiovisuell. Auch digitale Kommunikation gehört dazu."
+            },
+            {
+                term: "🔑 Schlüsselkompetenzen",
+                text: "Das sind überfachliche Fähigkeiten wie Selbstmanagement, Kooperation, kritisches Denken. Sie helfen dir in allen Lebensbereichen."
+            },
+            {
+                term: "🎯 Umsetzungsbeispiele",
+                text: "Konkrete Aufgaben und Situationen aus dem Alltag, in denen du zeigen kannst, was du gelernt hast. Sie verbinden alle Kompetenzen."
+            },
+            {
+                term: "💡 Sinnhaftigkeit",
+                text: "Sinnhaftigkeit bedeutet: Du verstehst, WARUM du etwas lernst. Du erkennst den Nutzen für dein Leben, nicht nur für die Prüfung."
+            },
+            {
+                term: "🌀 Spiralcurriculum",
+                text: "Wie eine Spirale: Du begegnest Themen mehrfach, jedes Mal auf einer höheren Stufe – tiefer, komplexer, selbstständiger."
+            },
+            {
+                term: "🎭 Scaffolding",
+                text: "Lernhilfen und Unterstützungen, die dir helfen, komplexe Aufgaben zu meistern. Wie ein Gerüst beim Hausbau – später kannst du ohne."
+            },
+            {
+                term: "📊 Portfolio",
+                text: "Eine Sammlung deiner Arbeiten und Reflexionen. Hier zeigst du, was du gelernt hast und denkst über deinen Lernweg nach."
+            },
+            {
+                term: "🎮 Gamification",
+                text: "Spielelemente wie Punkte, Badges und Fortschrittsbalken, die das Lernen motivierender machen. Du sammelst Erfolge!"
+            }
+        ];
+
+        let currentWiseQuoteIndex = 0;
+        let currentRobotExplanationIndex = 0;
+        let wiseTimeout = null;
+        let robotTimeout = null;
+
+        // Weise Frau Click
+        const floatingWise = document.getElementById('floatingWise');
+        const wiseSpeech = document.getElementById('wiseSpeech');
+        const wiseQuote = document.getElementById('wiseQuote');
+
+        floatingWise.addEventListener('click', function() {
+            if (wiseTimeout) clearTimeout(wiseTimeout);
+            wiseQuote.textContent = wiseQuotes[currentWiseQuoteIndex];
+            wiseSpeech.classList.add('show');
+            currentWiseQuoteIndex = (currentWiseQuoteIndex + 1) % wiseQuotes.length;
+            wiseTimeout = setTimeout(() => {
+                wiseSpeech.classList.remove('show');
+            }, 8000);
+        });
+
+        // Robot Click
+        const floatingRobot = document.getElementById('floatingRobot');
+        const robotSpeech = document.getElementById('robotSpeech');
+        const robotExplanation = document.getElementById('robotExplanation');
+
+        floatingRobot.addEventListener('click', function() {
+            if (robotTimeout) clearTimeout(robotTimeout);
+            const current = robotExplanations[currentRobotExplanationIndex];
+            robotExplanation.innerHTML = `<span class="term">${current.term}</span><span class="explanation">${current.text}</span>`;
+            robotSpeech.classList.add('show');
+            currentRobotExplanationIndex = (currentRobotExplanationIndex + 1) % robotExplanations.length;
+            robotTimeout = setTimeout(() => {
+                robotSpeech.classList.remove('show');
+            }, 12000);
+        });
+
+        // Auto-show wise woman on first visit
+        setTimeout(() => {
+            if (!localStorage.getItem('abuEbaWelcomeShown')) {
+                wiseQuote.textContent = "👋 Willkommen bei ABU EBA Digital! Klick mich für mehr Weisheiten!";
+                wiseSpeech.classList.add('show');
+                localStorage.setItem('abuEbaWelcomeShown', 'true');
+                setTimeout(() => {
+                    wiseSpeech.classList.remove('show');
+                }, 6000);
+            }
+        }, 2000);
+
+        // ========================================
+        // AUTO-REDIRECT LOGIK
+        // ========================================
         // Prüft Login-Status und leitet entsprechend weiter
         (function() {
             const userCode = localStorage.getItem('abuEbaCode');
