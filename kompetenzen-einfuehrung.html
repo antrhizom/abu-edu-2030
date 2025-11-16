@@ -1784,6 +1784,50 @@ Zum Beispiel:
         let exploredExamples = new Set();
         let quizScore = 0;
 
+        // ✅ NEU: Lade gespeicherten Fortschritt
+        function loadSavedProgress() {
+            const savedData = localStorage.getItem(`abuEba_${userCode}_introProgress`);
+            if (savedData) {
+                try {
+                    const data = JSON.parse(savedData);
+                    exploredInteractive = new Set(data.interactive || []);
+                    exploredExamples = new Set(data.examples || []);
+                    quizScore = data.quizScore || 0;
+                    
+                    // Restore UI state
+                    exploredInteractive.forEach(index => {
+                        const element = interactiveElements[index];
+                        if (element) {
+                            element.classList.add('explored');
+                            element.classList.add('active');
+                        }
+                    });
+                    
+                    exploredExamples.forEach(index => {
+                        const element = exampleElements[index];
+                        if (element) {
+                            element.classList.add('explored');
+                        }
+                    });
+                    
+                    console.log('✅ Fortschritt geladen:', data);
+                } catch (e) {
+                    console.error('Fehler beim Laden des Fortschritts:', e);
+                }
+            }
+        }
+
+        // ✅ NEU: Speichere Fortschritt
+        function saveProgress() {
+            const progressData = {
+                interactive: Array.from(exploredInteractive),
+                examples: Array.from(exploredExamples),
+                quizScore: quizScore,
+                lastUpdated: new Date().toISOString()
+            };
+            localStorage.setItem(`abuEba_${userCode}_introProgress`, JSON.stringify(progressData));
+        }
+
         function updateProgress() {
             const totalExplored = exploredInteractive.size + exploredExamples.size;
             const percentage = Math.round((totalExplored / totalAll) * 100);
@@ -1795,6 +1839,9 @@ Zum Beispiel:
             document.getElementById('statInteractive').textContent = `${exploredInteractive.size}/${totalInteractive}`;
             document.getElementById('statExamples').textContent = `${exploredExamples.size}/${totalExamples}`;
             document.getElementById('statProgress').textContent = percentage + '%';
+            
+            // ✅ NEU: Speichere bei jeder Änderung
+            saveProgress();
         }
 
         function updateActivityStats() {
@@ -1805,7 +1852,15 @@ Zum Beispiel:
             const totalExplored = exploredInteractive.size + exploredExamples.size;
             const percentage = Math.round((totalExplored / totalAll) * 100);
             document.getElementById('statProgress').textContent = percentage + '%';
+            
+            // ✅ NEU: Speichere bei jeder Änderung
+            saveProgress();
         }
+
+        // ✅ NEU: Lade Fortschritt beim Start
+        loadSavedProgress();
+        updateProgress();
+        updateActivityStats();
 
         // Interactive Elements
         interactiveElements.forEach((element, index) => {
@@ -1936,7 +1991,10 @@ Zum Beispiel:
             
             quizSubmit.style.display = 'none';
             
-            // ✅ GEÄNDERT: Setze das richtige Flag
+            // ✅ Speichere Quiz-Antworten
+            saveProgress();
+            
+            // ✅ Setze das richtige Flag
             localStorage.setItem(`abuEba_${userCode}_seenCompetencyIntro`, 'true');
             console.log('✅ Kompetenz-Einführung als gesehen markiert');
         });
