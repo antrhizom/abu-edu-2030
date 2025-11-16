@@ -322,6 +322,37 @@
     </div>
 
     <script>
+        // ========================================
+        // AUTO-REDIRECT FÜR EINGELOGGTE USER
+        // ========================================
+        (function() {
+            const userCode = localStorage.getItem('abuEbaCode');
+            const userName = localStorage.getItem('abuEbaName');
+            
+            if (userCode && userName) {
+                console.log('✅ User bereits eingeloggt:', userName, userCode);
+                
+                // Prüfe ob Kompetenz-Einführung bereits gesehen wurde
+                const hasSeenCompetencyIntro = localStorage.getItem(`abuEba_${userCode}_seenCompetencyIntro`);
+                
+                if (hasSeenCompetencyIntro === 'true') {
+                    console.log('✅ Kompetenz-Einführung abgeschlossen → Weiterleitung zu startzweig.html');
+                    window.location.href = 'startzweig.html';
+                    return; // Stop execution
+                } else {
+                    console.log('⏳ Kompetenz-Einführung noch nicht gesehen → Weiterleitung zu kompetenzen-einfuehrung.html');
+                    window.location.href = 'kompetenzen-einfuehrung.html';
+                    return; // Stop execution
+                }
+            }
+            
+            console.log('👤 User nicht eingeloggt → Zeige Login-Formular');
+        })();
+
+        // ========================================
+        // NORMALE LOGIN-FUNKTIONALITÄT
+        // ========================================
+        
         // Firebase Config
         let firebaseConfig = null;
         let db = null;
@@ -513,7 +544,14 @@
                 }
                 
                 setTimeout(() => {
-                    window.location.href = 'startzweig.html';
+                    // Nach Code-Erstellung: Prüfe ob Kompetenz-Einführung gesehen
+                    const hasSeenCompetencyIntro = localStorage.getItem(`abuEba_${code}_seenCompetencyIntro`);
+                    
+                    if (hasSeenCompetencyIntro === 'true') {
+                        window.location.href = 'startzweig.html';
+                    } else {
+                        window.location.href = 'kompetenzen-einfuehrung.html';
+                    }
                 }, 2000);
                 
             } catch (error) {
