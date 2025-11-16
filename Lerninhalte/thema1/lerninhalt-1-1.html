@@ -33,6 +33,115 @@
             min-height: 100vh;
         }
 
+        /* Top Navigation - wie in startzweig.html */
+        .top-nav {
+            background: var(--white);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .top-nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ktzh-blue);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            color: var(--ktzh-cyan);
+            transform: scale(1.05);
+        }
+
+        .logo-icon {
+            font-size: 1.75rem;
+        }
+
+        .nav-divider {
+            width: 1px;
+            height: 30px;
+            background: var(--ktzh-gray);
+            opacity: 0.3;
+        }
+
+        .current-page {
+            color: var(--ktzh-gray);
+            font-weight: 600;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 0.938rem;
+        }
+
+        .nav-btn-primary {
+            background: var(--ktzh-blue);
+            color: var(--white);
+        }
+
+        .nav-btn-primary:hover {
+            background: var(--ktzh-cyan);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+        }
+
+        .nav-btn-secondary {
+            background: transparent;
+            color: var(--ktzh-blue);
+            border: 2px solid var(--ktzh-blue);
+        }
+
+        .nav-btn-secondary:hover {
+            background: var(--ktzh-lightblue);
+        }
+
+        .user-badge {
+            background: var(--ktzh-lightblue);
+            color: var(--ktzh-blue);
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
         /* Progress Bar */
         .progress-bar {
             position: fixed;
@@ -54,7 +163,7 @@
         /* Progress Badge */
         .progress-badge {
             position: fixed;
-            top: 20px;
+            top: 80px;
             right: 20px;
             background: var(--white);
             padding: 1rem 1.5rem;
@@ -185,65 +294,29 @@
         .header {
             background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
             color: var(--white);
-            padding: 2rem;
+            padding: 3rem 2rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .header-content {
             max-width: 1200px;
             margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
         }
 
         .header-title {
             display: flex;
             align-items: center;
-            gap: 1rem;
-        }
-
-        .header-title h1 {
-            font-size: 2rem;
-            font-weight: 700;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .header-icon {
-            font-size: 3rem;
+            font-size: 4rem;
         }
 
-        .header-nav {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .nav-link {
-            background: rgba(255, 255, 255, 0.2);
-            color: var(--white);
-            padding: 0.75rem 1.5rem;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-link:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .user-info {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.75rem 1.5rem;
-            border-radius: 20px;
-            font-size: 0.938rem;
+        .header-title h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
         }
 
         /* Container */
@@ -904,19 +977,19 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .header-content {
+            .top-nav-content {
                 flex-direction: column;
-                text-align: center;
+                gap: 1rem;
             }
 
-            .header-nav {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .nav-link {
+            .nav-left, .nav-right {
                 width: 100%;
                 justify-content: center;
+            }
+
+            .header-title {
+                flex-direction: column;
+                text-align: center;
             }
 
             .intro-card h2 {
@@ -954,6 +1027,27 @@
         <div class="progress-fill" id="progressFill"></div>
     </div>
 
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="top-nav-content">
+            <div class="nav-left">
+                <a href="index.html" class="logo">
+                    <span class="logo-icon">🎓</span>
+                    <span>ABU EBA Digital</span>
+                </a>
+                <div class="nav-divider"></div>
+                <span class="current-page">📋 Lehrvertrag & Konfliktmanagement</span>
+            </div>
+            <div class="nav-right">
+                <a href="startzweig.html" class="nav-btn nav-btn-secondary">📚 Lernraum</a>
+                <a href="portfolio.html" class="nav-btn nav-btn-primary">📁 Portfolio</a>
+                <div class="user-badge">
+                    <span id="userDisplay">👤 Gast</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
     <!-- Progress Badge -->
     <div class="progress-badge">
         <div class="percentage" id="progressPercentage">0%</div>
@@ -982,14 +1076,6 @@
             <div class="header-title">
                 <span class="header-icon">📋</span>
                 <h1>Lehrvertrag & Konfliktmanagement</h1>
-            </div>
-            <div class="header-nav">
-                <a href="index.html" class="nav-link">🏠 Startseite</a>
-                <a href="startzweig.html" class="nav-link">📚 Lernraum</a>
-                <a href="portfolio.html" class="nav-link">📁 Portfolio</a>
-                <div class="user-info">
-                    <span id="userDisplay">👤 Gast</span>
-                </div>
             </div>
         </div>
     </header>
