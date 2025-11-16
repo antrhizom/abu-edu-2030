@@ -2121,6 +2121,30 @@ Zum Beispiel:
         if (isViewer) {
             console.log('👁️ Viewing portfolio of:', viewingCode);
         }
+        // ✅ ZUSATZ: Button "Zu den Themen" mit Flag-Setzung
+document.addEventListener('DOMContentLoaded', function() {
+    // Warte bis DOM geladen ist, dann finde den Button
+    const themesButton = document.querySelector('a.btn-primary[href="startzweig.html"]');
+    
+    if (themesButton) {
+        themesButton.addEventListener('click', function(e) {
+            e.preventDefault(); // Verhindere direkte Navigation
+            
+            const userCode = localStorage.getItem('abuEbaCode');
+            
+            if (userCode) {
+                // ✅ Setze Flag: User hat Kompetenz-Einführung gesehen
+                localStorage.setItem(`abuEba_${userCode}_seenCompetencyIntro`, 'true');
+                console.log('✅ Kompetenz-Einführung als gesehen markiert für:', userCode);
+            }
+            
+            // Jetzt zur Themenübersicht weiterleiten
+            window.location.href = 'startzweig.html';
+        });
+        
+        console.log('✅ Kompetenz-Button Event-Listener registriert');
+    }
+});
     </script>
 </body>
 </html>
