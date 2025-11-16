@@ -737,6 +737,17 @@
             // Not logged in, redirect to index
             window.location.href = 'index.html';
         } else {
+            // ✅ NEUE LOGIK: Check if user has seen competency introduction
+            const hasSeenCompetencyIntro = localStorage.getItem(`abuEba_${userCode}_seenCompetencyIntro`);
+            
+            if (!hasSeenCompetencyIntro) {
+                // First time login - redirect to competency introduction
+                console.log('🎯 Erste Anmeldung - Weiterleitung zur Kompetenz-Einführung');
+                window.location.href = 'kompetenzen-einfuehrung.html';
+                // Stop execution here to prevent UI from rendering
+                return;
+            }
+
             // Extract symbol from code (format: NAME-JAHR-SYMBOL-PIN)
             const codeParts = userCode.split('-');
             const symbol = codeParts[2] || '🚀';
