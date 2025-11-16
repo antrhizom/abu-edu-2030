@@ -737,121 +737,120 @@
             // Not logged in, redirect to index
             window.location.href = 'index.html';
         } else {
-            // ✅ NEUE LOGIK: Check if user has seen competency introduction
+            // ✅ Check if user has seen competency introduction
             const hasSeenCompetencyIntro = localStorage.getItem(`abuEba_${userCode}_seenCompetencyIntro`);
             
             if (!hasSeenCompetencyIntro) {
                 // First time login - redirect to competency introduction
                 console.log('🎯 Erste Anmeldung - Weiterleitung zur Kompetenz-Einführung');
                 window.location.href = 'kompetenzen-einfuehrung.html';
-                // Stop execution here to prevent UI from rendering
-                return;
-            }
+            } else {
+                // User has seen intro - continue with normal page load
+                // Extract symbol from code (format: NAME-JAHR-SYMBOL-PIN)
+                const codeParts = userCode.split('-');
+                const symbol = codeParts[2] || '🚀';
 
-            // Extract symbol from code (format: NAME-JAHR-SYMBOL-PIN)
-            const codeParts = userCode.split('-');
-            const symbol = codeParts[2] || '🚀';
+                // Display user info
+                document.getElementById('userName').textContent = userName;
+                document.getElementById('headerUserName').textContent = userName;
+                document.getElementById('userSymbol').textContent = symbol;
 
-            // Display user info
-            document.getElementById('userName').textContent = userName;
-            document.getElementById('headerUserName').textContent = userName;
-            document.getElementById('userSymbol').textContent = symbol;
-        }
+                // Logout functionality
+                document.getElementById('logoutBtn').addEventListener('click', function() {
+                    if (confirm('Möchten Sie sich wirklich abmelden?')) {
+                        localStorage.removeItem('abuEbaCode');
+                        localStorage.removeItem('abuEbaName');
+                        window.location.href = 'index.html';
+                    }
+                });
 
-        // Logout functionality
-        document.getElementById('logoutBtn').addEventListener('click', function() {
-            if (confirm('Möchten Sie sich wirklich abmelden?')) {
-                localStorage.removeItem('abuEbaCode');
-                localStorage.removeItem('abuEbaName');
-                window.location.href = 'index.html';
-            }
-        });
-
-        // Load progress data from localStorage
-        function loadProgressData() {
-            const progressKey = `abuEba_${userCode}_progress`;
-            const savedProgress = localStorage.getItem(progressKey);
-            
-            if (savedProgress) {
-                try {
-                    return JSON.parse(savedProgress);
-                } catch (e) {
-                    console.error('Fehler beim Laden der Fortschrittsdaten:', e);
+                // Load progress data from localStorage
+                function loadProgressData() {
+                    const progressKey = `abuEba_${userCode}_progress`;
+                    const savedProgress = localStorage.getItem(progressKey);
+                    
+                    if (savedProgress) {
+                        try {
+                            return JSON.parse(savedProgress);
+                        } catch (e) {
+                            console.error('Fehler beim Laden der Fortschrittsdaten:', e);
+                            return {};
+                        }
+                    }
                     return {};
                 }
+
+                // Calculate theme progress
+                function calculateThemeProgress(themeId) {
+                    const progressData = loadProgressData();
+                    const themeProgress = progressData[`theme${themeId}`] || {};
+                    
+                    if (!themeData[themeId]) return 0;
+                    
+                    const totalLerninhalte = themeData[themeId].lerninhalte;
+                    const completedLerninhalte = Object.keys(themeProgress).filter(key => 
+                        themeProgress[key] === true
+                    ).length;
+                    
+                    return Math.round((completedLerninhalte / totalLerninhalte) * 100);
+                }
+
+                // Update UI with progress data
+                function updateProgressUI() {
+                    let totalCompleted = 0;
+                    let totalThemes = 8;
+                    let totalProgressSum = 0;
+
+                    for (let i = 1; i <= 8; i++) {
+                        const progress = calculateThemeProgress(i);
+                        const progressElement = document.getElementById(`progress-${i}`);
+                        const progressBarElement = document.getElementById(`progress-bar-${i}`);
+                        
+                        if (progressElement) {
+                            progressElement.textContent = `${progress}%`;
+                        }
+                        if (progressBarElement) {
+                            progressBarElement.style.width = `${progress}%`;
+                        }
+                        
+                        totalProgressSum += progress;
+                        if (progress === 100) {
+                            totalCompleted++;
+                        }
+                    }
+
+                    // Update stats
+                    const overallProgress = Math.round(totalProgressSum / 8);
+                    document.getElementById('totalProgress').textContent = `${overallProgress}%`;
+                    document.getElementById('completedThemes').textContent = `${totalCompleted}/8`;
+                    
+                    // Points: 10 points per completed theme
+                    const totalPoints = totalCompleted * 10;
+                    document.getElementById('totalPoints').textContent = totalPoints;
+                }
+
+                // Add click handlers to theme cards
+                document.querySelectorAll('.theme-card').forEach(card => {
+                    card.addEventListener('click', function() {
+                        const themeId = this.dataset.theme;
+                        const theme = themeData[themeId];
+                        
+                        if (theme && theme.url !== '#') {
+                            window.location.href = theme.url;
+                        } else {
+                            alert('Dieses Thema ist noch nicht verfügbar. Es wird bald freigeschaltet!');
+                        }
+                    });
+                });
+
+                // Initialize
+                updateProgressUI();
+
+                console.log('✅ ABU EBA - Themenübersicht geladen');
+                console.log('👤 Eingeloggt als:', userName);
+                console.log('🔑 Code:', userCode);
             }
-            return {};
         }
-
-        // Calculate theme progress
-        function calculateThemeProgress(themeId) {
-            const progressData = loadProgressData();
-            const themeProgress = progressData[`theme${themeId}`] || {};
-            
-            if (!themeData[themeId]) return 0;
-            
-            const totalLerninhalte = themeData[themeId].lerninhalte;
-            const completedLerninhalte = Object.keys(themeProgress).filter(key => 
-                themeProgress[key] === true
-            ).length;
-            
-            return Math.round((completedLerninhalte / totalLerninhalte) * 100);
-        }
-
-        // Update UI with progress data
-        function updateProgressUI() {
-            let totalCompleted = 0;
-            let totalThemes = 8;
-            let totalProgressSum = 0;
-
-            for (let i = 1; i <= 8; i++) {
-                const progress = calculateThemeProgress(i);
-                const progressElement = document.getElementById(`progress-${i}`);
-                const progressBarElement = document.getElementById(`progress-bar-${i}`);
-                
-                if (progressElement) {
-                    progressElement.textContent = `${progress}%`;
-                }
-                if (progressBarElement) {
-                    progressBarElement.style.width = `${progress}%`;
-                }
-                
-                totalProgressSum += progress;
-                if (progress === 100) {
-                    totalCompleted++;
-                }
-            }
-
-            // Update stats
-            const overallProgress = Math.round(totalProgressSum / 8);
-            document.getElementById('totalProgress').textContent = `${overallProgress}%`;
-            document.getElementById('completedThemes').textContent = `${totalCompleted}/8`;
-            
-            // Points: 10 points per completed theme
-            const totalPoints = totalCompleted * 10;
-            document.getElementById('totalPoints').textContent = totalPoints;
-        }
-
-        // Add click handlers to theme cards
-        document.querySelectorAll('.theme-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const themeId = this.dataset.theme;
-                const theme = themeData[themeId];
-                
-                if (theme && theme.url !== '#') {
-                    window.location.href = theme.url;
-                } else {
-                    alert('Dieses Thema ist noch nicht verfügbar. Es wird bald freigeschaltet!');
-                }
-            });
-        });
-
-        // Initialize
-        updateProgressUI();
-
-        console.log('✅ ABU EBA - Themenübersicht geladen');
-        console.log('👤 Eingeloggt als:', userName);
-        console.log('🔑 Code:', userCode);
     </script>
 </body>
 </html>
