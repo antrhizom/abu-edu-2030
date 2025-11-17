@@ -645,107 +645,6 @@
             animation-delay: 2s;
         }
 
-        /* Sprechblasen für Assistenten */
-        .speech-bubble {
-            position: fixed;
-            background: var(--white);
-            padding: 1.5rem;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            max-width: 320px;
-            z-index: 10000;
-            display: none;
-            animation: bubbleIn 0.4s ease;
-        }
-
-        .speech-bubble.show {
-            display: block;
-        }
-
-        .speech-bubble.wise-woman {
-            bottom: 140px;
-            right: 130px;
-            border: 3px solid var(--yellow);
-        }
-
-        .speech-bubble.robot {
-            bottom: 30px;
-            right: 130px;
-            border: 3px solid var(--ktzh-cyan);
-        }
-
-        .speech-bubble::after {
-            content: '';
-            position: absolute;
-            right: -15px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-left: 15px solid var(--white);
-            border-top: 15px solid transparent;
-            border-bottom: 15px solid transparent;
-        }
-
-        @keyframes bubbleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.8) translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateX(0);
-            }
-        }
-
-        .speech-bubble-header {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 0.75rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 2px solid var(--ktzh-lightblue);
-        }
-
-        .speech-bubble-icon {
-            font-size: 2rem;
-        }
-
-        .speech-bubble-name {
-            font-weight: 700;
-            color: var(--ktzh-blue);
-            font-size: 1rem;
-        }
-
-        .speech-bubble-text {
-            color: var(--ktzh-darkgray);
-            line-height: 1.6;
-            font-size: 0.95rem;
-        }
-
-        .speech-bubble-close {
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--ktzh-gray);
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-
-        .speech-bubble-close:hover {
-            background: var(--ktzh-lightblue);
-            color: var(--ktzh-blue);
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
             header h1 { font-size: 2rem; }
@@ -777,20 +676,6 @@
                 bottom: 20px;
                 right: 20px;
             }
-            
-            .speech-bubble {
-                max-width: 280px;
-                right: 90px;
-                font-size: 0.875rem;
-            }
-            
-            .speech-bubble.wise-woman {
-                bottom: 90px;
-            }
-            
-            .speech-bubble.robot {
-                bottom: 20px;
-            }
         }
     </style>
 </head>
@@ -821,89 +706,7 @@
             <p style="text-align: center; color: var(--ktzh-gray); font-size: 1.125rem; margin-bottom: 3rem;">Klicken Sie auf eine Kompetenz, um ein konkretes Jugend-Beispiel zu sehen 👇</p>
 
             <div class="kompetenz-grid" id="kompetenzGrid">
-                <div class="kompetenz-card" onclick="openKompetenz(1)">
-                    <div class="number">1</div>
-                    <div class="icon">🔍</div>
-                    <h3>Zwischen relevanten und irrelevanten Quellen unterscheiden</h3>
-                    <p>Informationen filtern, bewerten und nutzen – auch bei KI-Inhalten</p>
-                </div>
-
-                <div class="kompetenz-card" onclick="openKompetenz(2)">
-                    <div class="number">2</div>
-                    <div class="icon">🎯</div>
-                    <h3>Ziele setzen, überprüfen und anpassen</h3>
-                    <p>Prioritäten setzen, Fortschritte bewerten, Strategien anpassen</p>
-                </div>
-
-                <div class="kompetenz-card" onclick="openKompetenz(3)">
-                    <div class="number">3</div>
-                    <div class="icon">💡</div>
-                    <h3>Innovative Problemlösungen entwickeln</h3>
-                    <p>Kreativ, flexibel und vorausschauend denken und handeln</p>
-                </div>
-
-                <div class="kompetenz-card" onclick="openKompetenz(4)">
-                    <div class="number">4</div>
-                    <div class="icon">🤝</div>
-                    <h3>In unterschiedlichen Teams arbeiten</h3>
-                    <p>Kooperieren, kommunizieren, koordinieren und Verantwortung teilen</p>
-                </div>
-
-                <div class="kompetenz-card" onclick="openKompetenz(5)">
-                    <div class="number">5</div>
-                    <div class="icon">🔄</div>
-                    <h3>Eigene Werthaltungen reflektieren</h3>
-                    <p>Werte hinterfragen, Perspektiven erweitern, ethisch handeln</p>
-                </div>
-
-                <div class="kompetenz-card" onclick="openKompetenz(6)">
-                    <div class="number">6</div>
-                    <div class="icon">💬</div>
-                    <h3>Standpunkte begründen und überzeugen</h3>
-                    <p>Argumente klar und überzeugend präsentieren</p>
-                </div>
-
-                <div class="kompetenz-card" onclick="openKompetenz(7)">
-                    <div class="number">7</div>
-                    <div class="icon">👁️</div>
-                    <h3>Unterschiedliche Standpunkte nachvollziehen</h3>
-                    <p>Perspektivenwechsel, Empathie entwickeln, Toleranz zeigen</p>
-                </div>
-
-                <div class="kompetenz-card" onclick="openKompetenz(8)">
-                    <div class="number">8</div>
-                    <div class="icon">📅</div>
-                    <h3>Lebensphasen planen</h3>
-                    <p>Ressourcen aufbauen, Laufbahn gestalten, Gesundheit beachten</p>
-                </div>
-
-                <div class="kompetenz-card" onclick="openKompetenz(9)">
-                    <div class="number">9</div>
-                    <div class="icon">🌍</div>
-                    <h3>Vernetzt und nachhaltig denken</h3>
-                    <p>Zusammenhänge verstehen, nachhaltig handeln</p>
-                </div>
-
-                <div class="kompetenz-card" onclick="openKompetenz(10)">
-                    <div class="number">10</div>
-                    <div class="icon">⚡</div>
-                    <h3>Mit Veränderungen umgehen</h3>
-                    <p>Flexibel sein, anpassen, konstruktiv reagieren</p>
-                </div>
-
-                <div class="kompetenz-card" onclick="openKompetenz(11)">
-                    <div class="number">11</div>
-                    <div class="icon">🤔</div>
-                    <h3>Mit Mehrdeutigkeiten umgehen</h3>
-                    <p>Unsicherheiten aushalten, verschiedene Perspektiven berücksichtigen</p>
-                </div>
-
-                <div class="kompetenz-card" onclick="openKompetenz(12)">
-                    <div class="number">12</div>
-                    <div class="icon">🗳️</div>
-                    <h3>An gesellschaftlichen Prozessen partizipieren</h3>
-                    <p>Mitgestalten, Handlungsspielräume nutzen, aktiv werden</p>
-                </div>
+                <!-- Kompetenzkarten werden per JavaScript eingefügt -->
             </div>
         </div>
 
@@ -931,8 +734,8 @@ Zum Beispiel:
                     <span>💾</span>
                     <span>Ins Portfolio speichern</span>
                 </button>
-                <a href="./portfolio.html" class="btn btn-white">
-                    <span>Mein Portfolio</span>
+                <a href="portfolio.html" class="btn btn-white">
+                    <span>📁 Mein Portfolio</span>
                     <span>→</span>
                 </a>
             </div>
@@ -970,49 +773,63 @@ Zum Beispiel:
     </div>
 
     <!-- Schwebende AI-Assistenten -->
-    <div class="ai-assistant wise-woman" onclick="toggleAssistant('wise')">
+    <div class="ai-assistant wise-woman" onclick="alert('👵 Diese 12 Schlüsselkompetenzen begleiten Sie ein Leben lang! Nehmen Sie sich Zeit, jede einzelne zu verstehen.')">
         👵
     </div>
 
-    <div class="ai-assistant robot" onclick="toggleAssistant('robot')">
+    <div class="ai-assistant robot" onclick="alert('🤖 Tipp: Klicken Sie auf jede Kompetenz und lösen Sie die Beispiele! Bei 100% Fortschritt schalten Sie den Portfolio-Eintrag frei. Los geht\'s! 🚀')">
         🤖
     </div>
 
-    <!-- Sprechblasen -->
-    <div class="speech-bubble wise-woman" id="wiseBubble">
-        <button class="speech-bubble-close" onclick="closeBubble('wise')">&times;</button>
-        <div class="speech-bubble-header">
-            <div class="speech-bubble-icon">👵</div>
-            <div class="speech-bubble-name">Weise Frau</div>
-        </div>
-        <div class="speech-bubble-text">
-            Diese 12 Schlüsselkompetenzen begleiten Sie ein Leben lang! Nehmen Sie sich Zeit, jede einzelne zu verstehen. Die Beispiele zeigen, wie wichtig sie im Alltag sind.
-        </div>
-    </div>
+    <script type="module">
+        // Firebase Imports
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+        import { getDatabase, ref, get, set } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js';
 
-    <div class="speech-bubble robot" id="robotBubble">
-        <button class="speech-bubble-close" onclick="closeBubble('robot')">&times;</button>
-        <div class="speech-bubble-header">
-            <div class="speech-bubble-icon">🤖</div>
-            <div class="speech-bubble-name">Roboter-Assistent</div>
-        </div>
-        <div class="speech-bubble-text">
-            Tipp: Klicken Sie auf jede Kompetenz und lösen Sie die Beispiele! Bei 100% Fortschritt schalten Sie den Portfolio-Eintrag frei. Los geht's! 🚀
-        </div>
-    </div>
+        // Firebase Konfiguration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBLRconsultV5H4C_v2qKBh0vZ0k5q8MWcN70",
+            authDomain: "abueba.firebaseapp.com",
+            databaseURL: "https://abueba-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "abueba",
+            storageBucket: "abueba.appspot.com",
+            messagingSenderId: "668483480992",
+            appId: "1:668483480992:web:8e2fe3c2f1d5a5d5c5e5c5"
+        };
 
-    <script>
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+
+        // User Info
+        const userCode = localStorage.getItem('abuEbaCode');
+        const userName = localStorage.getItem('abuEbaName');
+        let currentUser = null;
+
         // Tracking-Variablen
         let visitedComps = new Set();
         let correctAnswers = new Set();
-        const userCode = localStorage.getItem('abuEbaCode');
-        let activeBubble = null;
+        const contentId = 'kompetenzen_schluessel';
 
-        // Kompetenz-Daten mit Beispielen
+        // Auth State Check
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+                console.log('✅ Firebase Auth aktiv für:', user.uid);
+                loadProgressFromFirebase();
+            } else {
+                console.log('⚠️ Kein Firebase Auth - LocalStorage Fallback');
+                loadProgressFromLocalStorage();
+            }
+        });
+
+        // Kompetenz-Daten
         const kompetenzData = {
             1: {
                 icon: '🔍',
                 title: 'Zwischen relevanten und irrelevanten Quellen unterscheiden',
+                description: 'Informationen filtern, bewerten und nutzen – auch bei KI-Inhalten',
                 scenario: 'Du scrollst durch TikTok und siehst ein Video: "5G-Antennen machen krank – BEWEIS!" Das Video hat 50\'000 Likes und viele Kommentare. Dein Kollege teilt es in der Klassen-Gruppe und fragt: "Ist das wahr?"',
                 question: 'Was ist die beste Reaktion?',
                 options: [
@@ -1026,6 +843,7 @@ Zum Beispiel:
             2: {
                 icon: '🎯',
                 title: 'Ziele setzen, überprüfen und anpassen',
+                description: 'Prioritäten setzen, Fortschritte bewerten, Strategien anpassen',
                 scenario: 'Du möchtest die Lehrabschlussprüfung mit einer guten Note bestehen. Gleichzeitig trainierst du 4x pro Woche für ein Fussballturnier, arbeitest am Wochenende im Restaurant und möchtest Zeit mit Freunden verbringen. Nach 2 Wochen merkst du: Es ist zu viel.',
                 question: 'Wie gehst du vor?',
                 options: [
@@ -1036,9 +854,11 @@ Zum Beispiel:
                 ],
                 explanation: 'Ziele müssen realistisch sein! Wenn du merkst, dass es nicht klappt, musst du Prioritäten setzen und Ziele anpassen. Die Lehrabschlussprüfung ist wichtig für deine Zukunft – andere Dinge können vorübergehend reduziert werden.'
             },
+            // Weitere Kompetenzen 3-12 hier... (gekürzt für Übersicht)
             3: {
                 icon: '💡',
                 title: 'Innovative Problemlösungen entwickeln',
+                description: 'Kreativ, flexibel und vorausschauend denken und handeln',
                 scenario: 'In deinem Lehrbetrieb gibt es ein Problem: Die Mittagspause ist zu kurz, um auswärts essen zu gehen, aber es gibt keine Mikrowelle oder Küche. Viele kaufen teures Fast Food oder bleiben hungrig.',
                 question: 'Welche Lösung zeigt innovative Problemlösung?',
                 options: [
@@ -1052,6 +872,7 @@ Zum Beispiel:
             4: {
                 icon: '🤝',
                 title: 'In unterschiedlichen Teams arbeiten',
+                description: 'Kooperieren, kommunizieren, koordinieren und Verantwortung teilen',
                 scenario: 'Für ein Schulprojekt wirst du mit drei Personen eingeteilt, die du nicht gut kennst. Eine Person redet viel, macht aber nichts. Eine andere ist super organisiert, aber etwas herrisch. Die dritte ist ruhig und unsicher.',
                 question: 'Wie verhältst du dich im Team?',
                 options: [
@@ -1065,6 +886,7 @@ Zum Beispiel:
             5: {
                 icon: '🔄',
                 title: 'Eigene Werthaltungen reflektieren',
+                description: 'Werte hinterfragen, Perspektiven erweitern, ethisch handeln',
                 scenario: 'Deine Kollegin zeigt dir ein Foto von ihrer neuen Jacke, die bei einer Fast-Fashion-Kette CHF 29.- kostet. Du hast gerade einen Dokumentarfilm über Kinderarbeit in der Textilindustrie gesehen. Du weisst, dass solche Jacken unter schlechten Bedingungen produziert werden.',
                 question: 'Wie reagierst du?',
                 options: [
@@ -1078,6 +900,7 @@ Zum Beispiel:
             6: {
                 icon: '💬',
                 title: 'Standpunkte begründen und überzeugen',
+                description: 'Argumente klar und überzeugend präsentieren',
                 scenario: 'In deinem Lehrbetrieb wird diskutiert, ob Lehrlinge eigene Laptops statt Desktop-PCs bekommen sollen. Dein Chef ist skeptisch: "Zu teuer und unnötig." Du findest aber, dass mobile Arbeitsplätze sinnvoll wären.',
                 question: 'Wie überzeugst du deinen Chef?',
                 options: [
@@ -1091,6 +914,7 @@ Zum Beispiel:
             7: {
                 icon: '👁️',
                 title: 'Unterschiedliche Standpunkte nachvollziehen',
+                description: 'Perspektivenwechsel, Empathie entwickeln, Toleranz zeigen',
                 scenario: 'Deine beste Freundin ist sauer, weil du am Wochenende mit anderen Kollegen feiern warst, ohne sie einzuladen. Sie sagt: "Du ignorierst mich ständig!" Du findest, sie übertreibt – du hast doch das Recht, auch mit anderen etwas zu unternehmen.',
                 question: 'Wie gehst du damit um?',
                 options: [
@@ -1104,6 +928,7 @@ Zum Beispiel:
             8: {
                 icon: '📅',
                 title: 'Lebensphasen planen',
+                description: 'Ressourcen aufbauen, Laufbahn gestalten, Gesundheit beachten',
                 scenario: 'Du bist im 2. Lehrjahr und überlegst: Nach der Lehre direkt arbeiten oder Berufsmatura nachholen? Arbeiten bringt Geld, aber die BM öffnet mehr Karrierechancen. Deine Eltern sagen: "Verdiene endlich Geld!" Deine Lehrperson sagt: "Mach die BM!"',
                 question: 'Wie triffst du die Entscheidung?',
                 options: [
@@ -1117,6 +942,7 @@ Zum Beispiel:
             9: {
                 icon: '🌍',
                 title: 'Vernetzt und nachhaltig denken',
+                description: 'Zusammenhänge verstehen, nachhaltig handeln',
                 scenario: 'Du kaufst dir ein neues Smartphone für CHF 1\'200.-. Es funktioniert super! Nach 1,5 Jahren kommt das neue Modell raus. Dein altes funktioniert noch, aber das neue hat bessere Kamera und mehr Speicher. Deine Kollegen haben alle schon das neueste Modell.',
                 question: 'Was tust du?',
                 options: [
@@ -1130,6 +956,7 @@ Zum Beispiel:
             10: {
                 icon: '⚡',
                 title: 'Mit Veränderungen umgehen',
+                description: 'Flexibel sein, anpassen, konstruktiv reagieren',
                 scenario: 'Dein Lehrbetrieb wird umstrukturiert. Dein bisheriger Berufsbildner, mit dem du super klarkommst, wechselt in eine andere Abteilung. Ab nächster Woche hast du eine neue Berufsbildnerin, die als sehr streng gilt. Du hast Angst vor der Veränderung.',
                 question: 'Wie gehst du damit um?',
                 options: [
@@ -1143,6 +970,7 @@ Zum Beispiel:
             11: {
                 icon: '🤔',
                 title: 'Mit Mehrdeutigkeiten umgehen',
+                description: 'Unsicherheiten aushalten, verschiedene Perspektiven berücksichtigen',
                 scenario: 'Dein Chef sagt: "Die Arbeit war OK." Du weisst nicht: Meint er "gut gemacht" oder "gerade noch akzeptabel"? Er sagt oft nicht klar, was er denkt. Das verunsichert dich. Du fragst dich: Bin ich gut genug oder sollte ich mir Sorgen machen?',
                 question: 'Wie gehst du mit dieser Unsicherheit um?',
                 options: [
@@ -1156,6 +984,7 @@ Zum Beispiel:
             12: {
                 icon: '🗳️',
                 title: 'An gesellschaftlichen Prozessen partizipieren',
+                description: 'Mitgestalten, Handlungsspielräume nutzen, aktiv werden',
                 scenario: 'In deiner Gemeinde soll ein Jugendtreff geschlossen werden, weil die Gemeinde sparen muss. Viele Jugendliche sind sauer, aber niemand unternimmt etwas. Du denkst: "Die Politiker interessiert unsere Meinung eh nicht."',
                 question: 'Was kannst du tun?',
                 options: [
@@ -1168,37 +997,99 @@ Zum Beispiel:
             }
         };
 
-        // Lade gespeicherte Aktivität
-        function loadActivity() {
-            if (userCode) {
-                const savedVisited = localStorage.getItem(`abuEba_${userCode}_visitedComps`);
-                const savedCorrect = localStorage.getItem(`abuEba_${userCode}_correctComps`);
+        // Render Kompetenz-Karten
+        function renderKompetenzCards() {
+            const grid = document.getElementById('kompetenzGrid');
+            grid.innerHTML = '';
+            
+            Object.keys(kompetenzData).forEach(num => {
+                const data = kompetenzData[num];
+                const card = document.createElement('div');
+                card.className = 'kompetenz-card';
+                if (visitedComps.has(parseInt(num))) {
+                    card.classList.add('visited');
+                }
+                card.onclick = () => openKompetenz(parseInt(num));
                 
-                if (savedVisited) {
-                    visitedComps = new Set(JSON.parse(savedVisited));
-                    visitedComps.forEach(num => {
-                        const card = document.querySelector(`.kompetenz-card[onclick="openKompetenz(${num})"]`);
-                        if (card) card.classList.add('visited');
-                    });
+                card.innerHTML = `
+                    <div class="number">${num}</div>
+                    <div class="icon">${data.icon}</div>
+                    <h3>${data.title}</h3>
+                    <p>${data.description}</p>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // Load Progress from Firebase
+        async function loadProgressFromFirebase() {
+            if (!currentUser) return;
+
+            try {
+                const progressRef = ref(db, `users/${currentUser.uid}/progress/${contentId}`);
+                const snapshot = await get(progressRef);
+                
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    visitedComps = new Set(data.visitedComps || []);
+                    correctAnswers = new Set(data.correctAnswers || []);
+                    console.log('📥 Fortschritt von Firebase geladen');
                 }
                 
-                if (savedCorrect) {
-                    correctAnswers = new Set(JSON.parse(savedCorrect));
-                }
-                
+                renderKompetenzCards();
                 updateCounter();
+            } catch (error) {
+                console.error('❌ Firebase Fehler:', error);
+                loadProgressFromLocalStorage();
             }
         }
 
-        // Speichere Aktivität
-        function saveActivity() {
+        // Load Progress from LocalStorage
+        function loadProgressFromLocalStorage() {
+            const savedVisited = localStorage.getItem(`abuEba_${userCode}_visitedComps`);
+            const savedCorrect = localStorage.getItem(`abuEba_${userCode}_correctComps`);
+            
+            if (savedVisited) {
+                visitedComps = new Set(JSON.parse(savedVisited));
+            }
+            
+            if (savedCorrect) {
+                correctAnswers = new Set(JSON.parse(savedCorrect));
+            }
+            
+            renderKompetenzCards();
+            updateCounter();
+            console.log('📥 Fortschritt von LocalStorage geladen');
+        }
+
+        // Save Progress
+        async function saveProgress() {
+            const progressData = {
+                visitedComps: Array.from(visitedComps),
+                correctAnswers: Array.from(correctAnswers),
+                lastVisit: new Date().toISOString()
+            };
+
+            // LocalStorage
             if (userCode) {
-                localStorage.setItem(`abuEba_${userCode}_visitedComps`, JSON.stringify([...visitedComps]));
-                localStorage.setItem(`abuEba_${userCode}_correctComps`, JSON.stringify([...correctAnswers]));
+                localStorage.setItem(`abuEba_${userCode}_visitedComps`, JSON.stringify(Array.from(visitedComps)));
+                localStorage.setItem(`abuEba_${userCode}_correctComps`, JSON.stringify(Array.from(correctAnswers)));
+            }
+
+            // Firebase
+            if (currentUser) {
+                try {
+                    const progressRef = ref(db, `users/${currentUser.uid}/progress/${contentId}`);
+                    await set(progressRef, progressData);
+                    console.log('💾 Fortschritt in Firebase gespeichert');
+                } catch (error) {
+                    console.error('❌ Firebase Fehler:', error);
+                }
             }
         }
 
-        // Aktualisiere Counter
+        // Update Counter
         function updateCounter() {
             const stats = document.getElementById('counterStats');
             const details = document.getElementById('counterDetails');
@@ -1207,7 +1098,6 @@ Zum Beispiel:
             stats.textContent = `${visitedComps.size}/12`;
             details.textContent = `Erkundet • ${correctAnswers.size} richtig`;
             
-            // Bei 100% Farbe ändern und Portfolio freischalten
             if (visitedComps.size === 12) {
                 counter.classList.add('completed');
                 unlockPortfolio();
@@ -1219,14 +1109,13 @@ Zum Beispiel:
             const portfolioSection = document.getElementById('portfolioSection');
             portfolioSection.classList.add('unlocked');
             
-            // Smooth scroll zum Portfolio
             setTimeout(() => {
                 portfolioSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 500);
         }
 
         // Modal öffnen
-        function openKompetenz(num) {
+        window.openKompetenz = function(num) {
             const data = kompetenzData[num];
             const modal = document.getElementById('kompetenzModal');
             const modalBody = document.getElementById('modalBody');
@@ -1264,41 +1153,23 @@ Zum Beispiel:
             modal.classList.add('show');
             document.body.style.overflow = 'hidden';
             
-            // Markiere als besucht
             if (!visitedComps.has(num)) {
                 visitedComps.add(num);
-                const card = document.querySelector(`.kompetenz-card[onclick="openKompetenz(${num})"]`);
-                if (card) card.classList.add('visited');
+                renderKompetenzCards();
                 updateCounter();
-                saveActivity();
+                saveProgress();
             }
-        }
+        };
 
         // Modal schließen
-        function closeModal() {
+        window.closeModal = function() {
             const modal = document.getElementById('kompetenzModal');
             modal.classList.remove('show');
             document.body.style.overflow = 'auto';
-        }
-
-        // ESC-Taste zum Schließen
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeModal();
-                closeBubble('wise');
-                closeBubble('robot');
-            }
-        });
-
-        // Außerhalb klicken zum Schließen
-        document.getElementById('kompetenzModal')?.addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
+        };
 
         // Antwort überprüfen
-        function checkAnswer(num) {
+        window.checkAnswer = function(num) {
             const data = kompetenzData[num];
             const form = document.getElementById(`answerForm${num}`);
             const selected = form.querySelector('input[type="radio"]:checked');
@@ -1312,7 +1183,6 @@ Zum Beispiel:
             const isCorrect = data.options[selectedIndex].correct;
             const feedback = document.getElementById(`feedback${num}`);
 
-            // Alle Optionen einfärben
             data.options.forEach((opt, idx) => {
                 const optionEl = document.getElementById(`option${num}_${idx}`);
                 if (opt.correct) {
@@ -1320,64 +1190,26 @@ Zum Beispiel:
                 } else if (idx === selectedIndex && !isCorrect) {
                     optionEl.classList.add('incorrect');
                 }
-                // Radio disabled
                 document.getElementById(`radio${num}_${idx}`).disabled = true;
             });
 
-            // Bei richtiger Antwort zu correctAnswers hinzufügen
             if (isCorrect && !correctAnswers.has(num)) {
                 correctAnswers.add(num);
                 updateCounter();
-                saveActivity();
+                saveProgress();
             }
 
-            // Feedback anzeigen
             feedback.className = `feedback-box show ${isCorrect ? 'success' : 'error'}`;
             feedback.innerHTML = `
                 <h5>${isCorrect ? '✅ Richtig!' : '❌ Nicht ganz...'}</h5>
                 <p>${data.explanation}</p>
             `;
 
-            // Button deaktivieren
             event.target.disabled = true;
             event.target.textContent = isCorrect ? '✓ Richtig beantwortet' : '✓ Antwort geprüft';
-        }
+        };
 
-        // AI-Assistenten Toggle
-        function toggleAssistant(type) {
-            const bubble = type === 'wise' ? document.getElementById('wiseBubble') : document.getElementById('robotBubble');
-            
-            // Schließe andere Blase
-            const otherType = type === 'wise' ? 'robot' : 'wise';
-            closeBubble(otherType);
-            
-            // Toggle aktuelle Blase
-            if (activeBubble === type) {
-                bubble.classList.remove('show');
-                activeBubble = null;
-            } else {
-                bubble.classList.add('show');
-                activeBubble = type;
-                
-                // Auto-close nach 5 Sekunden
-                setTimeout(() => {
-                    if (activeBubble === type) {
-                        closeBubble(type);
-                    }
-                }, 5000);
-            }
-        }
-
-        // Sprechblase schließen
-        function closeBubble(type) {
-            const bubble = type === 'wise' ? document.getElementById('wiseBubble') : document.getElementById('robotBubble');
-            bubble.classList.remove('show');
-            if (activeBubble === type) {
-                activeBubble = null;
-            }
-        }
-
-        // Portfolio-Speicher-Funktion
+        // Portfolio speichern
         document.getElementById('savePortfolio')?.addEventListener('click', async function() {
             const reflection = document.getElementById('reflection').value;
             
@@ -1388,20 +1220,20 @@ Zum Beispiel:
 
             if (!userCode) {
                 alert('⚠️ Bitte loggen Sie sich zuerst ein!');
-                window.location.href = 'code-erstellen-FINAL.html';
+                window.location.href = 'index.html';
                 return;
             }
 
-            // Button-Status ändern
             this.disabled = true;
             this.innerHTML = '<span>⏳</span><span>Speichere...</span>';
 
             const portfolioEntry = {
+                id: contentId,
                 type: 'kompetenz-dimension',
-                module: 'Schlüsselkompetenzen',
+                title: 'Schlüsselkompetenzen',
                 subtitle: '12 Kompetenzen für lebenslanges Lernen',
-                completed: true,
-                date: new Date().toISOString(),
+                icon: '🎯',
+                completedAt: new Date().toISOString(),
                 reflection: reflection,
                 activity: {
                     exploredCompetencies: visitedComps.size,
@@ -1412,46 +1244,52 @@ Zum Beispiel:
             };
 
             try {
-                // Speichere in localStorage
-                let portfolio = JSON.parse(localStorage.getItem('abuEbaPortfolio') || '[]');
-                
-                // Prüfe, ob bereits ein Eintrag für Schlüsselkompetenzen existiert
-                const existingIndex = portfolio.findIndex(entry => 
-                    entry.type === 'kompetenz-dimension' && entry.module === 'Schlüsselkompetenzen'
-                );
+                // Firebase
+                if (currentUser) {
+                    const portfolioRef = ref(db, `users/${currentUser.uid}/portfolio/${contentId}`);
+                    await set(portfolioRef, portfolioEntry);
+                    console.log('✅ Portfolio in Firebase gespeichert');
+                }
+
+                // LocalStorage
+                let portfolio = JSON.parse(localStorage.getItem(`abuEba_${userCode}_portfolio`) || '[]');
+                const existingIndex = portfolio.findIndex(entry => entry.id === contentId);
                 
                 if (existingIndex >= 0) {
-                    // Aktualisiere existierenden Eintrag
                     portfolio[existingIndex] = portfolioEntry;
-                    console.log('✅ Portfolio-Eintrag aktualisiert');
                 } else {
-                    // Füge neuen Eintrag hinzu
                     portfolio.push(portfolioEntry);
-                    console.log('✅ Neuer Portfolio-Eintrag erstellt');
                 }
                 
-                localStorage.setItem('abuEbaPortfolio', JSON.stringify(portfolio));
+                localStorage.setItem(`abuEba_${userCode}_portfolio`, JSON.stringify(portfolio));
 
-                // Erfolgsmeldung
                 this.innerHTML = '<span>✓</span><span>Gespeichert</span>';
                 this.style.background = 'var(--green)';
-                this.style.color = 'var(--white)';
 
-                // Nach 2 Sekunden zur Portfolio-Seite
                 setTimeout(() => {
                     window.location.href = 'portfolio.html';
                 }, 2000);
 
             } catch (error) {
-                console.error('❌ Fehler beim Speichern:', error);
+                console.error('❌ Fehler:', error);
                 alert('⚠️ Fehler beim Speichern. Bitte versuchen Sie es erneut.');
                 this.disabled = false;
                 this.innerHTML = '<span>💾</span><span>Ins Portfolio speichern</span>';
             }
         });
 
+        // ESC-Taste zum Schließen
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
         // Initialisierung
-        loadActivity();
+        renderKompetenzCards();
+        console.log('🎯 Schlüsselkompetenzen geladen');
+        console.log('👤 User:', userName || 'Gast');
+        console.log('🔥 Firebase:', currentUser ? 'Aktiv' : 'LocalStorage Fallback');
     </script>
 </body>
 </html>
