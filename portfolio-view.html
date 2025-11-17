@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Ansicht - ABU EBA Digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ktzh-blue: #0066CC;
+            --ktzh-light-blue: #00A0E0;
+            --ktzh-ultra-light: #E8F4F8;
+            --ktzh-white: #FFFFFF;
+            --ktzh-text: #1a1a1a;
+            --ktzh-gray: #666666;
+            --ktzh-light-gray: #f5f5f5;
+            --ktzh-success: #28a745;
+            --ktzh-warning: #ffc107;
+            --ktzh-danger: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, var(--ktzh-ultra-light) 0%, var(--ktzh-white) 100%);
+            color: var(--ktzh-text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        /* Header */
+        header {
+            background: var(--ktzh-white);
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section h1 {
+            color: var(--ktzh-blue);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .view-mode-badge {
+            background: var(--ktzh-warning);
+            color: var(--ktzh-white);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-title {
+            color: var(--ktzh-blue);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .page-description {
+            color: var(--ktzh-gray);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        /* Portfolio Entry */
+        .portfolio-entry {
+            background: var(--ktzh-white);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.1);
+        }
+
+        .entry-header {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--ktzh-ultra-light);
+        }
+
+        .entry-title {
+            color: var(--ktzh-blue);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .entry-date {
+            color: var(--ktzh-gray);
+            font-size: 0.9rem;
+        }
+
+        .entry-content {
+            color: var(--ktzh-text);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            white-space: pre-wrap;
+            font-size: 1.1rem;
+        }
+
+        .entry-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--ktzh-ultra-light);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--ktzh-gray);
+            font-size: 0.9rem;
+        }
+
+        .meta-label {
+            font-weight: 600;
+        }
+
+        .meta-value {
+            color: var(--ktzh-blue);
+        }
+
+        /* Reactions Section */
+        .reactions-section {
+            background: var(--ktzh-ultra-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .reactions-title {
+            color: var(--ktzh-blue);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .reactions-display {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .reaction-item {
+            background: var(--ktzh-white);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 4px rgba(0, 102, 204, 0.1);
+        }
+
+        .reaction-emoji {
+            font-size: 1.2rem;
+        }
+
+        .reaction-text {
+            font-weight: 500;
+        }
+
+        .reaction-from {
+            color: var(--ktzh-gray);
+            font-size: 0.8rem;
+        }
+
+        /* Emoji Picker */
+        .emoji-picker {
+            background: var(--ktzh-white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .emoji-picker-title {
+            color: var(--ktzh-gray);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .name-input-group {
+            margin-bottom: 1rem;
+        }
+
+        .name-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--ktzh-ultra-light);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .name-input:focus {
+            outline: none;
+            border-color: var(--ktzh-blue);
+        }
+
+        .emoji-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .emoji-button {
+            background: var(--ktzh-light-gray);
+            border: 2px solid var(--ktzh-ultra-light);
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .emoji-button:hover {
+            border-color: var(--ktzh-blue);
+            background: var(--ktzh-ultra-light);
+            transform: scale(1.05);
+        }
+
+        .emoji-icon {
+            font-size: 1.3rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--ktzh-gray);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-text {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .error-state {
+            background: #fee;
+            border: 2px solid var(--ktzh-danger);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .error-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: var(--ktzh-success);
+            color: var(--ktzh-white);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .emoji-options {
+                flex-direction: column;
+            }
+
+            .emoji-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <h1>ABU EBA Digital - Portfolio Ansicht</h1>
+            </div>
+            <div class="view-mode-badge">
+                👁️ Lesemodus
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="page-title" id="pageTitle">📁 Portfolio wird geladen...</h1>
+        <p class="page-description" id="pageDescription">
+            Einen Moment bitte...
+        </p>
+
+        <!-- Success Message (hidden by default) -->
+        <div id="successMessage" style="display: none;"></div>
+
+        <!-- Portfolio Entries Container -->
+        <div id="portfolioContainer">
+            <!-- Entries will be loaded here dynamically -->
+        </div>
+
+        <!-- Loading State -->
+        <div class="empty-state" id="loadingState">
+            <div class="empty-icon">⏳</div>
+            <div class="empty-text">Portfolio wird geladen...</div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-icon">📂</div>
+            <div class="empty-text">Keine Portfolio-Einträge gefunden</div>
+            <div class="empty-subtext">Dieser Code hat noch keine Einträge oder der Code ist ungültig.</div>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-state" id="errorState" style="display: none;">
+            <div class="error-icon">⚠️</div>
+            <div class="empty-text">Fehler beim Laden</div>
+            <div class="empty-subtext" id="errorMessage"></div>
+        </div>
+    </div>
+
+    <script>
+        let viewerName = '';
+        let portfolioCode = '';
+        let specificEntryIndex = null;
+
+        // Load portfolio from URL parameters
+        function loadPortfolioFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            portfolioCode = urlParams.get('code');
+            specificEntryIndex = urlParams.get('entry');
+
+            if (!portfolioCode) {
+                showError('Kein Portfolio-Code in der URL gefunden.');
+                return;
+            }
+
+            // Load all portfolio entries
+            loadPortfolioEntries(portfolioCode);
+        }
+
+        // Load portfolio entries
+        function loadPortfolioEntries(code) {
+            try {
+                let allEntries = [];
+                
+                // Method 1: Load from global portfolio array
+                const portfolioData = localStorage.getItem('abuEbaPortfolio');
+                if (portfolioData) {
+                    const entries = JSON.parse(portfolioData);
+                    const userEntries = entries.filter(entry => 
+                        entry.userCode && entry.userCode.replace(/[^A-Z0-9]/g, '') === code
+                    );
+                    
+                    allEntries = allEntries.concat(userEntries);
+                }
+
+                // Method 2: Try to find entries by scanning localStorage
+                const possibleKeys = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key && key.includes('abuEba_') && key.includes('_progress')) {
+                        possibleKeys.push(key);
+                    }
+                }
+
+                // Try to find matching user code
+                possibleKeys.forEach(key => {
+                    const parts = key.split('_');
+                    if (parts.length >= 2) {
+                        const keyCode = parts[1];
+                        if (keyCode.replace(/[^A-Z0-9]/g, '') === code) {
+                            try {
+                                const progressData = JSON.parse(localStorage.getItem(key));
+                                const entries = convertProgressToPortfolioEntries(key, progressData, keyCode);
+                                allEntries = allEntries.concat(entries);
+                            } catch (e) {
+                                console.log('Could not parse progress data:', e);
+                            }
+                        }
+                    }
+                });
+
+                // Remove duplicates
+                allEntries = removeDuplicateEntries(allEntries);
+
+                if (allEntries.length === 0) {
+                    showEmptyState();
+                } else {
+                    displayPortfolio(allEntries);
+                }
+
+            } catch (error) {
+                console.error('Error loading portfolio:', error);
+                showError('Fehler beim Laden des Portfolios: ' + error.message);
+            }
+        }
+
+        // Convert progress data to portfolio entries
+        function convertProgressToPortfolioEntries(key, progressData, userCode) {
+            const entries = [];
+            
+            for (const themeKey in progressData) {
+                const themeData = progressData[themeKey];
+                
+                for (const contentKey in themeData) {
+                    if (themeData[contentKey] === true) {
+                        const activityKey = `abuEba_${userCode}_${contentKey}_activity`;
+                        
+                        let activityData = {};
+                        try {
+                            if (localStorage.getItem(activityKey)) {
+                                activityData = JSON.parse(localStorage.getItem(activityKey));
+                            }
+                        } catch (e) {
+                            console.log('Error parsing activity data:', e);
+                        }
+                        
+                        entries.push({
+                            userCode: userCode,
+                            date: activityData.date || new Date().toISOString(),
+                            theme: formatThemeName(themeKey),
+                            module: formatModuleName(contentKey),
+                            reflection: activityData.reflection || 'Modul abgeschlossen',
+                            competencies: activityData.competencies || '',
+                            reactions: activityData.reactions || []
+                        });
+                    }
+                }
+            }
+            
+            return entries;
+        }
+
+        // Remove duplicate entries
+        function removeDuplicateEntries(entries) {
+            const seen = new Map();
+            
+            entries.forEach(entry => {
+                const uniqueKey = `${entry.theme}_${entry.module}`;
+                
+                if (!seen.has(uniqueKey)) {
+                    seen.set(uniqueKey, entry);
+                } else {
+                    const existing = seen.get(uniqueKey);
+                    // Keep the one with a real reflection
+                    if (entry.reflection && entry.reflection !== 'Modul abgeschlossen' && 
+                        (!existing.reflection || existing.reflection === 'Modul abgeschlossen')) {
+                        seen.set(uniqueKey, entry);
+                    }
+                }
+            });
+            
+            return Array.from(seen.values());
+        }
+
+        // Format theme name
+        function formatThemeName(themeKey) {
+            const themeNames = {
+                'theme1': 'Thema 1: Ins Berufsleben einsteigen',
+                'theme2': 'Thema 2: Bewusst konsumieren',
+                'theme3': 'Thema 3: Risiko und Sicherheit',
+                'theme4': 'Thema 4: Geld und Kauf',
+                'theme5': 'Thema 5: Demokratie mitgestalten',
+                'theme6': 'Thema 6: Verträge verstehen',
+                'theme7': 'Thema 7: Arbeit und Steuern',
+                'theme8': 'Thema 8: Kunst und Kultur'
+            };
+            return themeNames[themeKey] || themeKey;
+        }
+
+        // Format module name
+        function formatModuleName(moduleKey) {
+            return moduleKey
+                .replace(/-/g, ' ')
+                .replace(/\b\w/g, l => l.toUpperCase());
+        }
+
+        // Display portfolio
+        function displayPortfolio(entries) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'none';
+
+            // Update page title
+            const ownerName = entries.length > 0 ? (entries[0].userName || 'Lernende:r') : 'Lernende:r';
+            document.getElementById('pageTitle').textContent = `📁 Portfolio von ${ownerName}`;
+            document.getElementById('pageDescription').textContent = 
+                'Hier kannst du die Portfolio-Einträge einsehen und Rückmeldungen geben.';
+
+            // Sort entries by date (newest first)
+            entries.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            const container = document.getElementById('portfolioContainer');
+            container.innerHTML = '';
+
+            // If specific entry requested, show only that one
+            if (specificEntryIndex !== null) {
+                const index = parseInt(specificEntryIndex);
+                if (index >= 0 && index < entries.length) {
+                    displayEntry(entries[index], index, container);
+                    return;
+                }
+            }
+
+            // Display all entries
+            entries.forEach((entry, index) => {
+                displayEntry(entry, index, container);
+            });
+        }
+
+        // Display single entry
+        function displayEntry(entry, index, container) {
+            const reactions = entry.reactions || [];
+            const hasReactions = reactions.length > 0;
+
+            const entryDiv = document.createElement('div');
+            entryDiv.className = 'portfolio-entry';
+
+            entryDiv.innerHTML = `
+                <div class="entry-header">
+                    <h3 class="entry-title">${entry.theme || 'Lernaktivität'}</h3>
+                    <span class="entry-date">${formatDate(entry.date)}</span>
+                </div>
+                
+                <div class="entry-content">${entry.reflection}</div>
+                
+                <div class="entry-meta">
+                    ${entry.module ? `
+                        <div class="meta-item">
+                            <span class="meta-label">Modul:</span>
+                            <span class="meta-value">${entry.module}</span>
+                        </div>
+                    ` : ''}
+                    ${entry.competencies ? `
+                        <div class="meta-item">
+                            <span class="meta-label">Kompetenzen:</span>
+                            <span class="meta-value">${entry.competencies}</span>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <div class="reactions-section">
+                    <h4 class="reactions-title">💬 Rückmeldungen (${reactions.length})</h4>
+                    
+                    ${hasReactions ? `
+                        <div class="reactions-display">
+                            ${reactions.map(reaction => `
+                                <div class="reaction-item">
+                                    <span class="reaction-emoji">${reaction.emoji}</span>
+                                    <span class="reaction-text">${reaction.meaning}</span>
+                                    <span class="reaction-from">von ${reaction.from}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : `
+                        <p style="color: var(--ktzh-gray); margin-bottom: 1rem;">
+                            Noch keine Rückmeldungen vorhanden.
+                        </p>
+                    `}
+                    
+                    <div class="emoji-picker">
+                        <div class="emoji-picker-title">✍️ Deine Rückmeldung:</div>
+                        <div class="name-input-group">
+                            <input 
+                                type="text" 
+                                class="name-input" 
+                                id="nameInput-${index}"
+                                placeholder="Dein Name (z.B. Herr Müller, Frau Schmidt)"
+                                value="${viewerName}"
+                            >
+                        </div>
+                        <div class="emoji-options">
+                            <button class="emoji-button" onclick="addReaction(${index}, '👍', 'Super!')">
+                                <span class="emoji-icon">👍</span>
+                                <span>Super!</span>
+                            </button>
+                            <button class="emoji-button" onclick="addReaction(${index}, '💯', 'Perfekt')">
+                                <span class="emoji-icon">💯</span>
+                                <span>Perfekt</span>
+                            </button>
+                            <button class="emoji-button" onclick="addReaction(${index}, '🎯', 'Genau richtig')">
+                                <span class="emoji-icon">🎯</span>
+                                <span>Genau richtig</span>
+                            </button>
+                            <button class="emoji-button" onclick="addReaction(${index}, '💡', 'Clever!')">
+                                <span class="emoji-icon">💡</span>
+                                <span>Clever!</span>
+                            </button>
+                            <button class="emoji-button" onclick="addReaction(${index}, '🌟', 'Toll gemacht')">
+                                <span class="emoji-icon">🌟</span>
+                                <span>Toll gemacht</span>
+                            </button>
+                            <button class="emoji-button" onclick="addReaction(${index}, '🚀', 'Weiter so!')">
+                                <span class="emoji-icon">🚀</span>
+                                <span>Weiter so!</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(entryDiv);
+        }
+
+        // Add reaction
+        function addReaction(entryIndex, emoji, meaning) {
+            const nameInput = document.getElementById(`nameInput-${entryIndex}`);
+            const name = nameInput.value.trim();
+
+            if (!name) {
+                alert('Bitte gib deinen Namen ein, um eine Rückmeldung zu geben.');
+                nameInput.focus();
+                return;
+            }
+
+            viewerName = name; // Remember for next time
+
+            try {
+                // Load portfolio data
+                const portfolioData = localStorage.getItem('abuEbaPortfolio');
+                const entries = portfolioData ? JSON.parse(portfolioData) : [];
+
+                // Find the entry
+                const userEntries = entries.filter(entry => 
+                    entry.userCode && entry.userCode.replace(/[^A-Z0-9]/g, '') === portfolioCode
+                );
+
+                if (!userEntries[entryIndex]) {
+                    alert('Eintrag nicht gefunden.');
+                    return;
+                }
+
+                const entry = userEntries[entryIndex];
+
+                // Add reaction
+                if (!entry.reactions) {
+                    entry.reactions = [];
+                }
+
+                const reaction = {
+                    emoji: emoji,
+                    meaning: meaning,
+                    from: name,
+                    date: new Date().toISOString()
+                };
+
+                entry.reactions.push(reaction);
+
+                // Update in global array
+                const globalIndex = entries.findIndex(e => 
+                    e.userCode === entry.userCode && 
+                    e.date === entry.date && 
+                    e.reflection === entry.reflection
+                );
+
+                if (globalIndex !== -1) {
+                    entries[globalIndex] = entry;
+                    localStorage.setItem('abuEbaPortfolio', JSON.stringify(entries));
+                }
+
+                // Also update in activity data if it exists
+                const activityKey = `abuEba_${entry.userCode}_${entry.module.toLowerCase().replace(/ /g, '-')}_activity`;
+                const activityData = localStorage.getItem(activityKey);
+                if (activityData) {
+                    try {
+                        const activity = JSON.parse(activityData);
+                        if (!activity.reactions) {
+                            activity.reactions = [];
+                        }
+                        activity.reactions.push(reaction);
+                        localStorage.setItem(activityKey, JSON.stringify(activity));
+                    } catch (e) {
+                        console.log('Could not update activity data:', e);
+                    }
+                }
+
+                showSuccessMessage(`Rückmeldung "${meaning}" wurde hinzugefügt!`);
+                
+                // Reload to show new reaction
+                setTimeout(() => {
+                    loadPortfolioEntries(portfolioCode);
+                }, 1000);
+
+            } catch (error) {
+                console.error('Error adding reaction:', error);
+                alert('Fehler beim Hinzufügen der Rückmeldung: ' + error.message);
+            }
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            return date.toLocaleDateString('de-CH', options);
+        }
+
+        // Show success message
+        function showSuccessMessage(message) {
+            const messageDiv = document.getElementById('successMessage');
+            messageDiv.textContent = message;
+            messageDiv.className = 'success-message';
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Show empty state
+        function showEmptyState() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('emptyState').style.display = 'block';
+            document.getElementById('errorState').style.display = 'none';
+            document.getElementById('pageTitle').textContent = '📁 Keine Einträge gefunden';
+            document.getElementById('pageDescription').textContent = '';
+        }
+
+        // Show error state
+        function showError(message) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('pageTitle').textContent = '⚠️ Fehler';
+            document.getElementById('pageDescription').textContent = '';
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadPortfolioFromURL();
+        });
+    </script>
+</body>
+</html>
