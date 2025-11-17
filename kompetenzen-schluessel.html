@@ -17,6 +17,7 @@
             --ktzh-lightblue: #E8F4F8;
             --ktzh-darkgray: #3C3C3B;
             --ktzh-gray: #767676;
+            --ktzh-lightgray: #CCCCCC;
             --white: #FFFFFF;
             --green: #10B981;
             --yellow: #F59E0B;
@@ -72,6 +73,11 @@
             text-decoration: none;
             opacity: 0.9;
             font-size: 0.875rem;
+            transition: opacity 0.3s;
+        }
+
+        .breadcrumb a:hover {
+            opacity: 1;
         }
 
         header h1 {
@@ -126,169 +132,51 @@
             margin-bottom: 1rem;
         }
 
-        /* Interactive Scenario */
-        .scenario-box {
-            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
-            border-radius: 16px;
-            padding: 2.5rem;
-            margin: 2rem 0;
-            border-left: 6px solid var(--orange);
+        /* Aktivitäts-Tracker */
+        .activity-tracker {
+            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            color: var(--white);
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.2);
         }
 
-        .scenario-box h3 {
-            color: #92400E;
-            font-size: 1.5rem;
+        .activity-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
             margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
         }
 
-        .scenario-text {
-            color: #78350F;
-            font-size: 1.125rem;
-            line-height: 1.8;
-            margin-bottom: 2rem;
-        }
-
-        /* Interactive Challenge */
-        .challenge-section {
-            background: var(--white);
-            border-radius: 16px;
-            padding: 2.5rem;
-            margin: 2rem 0;
-            border: 3px solid var(--ktzh-cyan);
-        }
-
-        .challenge-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .challenge-icon {
+        .activity-icon {
             font-size: 3rem;
         }
 
-        .challenge-title {
-            flex: 1;
-        }
-
-        .challenge-title h3 {
-            color: var(--ktzh-blue);
+        .activity-content h3 {
             font-size: 1.5rem;
             margin-bottom: 0.5rem;
         }
 
-        .challenge-title p {
-            color: var(--ktzh-gray);
-            font-size: 0.95rem;
+        .activity-content p {
+            font-size: 1rem;
+            opacity: 0.9;
         }
 
-        /* Matching Game */
-        .matching-game {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .matching-column h4 {
-            color: var(--ktzh-blue);
-            margin-bottom: 1rem;
-            font-size: 1.125rem;
-        }
-
-        .matching-item {
-            background: var(--ktzh-lightblue);
-            border: 3px solid transparent;
-            border-radius: 12px;
-            padding: 1.25rem;
-            margin-bottom: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            user-select: none;
-        }
-
-        .matching-item:hover {
-            transform: translateX(4px);
-            border-color: var(--ktzh-cyan);
-        }
-
-        .matching-item.selected {
-            background: var(--ktzh-cyan);
-            color: var(--white);
-            border-color: var(--ktzh-blue);
-            transform: scale(1.05);
-        }
-
-        .matching-item.correct {
-            background: var(--green);
-            color: var(--white);
-            border-color: #059669;
-        }
-
-        .matching-item.incorrect {
-            background: var(--red);
-            color: var(--white);
-            border-color: #DC2626;
-            animation: shake 0.5s;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-
-        .matching-item-number {
-            display: inline-block;
-            background: var(--white);
-            color: var(--ktzh-blue);
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 32px;
-            font-weight: 700;
-            margin-right: 0.75rem;
-        }
-
-        .matching-item.selected .matching-item-number,
-        .matching-item.correct .matching-item-number {
-            background: var(--white);
-            color: var(--ktzh-blue);
-        }
-
-        /* Progress Tracker */
-        .progress-tracker {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .progress-text {
-            color: var(--ktzh-gray);
-            font-size: 0.95rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .progress-bar-container {
-            background: var(--ktzh-lightgray);
-            height: 12px;
+        .activity-progress-bar {
+            background: rgba(255, 255, 255, 0.2);
+            height: 16px;
             border-radius: 20px;
             overflow: hidden;
         }
 
-        .progress-bar-fill {
-            background: linear-gradient(90deg, var(--green) 0%, #059669 100%);
+        .activity-progress-fill {
+            background: var(--white);
             height: 100%;
             width: 0%;
             transition: width 0.6s ease;
             border-radius: 20px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         /* Kompetenz Overview Grid */
@@ -348,93 +236,6 @@
         .kompetenz-card .icon {
             font-size: 2rem;
             margin-bottom: 1rem;
-        }
-
-        /* Feedback Messages */
-        .feedback-message {
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin: 1.5rem 0;
-            display: none;
-            animation: slideIn 0.4s ease;
-        }
-
-        .feedback-message.show {
-            display: block;
-        }
-
-        .feedback-message.success {
-            background: #ECFDF5;
-            border-left: 4px solid var(--green);
-            color: #065F46;
-        }
-
-        .feedback-message.info {
-            background: var(--ktzh-lightblue);
-            border-left: 4px solid var(--ktzh-cyan);
-            color: #0C4A6E;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Button */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-primary {
-            background: var(--ktzh-blue);
-            color: var(--white);
-        }
-
-        .btn-primary:hover {
-            background: var(--ktzh-cyan);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 160, 224, 0.3);
-        }
-
-        .btn-success {
-            background: var(--green);
-            color: var(--white);
-        }
-
-        .btn-success:hover {
-            background: #059669;
-            transform: translateY(-2px);
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 3rem;
-            flex-wrap: wrap;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            header h1 { font-size: 2rem; }
-            .matching-game { grid-template-columns: 1fr; }
-            .kompetenz-grid { grid-template-columns: 1fr; }
         }
 
         /* Modal */
@@ -646,6 +447,17 @@
             animation: slideIn 0.4s ease;
         }
 
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .feedback-box.success {
             background: #ECFDF5;
             border-left: 6px solid var(--green);
@@ -666,13 +478,169 @@
         .feedback-box p {
             line-height: 1.6;
         }
+
+        /* Portfolio Section */
+        .portfolio-section {
+            background: linear-gradient(135deg, var(--purple) 0%, #9333EA 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 3rem 0;
+            color: var(--white);
+            text-align: center;
+        }
+
+        .portfolio-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .portfolio-section p {
+            font-size: 1.125rem;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: var(--ktzh-blue);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--ktzh-cyan);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 160, 224, 0.3);
+        }
+
+        .btn-success {
+            background: var(--green);
+            color: var(--white);
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .btn-white {
+            background: var(--white);
+            color: var(--purple);
+        }
+
+        .btn-white:hover {
+            background: var(--ktzh-lightblue);
+            color: var(--ktzh-blue);
+            transform: translateY(-2px);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Schwebende AI-Assistenten */
+        .ai-assistant {
+            position: fixed;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            cursor: pointer;
+            z-index: 9999;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .ai-assistant:hover {
+            transform: scale(1.1);
+        }
+
+        .ai-assistant.wise-woman {
+            bottom: 120px;
+            right: 30px;
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            animation-delay: 0s;
+        }
+
+        .ai-assistant.robot {
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, var(--ktzh-lightblue) 0%, #BFDBFE 100%);
+            animation-delay: 2s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .ai-tooltip {
+            position: absolute;
+            right: 90px;
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            white-space: nowrap;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--ktzh-darkgray);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .ai-assistant:hover .ai-tooltip {
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            .kompetenz-grid { grid-template-columns: 1fr; }
+            .ai-assistant {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+            .ai-assistant.wise-woman {
+                bottom: 90px;
+                right: 20px;
+            }
+            .ai-assistant.robot {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="header-content">
             <div class="breadcrumb">
-                <a href="kompetenzen-einfuehrung.html">← Zurück zur Kompetenz-Übersicht</a>
+                <a href="kompetenzen-dashboard.html">← Zurück zum Kompetenzen-Dashboard</a>
             </div>
             <h1>🎯 Schlüsselkompetenzen</h1>
             <p>12 Kompetenzen für lebenslanges Lernen – entdecken, verstehen, anwenden</p>
@@ -795,6 +763,16 @@
             </div>
         </div>
 
+        <!-- Portfolio Section -->
+        <div class="portfolio-section">
+            <h2>📝 Portfolio-Eintrag</h2>
+            <p>Reflektieren Sie Ihre Erkenntnisse zu den Schlüsselkompetenzen und speichern Sie sie in Ihrem Portfolio.</p>
+            <a href="portfolio.html" class="btn btn-white">
+                <span>Zum Portfolio</span>
+                <span>→</span>
+            </a>
+        </div>
+
         <!-- Modal für Kompetenz-Details -->
         <div id="kompetenzModal" class="modal">
             <div class="modal-content">
@@ -805,129 +783,63 @@
 
         <!-- Navigation -->
         <div class="nav-buttons">
-            <a href="kompetenzen-einfuehrung.html" class="btn btn-primary">
+            <a href="kompetenzen-dashboard.html" class="btn btn-primary">
                 <span>←</span>
-                <span>Zurück zur Übersicht</span>
+                <span>Zurück zum Dashboard</span>
             </a>
-            <a href="thema1-uebersicht.html" class="btn btn-success">
-                <span>Jetzt Thema 1 starten</span>
+            <a href="kompetenzen-gesellschaft.html" class="btn btn-success">
+                <span>Nächste Dimension: Gesellschaft & Aspekte</span>
                 <span>→</span>
             </a>
         </div>
     </div>
 
+    <!-- Schwebende AI-Assistenten -->
+    <div class="ai-assistant wise-woman" onclick="showAssistantMessage('wise')">
+        👵
+        <div class="ai-tooltip">Weise Frau fragen</div>
+    </div>
+
+    <div class="ai-assistant robot" onclick="showAssistantMessage('robot')">
+        🤖
+        <div class="ai-tooltip">Roboter-Assistent fragen</div>
+    </div>
+
     <script>
-        let selectedSituation = null;
-        let selectedKompetenz = null;
-        let matches = {};
-        let correctMatches = 0;
+        // Aktivitäts-Tracking
+        let completedComps = new Set();
+        const userCode = localStorage.getItem('abuEbaCode');
 
-        // Richtige Zuordnungen
-        const correctAnswers = {
-            1: 2,  // Konflikt erkennen → Ziele setzen
-            2: 7,  // Perspektive wechseln → Standpunkte nachvollziehen
-            3: 3,  // Lösung finden → Innovative Problemlösung
-            4: 6   // Begründen → Standpunkte begründen
-        };
-
-        function selectSituation(num) {
-            // Vorherige Auswahl entfernen
-            document.querySelectorAll('[data-situation]').forEach(el => {
-                el.classList.remove('selected');
-            });
-            
-            // Neue Auswahl
-            selectedSituation = num;
-            document.querySelector(`[data-situation="${num}"]`).classList.add('selected');
-            
-            checkIfPairReady();
-        }
-
-        function selectKompetenz(num) {
-            // Vorherige Auswahl entfernen
-            document.querySelectorAll('[data-kompetenz]').forEach(el => {
-                el.classList.remove('selected');
-            });
-            
-            // Neue Auswahl
-            selectedKompetenz = num;
-            document.querySelector(`[data-kompetenz="${num}"]`).classList.add('selected');
-            
-            checkIfPairReady();
-        }
-
-        function checkIfPairReady() {
-            if (selectedSituation && selectedKompetenz) {
-                // Prüfen ob richtig
-                const isCorrect = correctAnswers[selectedSituation] === selectedKompetenz;
-                
-                const situationEl = document.querySelector(`[data-situation="${selectedSituation}"]`);
-                const kompetenzEl = document.querySelector(`[data-kompetenz="${selectedKompetenz}"]`);
-                
-                if (isCorrect) {
-                    // Richtig!
-                    situationEl.classList.remove('selected');
-                    situationEl.classList.add('correct');
-                    kompetenzEl.classList.remove('selected');
-                    kompetenzEl.classList.add('correct');
-                    
-                    // Disable beide
-                    situationEl.onclick = null;
-                    kompetenzEl.onclick = null;
-                    
-                    // Match speichern
-                    matches[selectedSituation] = selectedKompetenz;
-                    correctMatches++;
-                    
-                    // Progress aktualisieren
-                    updateProgress();
-                    
-                    // Feedback
-                    showFeedback('success', '✅ Richtig! Sehr gut erkannt.');
-                    
-                    // Alle richtig?
-                    if (correctMatches === 4) {
-                        setTimeout(() => {
-                            document.getElementById('successSection').style.display = 'block';
-                            document.getElementById('successSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }, 1000);
-                    }
-                } else {
-                    // Falsch
-                    situationEl.classList.remove('selected');
-                    situationEl.classList.add('incorrect');
-                    kompetenzEl.classList.remove('selected');
-                    kompetenzEl.classList.add('incorrect');
-                    
-                    showFeedback('info', '❌ Nicht ganz. Versuchen Sie es nochmal!');
-                    
-                    // Nach 1 Sekunde zurücksetzen
-                    setTimeout(() => {
-                        situationEl.classList.remove('incorrect');
-                        kompetenzEl.classList.remove('incorrect');
-                    }, 1000);
+        // Lade gespeicherte Aktivität
+        function loadActivity() {
+            if (userCode) {
+                const saved = localStorage.getItem(`abuEba_${userCode}_completedComps`);
+                if (saved) {
+                    completedComps = new Set(JSON.parse(saved));
+                    updateActivityDisplay();
                 }
-                
-                // Reset selection
-                selectedSituation = null;
-                selectedKompetenz = null;
             }
         }
 
-        function updateProgress() {
-            const percentage = (correctMatches / 4) * 100;
-            document.getElementById('progressBar').style.width = percentage + '%';
-            document.getElementById('matchedCount').textContent = correctMatches;
+        // Aktualisiere Aktivitätsanzeige
+        function updateActivityDisplay() {
+            document.getElementById('completedComps').textContent = completedComps.size;
+            const percentage = (completedComps.size / 12) * 100;
+            document.getElementById('activityProgress').style.width = percentage + '%';
         }
 
-        function showFeedback(type, message) {
-            const feedback = document.getElementById('feedbackMessage');
-            feedback.className = `feedback-message ${type} show`;
-            feedback.textContent = message;
-            
-            setTimeout(() => {
-                feedback.classList.remove('show');
-            }, 3000);
+        // Speichere Aktivität
+        function saveActivity() {
+            if (userCode) {
+                localStorage.setItem(`abuEba_${userCode}_completedComps`, JSON.stringify([...completedComps]));
+            }
+        }
+
+        // Kompetenz als erkundet markieren
+        function markCompetenzCompleted(num) {
+            completedComps.add(num);
+            updateActivityDisplay();
+            saveActivity();
         }
 
         // Kompetenz-Daten mit Beispielen
@@ -1128,6 +1040,9 @@
 
             modal.classList.add('show');
             document.body.style.overflow = 'hidden';
+            
+            // Markiere als erkundet
+            markCompetenzCompleted(num);
         }
 
         // Modal schließen
@@ -1189,6 +1104,18 @@
             event.target.disabled = true;
             event.target.textContent = isCorrect ? '✓ Richtig beantwortet' : '✓ Antwort geprüft';
         }
+
+        // AI-Assistenten Nachrichten
+        function showAssistantMessage(type) {
+            if (type === 'wise') {
+                alert('👵 Weise Frau: "Diese Schlüsselkompetenzen begleiten dich ein Leben lang. Nimm dir Zeit, sie zu verstehen und zu üben!"');
+            } else {
+                alert('🤖 Roboter: "Tipp: Klicke auf jede Kompetenz und löse die Beispiele. So lernst du am besten!"');
+            }
+        }
+
+        // Initialisierung
+        loadActivity();
     </script>
 </body>
 </html>
