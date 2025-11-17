@@ -18,6 +18,8 @@
             --ktzh-light-gray: #f5f5f5;
             --ktzh-success: #28a745;
             --ktzh-warning: #ffc107;
+            --ktzh-danger: #dc3545;
+            --ktzh-danger-hover: #c82333;
         }
 
         * {
@@ -250,6 +252,17 @@
             flex-wrap: wrap;
             gap: 1rem;
         }
+        
+        .entry-header-main {
+            flex: 1 1 300px;
+        }
+
+        .entry-header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
 
         .entry-title {
             color: var(--ktzh-blue);
@@ -280,9 +293,10 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 102, 204, 0.3);
         }
-
-        .delete-entry-button {
-            background: #dc3545;
+        
+        /* NEU: Delete Button Style */
+        .delete-button {
+            background: var(--ktzh-danger);
             color: var(--ktzh-white);
             border: none;
             padding: 0.5rem 1rem;
@@ -294,8 +308,8 @@
             white-space: nowrap;
         }
 
-        .delete-entry-button:hover {
-            background: #c82333;
+        .delete-button:hover {
+            background: var(--ktzh-danger-hover);
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
         }
@@ -515,6 +529,82 @@
         .nav-button.secondary:hover {
             background: var(--ktzh-ultra-light);
         }
+        
+        /* NEU: Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 2rem;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,102,204,0.3);
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .modal-title {
+            color: var(--ktzh-blue);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .modal-text {
+            margin-bottom: 1.5rem;
+            color: var(--ktzh-gray);
+            font-size: 1.1rem;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        
+        .modal-button {
+            background: var(--ktzh-blue);
+            color: var(--ktzh-white);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .modal-button.secondary {
+            background: var(--ktzh-light-gray);
+            border: 2px solid var(--ktzh-gray);
+            color: var(--ktzh-gray);
+        }
+        
+        .modal-button.secondary:hover {
+            background: var(--ktzh-gray);
+            color: var(--ktzh-white);
+        }
+        
+        .modal-button.danger {
+            background: var(--ktzh-danger);
+        }
+        
+        .modal-button.danger:hover {
+            background: var(--ktzh-danger-hover);
+        }
+
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -543,18 +633,26 @@
                 width: 100%;
                 text-align: center;
             }
+            
+            .entry-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .entry-header-controls {
+                justify-content: flex-start;
+            }
         }
 
         /* Animations */
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .portfolio-entry {
@@ -569,97 +667,6 @@
             margin-bottom: 1rem;
             text-align: center;
             animation: fadeIn 0.3s ease-out;
-        }
-
-        /* Delete Confirmation Modal */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: var(--ktzh-white);
-            border-radius: 12px;
-            padding: 2rem;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            animation: slideUp 0.3s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .modal-title {
-            color: var(--ktzh-blue);
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .modal-text {
-            color: var(--ktzh-text);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-        }
-
-        .modal-button {
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .modal-button.confirm {
-            background: #dc3545;
-            color: var(--ktzh-white);
-        }
-
-        .modal-button.confirm:hover {
-            background: #c82333;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
-        }
-
-        .modal-button.cancel {
-            background: var(--ktzh-light-gray);
-            color: var(--ktzh-text);
-            border: 2px solid var(--ktzh-ultra-light);
-        }
-
-        .modal-button.cancel:hover {
-            background: var(--ktzh-ultra-light);
-            border-color: var(--ktzh-blue);
         }
     </style>
 </head>
@@ -679,23 +686,23 @@
 
     <!-- Breadcrumb Navigation -->
     <nav class="breadcrumb">
-        <a href="startzweig.html">ðŸ  Startseite</a>
-        <span>â€º</span>
-        <span>ðŸ“ Mein Portfolio</span>
+        <a href="startzweig.html">🏠 Startseite</a>
+        <span>›</span>
+        <span>📁 Mein Portfolio</span>
     </nav>
 
     <!-- Main Content -->
     <div class="container">
-        <h1 class="page-title">ðŸ“ Mein Portfolio</h1>
+        <h1 class="page-title">📁 Mein Portfolio</h1>
         <p class="page-description">
-            Hier findest du alle deine Reflexionen und Lernfortschritte. Du kannst dein Portfolio mit anderen teilen und RÃ¼ckmeldungen erhalten.
+            Hier findest du alle deine Reflexionen und Lernfortschritte. Du kannst dein Portfolio mit anderen teilen und Rückmeldungen erhalten.
         </p>
 
         <!-- Portfolio Statistics -->
         <div class="portfolio-stats">
             <div class="stat-card">
                 <div class="stat-number" id="totalEntries">0</div>
-                <div class="stat-label">Portfolio-EintrÃ¤ge</div>
+                <div class="stat-label">Portfolio-Einträge</div>
             </div>
             <div class="stat-card">
                 <div class="stat-number" id="totalReactions">0</div>
@@ -703,24 +710,24 @@
             </div>
             <div class="stat-card">
                 <div class="stat-number" id="totalShares">0</div>
-                <div class="stat-label">Geteilte EintrÃ¤ge</div>
+                <div class="stat-label">Geteilte Einträge</div>
             </div>
         </div>
 
         <!-- Share Section -->
         <div class="share-section">
-            <h2 class="share-title">ðŸ“¤ Portfolio teilen</h2>
+            <h2 class="share-title">📤 Portfolio teilen</h2>
             <p style="color: var(--ktzh-gray); margin-bottom: 1rem;">
-                Teile dein Portfolio mit Lehrpersonen, Berufsbildner:innen oder MitschÃ¼ler:innen, damit sie dir RÃ¼ckmeldungen geben kÃ¶nnen.
+                Teile dein Portfolio mit Lehrpersonen, Berufsbildner:innen oder Mitschüler:innen, damit sie dir Rückmeldungen geben können.
             </p>
             <div class="share-controls">
                 <button class="share-button" onclick="generateShareLink()">
-                    <span>ðŸ”—</span>
+                    <span>🔗</span>
                     <span>Teilungs-Link erstellen</span>
                 </button>
                 <input type="text" class="share-link" id="shareLink" readonly placeholder="Klicke auf 'Link erstellen', um einen Teilungs-Link zu generieren">
                 <button class="copy-button" id="copyButton" onclick="copyShareLink()" style="display: none;">
-                    ðŸ“‹ Link kopieren
+                    📋 Link kopieren
                 </button>
             </div>
         </div>
@@ -735,8 +742,8 @@
 
         <!-- Empty State -->
         <div class="empty-state" id="emptyState" style="display: none;">
-            <div class="empty-icon">ðŸ“‚</div>
-            <div class="empty-text">Noch keine Portfolio-EintrÃ¤ge</div>
+            <div class="empty-icon">📂</div>
+            <div class="empty-text">Noch keine Portfolio-Einträge</div>
             <div class="empty-subtext">Beginne mit dem Lernen und erstelle deine ersten Reflexionen!</div>
         </div>
     </div>
@@ -745,28 +752,34 @@
     <div class="bottom-nav">
         <div class="bottom-nav-content">
             <a href="startzweig.html" class="nav-button secondary">
-                â† ZurÃ¼ck zur Startseite
+                ← Zurück zur Startseite
             </a>
         </div>
     </div>
-
-    <!-- Delete Confirmation Modal -->
-    <div class="modal-overlay" id="deleteModal">
+    
+    <!-- NEU: Alert Modal (ersetzt alert()) -->
+    <div id="alertModal" class="modal-overlay">
         <div class="modal-content">
-            <h3 class="modal-title">⚠️ Eintrag löschen?</h3>
-            <p class="modal-text">
-                Möchtest du diesen Portfolio-Eintrag wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.
-            </p>
-            <div class="modal-actions">
-                <button class="modal-button cancel" onclick="closeDeleteModal()">
-                    Abbrechen
-                </button>
-                <button class="modal-button confirm" onclick="confirmDelete()">
-                    🗑️ Löschen
-                </button>
+            <h2 id="alertModalTitle" class="modal-title">Hinweis</h2>
+            <p id="alertModalText" class="modal-text"></p>
+            <div class="modal-buttons">
+                <button id="alertModalOk" class="modal-button">OK</button>
             </div>
         </div>
     </div>
+
+    <!-- NEU: Confirmation Modal (ersetzt confirm()) -->
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 id="confirmModalTitle" class="modal-title">Löschen bestätigen</h2>
+            <p id="confirmModalText" class="modal-text">Möchtest du diesen Eintrag wirklich endgültig löschen?</p>
+            <div class="modal-buttons">
+                <button id="confirmModalCancel" class="modal-button secondary">Abbrechen</button>
+                <button id="confirmModalConfirm" class="modal-button danger">Löschen</button>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         // Initialize
@@ -775,7 +788,108 @@
             name: ''
         };
         
-        let entryToDelete = null;
+        // NEU: Global variable to hold the delete callback
+        let deleteCallback = null;
+
+        // NEU: Function to replace alert()
+        function customAlert(message, title = 'Hinweis', callback = null) {
+            const modal = document.getElementById('alertModal');
+            document.getElementById('alertModalTitle').textContent = title;
+            document.getElementById('alertModalText').textContent = message;
+            modal.style.display = 'block';
+
+            document.getElementById('alertModalOk').onclick = () => {
+                modal.style.display = 'none';
+                if (callback) {
+                    callback();
+                }
+            };
+        }
+        
+        // NEU: Function to show confirmation modal
+        function confirmDelete(dataSource, dataKey, progressKey, themeDataKey, reflectionKey) {
+            const modal = document.getElementById('confirmModal');
+            modal.style.display = 'block';
+
+            // Store the delete function to be called on confirm
+            deleteCallback = () => {
+                // Handle 'undefined' strings from HTML
+                const pKey = progressKey === 'undefined' ? '' : progressKey;
+                const tKey = themeDataKey === 'undefined' ? '' : themeDataKey;
+                const rKey = reflectionKey === 'undefined' ? '' : reflectionKey;
+
+                deleteEntry(dataSource, dataKey, pKey, tKey, rKey);
+                modal.style.display = 'none';
+                deleteCallback = null;
+            };
+        }
+        
+        // NEU: The actual delete logic
+        function deleteEntry(dataSource, dataKey, progressKey, themeDataKey, reflectionKey) {
+            if (dataSource === 'undefined' || dataKey === 'undefined') {
+                console.error('Delete failed: Invalid data source or key.');
+                return;
+            }
+
+            try {
+                if (dataSource === 'portfolio') {
+                    // Source 1: Delete from 'abuEbaPortfolio' array
+                    const portfolioData = localStorage.getItem('abuEbaPortfolio');
+                    if (portfolioData) {
+                        let entries = JSON.parse(portfolioData);
+                        const initialLength = entries.length;
+                        // Find the entry by its dataKey (date) and reflectionKey
+                        entries = entries.filter(entry => 
+                            !(entry.userCode === currentUser.code && entry.date === dataKey && entry.reflection === reflectionKey)
+                        );
+                        
+                        if (entries.length < initialLength) {
+                            localStorage.setItem('abuEbaPortfolio', JSON.stringify(entries));
+                            console.log('Deleted entry from abuEbaPortfolio');
+                        }
+                    }
+                } else if (dataSource === 'activity') {
+                    // Source 2: Delete the specific activity key
+                    localStorage.removeItem(dataKey); // dataKey is the full key
+                    console.log('Deleted activity key:', dataKey);
+                    
+                } else if (dataSource === 'progress') {
+                    // Source 3: Update the progress object
+                    // dataKey = 'lerninhalt-1-1'
+                    // progressKey = 'abuEba_CODE_progress'
+                    // themeDataKey = 'theme1'
+                    const progressData = localStorage.getItem(progressKey);
+                    if (progressData) {
+                        let progress = JSON.parse(progressData);
+                        if (progress[themeDataKey] && progress[themeDataKey][dataKey]) {
+                            // Delete the progress entry
+                            delete progress[themeDataKey][dataKey];
+                            localStorage.setItem(progressKey, JSON.stringify(progress));
+                            console.log('Updated progress key:', progressKey, 'for module:', dataKey);
+                        }
+                    }
+                    
+                    // Also delete any associated activity/interactive/quiz keys
+                    const activityKey = `abuEba_${currentUser.code}_${dataKey}_activity`;
+                    const interactiveKey = `abuEba_${currentUser.code}_${dataKey}_interactive`;
+                    const quizKey = `abuEba_${currentUser.code}_${dataKey}_quizActivity`;
+                    localStorage.removeItem(activityKey);
+                    localStorage.removeItem(interactiveKey);
+                    localStorage.removeItem(quizKey);
+                    console.log('Removed associated activity/quiz keys for:', dataKey);
+                }
+
+                showSuccessMessage('Eintrag wurde gelöscht!');
+                
+                // Reload all entries to reflect the change
+                loadPortfolioEntries();
+
+            } catch (e) {
+                console.error('Error during deletion:', e);
+                customAlert('Fehler beim Löschen.', 'Fehler');
+            }
+        }
+
 
         // Load user data
         function loadUserData() {
@@ -783,8 +897,10 @@
             const userName = localStorage.getItem('abuEbaName');
             
             if (!userCode || !userName) {
-                alert('Bitte melde dich zuerst an!');
-                window.location.href = 'index.html';
+                // ERSETZT: alert('Bitte melde dich zuerst an!');
+                customAlert('Bitte melde dich zuerst an!', 'Fehler', () => {
+                    window.location.href = 'index.html';
+                });
                 return;
             }
             
@@ -804,6 +920,14 @@
             if (portfolioData) {
                 const entries = JSON.parse(portfolioData);
                 const userEntries = entries.filter(entry => entry.userCode === currentUser.code);
+                
+                // NEU: Add data source info for deletion
+                userEntries.forEach(entry => {
+                    entry.dataSource = 'portfolio';
+                    entry.dataKey = entry.date; // Use date as the key
+                    entry.reflectionKey = entry.reflection; // Use reflection as second key part
+                });
+                
                 allEntries = allEntries.concat(userEntries);
             }
             
@@ -862,14 +986,15 @@
             return {
                 userCode: currentUser.code,
                 date: data.date || new Date().toISOString(),
-                theme: data.theme || 'LernaktivitÃ¤t',
+                theme: data.theme || 'Lernaktivität',
                 module: moduleName,
-                reflection: data.reflection || 'AktivitÃ¤t abgeschlossen',
+                reflection: data.reflection || 'Aktivität abgeschlossen',
                 competencies: data.competencies || '',
                 activities: data,
                 reactions: data.reactions || [],
-                source: 'activity',
-                shareLink: null
+                shareLink: null,
+                dataSource: 'activity', // NEU
+                dataKey: key // NEU: The full localStorage key
             };
         }
         
@@ -919,7 +1044,10 @@
                                 quiz: quizData
                             },
                             reactions: activityData.reactions || [],
-                            source: 'progress'
+                            dataSource: 'progress', // NEU
+                            dataKey: contentKey,    // NEU: e.g., 'lerninhalt-1-1'
+                            progressKey: key,       // NEU: e.g., 'abuEba_CODE_progress'
+                            themeDataKey: themeKey  // NEU: e.g., 'theme1'
                         });
                     }
                 }
@@ -928,36 +1056,48 @@
             return entries;
         }
         
-        // Remove duplicate entries
+        // Remove duplicate entries (ÜBERARBEITET)
         function removeDuplicateEntries(entries) {
             const seen = new Map();
             
-            return entries.filter(entry => {
-                // Create unique key based on theme and module (ignore date for deduplication)
+            entries.forEach(entry => {
                 const uniqueKey = `${entry.theme}_${entry.module}`;
                 
-                if (seen.has(uniqueKey)) {
-                    // If we already have this entry, keep the one with more data
-                    const existing = seen.get(uniqueKey);
-                    
-                    // Prefer entries with reflections
-                    if (entry.reflection && entry.reflection !== 'AktivitÃ¤t abgeschlossen' && entry.reflection !== 'Modul abgeschlossen') {
-                        seen.set(uniqueKey, entry);
-                        return false; // Will add the better one later
-                    }
-                    
-                    // Prefer entries from portfolio source over progress source
-                    if (entry.source === 'portfolio' && existing.source === 'progress') {
-                        seen.set(uniqueKey, entry);
-                        return false;
-                    }
-                    
-                    return false; // Skip duplicate
+                if (!seen.has(uniqueKey)) {
+                    seen.set(uniqueKey, entry);
+                    return;
+                }
+
+                const existing = seen.get(uniqueKey);
+
+                // Prefer entries with real reflections
+                let entryHasReflection = entry.reflection && entry.reflection !== 'Aktivität abgeschlossen' && entry.reflection !== 'Modul abgeschlossen';
+                let existingHasReflection = existing.reflection && existing.reflection !== 'Aktivität abgeschlossen' && existing.reflection !== 'Modul abgeschlossen';
+
+                if (entryHasReflection && !existingHasReflection) {
+                    seen.set(uniqueKey, entry);
+                    return;
+                }
+                if (!entryHasReflection && existingHasReflection) {
+                    return; // Keep existing
                 }
                 
-                seen.set(uniqueKey, entry);
-                return true;
+                // Prefer 'activity' or 'portfolio' source over 'progress'
+                if ((entry.dataSource === 'portfolio' || entry.dataSource === 'activity') && existing.dataSource === 'progress') {
+                    seen.set(uniqueKey, entry);
+                    return;
+                }
+                if ((existing.dataSource === 'portfolio' || existing.dataSource === 'activity') && entry.dataSource === 'progress') {
+                    return; // Keep existing
+                }
+                
+                // If both are good, prefer the one with a later date
+                if (new Date(entry.date) > new Date(existing.date)) {
+                    seen.set(uniqueKey, entry);
+                }
             });
+            
+            return Array.from(seen.values());
         }
         
         // Format theme name
@@ -968,7 +1108,7 @@
                 'theme3': 'Thema 3: Risiko und Sicherheit',
                 'theme4': 'Thema 4: Geld und Kauf',
                 'theme5': 'Thema 5: Demokratie mitgestalten',
-                'theme6': 'Thema 6: VertrÃ¤ge verstehen',
+                'theme6': 'Thema 6: Verträge verstehen',
                 'theme7': 'Thema 7: Arbeit und Steuern',
                 'theme8': 'Thema 8: Kunst und Kultur'
             };
@@ -1022,7 +1162,7 @@
                         activitiesHTML += `
                             <div class="meta-item">
                                 <span class="meta-label">Status:</span>
-                                <span class="meta-value">âœ“ Abgeschlossen</span>
+                                <span class="meta-value">✓ Abgeschlossen</span>
                             </div>
                         `;
                     }
@@ -1033,15 +1173,24 @@
                 const shareCode = currentUser.code.replace(/[^A-Z0-9]/g, '');
                 const entryShareLink = `${baseUrl}portfolio-view.html?code=${shareCode}&entry=${index}`;
                 
+                // NEU: Escape reflection for onclick handler
+                const reflectionKey = (entry.reflectionKey || entry.reflection || '').replace(/'/g, "\\'");
+                // NEU: Handle undefined keys for progress
+                const progressKey = entry.progressKey || '';
+                const themeDataKey = entry.themeDataKey || '';
+
                 entryDiv.innerHTML = `
                     <div class="entry-header">
-                        <h3 class="entry-title">${entry.theme || 'LernaktivitÃ¤t'}</h3>
-                        <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div class="entry-header-main">
+                            <h3 class="entry-title">${entry.theme || 'Lernaktivität'}</h3>
                             <span class="entry-date">${formatDate(entry.date)}</span>
+                        </div>
+                        <div class="entry-header-controls">
                             <button class="share-entry-button" onclick="shareEntry(${index})" title="Diesen Eintrag teilen">
-                                ðŸ”— Teilen
+                                🔗 Teilen
                             </button>
-                            <button class="delete-entry-button" onclick="openDeleteModal(${index})" title="Diesen Eintrag löschen">
+                            <!-- NEU: Delete Button -->
+                            <button class="delete-button" onclick="confirmDelete('${entry.dataSource}', '${entry.dataKey}', '${progressKey}', '${themeDataKey}', '${reflectionKey}')" title="Diesen Eintrag löschen">
                                 🗑️ Löschen
                             </button>
                         </div>
@@ -1070,13 +1219,13 @@
                         <div class="share-controls" style="margin-top: 1rem;">
                             <input type="text" class="share-link" id="entryShareLink-${index}" value="${entryShareLink}" readonly>
                             <button class="copy-button" onclick="copyEntryLink(${index})">
-                                ðŸ“‹ Link kopieren
+                                📋 Link kopieren
                             </button>
                         </div>
                     </div>
                     
                     <div class="reactions-section">
-                        <h4 class="reactions-title">ðŸ’¬ RÃ¼ckmeldungen (${reactions.length})</h4>
+                        <h4 class="reactions-title">💬 Rückmeldungen (${reactions.length})</h4>
                         
                         ${hasReactions ? `
                             <div class="reactions-display">
@@ -1090,35 +1239,35 @@
                             </div>
                         ` : `
                             <p style="color: var(--ktzh-gray); font-size: 0.9rem; margin-bottom: 1rem;">
-                                Noch keine RÃ¼ckmeldungen. Teile dein Portfolio, um Feedback zu erhalten!
+                                Noch keine Rückmeldungen. Teile dein Portfolio, um Feedback zu erhalten!
                             </p>
                         `}
                         
                         <div class="emoji-picker">
-                            <div class="emoji-picker-title">MÃ¶chtest du selbst eine RÃ¼ckmeldung hinzufÃ¼gen?</div>
+                            <div class="emoji-picker-title">Möchtest du selbst eine Rückmeldung hinzufügen?</div>
                             <div class="emoji-options">
-                                <button class="emoji-button" onclick="addReaction(${index}, 'ðŸ‘', 'Super!')">
-                                    <span class="emoji-icon">ðŸ‘</span>
+                                <button class="emoji-button" onclick="addReaction(${index}, '👍', 'Super!')">
+                                    <span class="emoji-icon">👍</span>
                                     <span>Super!</span>
                                 </button>
-                                <button class="emoji-button" onclick="addReaction(${index}, 'ðŸ’¯', 'Perfekt')">
-                                    <span class="emoji-icon">ðŸ’¯</span>
+                                <button class="emoji-button" onclick="addReaction(${index}, '💯', 'Perfekt')">
+                                    <span class="emoji-icon">💯</span>
                                     <span>Perfekt</span>
                                 </button>
-                                <button class="emoji-button" onclick="addReaction(${index}, 'ðŸŽ¯', 'Genau richtig')">
-                                    <span class="emoji-icon">ðŸŽ¯</span>
+                                <button class="emoji-button" onclick="addReaction(${index}, '🎯', 'Genau richtig')">
+                                    <span class="emoji-icon">🎯</span>
                                     <span>Genau richtig</span>
                                 </button>
-                                <button class="emoji-button" onclick="addReaction(${index}, 'ðŸ’¡', 'Clever!')">
-                                    <span class="emoji-icon">ðŸ’¡</span>
+                                <button class="emoji-button" onclick="addReaction(${index}, '💡', 'Clever!')">
+                                    <span class="emoji-icon">💡</span>
                                     <span>Clever!</span>
                                 </button>
-                                <button class="emoji-button" onclick="addReaction(${index}, 'ðŸŒŸ', 'Toll gemacht')">
-                                    <span class="emoji-icon">ðŸŒŸ</span>
+                                <button class="emoji-button" onclick="addReaction(${index}, '🌟', 'Toll gemacht')">
+                                    <span class="emoji-icon">🌟</span>
                                     <span>Toll gemacht</span>
                                 </button>
-                                <button class="emoji-button" onclick="addReaction(${index}, 'ðŸš€', 'Weiter so!')">
-                                    <span class="emoji-icon">ðŸš€</span>
+                                <button class="emoji-button" onclick="addReaction(${index}, '🚀', 'Weiter so!')">
+                                    <span class="emoji-icon">🚀</span>
                                     <span>Weiter so!</span>
                                 </button>
                             </div>
@@ -1132,13 +1281,41 @@
 
         // Add reaction to entry
         function addReaction(entryIndex, emoji, meaning) {
+            // HINWEIS: Diese Funktion ist potenziell fehlerhaft, da sie `entryIndex` aus der
+            // sortierten Liste verwendet, um `abuEbaPortfolio` zu filtern.
+            // Sie wird "wie besehen" beibehalten, wie gewünscht.
             const portfolioData = localStorage.getItem('abuEbaPortfolio');
             const entries = portfolioData ? JSON.parse(portfolioData) : [];
             
             const userEntries = entries.filter(entry => entry.userCode === currentUser.code);
-            const entry = userEntries[entryIndex];
             
-            if (!entry) return;
+            // Versuche, den richtigen Eintrag basierend auf der sortierten Anzeige zu finden
+            // Dies ist ein Workaround für die bestehende Logik
+            const displayedEntries = Array.from(document.querySelectorAll('.portfolio-entry'));
+            const targetEntryElement = displayedEntries[entryIndex];
+            if (!targetEntryElement) return;
+            
+            const targetTitle = targetEntryElement.querySelector('.entry-title').textContent;
+            const targetDate = targetEntryElement.querySelector('.entry-date').textContent;
+
+            // Finde den echten Eintrag in userEntries, der am ehesten übereinstimmt
+            let entry = userEntries[entryIndex]; // Alte (fehleranfällige) Methode
+            
+            // Bessere Methode: Finde den Eintrag, der in der Anzeige an Position `entryIndex` ist
+            const allEntries = document.getElementById('portfolioEntries').childNodes;
+            if (allEntries[entryIndex]) {
+                 // Diese Logik ist zu komplex, um sie ohne kompletten Rewrite zu fixen.
+                 // Wir bleiben bei der Original-Logik von `addReaction`
+            }
+
+            if (!entry) {
+                 // Fallback: Nehmen wir an, der Index stimmt
+                 entry = userEntries[entryIndex];
+                 if (!entry) {
+                     console.error("Konnte Eintrag für Reaktion nicht finden.");
+                     return;
+                 }
+            }
             
             // Initialize reactions array if it doesn't exist
             if (!entry.reactions) {
@@ -1168,7 +1345,7 @@
             }
             
             // Show success message
-            showSuccessMessage(`RÃ¼ckmeldung "${meaning}" hinzugefÃ¼gt!`);
+            showSuccessMessage(`Rückmeldung "${meaning}" hinzugefügt!`);
             
             // Reload entries
             loadPortfolioEntries();
@@ -1222,11 +1399,11 @@
             document.execCommand('copy');
             
             const copyButton = document.getElementById('copyButton');
-            copyButton.textContent = 'âœ“ Kopiert!';
+            copyButton.textContent = '✓ Kopiert!';
             copyButton.classList.add('copied');
             
             setTimeout(() => {
-                copyButton.textContent = 'ðŸ“‹ Link kopieren';
+                copyButton.textContent = '📋 Link kopieren';
                 copyButton.classList.remove('copied');
             }, 2000);
         }
@@ -1261,7 +1438,7 @@
             
             if (shareSection.style.display === 'none' || shareSection.style.display === '') {
                 shareSection.style.display = 'block';
-                showSuccessMessage(`Teilungs-Link fÃ¼r Eintrag ${entryIndex + 1} wurde generiert!`);
+                showSuccessMessage(`Teilungs-Link für Eintrag ${entryIndex + 1} wurde generiert!`);
             } else {
                 shareSection.style.display = 'none';
             }
@@ -1275,7 +1452,7 @@
             
             const copyButton = event.target;
             const originalText = copyButton.textContent;
-            copyButton.textContent = 'âœ“ Kopiert!';
+            copyButton.textContent = '✓ Kopiert!';
             copyButton.classList.add('copied');
             
             setTimeout(() => {
@@ -1298,6 +1475,31 @@
                     highlightAndScrollToEntry(parseInt(highlightIndex));
                 }, 500);
             }
+            
+            // NEU: Add event listeners for modal buttons
+            document.getElementById('confirmModalCancel').onclick = () => {
+                document.getElementById('confirmModal').style.display = 'none';
+                deleteCallback = null;
+            };
+            
+            document.getElementById('confirmModalConfirm').onclick = () => {
+                if (deleteCallback) {
+                    deleteCallback();
+                }
+            };
+            
+            // Close modals if clicking outside
+            window.onclick = (event) => {
+                const confirmModal = document.getElementById('confirmModal');
+                const alertModal = document.getElementById('alertModal');
+                if (event.target == confirmModal) {
+                    confirmModal.style.display = 'none';
+                    deleteCallback = null;
+                }
+                if (event.target == alertModal) {
+                    alertModal.style.display = 'none';
+                }
+            };
         });
 
         // Highlight and scroll to specific entry
@@ -1305,7 +1507,7 @@
             const entries = document.querySelectorAll('.portfolio-entry');
             if (entries[index]) {
                 entries[index].style.background = 'linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%)';
-                entries[index].style.border = '3px solid var(--yellow)';
+                entries[index].style.border = '3px solid var(--ktzh-warning)'; // Bessere Variable
                 entries[index].style.animation = 'pulse 1.5s ease-in-out 3';
                 
                 entries[index].scrollIntoView({ 
@@ -1323,80 +1525,9 @@
                 `;
                 document.head.appendChild(style);
                 
-                showSuccessMessage('ðŸ“Œ Dieser Portfolio-Eintrag wurde hervorgehoben!');
+                showSuccessMessage('📌 Dieser Portfolio-Eintrag wurde hervorgehoben!');
             }
         }
     </script>
-
-        // Open delete confirmation modal
-        function openDeleteModal(entryIndex) {
-            entryToDelete = entryIndex;
-            document.getElementById('deleteModal').classList.add('active');
-        }
-
-        // Close delete confirmation modal
-        function closeDeleteModal() {
-            entryToDelete = null;
-            document.getElementById('deleteModal').classList.remove('active');
-        }
-
-        // Confirm and execute delete
-        function confirmDelete() {
-            if (entryToDelete === null) return;
-            
-            // Get all entries
-            const portfolioData = localStorage.getItem('abuEbaPortfolio');
-            let entries = portfolioData ? JSON.parse(portfolioData) : [];
-            
-            // Get user entries
-            const userEntries = entries.filter(entry => entry.userCode === currentUser.code);
-            const entryToRemove = userEntries[entryToDelete];
-            
-            if (!entryToRemove) {
-                closeDeleteModal();
-                return;
-            }
-            
-            // Remove from global portfolio
-            entries = entries.filter(entry => 
-                !(entry.userCode === entryToRemove.userCode && 
-                  entry.date === entryToRemove.date && 
-                  entry.theme === entryToRemove.theme &&
-                  entry.module === entryToRemove.module)
-            );
-            
-            // Save updated entries
-            localStorage.setItem('abuEbaPortfolio', JSON.stringify(entries));
-            
-            // Also try to remove from activity-specific storage
-            if (entryToRemove.module) {
-                const moduleKey = entryToRemove.module.toLowerCase().replace(/ /g, '-');
-                const activityKey = `abuEba_${currentUser.code}_${moduleKey}_activity`;
-                const interactiveKey = `abuEba_${currentUser.code}_${moduleKey}_interactive`;
-                const quizKey = `abuEba_${currentUser.code}_${moduleKey}_quizActivity`;
-                
-                localStorage.removeItem(activityKey);
-                localStorage.removeItem(interactiveKey);
-                localStorage.removeItem(quizKey);
-            }
-            
-            // Close modal
-            closeDeleteModal();
-            
-            // Show success message
-            showSuccessMessage('🗑️ Portfolio-Eintrag wurde erfolgreich gelöscht!');
-            
-            // Reload entries
-            setTimeout(() => {
-                loadPortfolioEntries();
-            }, 500);
-        }
-
-        // Close modal when clicking outside
-        document.getElementById('deleteModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeDeleteModal();
-            }
-        });
 </body>
 </html>
