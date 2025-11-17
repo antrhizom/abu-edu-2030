@@ -33,6 +33,65 @@
             min-height: 100vh;
         }
 
+        /* Portfolio Status Badge */
+        .portfolio-status-badge {
+            position: fixed;
+            top: 170px;
+            left: 20px;
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 9998;
+            display: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .portfolio-status-badge:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+        }
+
+        .portfolio-status-badge.has-entry {
+            display: block;
+            background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+            border: 2px solid var(--green);
+            animation: slideInFromLeft 0.5s ease-out;
+        }
+
+        .portfolio-status-badge .badge-icon {
+            font-size: 2.5rem;
+            display: block;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .portfolio-status-badge .badge-text {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--green);
+            text-align: center;
+        }
+
+        .portfolio-status-badge .badge-subtext {
+            font-size: 0.75rem;
+            color: var(--ktzh-gray);
+            text-align: center;
+            margin-top: 0.25rem;
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
         /* Top Navigation */
         .top-nav {
             background: var(--white);
@@ -978,6 +1037,17 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            .portfolio-status-badge {
+                left: 50%;
+                transform: translateX(-50%);
+                top: auto;
+                bottom: 100px;
+            }
+
+            .portfolio-status-badge:hover {
+                transform: translateX(-50%) translateY(-3px) scale(1.05);
+            }
+
             .top-nav-content {
                 flex-direction: column;
                 gap: 1rem;
@@ -1023,6 +1093,13 @@
     </style>
 </head>
 <body>
+    <!-- Portfolio Status Badge -->
+    <div class="portfolio-status-badge" id="portfolioBadge">
+        <div class="badge-icon">📁</div>
+        <div class="badge-text">Portfolio-Eintrag</div>
+        <div class="badge-subtext">Klicken zum Ansehen</div>
+    </div>
+
     <!-- Progress Bar -->
     <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
@@ -1697,7 +1774,7 @@ Zum Beispiel:
         }
 
         // Constants
-        const LERNINHALT_ID = 'lerninhalt-1-1'; // Eindeutige ID für diesen Lerninhalt (entspricht Dateiname)
+        const LERNINHALT_ID = 'lerninhalt-1-1';
         const THEME_ID = 'theme1';
 
         // Wise Quotes
@@ -1907,7 +1984,6 @@ Zum Beispiel:
             
             quizSubmit.style.display = 'none';
             
-            // Mark as completed AND save quiz activity
             markLerninhaltCompleted();
             saveQuizActivity(correctCount);
         });
@@ -1967,9 +2043,10 @@ Zum Beispiel:
             const portfolioEntry = {
                 type: 'lerninhalt',
                 module: 'Lehrvertrag & Konfliktmanagement',
-                theme: '1.1', // Format für thema1.html Kompatibilität
+                theme: '1.1',
                 themeName: 'Thema 1: Berufseinstieg',
                 lerninhaltId: LERNINHALT_ID,
+                userCode: userCode,
                 completed: true,
                 date: new Date().toISOString(),
                 reflection: reflection,
@@ -1984,7 +2061,6 @@ Zum Beispiel:
             };
 
             try {
-                // Save to localStorage
                 let portfolio = JSON.parse(localStorage.getItem(`abuEba_${userCode}_portfolio`) || '[]');
                 portfolio.push(portfolioEntry);
                 localStorage.setItem(`abuEba_${userCode}_portfolio`, JSON.stringify(portfolio));
@@ -1994,9 +2070,9 @@ Zum Beispiel:
                 this.textContent = '✓ Gespeichert';
                 this.style.background = 'var(--green)';
 
-                // Show success message
                 setTimeout(() => {
                     alert('✅ Portfolio-Eintrag erfolgreich gespeichert!');
+                    updatePortfolioStatus();
                 }, 300);
 
             } catch (error) {
@@ -2007,10 +2083,84 @@ Zum Beispiel:
             }
         });
 
+        // ===== PORTFOLIO STATUS CHECK =====
+        function checkPortfolioEntry(lerninhaltId) {
+            if (!userCode) return null;
+            
+            const portfolioData = localStorage.getItem('abuEbaPortfolio');
+            if (portfolioData) {
+                try {
+                    const entries = JSON.parse(portfolioData);
+                    const userEntries = entries.filter(entry => 
+                        entry.userCode === userCode && 
+                        entry.module && 
+                        (entry.module.includes('Lehrvertrag') || entry.lerninhaltId === lerninhaltId)
+                    );
+                    if (userEntries.length > 0) {
+                        return {
+                            exists: true,
+                            source: 'portfolio',
+                            entry: userEntries[0],
+                            index: entries.findIndex(e => e === userEntries[0])
+                        };
+                    }
+                } catch (e) {
+                    console.error('Portfolio parse error:', e);
+                }
+            }
+            
+            const userPortfolioKey = `abuEba_${userCode}_portfolio`;
+            const userPortfolio = localStorage.getItem(userPortfolioKey);
+            if (userPortfolio) {
+                try {
+                    const entries = JSON.parse(userPortfolio);
+                    const matchingEntry = entries.find(entry => 
+                        entry.lerninhaltId === lerninhaltId || 
+                        (entry.module && entry.module.includes('Lehrvertrag'))
+                    );
+                    if (matchingEntry) {
+                        return {
+                            exists: true,
+                            source: 'userPortfolio',
+                            entry: matchingEntry,
+                            index: entries.indexOf(matchingEntry)
+                        };
+                    }
+                } catch (e) {
+                    console.error('User portfolio parse error:', e);
+                }
+            }
+            
+            return null;
+        }
+
+        function updatePortfolioStatus() {
+            const portfolioStatus = checkPortfolioEntry(LERNINHALT_ID);
+            const badge = document.getElementById('portfolioBadge');
+            
+            if (portfolioStatus && portfolioStatus.exists) {
+                if (badge) {
+                    badge.classList.add('has-entry');
+                    badge.onclick = function() {
+                        window.location.href = `../../portfolio.html?highlight=${portfolioStatus.index}`;
+                    };
+                }
+                
+                console.log('✅ Portfolio-Eintrag gefunden:', portfolioStatus);
+            } else {
+                console.log('ℹ️ Noch kein Portfolio-Eintrag für diesen Lerninhalt');
+            }
+        }
+
+        if (userCode) {
+            setTimeout(() => {
+                updatePortfolioStatus();
+            }, 500);
+        }
+
         // Initialize
         loadProgress();
 
-        // Auto-show assistants
         setTimeout(() => {
             if (!localStorage.getItem(`abuEba_${userCode}_wiseGreeted_${LERNINHALT_ID}`)) {
                 wiseQuote.textContent = "Willkommen! Ihr Lehrvertrag ist wichtig – lernen Sie ihn kennen! 🧙‍♀️";
