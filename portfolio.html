@@ -3,832 +3,883 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mein Portfolio - ABU EBA</title>
-
+    <title>Mein Portfolio - ABU EBA Digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --ktzh-blue: #0066CC;
+            --ktzh-light-blue: #00A0E0;
+            --ktzh-ultra-light: #E8F4F8;
+            --ktzh-white: #FFFFFF;
+            --ktzh-text: #1a1a1a;
+            --ktzh-gray: #666666;
+            --ktzh-light-gray: #f5f5f5;
+            --ktzh-success: #28a745;
+            --ktzh-warning: #ffc107;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        :root {
-            --ktzh-blue: #0066CC;
-            --ktzh-cyan: #00A0E0;
-            --ktzh-lightblue: #E8F4F8;
-            --ktzh-darkgray: #3C3C3B;
-            --ktzh-gray: #767676;
-            --white: #FFFFFF;
-            --green: #10B981;
-            --yellow: #F59E0B;
-            --red: #EF4444;
-            --purple: #8B5CF6;
-        }
-
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            color: var(--ktzh-darkgray);
+            background: linear-gradient(135deg, var(--ktzh-ultra-light) 0%, var(--ktzh-white) 100%);
+            color: var(--ktzh-text);
             line-height: 1.6;
-            background: linear-gradient(180deg, var(--white) 0%, var(--ktzh-lightblue) 100%);
             min-height: 100vh;
+            padding-bottom: 60px;
         }
 
         /* Header */
-        .header {
-            background: linear-gradient(135deg, var(--ktzh-blue) 0%, var(--ktzh-cyan) 100%);
-            color: var(--white);
-            padding: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        header {
+            background: var(--ktzh-white);
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .header-content {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
         }
 
-        .header-title {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .header-title h1 {
-            font-size: 2rem;
-            font-weight: 700;
-        }
-
-        .header-icon {
-            font-size: 3rem;
-        }
-
-        .header-nav {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .nav-link {
-            background: rgba(255, 255, 255, 0.2);
-            color: var(--white);
-            padding: 0.75rem 1.5rem;
-            border-radius: 20px;
-            text-decoration: none;
+        .logo-section h1 {
+            color: var(--ktzh-blue);
+            font-size: 1.5rem;
             font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-link:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
         }
 
         .user-info {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.75rem 1.5rem;
-            border-radius: 20px;
-            font-size: 0.938rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--ktzh-gray);
+            font-size: 0.9rem;
         }
 
-        /* Container */
+        .user-name {
+            font-weight: 600;
+            color: var(--ktzh-blue);
+        }
+
+        /* Navigation */
+        .breadcrumb {
+            max-width: 1200px;
+            margin: 1.5rem auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--ktzh-gray);
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: var(--ktzh-blue);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--ktzh-light-blue);
+        }
+
+        /* Main Container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 3rem 2rem;
+            padding: 0 2rem 2rem;
         }
 
-        /* Stats Cards */
-        .stats-grid {
+        .page-title {
+            color: var(--ktzh-blue);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .page-description {
+            color: var(--ktzh-gray);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        /* Portfolio Stats */
+        .portfolio-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
 
         .stat-card {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            background: var(--ktzh-white);
+            border-radius: 12px;
+            padding: 1.5rem;
             text-align: center;
-            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.2);
         }
 
-        .stat-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .stat-value {
+        .stat-number {
             font-size: 2.5rem;
             font-weight: 700;
             color: var(--ktzh-blue);
-            display: block;
             margin-bottom: 0.5rem;
         }
 
         .stat-label {
             color: var(--ktzh-gray);
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
 
-        /* Filter Bar */
-        .filter-bar {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 1.5rem;
+        /* Share Section */
+        .share-section {
+            background: var(--ktzh-white);
+            border-radius: 12px;
+            padding: 2rem;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.1);
+        }
+
+        .share-title {
+            color: var(--ktzh-blue);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .share-controls {
             display: flex;
             gap: 1rem;
             flex-wrap: wrap;
             align-items: center;
         }
 
-        .filter-group {
+        .share-button {
+            background: var(--ktzh-blue);
+            color: var(--ktzh-white);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        .filter-label {
-            font-weight: 600;
-            color: var(--ktzh-blue);
+        .share-button:hover {
+            background: var(--ktzh-light-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
         }
 
-        .filter-select {
-            padding: 0.5rem 1rem;
-            border: 2px solid var(--ktzh-lightblue);
-            border-radius: 10px;
-            font-family: inherit;
-            font-size: 0.938rem;
-            cursor: pointer;
-            transition: border-color 0.3s ease;
-        }
-
-        .filter-select:focus {
-            outline: none;
-            border-color: var(--ktzh-cyan);
-        }
-
-        .search-box {
+        .share-link {
             flex: 1;
-            min-width: 200px;
+            min-width: 300px;
+            padding: 0.8rem;
+            border: 2px solid var(--ktzh-ultra-light);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--ktzh-gray);
+            background: var(--ktzh-light-gray);
         }
 
-        .search-input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 2px solid var(--ktzh-lightblue);
-            border-radius: 10px;
-            font-family: inherit;
-            font-size: 0.938rem;
-            transition: border-color 0.3s ease;
+        .copy-button {
+            background: var(--ktzh-light-blue);
+            color: var(--ktzh-white);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .search-input:focus {
-            outline: none;
-            border-color: var(--ktzh-cyan);
+        .copy-button:hover {
+            background: var(--ktzh-blue);
+        }
+
+        .copy-button.copied {
+            background: var(--ktzh-success);
         }
 
         /* Portfolio Entries */
         .portfolio-entries {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
+            display: grid;
+            gap: 1.5rem;
         }
 
         .portfolio-entry {
-            background: var(--white);
-            border-radius: 20px;
+            background: var(--ktzh-white);
+            border-radius: 12px;
             padding: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            border-left: 6px solid var(--ktzh-cyan);
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.1);
+            transition: all 0.3s;
         }
 
         .portfolio-entry:hover {
-            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+            box-shadow: 0 4px 16px rgba(0, 102, 204, 0.15);
         }
 
         .entry-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             flex-wrap: wrap;
             gap: 1rem;
         }
 
-        .entry-title-section {
-            flex: 1;
-        }
-
-        .entry-type {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .type-lerninhalt {
-            background: var(--green);
-            color: var(--white);
-        }
-
-        .type-module {
-            background: var(--ktzh-cyan);
-            color: var(--white);
-        }
-
-        .type-theme {
-            background: var(--purple);
-            color: var(--white);
-        }
-
         .entry-title {
-            font-size: 1.5rem;
             color: var(--ktzh-blue);
-            margin-bottom: 0.5rem;
-        }
-
-        .entry-subtitle {
-            color: var(--ktzh-gray);
-            font-size: 0.938rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+            font-weight: 600;
         }
 
         .entry-date {
             color: var(--ktzh-gray);
-            font-size: 0.875rem;
+            font-size: 0.9rem;
         }
 
-        .entry-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .btn-icon {
-            padding: 0.5rem;
-            border: none;
-            border-radius: 10px;
-            background: var(--ktzh-lightblue);
-            color: var(--ktzh-blue);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1.25rem;
-        }
-
-        .btn-icon:hover {
-            background: var(--ktzh-cyan);
-            color: var(--white);
-            transform: scale(1.1);
-        }
-
-        /* Activity Stats in Entry */
-        .entry-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background: var(--ktzh-lightblue);
-            border-radius: 12px;
-        }
-
-        .entry-stat {
-            text-align: center;
-        }
-
-        .entry-stat-value {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--ktzh-cyan);
-            display: block;
-        }
-
-        .entry-stat-label {
-            font-size: 0.75rem;
-            color: var(--ktzh-gray);
-        }
-
-        /* Reflection */
-        .entry-reflection {
-            background: #F9FAFB;
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 1.5rem;
-        }
-
-        .reflection-label {
-            font-weight: 600;
-            color: var(--ktzh-blue);
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .reflection-text {
-            color: var(--ktzh-darkgray);
+        .entry-content {
+            color: var(--ktzh-text);
             line-height: 1.8;
+            margin-bottom: 1.5rem;
             white-space: pre-wrap;
         }
 
-        /* Buttons */
-        .btn {
-            padding: 1rem 2rem;
-            border-radius: 15px;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1rem;
-            border: none;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--ktzh-blue), var(--ktzh-cyan));
-            color: var(--white);
-            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.4);
-        }
-
-        .btn-secondary {
-            background: var(--white);
-            color: var(--ktzh-blue);
-            border: 2px solid var(--ktzh-blue);
-        }
-
-        .btn-secondary:hover {
-            background: var(--ktzh-blue);
-            color: var(--white);
-        }
-
-        .action-buttons {
+        .entry-meta {
             display: flex;
             gap: 1rem;
-            margin-top: 2rem;
             flex-wrap: wrap;
-            justify-content: center;
+            margin-bottom: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--ktzh-ultra-light);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--ktzh-gray);
+            font-size: 0.9rem;
+        }
+
+        .meta-label {
+            font-weight: 600;
+        }
+
+        .meta-value {
+            color: var(--ktzh-blue);
+        }
+
+        /* Reactions Section */
+        .reactions-section {
+            border-top: 2px solid var(--ktzh-ultra-light);
+            padding-top: 1.5rem;
+        }
+
+        .reactions-title {
+            color: var(--ktzh-blue);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .reactions-display {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .reaction-item {
+            background: var(--ktzh-ultra-light);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .reaction-item:hover {
+            background: var(--ktzh-light-blue);
+            color: var(--ktzh-white);
+            transform: scale(1.05);
+        }
+
+        .reaction-emoji {
+            font-size: 1.2rem;
+        }
+
+        .reaction-text {
+            font-weight: 500;
+        }
+
+        .reaction-from {
+            color: var(--ktzh-gray);
+            font-size: 0.8rem;
+        }
+
+        .reaction-item:hover .reaction-from {
+            color: var(--ktzh-white);
+        }
+
+        /* Emoji Picker */
+        .emoji-picker {
+            background: var(--ktzh-light-gray);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .emoji-picker-title {
+            color: var(--ktzh-gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .emoji-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .emoji-button {
+            background: var(--ktzh-white);
+            border: 2px solid var(--ktzh-ultra-light);
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .emoji-button:hover {
+            border-color: var(--ktzh-blue);
+            background: var(--ktzh-ultra-light);
+            transform: scale(1.05);
+        }
+
+        .emoji-button.selected {
+            background: var(--ktzh-blue);
+            border-color: var(--ktzh-blue);
+            color: var(--ktzh-white);
+        }
+
+        .emoji-icon {
+            font-size: 1.3rem;
         }
 
         /* Empty State */
         .empty-state {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 4rem 2rem;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 4rem 2rem;
+            color: var(--ktzh-gray);
         }
 
         .empty-icon {
-            font-size: 5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .empty-state h3 {
-            font-size: 1.75rem;
-            color: var(--ktzh-blue);
+            font-size: 4rem;
             margin-bottom: 1rem;
+            opacity: 0.5;
         }
 
-        .empty-state p {
-            color: var(--ktzh-gray);
-            font-size: 1.125rem;
-            margin-bottom: 2rem;
+        .empty-text {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
         }
 
-        /* Loading State */
-        .loading {
-            text-align: center;
-            padding: 4rem 2rem;
+        .empty-subtext {
+            font-size: 0.9rem;
         }
 
-        .loading-spinner {
-            font-size: 3rem;
-            animation: spin 1s linear infinite;
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--ktzh-white);
+            box-shadow: 0 -2px 8px rgba(0, 102, 204, 0.1);
+            padding: 1rem;
+            z-index: 100;
         }
 
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        .bottom-nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-button {
+            background: var(--ktzh-blue);
+            color: var(--ktzh-white);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-button:hover {
+            background: var(--ktzh-light-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+        }
+
+        .nav-button.secondary {
+            background: var(--ktzh-white);
+            color: var(--ktzh-blue);
+            border: 2px solid var(--ktzh-blue);
+        }
+
+        .nav-button.secondary:hover {
+            background: var(--ktzh-ultra-light);
         }
 
         /* Responsive */
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
-                text-align: center;
+                gap: 1rem;
             }
 
-            .header-title h1 {
-                font-size: 1.5rem;
-            }
-
-            .header-nav {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .nav-link {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .stats-grid {
+            .portfolio-stats {
                 grid-template-columns: 1fr;
             }
 
-            .filter-bar {
+            .share-controls {
                 flex-direction: column;
-                align-items: stretch;
             }
 
-            .filter-group {
-                flex-direction: column;
-                align-items: stretch;
+            .share-link {
+                min-width: 100%;
             }
 
-            .filter-select {
+            .bottom-nav-content {
+                flex-direction: column;
+            }
+
+            .nav-button {
                 width: 100%;
+                text-align: center;
             }
+        }
 
-            .entry-header {
-                flex-direction: column;
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
             }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-            .entry-actions {
-                width: 100%;
-                justify-content: flex-end;
-            }
+        .portfolio-entry {
+            animation: fadeIn 0.5s ease-out;
+        }
 
-            .action-buttons {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
+        .success-message {
+            background: var(--ktzh-success);
+            color: var(--ktzh-white);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: center;
+            animation: fadeIn 0.3s ease-out;
         }
     </style>
 </head>
 <body>
     <!-- Header -->
-    <header class="header">
+    <header>
         <div class="header-content">
-            <div class="header-title">
-                <span class="header-icon">📁</span>
-                <h1>Mein Portfolio</h1>
+            <div class="logo-section">
+                <h1>ABU EBA Digital</h1>
             </div>
-            <div class="header-nav">
-                <a href="startzweig.html" class="nav-link">📚 Themenauswahl</a>
-                <a href="kompetenzen-dashboard.html" class="nav-link">🎯 Kompetenzen</a>
-                <div class="user-info">
-                    <span id="userDisplay">👤 Gast</span>
-                </div>
+            <div class="user-info">
+                <span>Angemeldet als: <span class="user-name" id="userName"></span></span>
+                <span id="userCode"></span>
             </div>
         </div>
     </header>
 
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb">
+        <a href="startzweig.html">🏠 Startseite</a>
+        <span>›</span>
+        <span>📁 Mein Portfolio</span>
+    </nav>
+
     <!-- Main Content -->
     <div class="container">
-        <!-- Stats Overview -->
-        <div class="stats-grid">
+        <h1 class="page-title">📁 Mein Portfolio</h1>
+        <p class="page-description">
+            Hier findest du alle deine Reflexionen und Lernfortschritte. Du kannst dein Portfolio mit anderen teilen und Rückmeldungen erhalten.
+        </p>
+
+        <!-- Portfolio Statistics -->
+        <div class="portfolio-stats">
             <div class="stat-card">
-                <div class="stat-icon">📚</div>
-                <span class="stat-value" id="totalEntries">0</span>
-                <span class="stat-label">Portfolio-Einträge</span>
+                <div class="stat-number" id="totalEntries">0</div>
+                <div class="stat-label">Portfolio-Einträge</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon">✅</div>
-                <span class="stat-value" id="completedCount">0</span>
-                <span class="stat-label">Abgeschlossen</span>
+                <div class="stat-number" id="totalReactions">0</div>
+                <div class="stat-label">Erhaltene Reaktionen</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon">🎯</div>
-                <span class="stat-value" id="totalPoints">0</span>
-                <span class="stat-label">Quiz-Punkte</span>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">📈</div>
-                <span class="stat-value" id="avgProgress">0%</span>
-                <span class="stat-label">Ø Fortschritt</span>
+                <div class="stat-number" id="totalShares">0</div>
+                <div class="stat-label">Geteilte Einträge</div>
             </div>
         </div>
 
-        <!-- Filter Bar -->
-        <div class="filter-bar">
-            <div class="filter-group">
-                <span class="filter-label">Typ:</span>
-                <select class="filter-select" id="filterType">
-                    <option value="all">Alle</option>
-                    <option value="lerninhalt">Lerninhalte</option>
-                    <option value="module">Module</option>
-                    <option value="theme">Themen</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <span class="filter-label">Sortieren:</span>
-                <select class="filter-select" id="sortBy">
-                    <option value="date-desc">Neueste zuerst</option>
-                    <option value="date-asc">Älteste zuerst</option>
-                    <option value="title">Nach Titel</option>
-                </select>
-            </div>
-            <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="🔍 Suchen...">
+        <!-- Share Section -->
+        <div class="share-section">
+            <h2 class="share-title">📤 Portfolio teilen</h2>
+            <p style="color: var(--ktzh-gray); margin-bottom: 1rem;">
+                Teile dein Portfolio mit Lehrpersonen, Berufsbildner:innen oder Mitschüler:innen, damit sie dir Rückmeldungen geben können.
+            </p>
+            <div class="share-controls">
+                <button class="share-button" onclick="generateShareLink()">
+                    <span>🔗</span>
+                    <span>Teilungs-Link erstellen</span>
+                </button>
+                <input type="text" class="share-link" id="shareLink" readonly placeholder="Klicke auf 'Link erstellen', um einen Teilungs-Link zu generieren">
+                <button class="copy-button" id="copyButton" onclick="copyShareLink()" style="display: none;">
+                    📋 Link kopieren
+                </button>
             </div>
         </div>
+
+        <!-- Success Message (hidden by default) -->
+        <div id="successMessage" style="display: none;"></div>
 
         <!-- Portfolio Entries -->
-        <div id="portfolioContainer">
-            <div class="loading">
-                <div class="loading-spinner">⏳</div>
-                <p>Lade Portfolio...</p>
-            </div>
+        <div class="portfolio-entries" id="portfolioEntries">
+            <!-- Entries will be loaded here dynamically -->
         </div>
 
-        <!-- Action Buttons -->
-        <div class="action-buttons">
-            <a href="startzweig.html" class="btn btn-secondary">📚 Themenauswahl</a>
-            <a href="kompetenzen-dashboard.html" class="btn btn-secondary">🎯 Kompetenzen</a>
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-icon">📂</div>
+            <div class="empty-text">Noch keine Portfolio-Einträge</div>
+            <div class="empty-subtext">Beginne mit dem Lernen und erstelle deine ersten Reflexionen!</div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="bottom-nav-content">
+            <a href="startzweig.html" class="nav-button secondary">
+                ← Zurück zur Startseite
+            </a>
         </div>
     </div>
 
     <script>
-        // User Info
-        const userCode = localStorage.getItem('abuEbaCode');
-        const userName = localStorage.getItem('abuEbaName');
-        
-        if (!userCode || !userName) {
-            window.location.href = 'index.html';
-        }
+        // Initialize
+        let currentUser = {
+            code: '',
+            name: ''
+        };
 
-        document.getElementById('userDisplay').textContent = `👤 ${userName}`;
-
-        let allEntries = [];
-        let filteredEntries = [];
-
-        // Load Portfolio
-        function loadPortfolio() {
-            try {
-                // KORRIGIERT: Verwende user-spezifischen Key
-                const portfolioKey = `abuEba_${userCode}_portfolio`;
-                const stored = localStorage.getItem(portfolioKey);
-                allEntries = stored ? JSON.parse(stored) : [];
-                
-                // Add IDs if missing
-                allEntries = allEntries.map((entry, index) => ({
-                    id: entry.id || `entry-${Date.now()}-${index}`,
-                    ...entry
-                }));
-
-                console.log('✅ Loaded from localStorage:', allEntries.length, 'entries');
-                console.log('📦 Storage key:', portfolioKey);
-                console.log('📋 Entries:', allEntries);
-
-                updateStats();
-                applyFilters();
-
-            } catch (error) {
-                console.error('❌ Error loading portfolio:', error);
-                showEmptyState('Fehler beim Laden des Portfolios');
-            }
-        }
-
-        // Update Stats
-        function updateStats() {
-            const totalEntries = allEntries.length;
-            const completedCount = allEntries.filter(e => e.completed).length;
+        // Load user data
+        function loadUserData() {
+            const userCode = localStorage.getItem('abuEbaCode');
+            const userName = localStorage.getItem('abuEbaName');
             
-            let totalPoints = 0;
-            let totalProgress = 0;
-
-            allEntries.forEach(entry => {
-                if (entry.activity) {
-                    if (entry.activity.quizScore !== undefined) {
-                        totalPoints += entry.activity.quizScore;
-                    }
-                    if (entry.activity.progressPercentage !== undefined) {
-                        totalProgress += entry.activity.progressPercentage;
-                    }
-                }
-            });
-
-            const avgProgress = totalEntries > 0 ? Math.round(totalProgress / totalEntries) : 0;
-
-            document.getElementById('totalEntries').textContent = totalEntries;
-            document.getElementById('completedCount').textContent = completedCount;
-            document.getElementById('totalPoints').textContent = totalPoints;
-            document.getElementById('avgProgress').textContent = avgProgress + '%';
-        }
-
-        // Apply Filters
-        function applyFilters() {
-            const filterType = document.getElementById('filterType').value;
-            const sortBy = document.getElementById('sortBy').value;
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-
-            // Filter
-            filteredEntries = allEntries.filter(entry => {
-                const matchesType = filterType === 'all' || entry.type === filterType;
-                const matchesSearch = !searchTerm || 
-                    (entry.module && entry.module.toLowerCase().includes(searchTerm)) ||
-                    (entry.themeName && entry.themeName.toLowerCase().includes(searchTerm)) ||
-                    (entry.reflection && entry.reflection.toLowerCase().includes(searchTerm));
-                
-                return matchesType && matchesSearch;
-            });
-
-            // Sort
-            filteredEntries.sort((a, b) => {
-                switch(sortBy) {
-                    case 'date-desc':
-                        return new Date(b.date) - new Date(a.date);
-                    case 'date-asc':
-                        return new Date(a.date) - new Date(b.date);
-                    case 'title':
-                        return (a.module || '').localeCompare(b.module || '');
-                    default:
-                        return 0;
-                }
-            });
-
-            displayEntries();
-        }
-
-        // Display Entries
-        function displayEntries() {
-            const container = document.getElementById('portfolioContainer');
-
-            if (filteredEntries.length === 0) {
-                showEmptyState();
+            if (!userCode || !userName) {
+                alert('Bitte melde dich zuerst an!');
+                window.location.href = 'index.html';
                 return;
             }
-
-            container.innerHTML = '<div class="portfolio-entries" id="entriesList"></div>';
-            const list = document.getElementById('entriesList');
-
-            filteredEntries.forEach(entry => {
-                const entryEl = createEntryElement(entry);
-                list.appendChild(entryEl);
-            });
+            
+            currentUser.code = userCode;
+            currentUser.name = userName;
+            
+            document.getElementById('userName').textContent = userName;
+            document.getElementById('userCode').textContent = userCode;
         }
 
-        // Create Entry Element
-        function createEntryElement(entry) {
-            const div = document.createElement('div');
-            div.className = 'portfolio-entry';
+        // Load portfolio entries
+        function loadPortfolioEntries() {
+            const portfolioData = localStorage.getItem('abuEbaPortfolio');
+            const entries = portfolioData ? JSON.parse(portfolioData) : [];
             
-            const date = new Date(entry.date);
-            const formattedDate = date.toLocaleDateString('de-CH', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-
-            // Type Badge
-            let typeClass = 'type-lerninhalt';
-            let typeLabel = '📚 Lerninhalt';
+            const userEntries = entries.filter(entry => entry.userCode === currentUser.code);
             
-            if (entry.type === 'module') {
-                typeClass = 'type-module';
-                typeLabel = '📖 Modul';
-            } else if (entry.type === 'theme') {
-                typeClass = 'type-theme';
-                typeLabel = '🎯 Thema';
+            if (userEntries.length === 0) {
+                document.getElementById('emptyState').style.display = 'block';
+                document.getElementById('portfolioEntries').style.display = 'none';
+            } else {
+                document.getElementById('emptyState').style.display = 'none';
+                document.getElementById('portfolioEntries').style.display = 'grid';
+                displayEntries(userEntries);
             }
+            
+            updateStatistics(userEntries);
+        }
 
-            // Activity Stats
-            let statsHTML = '';
-            if (entry.activity) {
-                const act = entry.activity;
-                statsHTML = `
-                    <div class="entry-stats">
-                        ${act.quizScore !== undefined ? `
-                        <div class="entry-stat">
-                            <span class="entry-stat-value">${act.quizScore}/${act.quizTotal}</span>
-                            <span class="entry-stat-label">Quiz-Punkte</span>
-                        </div>` : ''}
-                        ${act.interactiveExplored !== undefined ? `
-                        <div class="entry-stat">
-                            <span class="entry-stat-value">${act.interactiveExplored}/${act.totalInteractive}</span>
-                            <span class="entry-stat-label">Erkundet</span>
-                        </div>` : ''}
-                        ${act.progressPercentage !== undefined ? `
-                        <div class="entry-stat">
-                            <span class="entry-stat-value">${act.progressPercentage}%</span>
-                            <span class="entry-stat-label">Fortschritt</span>
-                        </div>` : ''}
+        // Display portfolio entries
+        function displayEntries(entries) {
+            const container = document.getElementById('portfolioEntries');
+            container.innerHTML = '';
+            
+            // Sort entries by date (newest first)
+            entries.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            entries.forEach((entry, index) => {
+                const entryDiv = document.createElement('div');
+                entryDiv.className = 'portfolio-entry';
+                
+                const reactions = entry.reactions || [];
+                const hasReactions = reactions.length > 0;
+                
+                entryDiv.innerHTML = `
+                    <div class="entry-header">
+                        <h3 class="entry-title">${entry.theme || 'Lernaktivität'}</h3>
+                        <span class="entry-date">${formatDate(entry.date)}</span>
+                    </div>
+                    
+                    <div class="entry-content">${entry.reflection}</div>
+                    
+                    <div class="entry-meta">
+                        ${entry.module ? `
+                            <div class="meta-item">
+                                <span class="meta-label">Modul:</span>
+                                <span class="meta-value">${entry.module}</span>
+                            </div>
+                        ` : ''}
+                        ${entry.competencies ? `
+                            <div class="meta-item">
+                                <span class="meta-label">Kompetenzen:</span>
+                                <span class="meta-value">${entry.competencies}</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="reactions-section">
+                        <h4 class="reactions-title">💬 Rückmeldungen (${reactions.length})</h4>
+                        
+                        ${hasReactions ? `
+                            <div class="reactions-display">
+                                ${reactions.map(reaction => `
+                                    <div class="reaction-item">
+                                        <span class="reaction-emoji">${reaction.emoji}</span>
+                                        <span class="reaction-text">${reaction.meaning}</span>
+                                        <span class="reaction-from">von ${reaction.from}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : `
+                            <p style="color: var(--ktzh-gray); font-size: 0.9rem; margin-bottom: 1rem;">
+                                Noch keine Rückmeldungen. Teile dein Portfolio, um Feedback zu erhalten!
+                            </p>
+                        `}
+                        
+                        <div class="emoji-picker">
+                            <div class="emoji-picker-title">Möchtest du selbst eine Rückmeldung hinzufügen?</div>
+                            <div class="emoji-options">
+                                <button class="emoji-button" onclick="addReaction(${index}, '👍', 'Super!')">
+                                    <span class="emoji-icon">👍</span>
+                                    <span>Super!</span>
+                                </button>
+                                <button class="emoji-button" onclick="addReaction(${index}, '💯', 'Perfekt')">
+                                    <span class="emoji-icon">💯</span>
+                                    <span>Perfekt</span>
+                                </button>
+                                <button class="emoji-button" onclick="addReaction(${index}, '🎯', 'Genau richtig')">
+                                    <span class="emoji-icon">🎯</span>
+                                    <span>Genau richtig</span>
+                                </button>
+                                <button class="emoji-button" onclick="addReaction(${index}, '💡', 'Clever!')">
+                                    <span class="emoji-icon">💡</span>
+                                    <span>Clever!</span>
+                                </button>
+                                <button class="emoji-button" onclick="addReaction(${index}, '🌟', 'Toll gemacht')">
+                                    <span class="emoji-icon">🌟</span>
+                                    <span>Toll gemacht</span>
+                                </button>
+                                <button class="emoji-button" onclick="addReaction(${index}, '🚀', 'Weiter so!')">
+                                    <span class="emoji-icon">🚀</span>
+                                    <span>Weiter so!</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 `;
-            }
-
-            div.innerHTML = `
-                <div class="entry-header">
-                    <div class="entry-title-section">
-                        <span class="entry-type ${typeClass}">${typeLabel}</span>
-                        <h3 class="entry-title">${entry.module || 'Ohne Titel'}</h3>
-                        ${entry.themeName ? `<div class="entry-subtitle">${entry.themeName}</div>` : ''}
-                        ${entry.theme ? `<div class="entry-subtitle">Lerninhalt ${entry.theme}</div>` : ''}
-                        <div class="entry-date">📅 ${formattedDate}</div>
-                    </div>
-                    <div class="entry-actions">
-                        <button class="btn-icon" onclick="deleteEntry('${entry.id}')" title="Löschen">
-                            🗑️
-                        </button>
-                    </div>
-                </div>
-
-                ${statsHTML}
-
-                ${entry.reflection ? `
-                <div class="entry-reflection">
-                    <div class="reflection-label">💭 Reflexion</div>
-                    <div class="reflection-text">${entry.reflection}</div>
-                </div>
-                ` : ''}
-            `;
-
-            return div;
+                
+                container.appendChild(entryDiv);
+            });
         }
 
-        // Delete Entry
-        function deleteEntry(entryId) {
-            if (!confirm('Möchten Sie diesen Portfolio-Eintrag wirklich löschen?')) {
-                return;
+        // Add reaction to entry
+        function addReaction(entryIndex, emoji, meaning) {
+            const portfolioData = localStorage.getItem('abuEbaPortfolio');
+            const entries = portfolioData ? JSON.parse(portfolioData) : [];
+            
+            const userEntries = entries.filter(entry => entry.userCode === currentUser.code);
+            const entry = userEntries[entryIndex];
+            
+            if (!entry) return;
+            
+            // Initialize reactions array if it doesn't exist
+            if (!entry.reactions) {
+                entry.reactions = [];
             }
-
-            try {
-                // Remove from array
-                allEntries = allEntries.filter(e => e.id !== entryId);
-                
-                // Save back to localStorage
-                const portfolioKey = `abuEba_${userCode}_portfolio`;
-                localStorage.setItem(portfolioKey, JSON.stringify(allEntries));
-                
-                console.log('✅ Entry deleted:', entryId);
-                
-                // Reload
-                updateStats();
-                applyFilters();
-
-            } catch (error) {
-                console.error('❌ Error deleting entry:', error);
-                alert('Fehler beim Löschen des Eintrags');
+            
+            // Add new reaction
+            const reaction = {
+                emoji: emoji,
+                meaning: meaning,
+                from: currentUser.name,
+                date: new Date().toISOString()
+            };
+            
+            entry.reactions.push(reaction);
+            
+            // Update localStorage
+            const allEntriesIndex = entries.findIndex(e => 
+                e.userCode === entry.userCode && 
+                e.date === entry.date && 
+                e.reflection === entry.reflection
+            );
+            
+            if (allEntriesIndex !== -1) {
+                entries[allEntriesIndex] = entry;
+                localStorage.setItem('abuEbaPortfolio', JSON.stringify(entries));
             }
+            
+            // Show success message
+            showSuccessMessage(`Rückmeldung "${meaning}" hinzugefügt!`);
+            
+            // Reload entries
+            loadPortfolioEntries();
         }
 
-        // Filter & Search Event Listeners
-        document.getElementById('filterType').addEventListener('change', applyFilters);
-        document.getElementById('sortBy').addEventListener('change', applyFilters);
-        document.getElementById('searchInput').addEventListener('input', applyFilters);
-
-        // Empty State
-        function showEmptyState(message) {
-            const container = document.getElementById('portfolioContainer');
-            container.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-icon">📂</div>
-                    <h3>Noch keine Portfolio-Einträge</h3>
-                    <p>${message || 'Beginnen Sie mit einem Lerninhalt, um Ihr Portfolio zu füllen!'}</p>
-                    <a href="startzweig.html" class="btn btn-primary">📚 Zur Themenauswahl</a>
-                </div>
-            `;
+        // Update statistics
+        function updateStatistics(entries) {
+            document.getElementById('totalEntries').textContent = entries.length;
+            
+            let totalReactions = 0;
+            entries.forEach(entry => {
+                if (entry.reactions) {
+                    totalReactions += entry.reactions.length;
+                }
+            });
+            document.getElementById('totalReactions').textContent = totalReactions;
+            
+            // Count shared entries (entries with share link)
+            const sharedEntries = entries.filter(entry => entry.shareLink).length;
+            document.getElementById('totalShares').textContent = sharedEntries;
         }
 
-        // Initialize
-        loadPortfolio();
+        // Generate share link
+        function generateShareLink() {
+            const baseUrl = window.location.origin + window.location.pathname.replace('portfolio.html', '');
+            const shareCode = currentUser.code.replace(/[^A-Z0-9]/g, '');
+            const shareLink = `${baseUrl}portfolio-view.html?code=${shareCode}`;
+            
+            document.getElementById('shareLink').value = shareLink;
+            document.getElementById('copyButton').style.display = 'block';
+            
+            // Save share link to localStorage
+            const portfolioData = localStorage.getItem('abuEbaPortfolio');
+            const entries = portfolioData ? JSON.parse(portfolioData) : [];
+            
+            entries.forEach(entry => {
+                if (entry.userCode === currentUser.code) {
+                    entry.shareLink = shareLink;
+                }
+            });
+            
+            localStorage.setItem('abuEbaPortfolio', JSON.stringify(entries));
+            
+            showSuccessMessage('Teilungs-Link wurde erstellt!');
+        }
 
-        console.log('📁 Portfolio geladen');
-        console.log('👤 User:', userName);
-        console.log('🔑 User Code:', userCode);
+        // Copy share link
+        function copyShareLink() {
+            const shareLinkInput = document.getElementById('shareLink');
+            shareLinkInput.select();
+            document.execCommand('copy');
+            
+            const copyButton = document.getElementById('copyButton');
+            copyButton.textContent = '✓ Kopiert!';
+            copyButton.classList.add('copied');
+            
+            setTimeout(() => {
+                copyButton.textContent = '📋 Link kopieren';
+                copyButton.classList.remove('copied');
+            }, 2000);
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            return date.toLocaleDateString('de-CH', options);
+        }
+
+        // Show success message
+        function showSuccessMessage(message) {
+            const messageDiv = document.getElementById('successMessage');
+            messageDiv.textContent = message;
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadUserData();
+            loadPortfolioEntries();
+        });
     </script>
 </body>
 </html>
