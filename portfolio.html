@@ -604,9 +604,8 @@
                 updateFirebaseStatus('syncing', 'Lade Daten...');
                 
                 const querySnapshot = await db.collection('portfolios')
-                    .where('userCode', '==', currentUser.code)
-                    .orderBy('createdAt', 'desc')
-                    .get();
+    .where('userCode', '==', currentUser.code)
+    .get();  // ← orderBy() entfernt!
                 
                 const firebaseEntries = [];
                 querySnapshot.forEach(doc => {
@@ -615,7 +614,12 @@
                         ...doc.data()
                     });
                 });
-                
+                // Sortiere im JavaScript nach Datum (neueste zuerst)
+firebaseEntries.sort((a, b) => {
+    const dateA = a.createdAt ? a.createdAt.toDate() : new Date(a.date);
+    const dateB = b.createdAt ? b.createdAt.toDate() : new Date(b.date);
+    return dateB - dateA;
+});
                 if (firebaseEntries.length === 0) {
                     showMessage('Keine Cloud-Daten gefunden', 'error');
                     return;
