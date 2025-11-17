@@ -1173,7 +1173,12 @@
                 }
                 
                 // Share link for this entry
-                const baseUrl = window.location.origin + window.location.pathname.replace('portfolio.html', '');
+                // KORREKTUR: Die alte .replace() Methode war fehleranfällig.
+                // Diese Methode findet den Pfad zuverlässiger, indem sie das aktuelle Verzeichnis nimmt.
+                const path = window.location.pathname;
+                const dir = path.substring(0, path.lastIndexOf('/') + 1); // Findet den letzten '/'
+                const baseUrl = window.location.origin + dir;
+                // const baseUrl = window.location.origin + window.location.pathname.replace('portfolio.html', ''); // Alte, fehlerhafte Zeile
                 const shareCode = currentUser.code.replace(/[^A-Z0-9]/g, '');
                 const entryShareLink = `${baseUrl}portfolio-view.html?code=${shareCode}&entry=${index}`;
                 
@@ -1374,7 +1379,12 @@
 
         // Generate share link
         function generateShareLink() {
-            const baseUrl = window.location.origin + window.location.pathname.replace('portfolio.html', '');
+            // KORREKTUR: Die alte .replace() Methode war fehleranfällig.
+            // Diese Methode findet den Pfad zuverlässiger, indem sie das aktuelle Verzeichnis nimmt.
+            const path = window.location.pathname;
+            const dir = path.substring(0, path.lastIndexOf('/') + 1); // Findet den letzten '/'
+            const baseUrl = window.location.origin + dir;
+            // const baseUrl = window.location.origin + window.location.pathname.replace('portfolio.html', ''); // Alte, fehlerhafte Zeile
             const shareCode = currentUser.code.replace(/[^A-Z0-9]/g, '');
             const shareLink = `${baseUrl}portfolio-view.html?code=${shareCode}`;
             
