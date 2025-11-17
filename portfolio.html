@@ -4,21 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mein Portfolio - ABU EBA</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-    <script>
-        // Firebase Config - Optional
-        let firebaseConfig = null;
-        try {
-            if (typeof window.firebaseConfig !== 'undefined') {
-                firebaseConfig = window.firebaseConfig;
-            }
-        } catch (e) {
-            console.log('📦 Firebase config not found, using localStorage fallback');
-        }
-    </script>
-    <script src="config/firebase-config.js" onerror="console.log('Firebase config file not found - using localStorage')"></script>
 
     <style>
         * {
@@ -81,14 +66,36 @@
             font-size: 3rem;
         }
 
+        .header-nav {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
         .user-info {
             background: rgba(255, 255, 255, 0.2);
             padding: 0.75rem 1.5rem;
             border-radius: 20px;
             font-size: 0.938rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
 
         /* Container */
@@ -239,24 +246,30 @@
             margin-bottom: 0.5rem;
         }
 
-        .type-module {
+        .type-lerninhalt {
             background: var(--green);
             color: var(--white);
         }
 
-        .type-theme {
+        .type-module {
             background: var(--ktzh-cyan);
             color: var(--white);
         }
 
-        .type-task {
-            background: var(--yellow);
+        .type-theme {
+            background: var(--purple);
             color: var(--white);
         }
 
         .entry-title {
             font-size: 1.5rem;
             color: var(--ktzh-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .entry-subtitle {
+            color: var(--ktzh-gray);
+            font-size: 0.938rem;
             margin-bottom: 0.5rem;
         }
 
@@ -337,122 +350,6 @@
             white-space: pre-wrap;
         }
 
-        /* Emoji Reactions */
-        .entry-reactions {
-            border-top: 2px solid var(--ktzh-lightblue);
-            padding-top: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .reactions-title {
-            font-size: 0.938rem;
-            font-weight: 600;
-            color: var(--ktzh-blue);
-            margin-bottom: 1rem;
-        }
-
-        .emoji-grid {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-        }
-
-        .emoji-button {
-            font-size: 1.5rem;
-            background: var(--ktzh-lightblue);
-            border: 2px solid transparent;
-            border-radius: 10px;
-            padding: 0.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            min-width: 50px;
-            text-align: center;
-        }
-
-        .emoji-button:hover {
-            transform: scale(1.1);
-            background: var(--white);
-            border-color: var(--ktzh-cyan);
-        }
-
-        .emoji-button.selected {
-            background: var(--ktzh-cyan);
-            border-color: var(--ktzh-blue);
-        }
-
-        .emoji-count {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: var(--ktzh-blue);
-            color: var(--white);
-            font-size: 0.625rem;
-            font-weight: 700;
-            padding: 0.2rem 0.4rem;
-            border-radius: 8px;
-            min-width: 20px;
-        }
-
-        .reactions-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .reaction-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.875rem;
-            color: var(--ktzh-gray);
-        }
-
-        .reaction-emoji {
-            font-size: 1.25rem;
-        }
-
-        /* Share Section */
-        .share-section {
-            background: var(--ktzh-lightblue);
-            padding: 1rem;
-            border-radius: 12px;
-            margin-top: 1rem;
-        }
-
-        .share-link-container {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-            margin-top: 0.5rem;
-        }
-
-        .share-input {
-            flex: 1;
-            padding: 0.5rem;
-            border: 2px solid var(--ktzh-cyan);
-            border-radius: 8px;
-            font-family: monospace;
-            font-size: 0.75rem;
-        }
-
-        .btn-copy {
-            padding: 0.5rem 1rem;
-            background: var(--ktzh-cyan);
-            color: var(--white);
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-copy:hover {
-            background: var(--ktzh-blue);
-        }
-
         /* Buttons */
         .btn {
             padding: 1rem 2rem;
@@ -495,6 +392,7 @@
             gap: 1rem;
             margin-top: 2rem;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         /* Empty State */
@@ -539,60 +437,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-
-        .modal.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 2rem;
-            max-width: 600px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            color: var(--ktzh-blue);
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--ktzh-gray);
-            transition: color 0.3s ease;
-        }
-
-        .modal-close:hover {
-            color: var(--ktzh-blue);
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
             .header-content {
@@ -602,6 +446,16 @@
 
             .header-title h1 {
                 font-size: 1.5rem;
+            }
+
+            .header-nav {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .nav-link {
+                width: 100%;
+                justify-content: center;
             }
 
             .stats-grid {
@@ -650,10 +504,9 @@
                 <span class="header-icon">📁</span>
                 <h1>Mein Portfolio</h1>
             </div>
-            <div style="display: flex; gap: 1rem; align-items: center;">
-                <a href="startzweig.html" style="background: rgba(255, 255, 255, 0.2); color: var(--white); padding: 0.75rem 1.5rem; border-radius: 20px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; display: flex; align-items: center; gap: 0.5rem;" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">
-                    🏠 Zur Startseite
-                </a>
+            <div class="header-nav">
+                <a href="startzweig.html" class="nav-link">📚 Themenauswahl</a>
+                <a href="kompetenzen-dashboard.html" class="nav-link">🎯 Kompetenzen</a>
                 <div class="user-info">
                     <span id="userDisplay">👤 Gast</span>
                 </div>
@@ -672,18 +525,18 @@
             </div>
             <div class="stat-card">
                 <div class="stat-icon">✅</div>
-                <span class="stat-value" id="completedModules">0</span>
-                <span class="stat-label">Module abgeschlossen</span>
+                <span class="stat-value" id="completedCount">0</span>
+                <span class="stat-label">Abgeschlossen</span>
             </div>
             <div class="stat-card">
-                <div class="stat-icon">💬</div>
-                <span class="stat-value" id="totalReactions">0</span>
-                <span class="stat-label">Reaktionen erhalten</span>
+                <div class="stat-icon">🎯</div>
+                <span class="stat-value" id="totalPoints">0</span>
+                <span class="stat-label">Quiz-Punkte</span>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">📈</div>
                 <span class="stat-value" id="avgProgress">0%</span>
-                <span class="stat-label">Durchschn. Fortschritt</span>
+                <span class="stat-label">Ø Fortschritt</span>
             </div>
         </div>
 
@@ -693,9 +546,9 @@
                 <span class="filter-label">Typ:</span>
                 <select class="filter-select" id="filterType">
                     <option value="all">Alle</option>
+                    <option value="lerninhalt">Lerninhalte</option>
                     <option value="module">Module</option>
                     <option value="theme">Themen</option>
-                    <option value="task">Aufgaben</option>
                 </select>
             </div>
             <div class="filter-group">
@@ -721,56 +574,12 @@
 
         <!-- Action Buttons -->
         <div class="action-buttons">
-            <button class="btn btn-primary" id="exportBtn">📄 Als PDF exportieren</button>
-            <a href="index.html" class="btn btn-secondary">🏠 Zur Startseite</a>
-        </div>
-    </div>
-
-    <!-- Share Modal -->
-    <div class="modal" id="shareModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Portfolio-Eintrag teilen</h3>
-                <button class="modal-close" id="closeModal">✕</button>
-            </div>
-            <p style="color: var(--ktzh-gray); margin-bottom: 1rem;">
-                Teilen Sie diesen Link mit Ihrer Lehrperson oder Peergroup:
-            </p>
-            <div class="share-link-container">
-                <input type="text" class="share-input" id="shareModalLink" readonly>
-                <button class="btn-copy" id="copyModalLink">📋 Kopieren</button>
-            </div>
+            <a href="startzweig.html" class="btn btn-secondary">📚 Themenauswahl</a>
+            <a href="kompetenzen-dashboard.html" class="btn btn-secondary">🎯 Kompetenzen</a>
         </div>
     </div>
 
     <script>
-        // Firebase Setup
-        let db = null;
-        let auth = null;
-        let useFirebase = false;
-
-        setTimeout(() => {
-            if (typeof firebase !== 'undefined' && typeof firebaseConfig !== 'undefined' && firebaseConfig) {
-                try {
-                    if (!firebase.apps.length) {
-                        firebase.initializeApp(firebaseConfig);
-                    }
-                    db = firebase.firestore();
-                    auth = firebase.auth();
-                    useFirebase = true;
-                    console.log('🔥 Firebase initialized successfully');
-                    loadPortfolio();
-                } catch (error) {
-                    console.log('📦 Firebase initialization failed, using localStorage fallback');
-                    console.error(error);
-                    loadPortfolio();
-                }
-            } else {
-                console.log('📦 Firebase not configured, using localStorage fallback');
-                loadPortfolio();
-            }
-        }, 100);
-
         // User Info
         const userCode = localStorage.getItem('abuEbaCode');
         const userName = localStorage.getItem('abuEbaName');
@@ -785,37 +594,22 @@
         let filteredEntries = [];
 
         // Load Portfolio
-        async function loadPortfolio() {
+        function loadPortfolio() {
             try {
-                if (useFirebase && db) {
-                    // Load from Firebase
-                    const snapshot = await db.collection('portfolios')
-                        .doc(userCode)
-                        .collection('entries')
-                        .get();
+                // KORRIGIERT: Verwende user-spezifischen Key
+                const portfolioKey = `abuEba_${userCode}_portfolio`;
+                const stored = localStorage.getItem(portfolioKey);
+                allEntries = stored ? JSON.parse(stored) : [];
+                
+                // Add IDs if missing
+                allEntries = allEntries.map((entry, index) => ({
+                    id: entry.id || `entry-${Date.now()}-${index}`,
+                    ...entry
+                }));
 
-                    allEntries = [];
-                    snapshot.forEach(doc => {
-                        allEntries.push({
-                            id: doc.id,
-                            ...doc.data()
-                        });
-                    });
-
-                    console.log('✅ Loaded from Firebase:', allEntries.length, 'entries');
-                } else {
-                    // Load from localStorage
-                    const stored = localStorage.getItem('abuEbaPortfolio');
-                    allEntries = stored ? JSON.parse(stored) : [];
-                    
-                    // Add IDs if missing
-                    allEntries = allEntries.map((entry, index) => ({
-                        id: entry.id || `local-${index}`,
-                        ...entry
-                    }));
-
-                    console.log('✅ Loaded from localStorage:', allEntries.length, 'entries');
-                }
+                console.log('✅ Loaded from localStorage:', allEntries.length, 'entries');
+                console.log('📦 Storage key:', portfolioKey);
+                console.log('📋 Entries:', allEntries);
 
                 updateStats();
                 applyFilters();
@@ -829,25 +623,27 @@
         // Update Stats
         function updateStats() {
             const totalEntries = allEntries.length;
-            const completedModules = allEntries.filter(e => e.type === 'module' && e.completed).length;
+            const completedCount = allEntries.filter(e => e.completed).length;
             
-            let totalReactions = 0;
+            let totalPoints = 0;
             let totalProgress = 0;
 
             allEntries.forEach(entry => {
-                if (entry.reactions) {
-                    totalReactions += Object.keys(entry.reactions).length;
-                }
-                if (entry.activity && entry.activity.progressPercentage) {
-                    totalProgress += entry.activity.progressPercentage;
+                if (entry.activity) {
+                    if (entry.activity.quizScore !== undefined) {
+                        totalPoints += entry.activity.quizScore;
+                    }
+                    if (entry.activity.progressPercentage !== undefined) {
+                        totalProgress += entry.activity.progressPercentage;
+                    }
                 }
             });
 
             const avgProgress = totalEntries > 0 ? Math.round(totalProgress / totalEntries) : 0;
 
             document.getElementById('totalEntries').textContent = totalEntries;
-            document.getElementById('completedModules').textContent = completedModules;
-            document.getElementById('totalReactions').textContent = totalReactions;
+            document.getElementById('completedCount').textContent = completedCount;
+            document.getElementById('totalPoints').textContent = totalPoints;
             document.getElementById('avgProgress').textContent = avgProgress + '%';
         }
 
@@ -862,6 +658,7 @@
                 const matchesType = filterType === 'all' || entry.type === filterType;
                 const matchesSearch = !searchTerm || 
                     (entry.module && entry.module.toLowerCase().includes(searchTerm)) ||
+                    (entry.themeName && entry.themeName.toLowerCase().includes(searchTerm)) ||
                     (entry.reflection && entry.reflection.toLowerCase().includes(searchTerm));
                 
                 return matchesType && matchesSearch;
@@ -916,31 +713,33 @@
                 minute: '2-digit'
             });
 
-            const typeClass = entry.type === 'module' ? 'type-module' : 
-                             entry.type === 'theme' ? 'type-theme' : 'type-task';
+            // Type Badge
+            let typeClass = 'type-lerninhalt';
+            let typeLabel = '📚 Lerninhalt';
             
-            const typeLabel = entry.type === 'module' ? '📚 Modul' :
-                             entry.type === 'theme' ? '🎯 Thema' : '📝 Aufgabe';
+            if (entry.type === 'module') {
+                typeClass = 'type-module';
+                typeLabel = '📖 Modul';
+            } else if (entry.type === 'theme') {
+                typeClass = 'type-theme';
+                typeLabel = '🎯 Thema';
+            }
 
+            // Activity Stats
             let statsHTML = '';
             if (entry.activity) {
                 const act = entry.activity;
                 statsHTML = `
                     <div class="entry-stats">
+                        ${act.quizScore !== undefined ? `
+                        <div class="entry-stat">
+                            <span class="entry-stat-value">${act.quizScore}/${act.quizTotal}</span>
+                            <span class="entry-stat-label">Quiz-Punkte</span>
+                        </div>` : ''}
                         ${act.interactiveExplored !== undefined ? `
                         <div class="entry-stat">
                             <span class="entry-stat-value">${act.interactiveExplored}/${act.totalInteractive}</span>
                             <span class="entry-stat-label">Erkundet</span>
-                        </div>` : ''}
-                        ${act.examplesExplored !== undefined ? `
-                        <div class="entry-stat">
-                            <span class="entry-stat-value">${act.examplesExplored}/${act.totalExamples}</span>
-                            <span class="entry-stat-label">Beispiele</span>
-                        </div>` : ''}
-                        ${act.quizScore !== undefined ? `
-                        <div class="entry-stat">
-                            <span class="entry-stat-value">${act.quizScore}/${act.quizTotal}</span>
-                            <span class="entry-stat-label">Quiz</span>
                         </div>` : ''}
                         ${act.progressPercentage !== undefined ? `
                         <div class="entry-stat">
@@ -956,14 +755,13 @@
                     <div class="entry-title-section">
                         <span class="entry-type ${typeClass}">${typeLabel}</span>
                         <h3 class="entry-title">${entry.module || 'Ohne Titel'}</h3>
+                        ${entry.themeName ? `<div class="entry-subtitle">${entry.themeName}</div>` : ''}
+                        ${entry.theme ? `<div class="entry-subtitle">Lerninhalt ${entry.theme}</div>` : ''}
                         <div class="entry-date">📅 ${formattedDate}</div>
                     </div>
                     <div class="entry-actions">
-                        <button class="btn-icon" onclick="shareEntry('${entry.id}')" title="Teilen">
-                            🔗
-                        </button>
-                        <button class="btn-icon" onclick="exportEntry('${entry.id}')" title="Exportieren">
-                            📄
+                        <button class="btn-icon" onclick="deleteEntry('${entry.id}')" title="Löschen">
+                            🗑️
                         </button>
                     </div>
                 </div>
@@ -976,172 +774,36 @@
                     <div class="reflection-text">${entry.reflection}</div>
                 </div>
                 ` : ''}
-
-                <div class="entry-reactions" id="reactions-${entry.id}">
-                    <div class="reactions-title">😊 Reaktionen</div>
-                    <div class="emoji-grid" id="emoji-grid-${entry.id}">
-                        ${['👍', '💯', '👏', '✅', '❤️', '🔥', '💪', '🎯'].map(emoji => `
-                            <button class="emoji-button" data-emoji="${emoji}" data-entry-id="${entry.id}">
-                                ${emoji}
-                                <span class="emoji-count">0</span>
-                            </button>
-                        `).join('')}
-                    </div>
-                    <div class="reactions-list" id="reactions-list-${entry.id}">
-                        <p style="font-size: 0.875rem; color: var(--ktzh-gray);">Noch keine Reaktionen</p>
-                    </div>
-                </div>
             `;
-
-            // Load reactions for this entry
-            loadReactionsForEntry(entry.id);
 
             return div;
         }
 
-        // Load Reactions for Entry
-        async function loadReactionsForEntry(entryId) {
-            if (!useFirebase || !db) return;
+        // Delete Entry
+        function deleteEntry(entryId) {
+            if (!confirm('Möchten Sie diesen Portfolio-Eintrag wirklich löschen?')) {
+                return;
+            }
 
             try {
-                const reactionsSnapshot = await db.collection('portfolios')
-                    .doc(userCode)
-                    .collection('entries')
-                    .doc(entryId)
-                    .collection('reactions')
-                    .get();
-
-                const reactions = {};
-                const reactionsList = [];
-
-                reactionsSnapshot.forEach(doc => {
-                    const data = doc.data();
-                    const emoji = data.emoji;
-                    
-                    reactions[emoji] = (reactions[emoji] || 0) + 1;
-                    reactionsList.push({
-                        emoji: emoji,
-                        name: data.fromName,
-                        code: data.fromCode
-                    });
-                });
-
-                // Update emoji counts
-                const emojiGrid = document.getElementById(`emoji-grid-${entryId}`);
-                if (emojiGrid) {
-                    emojiGrid.querySelectorAll('.emoji-button').forEach(button => {
-                        const emoji = button.dataset.emoji;
-                        const count = reactions[emoji] || 0;
-                        const countSpan = button.querySelector('.emoji-count');
-                        countSpan.textContent = count;
-
-                        // Highlight if user reacted
-                        const userReacted = reactionsList.some(r => r.code === userCode && r.emoji === emoji);
-                        if (userReacted) {
-                            button.classList.add('selected');
-                        }
-                    });
-                }
-
-                // Update reactions list
-                const listDiv = document.getElementById(`reactions-list-${entryId}`);
-                if (listDiv && reactionsList.length > 0) {
-                    listDiv.innerHTML = reactionsList.map(r => `
-                        <div class="reaction-item">
-                            <span class="reaction-emoji">${r.emoji}</span>
-                            <span>${r.name}</span>
-                        </div>
-                    `).join('');
-                }
+                // Remove from array
+                allEntries = allEntries.filter(e => e.id !== entryId);
+                
+                // Save back to localStorage
+                const portfolioKey = `abuEba_${userCode}_portfolio`;
+                localStorage.setItem(portfolioKey, JSON.stringify(allEntries));
+                
+                console.log('✅ Entry deleted:', entryId);
+                
+                // Reload
+                updateStats();
+                applyFilters();
 
             } catch (error) {
-                console.error('❌ Error loading reactions:', error);
+                console.error('❌ Error deleting entry:', error);
+                alert('Fehler beim Löschen des Eintrags');
             }
         }
-
-        // Add Emoji Reaction
-        document.addEventListener('click', async function(e) {
-            if (e.target.closest('.emoji-button')) {
-                const button = e.target.closest('.emoji-button');
-                const emoji = button.dataset.emoji;
-                const entryId = button.dataset.entryId;
-
-                if (!useFirebase || !db) {
-                    alert('🔥 Firebase wird für Reaktionen benötigt');
-                    return;
-                }
-
-                try {
-                    const reactionRef = db.collection('portfolios')
-                        .doc(userCode)
-                        .collection('entries')
-                        .doc(entryId)
-                        .collection('reactions')
-                        .doc(userCode);
-
-                    const existingReaction = await reactionRef.get();
-                    
-                    if (existingReaction.exists && existingReaction.data().emoji === emoji) {
-                        // Remove reaction
-                        await reactionRef.delete();
-                    } else {
-                        // Add/update reaction
-                        await reactionRef.set({
-                            emoji: emoji,
-                            fromCode: userCode,
-                            fromName: userName,
-                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                        });
-                    }
-
-                    // Reload reactions
-                    loadReactionsForEntry(entryId);
-                    updateStats();
-
-                } catch (error) {
-                    console.error('❌ Error adding reaction:', error);
-                }
-            }
-        });
-
-        // Share Entry
-        function shareEntry(entryId) {
-            const shareUrl = `${window.location.origin}/kompetenzen-einfuehrung.html?view=${userCode}`;
-            document.getElementById('shareModalLink').value = shareUrl;
-            document.getElementById('shareModal').classList.add('show');
-        }
-
-        // Export Entry (Placeholder)
-        function exportEntry(entryId) {
-            alert('📄 Export-Funktion wird noch implementiert.\n\nHier wird später ein PDF mit dem Portfolio-Eintrag erstellt.');
-        }
-
-        // Export All (Placeholder)
-        document.getElementById('exportBtn').addEventListener('click', function() {
-            alert('📄 Export-Funktion wird noch implementiert.\n\nHier wird später ein vollständiges Portfolio-PDF erstellt.');
-        });
-
-        // Modal Controls
-        document.getElementById('closeModal').addEventListener('click', function() {
-            document.getElementById('shareModal').classList.remove('show');
-        });
-
-        document.getElementById('shareModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.classList.remove('show');
-            }
-        });
-
-        document.getElementById('copyModalLink').addEventListener('click', function() {
-            const input = document.getElementById('shareModalLink');
-            input.select();
-            document.execCommand('copy');
-            
-            this.textContent = '✓ Kopiert!';
-            setTimeout(() => {
-                this.textContent = '📋 Kopieren';
-            }, 2000);
-        });
 
         // Filter & Search Event Listeners
         document.getElementById('filterType').addEventListener('change', applyFilters);
@@ -1155,15 +817,18 @@
                 <div class="empty-state">
                     <div class="empty-icon">📂</div>
                     <h3>Noch keine Portfolio-Einträge</h3>
-                    <p>${message || 'Beginnen Sie mit einem Modul oder Thema, um Ihr Portfolio zu füllen!'}</p>
-                    <a href="kompetenzen-einfuehrung.html" class="btn btn-primary">🎯 Zur Kompetenzen-Einführung</a>
+                    <p>${message || 'Beginnen Sie mit einem Lerninhalt, um Ihr Portfolio zu füllen!'}</p>
+                    <a href="startzweig.html" class="btn btn-primary">📚 Zur Themenauswahl</a>
                 </div>
             `;
         }
 
+        // Initialize
+        loadPortfolio();
+
         console.log('📁 Portfolio geladen');
         console.log('👤 User:', userName);
-        console.log('🔥 Firebase:', useFirebase ? 'Aktiv' : 'LocalStorage Fallback');
+        console.log('🔑 User Code:', userCode);
     </script>
 </body>
 </html>
