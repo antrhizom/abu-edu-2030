@@ -640,21 +640,169 @@
 
         // Load portfolio entries
         function loadPortfolioEntries() {
+            let allEntries = [];
+            
+            // Method 1: Load from global portfolio array
             const portfolioData = localStorage.getItem('abuEbaPortfolio');
-            const entries = portfolioData ? JSON.parse(portfolioData) : [];
+            if (portfolioData) {
+                const entries = JSON.parse(portfolioData);
+                const userEntries = entries.filter(entry => entry.userCode === currentUser.code);
+                allEntries = allEntries.concat(userEntries);
+            }
             
-            const userEntries = entries.filter(entry => entry.userCode === currentUser.code);
+            // Method 2: Scan all localStorage keys for user-specific data
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                
+                // Look for keys like: abuEba_CODE_activity, abuEba_CODE_theme1, etc.
+                if (key && key.startsWith(`abuEba_${currentUser.code}_`)) {
+                    try {
+                        const data = JSON.parse(localStorage.getItem(key));
+                        
+                        // Check if this is activity data
+                        if (key.includes('_activity') || key.includes('_interactive') || key.includes('_quiz')) {
+                            const entry = convertActivityToPortfolioEntry(key, data);
+                            if (entry) {
+                                allEntries.push(entry);
+                            }
+                        }
+                        // Check if this is theme progress data
+                        else if (key.includes('_progress')) {
+                            const entries = convertProgressToPortfolioEntries(key, data);
+                            if (entries && entries.length > 0) {
+                                allEntries = allEntries.concat(entries);
+                            }
+                        }
+                    } catch (e) {
+                        console.log('Could not parse:', key);
+                    }
+                }
+            }
             
-            if (userEntries.length === 0) {
+            // Remove duplicates based on unique identifier
+            allEntries = removeDuplicateEntries(allEntries);
+            
+            if (allEntries.length === 0) {
                 document.getElementById('emptyState').style.display = 'block';
                 document.getElementById('portfolioEntries').style.display = 'none';
             } else {
                 document.getElementById('emptyState').style.display = 'none';
                 document.getElementById('portfolioEntries').style.display = 'grid';
-                displayEntries(userEntries);
+                displayEntries(allEntries);
             }
             
-            updateStatistics(userEntries);
+            updateStatistics(allEntries);
+        }
+        
+        // Convert activity data to portfolio entry
+        function convertActivityToPortfolioEntry(key, data) {
+            // Extract module name from key like: abuEba_CODE_lerninhalt-1-1_activity
+            const parts = key.split('_');
+            if (parts.length < 3) return null;
+            
+            const moduleName = parts.slice(2).join('_').replace('_activity', '').replace('_interactive', '').replace('_quiz', '');
+            
+            return {
+                userCode: currentUser.code,
+                date: data.date || new Date().toISOString(),
+                theme: data.theme || 'Lernaktivität',
+                module: moduleName,
+                reflection: data.reflection || 'Aktivität abgeschlossen',
+                competencies: data.competencies || '',
+                activities: data,
+                reactions: data.reactions || [],
+                source: 'activity'
+            };
+        }
+        
+        // Convert progress data to portfolio entries
+        function convertProgressToPortfolioEntries(key, progressData) {
+            const entries = [];
+            
+            // progressData structure: { theme1: { 'lerninhalt-1-1': true }, ... }
+            for (const themeKey in progressData) {
+                const themeData = progressData[themeKey];
+                
+                for (const contentKey in themeData) {
+                    if (themeData[contentKey] === true) {
+                        // Check if we have additional data for this content
+                        const activityKey = `abuEba_${currentUser.code}_${contentKey}_activity`;
+                        const interactiveKey = `abuEba_${currentUser.code}_${contentKey}_interactive`;
+                        const quizKey = `abuEba_${currentUser.code}_${contentKey}_quizActivity`;
+                        
+                        let activityData = {};
+                        let interactiveCount = 0;
+                        let quizData = null;
+                        
+                        try {
+                            if (localStorage.getItem(activityKey)) {
+                                activityData = JSON.parse(localStorage.getItem(activityKey));
+                            }
+                            if (localStorage.getItem(interactiveKey)) {
+                                interactiveCount = parseInt(localStorage.getItem(interactiveKey)) || 0;
+                            }
+                            if (localStorage.getItem(quizKey)) {
+                                quizData = JSON.parse(localStorage.getItem(quizKey));
+                            }
+                        } catch (e) {
+                            console.log('Error parsing additional data:', e);
+                        }
+                        
+                        entries.push({
+                            userCode: currentUser.code,
+                            date: activityData.date || new Date().toISOString(),
+                            theme: formatThemeName(themeKey),
+                            module: formatModuleName(contentKey),
+                            reflection: activityData.reflection || 'Modul abgeschlossen',
+                            competencies: activityData.competencies || '',
+                            activities: {
+                                completed: true,
+                                interactive: interactiveCount,
+                                quiz: quizData
+                            },
+                            reactions: activityData.reactions || [],
+                            source: 'progress'
+                        });
+                    }
+                }
+            }
+            
+            return entries;
+        }
+        
+        // Remove duplicate entries
+        function removeDuplicateEntries(entries) {
+            const seen = new Set();
+            return entries.filter(entry => {
+                const key = `${entry.theme}_${entry.module}_${entry.date}`;
+                if (seen.has(key)) {
+                    return false;
+                }
+                seen.add(key);
+                return true;
+            });
+        }
+        
+        // Format theme name
+        function formatThemeName(themeKey) {
+            const themeNames = {
+                'theme1': 'Thema 1: Ins Berufsleben einsteigen',
+                'theme2': 'Thema 2: Bewusst konsumieren',
+                'theme3': 'Thema 3: Risiko und Sicherheit',
+                'theme4': 'Thema 4: Geld und Kauf',
+                'theme5': 'Thema 5: Demokratie mitgestalten',
+                'theme6': 'Thema 6: Verträge verstehen',
+                'theme7': 'Thema 7: Arbeit und Steuern',
+                'theme8': 'Thema 8: Kunst und Kultur'
+            };
+            return themeNames[themeKey] || themeKey;
+        }
+        
+        // Format module name
+        function formatModuleName(moduleKey) {
+            return moduleKey
+                .replace(/-/g, ' ')
+                .replace(/\b\w/g, l => l.toUpperCase());
         }
 
         // Display portfolio entries
@@ -671,6 +819,36 @@
                 
                 const reactions = entry.reactions || [];
                 const hasReactions = reactions.length > 0;
+                
+                // Build activities display
+                let activitiesHTML = '';
+                if (entry.activities) {
+                    const acts = entry.activities;
+                    if (acts.interactive && acts.interactive > 0) {
+                        activitiesHTML += `
+                            <div class="meta-item">
+                                <span class="meta-label">Interaktiv erkundet:</span>
+                                <span class="meta-value">${acts.interactive}</span>
+                            </div>
+                        `;
+                    }
+                    if (acts.quiz) {
+                        activitiesHTML += `
+                            <div class="meta-item">
+                                <span class="meta-label">Quiz:</span>
+                                <span class="meta-value">${acts.quiz.quizScore || 0}/${acts.quiz.quizTotal || 0}</span>
+                            </div>
+                        `;
+                    }
+                    if (acts.completed) {
+                        activitiesHTML += `
+                            <div class="meta-item">
+                                <span class="meta-label">Status:</span>
+                                <span class="meta-value">✓ Abgeschlossen</span>
+                            </div>
+                        `;
+                    }
+                }
                 
                 entryDiv.innerHTML = `
                     <div class="entry-header">
@@ -693,6 +871,7 @@
                                 <span class="meta-value">${entry.competencies}</span>
                             </div>
                         ` : ''}
+                        ${activitiesHTML}
                     </div>
                     
                     <div class="reactions-section">
