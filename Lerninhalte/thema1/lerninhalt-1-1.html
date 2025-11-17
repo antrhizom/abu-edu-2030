@@ -1032,7 +1032,7 @@
     <nav class="top-nav">
         <div class="top-nav-content">
             <div class="nav-left">
-                <a href="startzweig.html" class="logo">
+                <a href="../../startzweig.html" class="logo">
                     <span class="logo-icon">🎓</span>
                     <span>ABU EBA Digital</span>
                 </a>
@@ -1040,8 +1040,8 @@
                 <span class="current-page">📋 Lehrvertrag & Konfliktmanagement</span>
             </div>
             <div class="nav-right">
-                <a href="startzweig.html" class="nav-btn nav-btn-secondary">📚 Lernraum</a>
-                <a href="kompetenzen-dashboard.html" class="nav-btn nav-btn-secondary">🎯 Kompetenzen</a>
+                <a href="../../startzweig.html" class="nav-btn nav-btn-secondary">📚 Themenauswahl</a>
+                <a href="../../kompetenzen-dashboard.html" class="nav-btn nav-btn-secondary">🎯 Kompetenzen</a>
                 <div class="user-badge">
                     <span id="userDisplay">👤 Gast</span>
                 </div>
@@ -1085,9 +1085,11 @@
     <div class="container">
         <!-- Breadcrumb -->
         <div class="breadcrumb">
-            <a href="startzweig.html">Startseite</a>
+            <a href="../../startzweig.html">Themenauswahl</a>
             <span>›</span>
-            <strong>Lehrvertrag & Konfliktmanagement</strong>
+            <a href="thema1.html">Thema 1: Berufseinstieg</a>
+            <span>›</span>
+            <strong>1.1 Lehrvertrag & Konfliktmanagement</strong>
         </div>
 
         <!-- Intro -->
@@ -1679,8 +1681,8 @@ Zum Beispiel:
             </div>
 
             <div class="action-buttons">
-                <a href="startzweig.html" class="btn btn-secondary">📚 Zurück zur Themenübersicht</a>
-                <a href="kompetenzen-dashboard.html" class="btn btn-secondary">🎯 Kompetenzen</a>
+                <a href="thema1.html" class="btn btn-secondary">← Zurück zu Thema 1</a>
+                <a href="../../kompetenzen-dashboard.html" class="btn btn-secondary">🎯 Kompetenzen</a>
             </div>
         </div>
     </div>
@@ -1905,9 +1907,26 @@ Zum Beispiel:
             
             quizSubmit.style.display = 'none';
             
-            // Mark as completed
+            // Mark as completed AND save quiz activity
             markLerninhaltCompleted();
+            saveQuizActivity(correctCount);
         });
+
+        // Save Quiz Activity immediately
+        function saveQuizActivity(score) {
+            if (!userCode) return;
+            
+            const quizActivityKey = `abuEba_${userCode}_${LERNINHALT_ID}_quizActivity`;
+            const quizActivity = {
+                quizScore: score,
+                quizTotal: 4,
+                completedAt: new Date().toISOString(),
+                answers: selectedAnswers
+            };
+            
+            localStorage.setItem(quizActivityKey, JSON.stringify(quizActivity));
+            console.log('✅ Quiz-Aktivität gespeichert:', score + '/4');
+        }
 
         // Mark lerninhalt as completed in theme progress
         function markLerninhaltCompleted() {
@@ -1948,7 +1967,8 @@ Zum Beispiel:
             const portfolioEntry = {
                 type: 'lerninhalt',
                 module: 'Lehrvertrag & Konfliktmanagement',
-                theme: 'Thema 1: Berufseinstieg',
+                theme: '1.1', // Format für thema1.html Kompatibilität
+                themeName: 'Thema 1: Berufseinstieg',
                 lerninhaltId: LERNINHALT_ID,
                 completed: true,
                 date: new Date().toISOString(),
