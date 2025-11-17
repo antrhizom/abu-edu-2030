@@ -33,7 +33,7 @@
             min-height: 100vh;
         }
 
-        /* Top Navigation - wie in startzweig.html */
+        /* Top Navigation */
         .top-nav {
             background: var(--white);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -87,6 +87,7 @@
         .current-page {
             color: var(--ktzh-gray);
             font-weight: 600;
+            font-size: 0.938rem;
         }
 
         .nav-right {
@@ -1031,7 +1032,7 @@
     <nav class="top-nav">
         <div class="top-nav-content">
             <div class="nav-left">
-                <a href="../index.html" class="logo">
+                <a href="startzweig.html" class="logo">
                     <span class="logo-icon">🎓</span>
                     <span>ABU EBA Digital</span>
                 </a>
@@ -1039,8 +1040,8 @@
                 <span class="current-page">📋 Lehrvertrag & Konfliktmanagement</span>
             </div>
             <div class="nav-right">
-                <a href="../startzweig.html" class="nav-btn nav-btn-secondary">📚 Lernraum</a>
-                <a href="../portfolio.html" class="nav-btn nav-btn-primary">📁 Portfolio</a>
+                <a href="startzweig.html" class="nav-btn nav-btn-secondary">📚 Lernraum</a>
+                <a href="kompetenzen-dashboard.html" class="nav-btn nav-btn-secondary">🎯 Kompetenzen</a>
                 <div class="user-badge">
                     <span id="userDisplay">👤 Gast</span>
                 </div>
@@ -1084,13 +1085,9 @@
     <div class="container">
         <!-- Breadcrumb -->
         <div class="breadcrumb">
-            <a href="../index.html">Startseite</a>
+            <a href="startzweig.html">Startseite</a>
             <span>›</span>
-            <a href="../startzweig.html">Lernraum</a>
-            <span>›</span>
-            <a href="thema1.html">Thema 1: Berufseinstieg</a>
-            <span>›</span>
-            <strong>1.1 Lehrvertrag & Konfliktmanagement</strong>
+            <strong>Lehrvertrag & Konfliktmanagement</strong>
         </div>
 
         <!-- Intro -->
@@ -1682,18 +1679,13 @@ Zum Beispiel:
             </div>
 
             <div class="action-buttons">
-                <a href="thema1.html" class="btn btn-secondary">📚 Zurück zu Thema 1</a>
-                <a href="../portfolio.html" class="btn btn-secondary">📁 Mein Portfolio</a>
-                <a href="lerninhalt-1-2.html" class="btn btn-primary">➡️ Nächster Lerninhalt</a>
+                <a href="startzweig.html" class="btn btn-secondary">📚 Zurück zur Themenübersicht</a>
+                <a href="kompetenzen-dashboard.html" class="btn btn-secondary">🎯 Kompetenzen</a>
             </div>
         </div>
     </div>
 
     <script>
-        // Simplified setup - uses localStorage
-        // Firebase can be added later if needed
-        let useFirebase = false;
-        
         // User Info
         const userCode = localStorage.getItem('abuEbaCode');
         const userName = localStorage.getItem('abuEbaName');
@@ -1701,6 +1693,10 @@ Zum Beispiel:
         if (userCode && userName) {
             document.getElementById('userDisplay').textContent = `👤 ${userName}`;
         }
+
+        // Constants
+        const LERNINHALT_ID = 'lerninhalt-1-1'; // Eindeutige ID für diesen Lerninhalt (entspricht Dateiname)
+        const THEME_ID = 'theme1';
 
         // Wise Quotes
         const wiseQuotes = [
@@ -1772,10 +1768,31 @@ Zum Beispiel:
         const totalInteractive = interactiveElements.length;
         let exploredCount = 0;
 
+        // Load saved progress
+        function loadProgress() {
+            if (!userCode) return;
+            
+            const progressKey = `abuEba_${userCode}_${LERNINHALT_ID}_interactive`;
+            const savedProgress = localStorage.getItem(progressKey);
+            
+            if (savedProgress) {
+                exploredCount = parseInt(savedProgress);
+                updateProgress();
+            }
+        }
+
+        function saveProgress() {
+            if (!userCode) return;
+            
+            const progressKey = `abuEba_${userCode}_${LERNINHALT_ID}_interactive`;
+            localStorage.setItem(progressKey, exploredCount.toString());
+        }
+
         function updateProgress() {
             const percentage = Math.round((exploredCount / totalInteractive) * 100);
             document.getElementById('progressFill').style.width = percentage + '%';
             document.getElementById('progressPercentage').textContent = percentage + '%';
+            saveProgress();
         }
 
         // Analogy Boxes
@@ -1887,7 +1904,29 @@ Zum Beispiel:
             document.getElementById('completionCard').scrollIntoView({ behavior: 'smooth' });
             
             quizSubmit.style.display = 'none';
+            
+            // Mark as completed
+            markLerninhaltCompleted();
         });
+
+        // Mark lerninhalt as completed in theme progress
+        function markLerninhaltCompleted() {
+            if (!userCode) return;
+            
+            const progressKey = `abuEba_${userCode}_progress`;
+            let progress = JSON.parse(localStorage.getItem(progressKey) || '{}');
+            
+            if (!progress[THEME_ID]) {
+                progress[THEME_ID] = {};
+            }
+            
+            progress[THEME_ID][LERNINHALT_ID] = true;
+            progress[THEME_ID].lastUpdated = new Date().toISOString();
+            
+            localStorage.setItem(progressKey, JSON.stringify(progress));
+            
+            console.log('✅ Lerninhalt als abgeschlossen markiert:', LERNINHALT_ID);
+        }
 
         // Portfolio Save
         document.getElementById('savePortfolio').addEventListener('click', async function() {
@@ -1909,7 +1948,8 @@ Zum Beispiel:
             const portfolioEntry = {
                 type: 'lerninhalt',
                 module: 'Lehrvertrag & Konfliktmanagement',
-                theme: 'Thema 1.1',
+                theme: 'Thema 1: Berufseinstieg',
+                lerninhaltId: LERNINHALT_ID,
                 completed: true,
                 date: new Date().toISOString(),
                 reflection: reflection,
@@ -1925,14 +1965,19 @@ Zum Beispiel:
 
             try {
                 // Save to localStorage
-                let portfolio = JSON.parse(localStorage.getItem('abuEbaPortfolio') || '[]');
+                let portfolio = JSON.parse(localStorage.getItem(`abuEba_${userCode}_portfolio`) || '[]');
                 portfolio.push(portfolioEntry);
-                localStorage.setItem('abuEbaPortfolio', JSON.stringify(portfolio));
+                localStorage.setItem(`abuEba_${userCode}_portfolio`, JSON.stringify(portfolio));
                 
-                console.log('✅ Saved to localStorage');
+                console.log('✅ Saved to portfolio');
 
                 this.textContent = '✓ Gespeichert';
                 this.style.background = 'var(--green)';
+
+                // Show success message
+                setTimeout(() => {
+                    alert('✅ Portfolio-Eintrag erfolgreich gespeichert!');
+                }, 300);
 
             } catch (error) {
                 console.error('❌ Error saving:', error);
@@ -1942,19 +1987,23 @@ Zum Beispiel:
             }
         });
 
+        // Initialize
+        loadProgress();
+
         // Auto-show assistants
         setTimeout(() => {
-            if (!localStorage.getItem('wiseGreetedLerninhalt1')) {
+            if (!localStorage.getItem(`abuEba_${userCode}_wiseGreeted_${LERNINHALT_ID}`)) {
                 wiseQuote.textContent = "Willkommen! Ihr Lehrvertrag ist wichtig – lernen Sie ihn kennen! 🧙‍♀️";
                 wiseSpeech.classList.add('show');
                 wiseSpeechVisible = true;
-                localStorage.setItem('wiseGreetedLerninhalt1', 'true');
+                localStorage.setItem(`abuEba_${userCode}_wiseGreeted_${LERNINHALT_ID}`, 'true');
             }
         }, 2000);
 
-        console.log('📋 Lerninhalt 1.1 geladen');
+        console.log('📋 Lerninhalt geladen:', LERNINHALT_ID);
         console.log('👤 User:', userName || 'Gast');
         console.log('📊 Interaktive Elemente:', totalInteractive);
+        console.log('📈 Bereits erkundet:', exploredCount);
     </script>
 </body>
 </html>
