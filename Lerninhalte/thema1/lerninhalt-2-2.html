@@ -471,6 +471,33 @@
             margin-bottom: 1rem;
         }
 
+        /* Portfolio Button */
+        .portfolio-btn {
+            background: var(--green);
+            color: var(--white);
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            border: none;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .portfolio-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+        }
+
+        .portfolio-btn.added {
+            background: var(--ktzh-gray);
+            cursor: not-allowed;
+        }
+
         /* Buttons */
         .btn {
             padding: 1rem 2.5rem;
@@ -572,9 +599,9 @@
                 <h1>Teamwork & Konfliktlösung</h1>
             </div>
             <div class="header-nav">
-                <a href="../index.html" class="nav-link">🏠 Startseite</a>
-                <a href="../startzweig.html" class="nav-link">📚 Lernraum</a>
-                <a href="../portfolio.html" class="nav-link">📁 Portfolio</a>
+                <a href="index.html" class="nav-link">🏠 Startseite</a>
+                <a href="startzweig.html" class="nav-link">📚 Lernraum</a>
+                <a href="portfolio.html" class="nav-link">📁 Portfolio</a>
                 <div class="user-info">
                     <span id="userDisplay">👤 Gast</span>
                 </div>
@@ -586,9 +613,9 @@
     <div class="container">
         <!-- Breadcrumb -->
         <div class="breadcrumb">
-            <a href="../index.html">Startseite</a>
+            <a href="index.html">Startseite</a>
             <span>›</span>
-            <a href="../startzweig.html">Lernraum</a>
+            <a href="startzweig.html">Lernraum</a>
             <span>›</span>
             <a href="thema1.html">Thema 1: Berufseinstieg</a>
             <span>›</span>
@@ -849,12 +876,19 @@
         <!-- Completion Card -->
         <div class="completion-card" id="completionCard">
             <h3>🎉 Gratulation – Sie haben's drauf!</h3>
-            <p>Sie haben die wichtigsten Teamwork- und Konfliktlösungs-Skills gelernt!</p>
+            <p style="font-size: 1.25rem; margin-bottom: 2rem;">
+                Sie haben die wichtigsten Teamwork- und Konfliktlösungs-Skills gelernt!
+            </p>
+
+            <button class="portfolio-btn" id="portfolioBtn" onclick="addToPortfolio()">
+                <span>📁</span>
+                <span id="portfolioBtnText">Zum Portfolio hinzufügen</span>
+            </button>
 
             <div class="action-buttons">
                 <a href="thema1.html" class="btn btn-secondary">📚 Zurück zu Thema 1</a>
-                <a href="../portfolio.html" class="btn btn-secondary">📁 Mein Portfolio</a>
-                <a href="../startzweig.html" class="btn btn-primary">🏠 Zum Lernraum</a>
+                <a href="portfolio.html" class="btn btn-secondary">📁 Mein Portfolio</a>
+                <a href="startzweig.html" class="btn btn-primary">🏠 Zum Lernraum</a>
             </div>
         </div>
     </div>
@@ -941,11 +975,44 @@
     </script>
 
     <!-- Main App Script -->
-    <script>
+    <script type="module">
+        // Firebase Imports
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+        import { getDatabase, ref, get, set, update } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js';
+
+        // Firebase Konfiguration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBLRconsultV5H4C_v2qKBh0vZ0k5q8MWcN70",
+            authDomain: "abueba.firebaseapp.com",
+            databaseURL: "https://abueba-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "abueba",
+            storageBucket: "abueba.appspot.com",
+            messagingSenderId: "668483480992",
+            appId: "1:668483480992:web:8e2fe3c2f1d5a5d5c5e5c5"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+
         // User Info
         const userCode = localStorage.getItem('abuEbaCode');
         const userName = localStorage.getItem('abuEbaName');
-        
+        let currentUser = null;
+
+        // Auth State Check
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+                console.log('✅ Firebase Auth aktiv für:', user.uid);
+                loadProgressFromFirebase();
+            } else {
+                console.log('⚠️ Kein Firebase Auth - LocalStorage Fallback');
+                loadProgressFromLocalStorage();
+            }
+        });
+
         if (userCode && userName) {
             document.getElementById('userDisplay').textContent = `👤 ${userName}`;
         }
@@ -953,17 +1020,189 @@
         // Progress Tracking
         let exploredCount = 0;
         const totalInteractive = 8; // 6 roles + 2 scenarios
+        let isCompleted = false;
+        let isInPortfolio = false;
+
+        // Content ID
+        const contentId = 'theme1_content2_2'; // Thema 1, Lebensbezug 2, Lerninhalt 2
 
         function updateProgress() {
             const percentage = Math.round((exploredCount / totalInteractive) * 100);
             document.getElementById('progressFill').style.width = percentage + '%';
             document.getElementById('progressPercentage').textContent = percentage + '%';
 
-            if (percentage === 100) {
+            if (percentage === 100 && !isCompleted) {
+                isCompleted = true;
                 setTimeout(() => {
                     document.getElementById('completionCard').classList.add('show');
                     document.getElementById('completionCard').scrollIntoView({ behavior: 'smooth' });
+                    saveCompletion();
                 }, 500);
+            }
+
+            // Speichere Fortschritt
+            saveProgress();
+        }
+
+        // Save Progress
+        async function saveProgress() {
+            const progressData = {
+                exploredCount: exploredCount,
+                isCompleted: isCompleted,
+                lastVisit: new Date().toISOString()
+            };
+
+            // LocalStorage
+            localStorage.setItem(`abuEba_${userCode}_${contentId}`, JSON.stringify(progressData));
+
+            // Firebase (wenn verfügbar)
+            if (currentUser) {
+                try {
+                    const progressRef = ref(db, `users/${currentUser.uid}/progress/${contentId}`);
+                    await set(progressRef, progressData);
+                    console.log('💾 Fortschritt in Firebase gespeichert');
+                } catch (error) {
+                    console.error('❌ Firebase Fehler:', error);
+                }
+            }
+        }
+
+        // Load Progress from Firebase
+        async function loadProgressFromFirebase() {
+            if (!currentUser) return;
+
+            try {
+                const progressRef = ref(db, `users/${currentUser.uid}/progress/${contentId}`);
+                const snapshot = await get(progressRef);
+                
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    exploredCount = data.exploredCount || 0;
+                    isCompleted = data.isCompleted || false;
+                    updateProgress();
+                    console.log('📥 Fortschritt von Firebase geladen:', data);
+                }
+
+                // Check Portfolio Status
+                const portfolioRef = ref(db, `users/${currentUser.uid}/portfolio/${contentId}`);
+                const portfolioSnapshot = await get(portfolioRef);
+                
+                if (portfolioSnapshot.exists()) {
+                    isInPortfolio = true;
+                    updatePortfolioButton();
+                }
+            } catch (error) {
+                console.error('❌ Fehler beim Laden:', error);
+                loadProgressFromLocalStorage();
+            }
+        }
+
+        // Load Progress from LocalStorage
+        function loadProgressFromLocalStorage() {
+            const saved = localStorage.getItem(`abuEba_${userCode}_${contentId}`);
+            if (saved) {
+                const data = JSON.parse(saved);
+                exploredCount = data.exploredCount || 0;
+                isCompleted = data.isCompleted || false;
+                updateProgress();
+                console.log('📥 Fortschritt von LocalStorage geladen:', data);
+            }
+
+            // Check Portfolio Status in LocalStorage
+            const portfolioData = localStorage.getItem(`abuEba_${userCode}_portfolio`);
+            if (portfolioData) {
+                const portfolio = JSON.parse(portfolioData);
+                isInPortfolio = portfolio.some(item => item.id === contentId);
+                updatePortfolioButton();
+            }
+        }
+
+        // Save Completion
+        async function saveCompletion() {
+            const completionData = {
+                completed: true,
+                completedAt: new Date().toISOString()
+            };
+
+            // Update Theme Progress
+            if (currentUser) {
+                try {
+                    const themeRef = ref(db, `users/${currentUser.uid}/themeProgress/theme1/lebensbezug2`);
+                    const snapshot = await get(themeRef);
+                    const current = snapshot.val() || { completed: 0, total: 2 };
+                    
+                    await update(themeRef, {
+                        completed: Math.min(current.completed + 1, current.total),
+                        lastUpdated: new Date().toISOString()
+                    });
+                } catch (error) {
+                    console.error('❌ Fehler beim Speichern:', error);
+                }
+            }
+
+            // LocalStorage
+            let themeProgress = JSON.parse(localStorage.getItem(`abuEba_${userCode}_themeProgress`) || '{}');
+            if (!themeProgress.theme1) {
+                themeProgress.theme1 = { lebensbezug1: { completed: 0, total: 2 }, lebensbezug2: { completed: 0, total: 2 } };
+            }
+            if (!themeProgress.theme1.lebensbezug2) {
+                themeProgress.theme1.lebensbezug2 = { completed: 0, total: 2 };
+            }
+            themeProgress.theme1.lebensbezug2.completed = Math.min(
+                themeProgress.theme1.lebensbezug2.completed + 1,
+                themeProgress.theme1.lebensbezug2.total
+            );
+            localStorage.setItem(`abuEba_${userCode}_themeProgress`, JSON.stringify(themeProgress));
+        }
+
+        // Add to Portfolio
+        window.addToPortfolio = async function() {
+            if (isInPortfolio) {
+                alert('✅ Dieser Lerninhalt ist bereits in Ihrem Portfolio!');
+                return;
+            }
+
+            const portfolioItem = {
+                id: contentId,
+                title: 'Teamwork & Konfliktlösung',
+                theme: 'Thema 1: Berufseinstieg',
+                lebensbezug: 'Lebensbezug 2: Konstruktive Kommunikation',
+                icon: '🤝',
+                completedAt: new Date().toISOString(),
+                url: 'lerninhalt-2-2.html',
+                description: 'Teamrollen verstehen, Kommunikationsstile erkennen und Konfliktgespräche üben'
+            };
+
+            // Firebase
+            if (currentUser) {
+                try {
+                    const portfolioRef = ref(db, `users/${currentUser.uid}/portfolio/${contentId}`);
+                    await set(portfolioRef, portfolioItem);
+                    console.log('✅ Zum Firebase Portfolio hinzugefügt');
+                } catch (error) {
+                    console.error('❌ Firebase Fehler:', error);
+                }
+            }
+
+            // LocalStorage
+            let portfolio = JSON.parse(localStorage.getItem(`abuEba_${userCode}_portfolio`) || '[]');
+            portfolio.push(portfolioItem);
+            localStorage.setItem(`abuEba_${userCode}_portfolio`, JSON.stringify(portfolio));
+
+            isInPortfolio = true;
+            updatePortfolioButton();
+            alert('✅ Erfolgreich zum Portfolio hinzugefügt!');
+        };
+
+        // Update Portfolio Button
+        function updatePortfolioButton() {
+            const btn = document.getElementById('portfolioBtn');
+            const btnText = document.getElementById('portfolioBtnText');
+            
+            if (isInPortfolio) {
+                btn.classList.add('added');
+                btnText.textContent = '✅ Im Portfolio';
+                btn.style.cursor = 'not-allowed';
             }
         }
 
@@ -977,7 +1216,7 @@
                     exploredCount++;
                 } else {
                     this.classList.remove('selected');
-                    exploredCount--;
+                    exploredCount = Math.max(0, exploredCount - 1);
                 }
                 
                 updateProgress();
@@ -1016,21 +1255,15 @@
         });
 
         // Open Judy Chat
-        function openJudyChat() {
-            const judyEmbed = document.getElementById('heygen-streaming-embed');
-            if (judyEmbed) {
-                // Trigger show event
-                const iframe = judyEmbed.querySelector('iframe');
-                if (iframe) {
-                    // The HeyGen embed will handle the show/hide via postMessage
-                    alert('💡 Klicken Sie auf den Avatar unten links, um mit Judy zu sprechen!');
-                }
-            }
-        }
+        window.openJudyChat = function() {
+            alert('💡 Klicken Sie auf den Avatar unten links, um mit Judy zu sprechen!');
+        };
 
         console.log('🤝 Lerninhalt 2.2 geladen');
         console.log('👤 User:', userName || 'Gast');
+        console.log('🔑 Code:', userCode || 'Kein Code');
         console.log('👩‍🏫 Judy Avatar: Bereit!');
+        console.log('🔥 Firebase:', currentUser ? 'Aktiv' : 'LocalStorage Fallback');
     </script>
 </body>
 </html>
