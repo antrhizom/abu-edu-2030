@@ -790,6 +790,7 @@
             // Thema 1
             'lerninhalt-1-1': 'lerninhalt-lehrvertrag.html',
             'lerninhalt-2-2': 'lerninhalt-2-2.html',
+            'theme1_content1_1': 'lerninhalt-lehrvertrag.html',
             'theme1_content2_2': 'lerninhalt-2-2.html',
             
             // Kompetenzen
@@ -839,22 +840,40 @@
         
         // The actual delete logic
         function deleteEntry(dataSource, dataKey, progressKey, themeDataKey, reflectionKey) {
-            if (dataSource === 'undefined' || dataKey === 'undefined') {
+            if (dataSource === 'undefined' || dataKey === 'undefined' || !dataKey) {
                 console.error('Delete failed: Invalid data source or key.');
+                customAlert('Fehler: Ungültige Daten. Eintrag kann nicht gelöscht werden.', 'Fehler');
                 return;
             }
 
             try {
                 if (dataSource === 'portfolio') {
-                    const portfolioData = localStorage.getItem(`abuEba_${currentUser.code}_portfolio`);
-                    if (portfolioData) {
-                        let entries = JSON.parse(portfolioData);
+                    // Try new portfolio structure
+                    const newPortfolioKey = `abuEba_${currentUser.code}_portfolio`;
+                    const newPortfolioData = localStorage.getItem(newPortfolioKey);
+                    if (newPortfolioData) {
+                        let entries = JSON.parse(newPortfolioData);
                         const initialLength = entries.length;
-                        entries = entries.filter(entry => entry.id !== dataKey);
+                        entries = entries.filter(entry => entry.id !== dataKey && entry.dataKey !== dataKey);
                         
                         if (entries.length < initialLength) {
-                            localStorage.setItem(`abuEba_${currentUser.code}_portfolio`, JSON.stringify(entries));
-                            console.log('Deleted entry from portfolio');
+                            localStorage.setItem(newPortfolioKey, JSON.stringify(entries));
+                            console.log('Deleted entry from new portfolio');
+                        }
+                    }
+                    
+                    // Try old portfolio structure
+                    const oldPortfolioData = localStorage.getItem('abuEbaPortfolio');
+                    if (oldPortfolioData) {
+                        let entries = JSON.parse(oldPortfolioData);
+                        const initialLength = entries.length;
+                        entries = entries.filter(entry => 
+                            !(entry.userCode === currentUser.code && entry.date === dataKey)
+                        );
+                        
+                        if (entries.length < initialLength) {
+                            localStorage.setItem('abuEbaPortfolio', JSON.stringify(entries));
+                            console.log('Deleted entry from old portfolio');
                         }
                     }
                 } else if (dataSource === 'activity') {
@@ -1093,52 +1112,80 @@
             entries.sort((a, b) => new Date(b.date) - new Date(a.date));
             
             entries.forEach((entry, index) => {
-                const entryDiv = document.createElement('div');
-                entryDiv.className = 'portfolio-entry';
-                entryDiv.setAttribute('data-entry-index', index);
-                
-                const reflectionKey = (entry.reflection || '').replace(/'/g, "\\'");
-                const progressKey = entry.progressKey || '';
-                const themeDataKey = entry.themeDataKey || '';
-                
-                // Get module URL
-                const moduleUrl = getModuleUrl(entry.moduleKey || entry.dataKey);
-                const moduleButton = moduleUrl ? 
-                    `<a href="${moduleUrl}" class="module-link-button" title="Zum Lerninhalt">
-                        📖 Zum Modul
-                    </a>` : '';
+                try {
+                    const entryDiv = document.createElement('div');
+                    entryDiv.className = 'portfolio-entry';
+                    entryDiv.setAttribute('data-entry-index', index);
+                    
+                    // Sichere Werte extrahieren
+                    const reflectionKey = (entry.reflection || '').replace(/'/g, "\\'").substring(0, 100);
+                    const progressKey = entry.progressKey || '';
+                    const themeDataKey = entry.themeDataKey || '';
+                    const dataSource = entry.dataSource || 'portfolio';
+                    const dataKey = entry.dataKey || entry.id || entry.date || '';
+                    
+                    // Bestimme moduleKey mit Fallbacks
+                    let moduleKey = entry.moduleKey || entry.id || entry.dataKey || '';
+                    
+                    // Versuche aus verschiedenen Quellen zu extrahieren
+                    if (!moduleKey && entry.url) {
+                        moduleKey = entry.url.replace('.html', '');
+                    }
+                    
+                    console.log('📝 Eintrag', index, ':', {
+                        moduleKey: moduleKey,
+                        dataKey: dataKey,
+                        theme: entry.theme,
+                        module: entry.module
+                    });
+                    
+                    // Get module URL
+                    const moduleUrl = moduleKey ? getModuleUrl(moduleKey) : null;
+                    const moduleButton = moduleUrl ? 
+                        `<a href="${moduleUrl}" class="module-link-button" title="Zum Lerninhalt">
+                            📖 Zum Modul
+                        </a>` : '';
 
-                entryDiv.innerHTML = `
-                    <div class="entry-header">
-                        <div class="entry-header-main">
-                            <h3 class="entry-title">${entry.theme || 'Lernaktivität'}</h3>
-                            <span class="entry-date">${formatDate(entry.date)}</span>
-                        </div>
-                        <div class="entry-header-controls">
-                            ${moduleButton}
-                            <button class="delete-button" onclick="confirmDelete('${entry.dataSource}', '${entry.dataKey}', '${progressKey}', '${themeDataKey}', '${reflectionKey}')" title="Diesen Eintrag löschen">
-                                🗑️ Löschen
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="entry-content">${entry.reflection}</div>
-                    
-                    <div class="entry-meta">
-                        ${entry.module ? `
-                            <div class="meta-item">
-                                <span class="meta-label">Modul:</span>
-                                <span class="meta-value">${entry.module}</span>
+                    entryDiv.innerHTML = `
+                        <div class="entry-header">
+                            <div class="entry-header-main">
+                                <h3 class="entry-title">${entry.theme || entry.title || 'Lernaktivität'}</h3>
+                                <span class="entry-date">${formatDate(entry.date)}</span>
                             </div>
-                        ` : ''}
-                        <div class="meta-item">
-                            <span class="meta-label">Status:</span>
-                            <span class="meta-value">✓ Abgeschlossen</span>
+                            <div class="entry-header-controls">
+                                ${moduleButton}
+                                <button class="delete-button" onclick="confirmDelete('${dataSource}', '${dataKey}', '${progressKey}', '${themeDataKey}', '${reflectionKey}')" title="Diesen Eintrag löschen">
+                                    🗑️ Löschen
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                `;
-                
-                container.appendChild(entryDiv);
+                        
+                        <div class="entry-content">${entry.reflection || entry.description || 'Keine Reflexion vorhanden'}</div>
+                        
+                        <div class="entry-meta">
+                            ${entry.module ? `
+                                <div class="meta-item">
+                                    <span class="meta-label">Modul:</span>
+                                    <span class="meta-value">${entry.module}</span>
+                                </div>
+                            ` : ''}
+                            ${entry.lebensbezug ? `
+                                <div class="meta-item">
+                                    <span class="meta-label">Lebensbezug:</span>
+                                    <span class="meta-value">${entry.lebensbezug}</span>
+                                </div>
+                            ` : ''}
+                            <div class="meta-item">
+                                <span class="meta-label">Status:</span>
+                                <span class="meta-value">✓ Abgeschlossen</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    container.appendChild(entryDiv);
+                } catch (err) {
+                    console.error('Fehler beim Anzeigen von Eintrag', index, ':', err, entry);
+                }
             });
         }
 
