@@ -294,6 +294,7 @@
             box-shadow: 0 4px 8px rgba(0, 102, 204, 0.3);
         }
         
+        /* Delete Button Style */
         .delete-button {
             background: var(--ktzh-danger);
             color: var(--ktzh-white);
@@ -604,29 +605,6 @@
             background: var(--ktzh-danger-hover);
         }
 
-        /* Module Link Button */
-        .module-link-button {
-            background: var(--ktzh-blue);
-            color: var(--ktzh-white);
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            white-space: nowrap;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .module-link-button:hover {
-            background: var(--ktzh-light-blue);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 102, 204, 0.3);
-        }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -708,7 +686,7 @@
 
     <!-- Breadcrumb Navigation -->
     <nav class="breadcrumb">
-        <a href="index.html">🏠 Startseite</a>
+        <a href="startzweig.html">🏠 Startseite</a>
         <span>›</span>
         <span>📁 Mein Portfolio</span>
     </nav>
@@ -736,6 +714,24 @@
             </div>
         </div>
 
+        <!-- Share Section -->
+        <div class="share-section">
+            <h2 class="share-title">📤 Portfolio teilen</h2>
+            <p style="color: var(--ktzh-gray); margin-bottom: 1rem;">
+                Teile dein Portfolio mit Lehrpersonen, Berufsbildner:innen oder Mitschüler:innen, damit sie dir Rückmeldungen geben können.
+            </p>
+            <div class="share-controls">
+                <button class="share-button" onclick="generateShareLink()">
+                    <span>🔗</span>
+                    <span>Teilungs-Link erstellen</span>
+                </button>
+                <input type="text" class="share-link" id="shareLink" readonly placeholder="Klicke auf 'Link erstellen', um einen Teilungs-Link zu generieren">
+                <button class="copy-button" id="copyButton" onclick="copyShareLink()" style="display: none;">
+                    📋 Link kopieren
+                </button>
+            </div>
+        </div>
+
         <!-- Success Message (hidden by default) -->
         <div id="successMessage" style="display: none;"></div>
 
@@ -755,7 +751,7 @@
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
         <div class="bottom-nav-content">
-            <a href="index.html" class="nav-button secondary">
+            <a href="startzweig.html" class="nav-button secondary">
                 ← Zurück zur Startseite
             </a>
         </div>
@@ -784,21 +780,8 @@
         </div>
     </div>
 
-    <script>
-        // Module URL Mapping
-        const moduleUrlMap = {
-            // Thema 1
-            'lerninhalt-1-1': 'lerninhalt-lehrvertrag.html',
-            'lerninhalt-2-2': 'lerninhalt-2-2.html',
-            'theme1_content1_1': 'lerninhalt-lehrvertrag.html',
-            'theme1_content2_2': 'lerninhalt-2-2.html',
-            
-            // Kompetenzen
-            'kompetenzen_schluessel': 'kompetenzen-schluessel.html',
-            'kompetenzen_gesellschaft': 'kompetenzen-gesellschaft.html',
-            'kompetenzen_sprachmodi': 'kompetenzen-sprachmodi.html'
-        };
 
+    <script>
         // Initialize
         let currentUser = {
             code: '',
@@ -840,40 +823,24 @@
         
         // The actual delete logic
         function deleteEntry(dataSource, dataKey, progressKey, themeDataKey, reflectionKey) {
-            if (dataSource === 'undefined' || dataKey === 'undefined' || !dataKey) {
+            if (dataSource === 'undefined' || dataKey === 'undefined') {
                 console.error('Delete failed: Invalid data source or key.');
-                customAlert('Fehler: Ungültige Daten. Eintrag kann nicht gelöscht werden.', 'Fehler');
                 return;
             }
 
             try {
                 if (dataSource === 'portfolio') {
-                    // Try new portfolio structure
-                    const newPortfolioKey = `abuEba_${currentUser.code}_portfolio`;
-                    const newPortfolioData = localStorage.getItem(newPortfolioKey);
-                    if (newPortfolioData) {
-                        let entries = JSON.parse(newPortfolioData);
-                        const initialLength = entries.length;
-                        entries = entries.filter(entry => entry.id !== dataKey && entry.dataKey !== dataKey);
-                        
-                        if (entries.length < initialLength) {
-                            localStorage.setItem(newPortfolioKey, JSON.stringify(entries));
-                            console.log('Deleted entry from new portfolio');
-                        }
-                    }
-                    
-                    // Try old portfolio structure
-                    const oldPortfolioData = localStorage.getItem('abuEbaPortfolio');
-                    if (oldPortfolioData) {
-                        let entries = JSON.parse(oldPortfolioData);
+                    const portfolioData = localStorage.getItem('abuEbaPortfolio');
+                    if (portfolioData) {
+                        let entries = JSON.parse(portfolioData);
                         const initialLength = entries.length;
                         entries = entries.filter(entry => 
-                            !(entry.userCode === currentUser.code && entry.date === dataKey)
+                            !(entry.userCode === currentUser.code && entry.date === dataKey && entry.reflection === reflectionKey)
                         );
                         
                         if (entries.length < initialLength) {
                             localStorage.setItem('abuEbaPortfolio', JSON.stringify(entries));
-                            console.log('Deleted entry from old portfolio');
+                            console.log('Deleted entry from abuEbaPortfolio');
                         }
                     }
                 } else if (dataSource === 'activity') {
@@ -928,57 +895,46 @@
             document.getElementById('userCode').textContent = userCode;
         }
 
-        // Get module URL
-        function getModuleUrl(moduleKey) {
-            // Check if we have a direct mapping
-            if (moduleUrlMap[moduleKey]) {
-                return moduleUrlMap[moduleKey];
-            }
-            
-            // Try to construct URL from module key
-            if (moduleKey.startsWith('lerninhalt-')) {
-                return `${moduleKey}.html`;
-            }
-            
-            if (moduleKey.startsWith('kompetenzen_')) {
-                return `kompetenzen-${moduleKey.replace('kompetenzen_', '')}.html`;
-            }
-            
-            // Default fallback
-            return null;
-        }
-
         // Load portfolio entries
         function loadPortfolioEntries() {
             let allEntries = [];
             
-            // Method 1: Load from user-specific portfolio
-            const portfolioKey = `abuEba_${currentUser.code}_portfolio`;
-            const portfolioData = localStorage.getItem(portfolioKey);
-            
+            // Method 1: Load from global portfolio array
+            const portfolioData = localStorage.getItem('abuEbaPortfolio');
             if (portfolioData) {
-                try {
-                    const entries = JSON.parse(portfolioData);
-                    entries.forEach(entry => {
-                        entry.dataSource = 'portfolio';
-                        entry.dataKey = entry.id;
-                    });
-                    allEntries = allEntries.concat(entries);
-                } catch (e) {
-                    console.error('Error parsing portfolio data:', e);
-                }
+                const entries = JSON.parse(portfolioData);
+                const userEntries = entries.filter(entry => entry.userCode === currentUser.code);
+                
+                userEntries.forEach(entry => {
+                    entry.dataSource = 'portfolio';
+                    entry.dataKey = entry.date;
+                    entry.reflectionKey = entry.reflection;
+                });
+                
+                allEntries = allEntries.concat(userEntries);
             }
             
-            // Method 2: Scan for progress data
+            // Method 2: Scan all localStorage keys for user-specific data
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
                 
-                if (key && key.startsWith(`abuEba_${currentUser.code}_`) && key.includes('_progress')) {
+                if (key && key.startsWith(`abuEba_${currentUser.code}_`)) {
                     try {
                         const data = JSON.parse(localStorage.getItem(key));
-                        const entries = convertProgressToPortfolioEntries(key, data);
-                        if (entries && entries.length > 0) {
-                            allEntries = allEntries.concat(entries);
+                        
+                        // Only catch real _activity keys, not quiz/interactive fragments
+                        if (key.includes('_activity') && !key.includes('_quizActivity')) {
+                            const entry = convertActivityToPortfolioEntry(key, data);
+                            if (entry) {
+                                allEntries.push(entry);
+                            }
+                        }
+                        // Check if this is theme progress data
+                        else if (key.includes('_progress')) {
+                            const entries = convertProgressToPortfolioEntries(key, data);
+                            if (entries && entries.length > 0) {
+                                allEntries = allEntries.concat(entries);
+                            }
                         }
                     } catch (e) {
                         console.log('Could not parse:', key);
@@ -986,7 +942,7 @@
                 }
             }
             
-            // Remove duplicates
+            // Remove duplicates with improved logic
             allEntries = removeDuplicateEntries(allEntries);
             
             if (allEntries.length === 0) {
@@ -1001,6 +957,28 @@
             updateStatistics(allEntries);
         }
         
+        // Convert activity data to portfolio entry
+        function convertActivityToPortfolioEntry(key, data) {
+            const parts = key.split('_');
+            if (parts.length < 3) return null;
+            
+            const moduleName = parts.slice(2).join('_').replace('_activity', '').replace('_interactive', '').replace('_quiz', '');
+            
+            return {
+                userCode: currentUser.code,
+                date: data.date || new Date().toISOString(),
+                theme: data.theme || 'Lernaktivität',
+                module: moduleName,
+                reflection: data.reflection || 'Aktivität abgeschlossen',
+                competencies: data.competencies || '',
+                activities: data,
+                reactions: data.reactions || [],
+                shareLink: null,
+                dataSource: 'activity',
+                dataKey: key
+            };
+        }
+        
         // Convert progress data to portfolio entries
         function convertProgressToPortfolioEntries(key, progressData) {
             const entries = [];
@@ -1011,14 +989,25 @@
                 for (const contentKey in themeData) {
                     if (themeData[contentKey] === true) {
                         const activityKey = `abuEba_${currentUser.code}_${contentKey}_activity`;
+                        const interactiveKey = `abuEba_${currentUser.code}_${contentKey}_interactive`;
+                        const quizKey = `abuEba_${currentUser.code}_${contentKey}_quizActivity`;
+                        
                         let activityData = {};
+                        let interactiveCount = 0;
+                        let quizData = null;
                         
                         try {
                             if (localStorage.getItem(activityKey)) {
                                 activityData = JSON.parse(localStorage.getItem(activityKey));
                             }
+                            if (localStorage.getItem(interactiveKey)) {
+                                interactiveCount = parseInt(localStorage.getItem(interactiveKey)) || 0;
+                            }
+                            if (localStorage.getItem(quizKey)) {
+                                quizData = JSON.parse(localStorage.getItem(quizKey));
+                            }
                         } catch (e) {
-                            console.log('Error parsing activity data:', e);
+                            console.log('Error parsing additional data:', e);
                         }
                         
                         entries.push({
@@ -1027,7 +1016,13 @@
                             theme: formatThemeName(themeKey),
                             module: formatModuleName(contentKey),
                             reflection: activityData.reflection || 'Modul abgeschlossen',
-                            moduleKey: contentKey,
+                            competencies: activityData.competencies || '',
+                            activities: {
+                                completed: true,
+                                interactive: interactiveCount,
+                                quiz: quizData
+                            },
+                            reactions: activityData.reactions || [],
                             dataSource: 'progress',
                             dataKey: contentKey,
                             progressKey: key,
@@ -1040,12 +1035,15 @@
             return entries;
         }
         
-        // Remove duplicate entries
+        // Remove duplicate entries (VERBESSERT - STÄRKERE DEDUPLIZIERUNG)
         function removeDuplicateEntries(entries) {
             const seen = new Map();
             
             entries.forEach(entry => {
-                const uniqueKey = `${entry.theme}_${entry.module}`;
+                // Create a more specific unique key including date and reflection snippet
+                const dateKey = new Date(entry.date).toISOString().split('T')[0]; // YYYY-MM-DD
+                const reflectionSnippet = (entry.reflection || '').substring(0, 50).trim();
+                const uniqueKey = `${entry.theme}_${entry.module}_${dateKey}_${reflectionSnippet}`;
                 
                 if (!seen.has(uniqueKey)) {
                     seen.set(uniqueKey, entry);
@@ -1054,25 +1052,55 @@
 
                 const existing = seen.get(uniqueKey);
 
-                let entryHasReflection = entry.reflection && entry.reflection !== 'Aktivität abgeschlossen' && entry.reflection !== 'Modul abgeschlossen';
-                let existingHasReflection = existing.reflection && existing.reflection !== 'Aktivität abgeschlossen' && existing.reflection !== 'Modul abgeschlossen';
+                // Prefer entries with real reflections (minimum 20 characters)
+                let entryHasReflection = entry.reflection && 
+                    entry.reflection !== 'Aktivität abgeschlossen' && 
+                    entry.reflection !== 'Modul abgeschlossen' &&
+                    entry.reflection.length > 20;
+                let existingHasReflection = existing.reflection && 
+                    existing.reflection !== 'Aktivität abgeschlossen' && 
+                    existing.reflection !== 'Modul abgeschlossen' &&
+                    existing.reflection.length > 20;
 
                 if (entryHasReflection && !existingHasReflection) {
                     seen.set(uniqueKey, entry);
                     return;
                 }
                 if (!entryHasReflection && existingHasReflection) {
-                    return;
+                    return; // Keep existing
                 }
                 
-                if ((entry.dataSource === 'portfolio' || entry.dataSource === 'activity') && existing.dataSource === 'progress') {
+                // Priority order: portfolio > activity > progress
+                const sourcePriority = {
+                    'portfolio': 3,
+                    'activity': 2,
+                    'progress': 1
+                };
+                
+                const entryPriority = sourcePriority[entry.dataSource] || 0;
+                const existingPriority = sourcePriority[existing.dataSource] || 0;
+                
+                if (entryPriority > existingPriority) {
                     seen.set(uniqueKey, entry);
                     return;
                 }
-                if ((existing.dataSource === 'portfolio' || existing.dataSource === 'activity') && entry.dataSource === 'progress') {
-                    return;
+                if (entryPriority < existingPriority) {
+                    return; // Keep existing
                 }
                 
+                // If same priority, prefer the one with more reactions
+                const entryReactions = (entry.reactions || []).length;
+                const existingReactions = (existing.reactions || []).length;
+                
+                if (entryReactions > existingReactions) {
+                    seen.set(uniqueKey, entry);
+                    return;
+                }
+                if (entryReactions < existingReactions) {
+                    return; // Keep existing
+                }
+                
+                // If everything is equal, prefer the one with a later date
                 if (new Date(entry.date) > new Date(existing.date)) {
                     seen.set(uniqueKey, entry);
                 }
@@ -1100,7 +1128,6 @@
         function formatModuleName(moduleKey) {
             return moduleKey
                 .replace(/-/g, ' ')
-                .replace(/_/g, ' ')
                 .replace(/\b\w/g, l => l.toUpperCase());
         }
 
@@ -1109,91 +1136,259 @@
             const container = document.getElementById('portfolioEntries');
             container.innerHTML = '';
             
+            // Sort entries by date (newest first)
             entries.sort((a, b) => new Date(b.date) - new Date(a.date));
             
             entries.forEach((entry, index) => {
-                try {
-                    const entryDiv = document.createElement('div');
-                    entryDiv.className = 'portfolio-entry';
-                    entryDiv.setAttribute('data-entry-index', index);
-                    
-                    // Sichere Werte extrahieren
-                    const reflectionKey = (entry.reflection || '').replace(/'/g, "\\'").substring(0, 100);
-                    const progressKey = entry.progressKey || '';
-                    const themeDataKey = entry.themeDataKey || '';
-                    const dataSource = entry.dataSource || 'portfolio';
-                    const dataKey = entry.dataKey || entry.id || entry.date || '';
-                    
-                    // Bestimme moduleKey mit Fallbacks
-                    let moduleKey = entry.moduleKey || entry.id || entry.dataKey || '';
-                    
-                    // Versuche aus verschiedenen Quellen zu extrahieren
-                    if (!moduleKey && entry.url) {
-                        moduleKey = entry.url.replace('.html', '');
+                const entryDiv = document.createElement('div');
+                entryDiv.className = 'portfolio-entry';
+                entryDiv.setAttribute('data-entry-index', index);
+                
+                const reactions = entry.reactions || [];
+                const hasReactions = reactions.length > 0;
+                
+                // Build activities display
+                let activitiesHTML = '';
+                if (entry.activities) {
+                    const acts = entry.activities;
+                    if (acts.interactive && acts.interactive > 0) {
+                        activitiesHTML += `
+                            <div class="meta-item">
+                                <span class="meta-label">Interaktiv erkundet:</span>
+                                <span class="meta-value">${acts.interactive}</span>
+                            </div>
+                        `;
                     }
-                    
-                    console.log('📝 Eintrag', index, ':', {
-                        moduleKey: moduleKey,
-                        dataKey: dataKey,
-                        theme: entry.theme,
-                        module: entry.module
-                    });
-                    
-                    // Get module URL
-                    const moduleUrl = moduleKey ? getModuleUrl(moduleKey) : null;
-                    const moduleButton = moduleUrl ? 
-                        `<a href="${moduleUrl}" class="module-link-button" title="Zum Lerninhalt">
-                            📖 Zum Modul
-                        </a>` : '';
-
-                    entryDiv.innerHTML = `
-                        <div class="entry-header">
-                            <div class="entry-header-main">
-                                <h3 class="entry-title">${entry.theme || entry.title || 'Lernaktivität'}</h3>
-                                <span class="entry-date">${formatDate(entry.date)}</span>
+                    if (acts.quiz) {
+                        activitiesHTML += `
+                            <div class="meta-item">
+                                <span class="meta-label">Quiz:</span>
+                                <span class="meta-value">${acts.quiz.quizScore || 0}/${acts.quiz.quizTotal || 0}</span>
                             </div>
-                            <div class="entry-header-controls">
-                                ${moduleButton}
-                                <button class="delete-button" onclick="confirmDelete('${dataSource}', '${dataKey}', '${progressKey}', '${themeDataKey}', '${reflectionKey}')" title="Diesen Eintrag löschen">
-                                    🗑️ Löschen
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="entry-content">${entry.reflection || entry.description || 'Keine Reflexion vorhanden'}</div>
-                        
-                        <div class="entry-meta">
-                            ${entry.module ? `
-                                <div class="meta-item">
-                                    <span class="meta-label">Modul:</span>
-                                    <span class="meta-value">${entry.module}</span>
-                                </div>
-                            ` : ''}
-                            ${entry.lebensbezug ? `
-                                <div class="meta-item">
-                                    <span class="meta-label">Lebensbezug:</span>
-                                    <span class="meta-value">${entry.lebensbezug}</span>
-                                </div>
-                            ` : ''}
+                        `;
+                    }
+                    if (acts.completed) {
+                        activitiesHTML += `
                             <div class="meta-item">
                                 <span class="meta-label">Status:</span>
                                 <span class="meta-value">✓ Abgeschlossen</span>
                             </div>
-                        </div>
-                    `;
-                    
-                    container.appendChild(entryDiv);
-                } catch (err) {
-                    console.error('Fehler beim Anzeigen von Eintrag', index, ':', err, entry);
+                        `;
+                    }
                 }
+                
+                const path = window.location.pathname;
+                const dir = path.substring(0, path.lastIndexOf('/') + 1);
+                const baseUrl = window.location.origin + dir;
+                const shareCode = currentUser.code.replace(/[^A-Z0-9]/g, '');
+                const entryShareLink = `${baseUrl}portfolio-view.html?code=${shareCode}&entry=${index}`;
+                
+                const reflectionKey = (entry.reflectionKey || entry.reflection || '').replace(/'/g, "\\'");
+                const progressKey = entry.progressKey || '';
+                const themeDataKey = entry.themeDataKey || '';
+
+                entryDiv.innerHTML = `
+                    <div class="entry-header">
+                        <div class="entry-header-main">
+                            <h3 class="entry-title">${entry.theme || 'Lernaktivität'}</h3>
+                            <span class="entry-date">${formatDate(entry.date)}</span>
+                        </div>
+                        <div class="entry-header-controls">
+                            <button class="share-entry-button" onclick="shareEntry(${index})" title="Diesen Eintrag teilen">
+                                🔗 Teilen
+                            </button>
+                            <button class="delete-button" onclick="confirmDelete('${entry.dataSource}', '${entry.dataKey}', '${progressKey}', '${themeDataKey}', '${reflectionKey}')" title="Diesen Eintrag löschen">
+                                🗑️ Löschen
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="entry-content">${entry.reflection}</div>
+                    
+                    <div class="entry-meta">
+                        ${entry.module ? `
+                            <div class="meta-item">
+                                <span class="meta-label">Modul:</span>
+                                <span class="meta-value">${entry.module}</span>
+                            </div>
+                        ` : ''}
+                        ${entry.competencies ? `
+                            <div class="meta-item">
+                                <span class="meta-label">Kompetenzen:</span>
+                                <span class="meta-value">${entry.competencies}</span>
+                            </div>
+                        ` : ''}
+                        ${activitiesHTML}
+                    </div>
+                    
+                    <div class="entry-share-section" id="entryShare-${index}" style="display: none;">
+                        <div class="share-controls" style="margin-top: 1rem;">
+                            <input type="text" class="share-link" id="entryShareLink-${index}" value="${entryShareLink}" readonly>
+                            <button class="copy-button" onclick="copyEntryLink(${index})">
+                                📋 Link kopieren
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="reactions-section">
+                        <h4 class="reactions-title">💬 Rückmeldungen (${reactions.length})</h4>
+                        
+                        ${hasReactions ? `
+                            <div class="reactions-display">
+                                ${reactions.map(reaction => `
+                                    <div class="reaction-item">
+                                        <span class="reaction-emoji">${reaction.emoji}</span>
+                                        <span class="reaction-text">${reaction.meaning}</span>
+                                        <span class="reaction-from">von ${reaction.from}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : `
+                            <p style="color: var(--ktzh-gray); font-size: 0.9rem; margin-bottom: 1rem;">
+                                Noch keine Rückmeldungen. Teile dein Portfolio, um Feedback zu erhalten!
+                            </p>
+                        `}
+                        
+                        <div class="emoji-picker">
+                            <div class="emoji-picker-title">Möchtest du selbst eine Rückmeldung hinzufügen?</div>
+                            <div class="emoji-options">
+                                <button class="emoji-button" onclick="addReaction(${index}, '👍', 'Super!')">
+                                    <span class="emoji-icon">👍</span>
+                                    <span>Super!</span>
+                                </button>
+                                <button class="emoji-button" onclick="addReaction(${index}, '💯', 'Perfekt')">
+                                    <span class="emoji-icon">💯</span>
+                                    <span>Perfekt</span>
+                                </button>
+                                <button class="emoji-button" onclick="addReaction(${index}, '🎯', 'Genau richtig')">
+                                    <span class="emoji-icon">🎯</span>
+                                    <span>Genau richtig</span>
+                                </button>
+                                <button class="emoji-button" onclick="addReaction(${index}, '💡', 'Clever!')">
+                                    <span class="emoji-icon">💡</span>
+                                    <span>Clever!</span>
+                                </button>
+                                <button class="emoji-button" onclick="addReaction(${index}, '🌟', 'Toll gemacht')">
+                                    <span class="emoji-icon">🌟</span>
+                                    <span>Toll gemacht</span>
+                                </button>
+                                <button class="emoji-button" onclick="addReaction(${index}, '🚀', 'Weiter so!')">
+                                    <span class="emoji-icon">🚀</span>
+                                    <span>Weiter so!</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(entryDiv);
             });
+        }
+
+        // Add reaction to entry
+        function addReaction(entryIndex, emoji, meaning) {
+            const portfolioData = localStorage.getItem('abuEbaPortfolio');
+            const entries = portfolioData ? JSON.parse(portfolioData) : [];
+            
+            const userEntries = entries.filter(entry => entry.userCode === currentUser.code);
+            
+            const displayedEntries = Array.from(document.querySelectorAll('.portfolio-entry'));
+            const targetEntryElement = displayedEntries[entryIndex];
+            if (!targetEntryElement) return;
+            
+            let entry = userEntries[entryIndex];
+
+            if (!entry) {
+                 entry = userEntries[entryIndex];
+                 if (!entry) {
+                     console.error("Konnte Eintrag für Reaktion nicht finden.");
+                     return;
+                 }
+            }
+            
+            if (!entry.reactions) {
+                entry.reactions = [];
+            }
+            
+            const reaction = {
+                emoji: emoji,
+                meaning: meaning,
+                from: currentUser.name,
+                date: new Date().toISOString()
+            };
+            
+            entry.reactions.push(reaction);
+            
+            const allEntriesIndex = entries.findIndex(e => 
+                e.userCode === entry.userCode && 
+                e.date === entry.date && 
+                e.reflection === entry.reflection
+            );
+            
+            if (allEntriesIndex !== -1) {
+                entries[allEntriesIndex] = entry;
+                localStorage.setItem('abuEbaPortfolio', JSON.stringify(entries));
+            }
+            
+            showSuccessMessage(`Rückmeldung "${meaning}" hinzugefügt!`);
+            loadPortfolioEntries();
         }
 
         // Update statistics
         function updateStatistics(entries) {
             document.getElementById('totalEntries').textContent = entries.length;
-            document.getElementById('totalReactions').textContent = '0';
-            document.getElementById('totalShares').textContent = '0';
+            
+            let totalReactions = 0;
+            entries.forEach(entry => {
+                if (entry.reactions) {
+                    totalReactions += entry.reactions.length;
+                }
+            });
+            document.getElementById('totalReactions').textContent = totalReactions;
+            
+            const sharedEntries = entries.filter(entry => entry.shareLink).length;
+            document.getElementById('totalShares').textContent = sharedEntries;
+        }
+
+        // Generate share link
+        function generateShareLink() {
+            const path = window.location.pathname;
+            const dir = path.substring(0, path.lastIndexOf('/') + 1);
+            const baseUrl = window.location.origin + dir;
+            const shareCode = currentUser.code.replace(/[^A-Z0-9]/g, '');
+            const shareLink = `${baseUrl}portfolio-view.html?code=${shareCode}`;
+            
+            document.getElementById('shareLink').value = shareLink;
+            document.getElementById('copyButton').style.display = 'block';
+            
+            const portfolioData = localStorage.getItem('abuEbaPortfolio');
+            const entries = portfolioData ? JSON.parse(portfolioData) : [];
+            
+            entries.forEach(entry => {
+                if (entry.userCode === currentUser.code) {
+                    entry.shareLink = shareLink;
+                }
+            });
+            
+            localStorage.setItem('abuEbaPortfolio', JSON.stringify(entries));
+            
+            showSuccessMessage('Teilungs-Link wurde erstellt!');
+        }
+
+        // Copy share link
+        function copyShareLink() {
+            const shareLinkInput = document.getElementById('shareLink');
+            shareLinkInput.select();
+            document.execCommand('copy');
+            
+            const copyButton = document.getElementById('copyButton');
+            copyButton.textContent = '✓ Kopiert!';
+            copyButton.classList.add('copied');
+            
+            setTimeout(() => {
+                copyButton.textContent = '📋 Link kopieren';
+                copyButton.classList.remove('copied');
+            }, 2000);
         }
 
         // Format date
@@ -1212,7 +1407,6 @@
         // Show success message
         function showSuccessMessage(message) {
             const messageDiv = document.getElementById('successMessage');
-            messageDiv.className = 'success-message';
             messageDiv.textContent = message;
             messageDiv.style.display = 'block';
             
@@ -1221,10 +1415,48 @@
             }, 3000);
         }
 
+        // Share individual entry
+        function shareEntry(entryIndex) {
+            const shareSection = document.getElementById(`entryShare-${entryIndex}`);
+            
+            if (shareSection.style.display === 'none' || shareSection.style.display === '') {
+                shareSection.style.display = 'block';
+                showSuccessMessage(`Teilungs-Link für Eintrag ${entryIndex + 1} wurde generiert!`);
+            } else {
+                shareSection.style.display = 'none';
+            }
+        }
+
+        // Copy entry share link
+        function copyEntryLink(entryIndex) {
+            const shareLinkInput = document.getElementById(`entryShareLink-${entryIndex}`);
+            shareLinkInput.select();
+            document.execCommand('copy');
+            
+            const copyButton = event.target;
+            const originalText = copyButton.textContent;
+            copyButton.textContent = '✓ Kopiert!';
+            copyButton.classList.add('copied');
+            
+            setTimeout(() => {
+                copyButton.textContent = originalText;
+                copyButton.classList.remove('copied');
+            }, 2000);
+        }
+
         // Initialize on page load
         window.addEventListener('DOMContentLoaded', () => {
             loadUserData();
             loadPortfolioEntries();
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const highlightIndex = urlParams.get('highlight');
+            
+            if (highlightIndex !== null) {
+                setTimeout(() => {
+                    highlightAndScrollToEntry(parseInt(highlightIndex));
+                }, 500);
+            }
             
             document.getElementById('confirmModalCancel').onclick = () => {
                 document.getElementById('confirmModal').style.display = 'none';
@@ -1249,6 +1481,32 @@
                 }
             };
         });
+
+        // Highlight and scroll to specific entry
+        function highlightAndScrollToEntry(index) {
+            const entries = document.querySelectorAll('.portfolio-entry');
+            if (entries[index]) {
+                entries[index].style.background = 'linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%)';
+                entries[index].style.border = '3px solid var(--ktzh-warning)';
+                entries[index].style.animation = 'pulse 1.5s ease-in-out 3';
+                
+                entries[index].scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+                
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes pulse {
+                        0%, 100% { transform: scale(1); }
+                        50% { transform: scale(1.02); }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                showSuccessMessage('📌 Dieser Portfolio-Eintrag wurde hervorgehoben!');
+            }
+        }
     </script>
 </body>
 </html>
