@@ -394,52 +394,103 @@
 
         // Load portfolio entries
         function loadPortfolioEntries(code) {
+            console.log('Loading portfolio for code:', code);
+            
             try {
                 let allEntries = [];
+                let foundUserCode = null;
                 
                 // Method 1: Load from global portfolio array
                 const portfolioData = localStorage.getItem('abuEbaPortfolio');
+                console.log('Portfolio data exists:', !!portfolioData);
+                
                 if (portfolioData) {
                     const entries = JSON.parse(portfolioData);
-                    const userEntries = entries.filter(entry => 
-                        entry.userCode && entry.userCode.replace(/[^A-Z0-9]/g, '') === code
-                    );
+                    console.log('Total portfolio entries:', entries.length);
+                    
+                    const userEntries = entries.filter(entry => {
+                        const entryCode = entry.userCode ? entry.userCode.replace(/[^A-Z0-9]/g, '') : '';
+                        const matches = entryCode === code;
+                        if (matches && !foundUserCode) {
+                            foundUserCode = entry.userCode;
+                        }
+                        return matches;
+                    });
+                    
+                    console.log('User entries from portfolio:', userEntries.length);
+                    
+                    userEntries.forEach(entry => {
+                        entry.dataSource = 'portfolio';
+                        entry.dataKey = entry.date;
+                        entry.reflectionKey = entry.reflection;
+                    });
                     
                     allEntries = allEntries.concat(userEntries);
                 }
 
-                // Method 2: Try to find entries by scanning localStorage
-                const possibleKeys = [];
+                // Method 2: Scan all localStorage keys for user-specific data
+                console.log('Scanning localStorage...');
                 for (let i = 0; i < localStorage.length; i++) {
                     const key = localStorage.key(i);
-                    if (key && key.includes('abuEba_') && key.includes('_progress')) {
-                        possibleKeys.push(key);
-                    }
-                }
-
-                // Try to find matching user code
-                possibleKeys.forEach(key => {
-                    const parts = key.split('_');
-                    if (parts.length >= 2) {
-                        const keyCode = parts[1];
-                        if (keyCode.replace(/[^A-Z0-9]/g, '') === code) {
-                            try {
-                                const progressData = JSON.parse(localStorage.getItem(key));
-                                const entries = convertProgressToPortfolioEntries(key, progressData, keyCode);
-                                allEntries = allEntries.concat(entries);
-                            } catch (e) {
-                                console.log('Could not parse progress data:', e);
+                    
+                    // Look for keys with the sanitized code
+                    if (key && key.startsWith('abuEba_')) {
+                        const parts = key.split('_');
+                        if (parts.length >= 2) {
+                            const keyCode = parts[1].replace(/[^A-Z0-9]/g, '');
+                            
+                            if (keyCode === code) {
+                                if (!foundUserCode) {
+                                    foundUserCode = parts[1]; // Store the original user code
+                                }
+                                
+                                try {
+                                    const data = JSON.parse(localStorage.getItem(key));
+                                    
+                                    // Check if this is activity data
+                                    if (key.includes('_activity') && !key.includes('_quizActivity')) {
+                                        console.log('Found activity key:', key);
+                                        const entry = convertActivityToPortfolioEntry(key, data, parts[1]);
+                                        if (entry) {
+                                            allEntries.push(entry);
+                                        }
+                                    }
+                                    // Check if this is theme progress data
+                                    else if (key.includes('_progress')) {
+                                        console.log('Found progress key:', key);
+                                        const entries = convertProgressToPortfolioEntries(key, data, parts[1]);
+                                        if (entries && entries.length > 0) {
+                                            console.log('Progress entries:', entries.length);
+                                            allEntries = allEntries.concat(entries);
+                                        }
+                                    }
+                                } catch (e) {
+                                    console.log('Could not parse:', key, e);
+                                }
                             }
                         }
                     }
-                });
+                }
+
+                console.log('Total entries before deduplication:', allEntries.length);
 
                 // Remove duplicates
                 allEntries = removeDuplicateEntries(allEntries);
+                
+                console.log('Total entries after deduplication:', allEntries.length);
 
                 if (allEntries.length === 0) {
                     showEmptyState();
                 } else {
+                    // Store the userName if we found it
+                    if (foundUserCode && allEntries.length > 0) {
+                        const userName = localStorage.getItem('abuEbaName');
+                        if (userName) {
+                            allEntries.forEach(entry => {
+                                entry.userName = userName;
+                            });
+                        }
+                    }
                     displayPortfolio(allEntries);
                 }
 
@@ -447,6 +498,28 @@
                 console.error('Error loading portfolio:', error);
                 showError('Fehler beim Laden des Portfolios: ' + error.message);
             }
+        }
+        
+        // Convert activity data to portfolio entry
+        function convertActivityToPortfolioEntry(key, data, userCode) {
+            const parts = key.split('_');
+            if (parts.length < 3) return null;
+            
+            const moduleName = parts.slice(2).join('_').replace('_activity', '');
+            
+            return {
+                userCode: userCode,
+                date: data.date || new Date().toISOString(),
+                theme: data.theme || 'Lernaktivität',
+                module: moduleName,
+                reflection: data.reflection || 'Aktivität abgeschlossen',
+                competencies: data.competencies || '',
+                activities: data,
+                reactions: data.reactions || [],
+                shareLink: null,
+                dataSource: 'activity',
+                dataKey: key
+            };
         }
 
         // Convert progress data to portfolio entries
@@ -459,14 +532,25 @@
                 for (const contentKey in themeData) {
                     if (themeData[contentKey] === true) {
                         const activityKey = `abuEba_${userCode}_${contentKey}_activity`;
+                        const interactiveKey = `abuEba_${userCode}_${contentKey}_interactive`;
+                        const quizKey = `abuEba_${userCode}_${contentKey}_quizActivity`;
                         
                         let activityData = {};
+                        let interactiveCount = 0;
+                        let quizData = null;
+                        
                         try {
                             if (localStorage.getItem(activityKey)) {
                                 activityData = JSON.parse(localStorage.getItem(activityKey));
                             }
+                            if (localStorage.getItem(interactiveKey)) {
+                                interactiveCount = parseInt(localStorage.getItem(interactiveKey)) || 0;
+                            }
+                            if (localStorage.getItem(quizKey)) {
+                                quizData = JSON.parse(localStorage.getItem(quizKey));
+                            }
                         } catch (e) {
-                            console.log('Error parsing activity data:', e);
+                            console.log('Error parsing additional data:', e);
                         }
                         
                         entries.push({
@@ -476,7 +560,16 @@
                             module: formatModuleName(contentKey),
                             reflection: activityData.reflection || 'Modul abgeschlossen',
                             competencies: activityData.competencies || '',
-                            reactions: activityData.reactions || []
+                            activities: {
+                                completed: true,
+                                interactive: interactiveCount,
+                                quiz: quizData
+                            },
+                            reactions: activityData.reactions || [],
+                            dataSource: 'progress',
+                            dataKey: contentKey,
+                            progressKey: key,
+                            themeDataKey: themeKey
                         });
                     }
                 }
@@ -485,22 +578,74 @@
             return entries;
         }
 
-        // Remove duplicate entries
+        // Remove duplicate entries (VERBESSERT)
         function removeDuplicateEntries(entries) {
             const seen = new Map();
             
             entries.forEach(entry => {
-                const uniqueKey = `${entry.theme}_${entry.module}`;
+                // Create a more specific unique key including date and reflection snippet
+                const dateKey = new Date(entry.date).toISOString().split('T')[0]; // YYYY-MM-DD
+                const reflectionSnippet = (entry.reflection || '').substring(0, 50).trim();
+                const uniqueKey = `${entry.theme}_${entry.module}_${dateKey}_${reflectionSnippet}`;
                 
                 if (!seen.has(uniqueKey)) {
                     seen.set(uniqueKey, entry);
-                } else {
-                    const existing = seen.get(uniqueKey);
-                    // Keep the one with a real reflection
-                    if (entry.reflection && entry.reflection !== 'Modul abgeschlossen' && 
-                        (!existing.reflection || existing.reflection === 'Modul abgeschlossen')) {
-                        seen.set(uniqueKey, entry);
-                    }
+                    return;
+                }
+
+                const existing = seen.get(uniqueKey);
+
+                // Prefer entries with real reflections (minimum 20 characters)
+                let entryHasReflection = entry.reflection && 
+                    entry.reflection !== 'Aktivität abgeschlossen' && 
+                    entry.reflection !== 'Modul abgeschlossen' &&
+                    entry.reflection.length > 20;
+                let existingHasReflection = existing.reflection && 
+                    existing.reflection !== 'Aktivität abgeschlossen' && 
+                    existing.reflection !== 'Modul abgeschlossen' &&
+                    existing.reflection.length > 20;
+
+                if (entryHasReflection && !existingHasReflection) {
+                    seen.set(uniqueKey, entry);
+                    return;
+                }
+                if (!entryHasReflection && existingHasReflection) {
+                    return; // Keep existing
+                }
+                
+                // Priority order: portfolio > activity > progress
+                const sourcePriority = {
+                    'portfolio': 3,
+                    'activity': 2,
+                    'progress': 1
+                };
+                
+                const entryPriority = sourcePriority[entry.dataSource] || 0;
+                const existingPriority = sourcePriority[existing.dataSource] || 0;
+                
+                if (entryPriority > existingPriority) {
+                    seen.set(uniqueKey, entry);
+                    return;
+                }
+                if (entryPriority < existingPriority) {
+                    return; // Keep existing
+                }
+                
+                // If same priority, prefer the one with more reactions
+                const entryReactions = (entry.reactions || []).length;
+                const existingReactions = (existing.reactions || []).length;
+                
+                if (entryReactions > existingReactions) {
+                    seen.set(uniqueKey, entry);
+                    return;
+                }
+                if (entryReactions < existingReactions) {
+                    return; // Keep existing
+                }
+                
+                // If everything is equal, prefer the one with a later date
+                if (new Date(entry.date) > new Date(existing.date)) {
+                    seen.set(uniqueKey, entry);
                 }
             });
             
@@ -567,6 +712,36 @@
             const reactions = entry.reactions || [];
             const hasReactions = reactions.length > 0;
 
+            // Build activities display
+            let activitiesHTML = '';
+            if (entry.activities) {
+                const acts = entry.activities;
+                if (acts.interactive && acts.interactive > 0) {
+                    activitiesHTML += `
+                        <div class="meta-item">
+                            <span class="meta-label">Interaktiv erkundet:</span>
+                            <span class="meta-value">${acts.interactive}</span>
+                        </div>
+                    `;
+                }
+                if (acts.quiz) {
+                    activitiesHTML += `
+                        <div class="meta-item">
+                            <span class="meta-label">Quiz:</span>
+                            <span class="meta-value">${acts.quiz.quizScore || 0}/${acts.quiz.quizTotal || 0}</span>
+                        </div>
+                    `;
+                }
+                if (acts.completed) {
+                    activitiesHTML += `
+                        <div class="meta-item">
+                            <span class="meta-label">Status:</span>
+                            <span class="meta-value">✓ Abgeschlossen</span>
+                        </div>
+                    `;
+                }
+            }
+
             const entryDiv = document.createElement('div');
             entryDiv.className = 'portfolio-entry';
 
@@ -591,6 +766,7 @@
                             <span class="meta-value">${entry.competencies}</span>
                         </div>
                     ` : ''}
+                    ${activitiesHTML}
                 </div>
                 
                 <div class="reactions-section">
