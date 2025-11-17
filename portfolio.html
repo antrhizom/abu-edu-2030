@@ -569,28 +569,46 @@ if (userPortfolioData) {
                 let synced = 0;
                 let errors = 0;
                 
-                for (const entry of userEntries) {
-                    try {
-                        // Check if entry already exists
-                        const querySnapshot = await db.collection('portfolios')
-                            .where('userCode', '==', currentUser.code)
-                            .where('date', '==', entry.date)
-                            .where('reflection', '==', entry.reflection)
-                            .get();
-                        
-                        if (querySnapshot.empty) {
-                            await db.collection('portfolios').add({
-                                ...entry,
-                                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                            });
-                            synced++;
-                        }
-                    } catch (error) {
-                        console.error('Error syncing entry:', error);
-                        errors++;
-                    }
-                }
+              for (const entry of userEntries) {
+    try {
+        // Bereinige den Eintrag - entferne undefined Werte
+        const cleanEntry = {};
+        for (const key in entry) {
+            if (entry[key] !== undefined && entry[key] !== null) {
+                cleanEntry[key] = entry[key];
+            }
+        }
+        
+        // Stelle sicher, dass wichtige Felder gesetzt sind
+        if (!cleanEntry.userCode) {
+            cleanEntry.userCode = currentUser.code;
+        }
+        if (!cleanEntry.date) {
+            cleanEntry.date = new Date().toISOString();
+        }
+        
+        // Check if entry already exists
+        const querySnapshot = await db.collection('portfolios')
+            .where('userCode', '==', currentUser.code)
+            .where('date', '==', cleanEntry.date)
+            .get();
+        
+        if (querySnapshot.empty) {
+            await db.collection('portfolios').add({
+                ...cleanEntry,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            synced++;
+            console.log('✅ Synchronisiert:', cleanEntry.module || cleanEntry.theme);
+        } else {
+            console.log('⏭️ Bereits vorhanden:', cleanEntry.module || cleanEntry.theme);
+        }
+    } catch (error) {
+        console.error('❌ Error syncing entry:', error);
+        errors++;
+    }
+}
                 
                 showMessage(`Erfolgreich synchronisiert: ${synced} Einträge`, 'success');
                 updateFirebaseStatus('connected', 'Mit Cloud verbunden');
