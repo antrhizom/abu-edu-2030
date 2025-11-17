@@ -262,6 +262,33 @@
             font-size: 0.9rem;
         }
 
+        .share-entry-button {
+            background: var(--ktzh-light-blue);
+            color: var(--ktzh-white);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .share-entry-button:hover {
+            background: var(--ktzh-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 102, 204, 0.3);
+        }
+
+        .entry-share-section {
+            background: var(--ktzh-ultra-light);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            animation: fadeIn 0.3s ease-out;
+        }
+
         .entry-content {
             color: var(--ktzh-text);
             line-height: 1.8;
@@ -711,7 +738,8 @@
                 competencies: data.competencies || '',
                 activities: data,
                 reactions: data.reactions || [],
-                source: 'activity'
+                source: 'activity',
+                shareLink: null
             };
         }
         
@@ -772,13 +800,32 @@
         
         // Remove duplicate entries
         function removeDuplicateEntries(entries) {
-            const seen = new Set();
+            const seen = new Map();
+            
             return entries.filter(entry => {
-                const key = `${entry.theme}_${entry.module}_${entry.date}`;
-                if (seen.has(key)) {
-                    return false;
+                // Create unique key based on theme and module (ignore date for deduplication)
+                const uniqueKey = `${entry.theme}_${entry.module}`;
+                
+                if (seen.has(uniqueKey)) {
+                    // If we already have this entry, keep the one with more data
+                    const existing = seen.get(uniqueKey);
+                    
+                    // Prefer entries with reflections
+                    if (entry.reflection && entry.reflection !== 'Aktivität abgeschlossen' && entry.reflection !== 'Modul abgeschlossen') {
+                        seen.set(uniqueKey, entry);
+                        return false; // Will add the better one later
+                    }
+                    
+                    // Prefer entries from portfolio source over progress source
+                    if (entry.source === 'portfolio' && existing.source === 'progress') {
+                        seen.set(uniqueKey, entry);
+                        return false;
+                    }
+                    
+                    return false; // Skip duplicate
                 }
-                seen.add(key);
+                
+                seen.set(uniqueKey, entry);
                 return true;
             });
         }
@@ -816,6 +863,7 @@
             entries.forEach((entry, index) => {
                 const entryDiv = document.createElement('div');
                 entryDiv.className = 'portfolio-entry';
+                entryDiv.setAttribute('data-entry-index', index);
                 
                 const reactions = entry.reactions || [];
                 const hasReactions = reactions.length > 0;
@@ -850,10 +898,20 @@
                     }
                 }
                 
+                // Share link for this entry
+                const baseUrl = window.location.origin + window.location.pathname.replace('portfolio.html', '');
+                const shareCode = currentUser.code.replace(/[^A-Z0-9]/g, '');
+                const entryShareLink = `${baseUrl}portfolio-view.html?code=${shareCode}&entry=${index}`;
+                
                 entryDiv.innerHTML = `
                     <div class="entry-header">
                         <h3 class="entry-title">${entry.theme || 'Lernaktivität'}</h3>
-                        <span class="entry-date">${formatDate(entry.date)}</span>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <span class="entry-date">${formatDate(entry.date)}</span>
+                            <button class="share-entry-button" onclick="shareEntry(${index})" title="Diesen Eintrag teilen">
+                                🔗 Teilen
+                            </button>
+                        </div>
                     </div>
                     
                     <div class="entry-content">${entry.reflection}</div>
@@ -872,6 +930,16 @@
                             </div>
                         ` : ''}
                         ${activitiesHTML}
+                    </div>
+                    
+                    <!-- Entry Share Section -->
+                    <div class="entry-share-section" id="entryShare-${index}" style="display: none;">
+                        <div class="share-controls" style="margin-top: 1rem;">
+                            <input type="text" class="share-link" id="entryShareLink-${index}" value="${entryShareLink}" readonly>
+                            <button class="copy-button" onclick="copyEntryLink(${index})">
+                                📋 Link kopieren
+                            </button>
+                        </div>
                     </div>
                     
                     <div class="reactions-section">
@@ -1052,6 +1120,35 @@
             setTimeout(() => {
                 messageDiv.style.display = 'none';
             }, 3000);
+        }
+
+        // Share individual entry
+        function shareEntry(entryIndex) {
+            const shareSection = document.getElementById(`entryShare-${entryIndex}`);
+            
+            if (shareSection.style.display === 'none' || shareSection.style.display === '') {
+                shareSection.style.display = 'block';
+                showSuccessMessage(`Teilungs-Link für Eintrag ${entryIndex + 1} wurde generiert!`);
+            } else {
+                shareSection.style.display = 'none';
+            }
+        }
+
+        // Copy entry share link
+        function copyEntryLink(entryIndex) {
+            const shareLinkInput = document.getElementById(`entryShareLink-${entryIndex}`);
+            shareLinkInput.select();
+            document.execCommand('copy');
+            
+            const copyButton = event.target;
+            const originalText = copyButton.textContent;
+            copyButton.textContent = '✓ Kopiert!';
+            copyButton.classList.add('copied');
+            
+            setTimeout(() => {
+                copyButton.textContent = originalText;
+                copyButton.classList.remove('copied');
+            }, 2000);
         }
 
         // Initialize on page load
