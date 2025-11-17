@@ -1155,7 +1155,44 @@
         window.addEventListener('DOMContentLoaded', () => {
             loadUserData();
             loadPortfolioEntries();
+            
+            // Check for highlight parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const highlightIndex = urlParams.get('highlight');
+            
+            if (highlightIndex !== null) {
+                setTimeout(() => {
+                    highlightAndScrollToEntry(parseInt(highlightIndex));
+                }, 500);
+            }
         });
+
+        // Highlight and scroll to specific entry
+        function highlightAndScrollToEntry(index) {
+            const entries = document.querySelectorAll('.portfolio-entry');
+            if (entries[index]) {
+                entries[index].style.background = 'linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%)';
+                entries[index].style.border = '3px solid var(--yellow)';
+                entries[index].style.animation = 'pulse 1.5s ease-in-out 3';
+                
+                entries[index].scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+                
+                // Add pulse animation
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes pulse {
+                        0%, 100% { transform: scale(1); }
+                        50% { transform: scale(1.02); }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                showSuccessMessage('📌 Dieser Portfolio-Eintrag wurde hervorgehoben!');
+            }
+        }
     </script>
 </body>
 </html>
