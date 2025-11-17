@@ -174,7 +174,7 @@
         .progress-bar-fill {
             background: linear-gradient(90deg, var(--ktzh-blue), var(--ktzh-cyan));
             height: 100%;
-            width: 25%;
+            width: 0%;
             transition: width 0.5s ease;
             display: flex;
             align-items: center;
@@ -307,6 +307,45 @@
             font-size: 0.875rem;
         }
 
+        /* Achievement Badge */
+        .achievement-badge {
+            background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+            border: 2px solid var(--green);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .achievement-badge.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .achievement-badge h4 {
+            color: var(--green);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--ktzh-darkgray);
+        }
+
         .btn {
             padding: 0.75rem 1.5rem;
             border-radius: 25px;
@@ -407,9 +446,8 @@
                 <h1>Thema 1: Berufseinstieg</h1>
             </div>
             <div class="header-nav">
-                <a href="../../index.html" class="nav-link">🏠 Startseite</a>
                 <a href="../../startzweig.html" class="nav-link">📚 Lernraum</a>
-                <a href="../../portfolio.html" class="nav-link">📁 Portfolio</a>
+                <a href="../../kompetenzen-dashboard.html" class="nav-link">🎯 Kompetenzen</a>
                 <div class="user-info">
                     <span id="userDisplay">👤 Gast</span>
                 </div>
@@ -421,8 +459,6 @@
     <div class="container">
         <!-- Breadcrumb -->
         <div class="breadcrumb">
-            <a href="../../index.html">Startseite</a>
-            <span>›</span>
             <a href="../../startzweig.html">Lernraum</a>
             <span>›</span>
             <strong>Thema 1: Berufseinstieg</strong>
@@ -443,7 +479,7 @@
         <div class="progress-overview">
             <h3>📊 Ihr Fortschritt in Thema 1</h3>
             <div class="progress-bar-container">
-                <div class="progress-bar-fill" id="themeProgress">50%</div>
+                <div class="progress-bar-fill" id="themeProgress">0%</div>
             </div>
             <div class="progress-stats">
                 <div class="stat">
@@ -451,20 +487,24 @@
                     <div class="stat-label">Abgeschlossen</div>
                 </div>
                 <div class="stat">
-                    <div class="stat-value">2/4</div>
-                    <div class="stat-label">Verfügbar</div>
+                    <div class="stat-value" id="availableCount">4</div>
+                    <div class="stat-label">Lerninhalte</div>
                 </div>
                 <div class="stat">
                     <div class="stat-value" id="totalPoints">0</div>
-                    <div class="stat-label">Punkte</div>
+                    <div class="stat-label">Quiz-Punkte</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="interactiveCount">0</div>
+                    <div class="stat-label">Erkundet</div>
                 </div>
             </div>
         </div>
 
         <!-- Learning Content Grid -->
         <div class="content-grid">
-            <!-- Content 1.1 - Completed -->
-            <div class="content-card completed">
+            <!-- Content 1.1 -->
+            <div class="content-card" id="card-1-1">
                 <div class="content-header">
                     <div class="content-number">1.1</div>
                     <div class="content-title">
@@ -493,8 +533,17 @@
                     </div>
                 </div>
 
+                <div class="achievement-badge" id="achievement-1-1">
+                    <h4>✨ Ihre Leistung</h4>
+                    <div class="achievement-stats">
+                        <span id="quiz-score-1-1">Quiz: -/-</span>
+                        <span>•</span>
+                        <span id="interactive-1-1">Erkundet: -/-</span>
+                    </div>
+                </div>
+
                 <a href="lerninhalt-1-1.html" class="btn btn-primary" style="width: 100%;">
-                    📋 Lerninhalt öffnen
+                    <span id="btn-text-1-1">📋 Lerninhalt öffnen</span>
                 </a>
             </div>
 
@@ -528,9 +577,9 @@
                     </div>
                 </div>
 
-                <a href="lerninhalt-1-2.html" class="btn btn-secondary" style="width: 100%;">
+                <button class="btn btn-secondary" style="width: 100%;" disabled>
                     🚧 Kommt bald
-                </a>
+                </button>
             </div>
 
             <!-- Content 2.1 - Coming Soon -->
@@ -563,13 +612,13 @@
                     </div>
                 </div>
 
-                <a href="lerninhalt-2-1.html" class="btn btn-secondary" style="width: 100%;">
+                <button class="btn btn-secondary" style="width: 100%;" disabled>
                     🚧 Kommt bald
-                </a>
+                </button>
             </div>
 
-            <!-- Content 2.2 - Available -->
-            <div class="content-card completed">
+            <!-- Content 2.2 -->
+            <div class="content-card" id="card-2-2">
                 <div class="content-header">
                     <div class="content-number">2.2</div>
                     <div class="content-title">
@@ -598,8 +647,17 @@
                     </div>
                 </div>
 
+                <div class="achievement-badge" id="achievement-2-2">
+                    <h4>✨ Ihre Leistung</h4>
+                    <div class="achievement-stats">
+                        <span id="quiz-score-2-2">Quiz: -/-</span>
+                        <span>•</span>
+                        <span id="interactive-2-2">Erkundet: -/-</span>
+                    </div>
+                </div>
+
                 <a href="lerninhalt-2-2.html" class="btn btn-primary" style="width: 100%;">
-                    🤝 Lerninhalt starten
+                    <span id="btn-text-2-2">🤝 Lerninhalt starten</span>
                 </a>
             </div>
         </div>
@@ -620,8 +678,8 @@
             <a href="../../startzweig.html" class="btn btn-secondary">
                 ← Zurück zum Lernraum
             </a>
-            <a href="../../portfolio.html" class="btn btn-secondary">
-                📁 Mein Portfolio
+            <a href="../../kompetenzen-dashboard.html" class="btn btn-secondary">
+                🎯 Kompetenzen
             </a>
         </div>
     </div>
@@ -635,27 +693,156 @@
             document.getElementById('userDisplay').textContent = `👤 ${userName}`;
         }
 
+        // Lerninhalt-Konfiguration
+        const LERNINHALTE = {
+            '1.1': {
+                id: 'lerninhalt-1-1',
+                cardId: 'card-1-1',
+                achievementId: 'achievement-1-1',
+                quizScoreId: 'quiz-score-1-1',
+                interactiveId: 'interactive-1-1',
+                btnTextId: 'btn-text-1-1'
+            },
+            '2.2': {
+                id: 'lerninhalt-2-2',
+                cardId: 'card-2-2',
+                achievementId: 'achievement-2-2',
+                quizScoreId: 'quiz-score-2-2',
+                interactiveId: 'interactive-2-2',
+                btnTextId: 'btn-text-2-2'
+            }
+        };
+
+        // Lade Portfolio-Daten
+        function loadPortfolioData() {
+            if (!userCode) return [];
+            
+            const portfolioKey = `abuEba_${userCode}_portfolio`;
+            const portfolio = localStorage.getItem(portfolioKey);
+            
+            if (portfolio) {
+                try {
+                    return JSON.parse(portfolio);
+                } catch (e) {
+                    console.error('Fehler beim Laden des Portfolios:', e);
+                    return [];
+                }
+            }
+            return [];
+        }
+
+        // Prüfe Completion-Status aus Theme-Progress
+        function checkCompletionStatus(lerninhaltId) {
+            if (!userCode) return false;
+            
+            const progressKey = `abuEba_${userCode}_progress`;
+            const progress = localStorage.getItem(progressKey);
+            
+            if (progress) {
+                try {
+                    const progressData = JSON.parse(progress);
+                    return progressData.theme1 && progressData.theme1[lerninhaltId] === true;
+                } catch (e) {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        // Update UI für einzelnen Lerninhalt
+        function updateLerninhaltUI(themeNumber, portfolioEntry, isCompleted) {
+            const config = LERNINHALTE[themeNumber];
+            if (!config) return;
+
+            const card = document.getElementById(config.cardId);
+            const achievementBadge = document.getElementById(config.achievementId);
+            const quizScoreElement = document.getElementById(config.quizScoreId);
+            const interactiveElement = document.getElementById(config.interactiveId);
+            const btnText = document.getElementById(config.btnTextId);
+
+            if (isCompleted) {
+                card.classList.add('completed');
+                achievementBadge.classList.add('show');
+                
+                if (portfolioEntry && portfolioEntry.activity) {
+                    const activity = portfolioEntry.activity;
+                    
+                    // Quiz Score
+                    if (activity.quizScore !== undefined && activity.quizTotal !== undefined) {
+                        quizScoreElement.textContent = `Quiz: ${activity.quizScore}/${activity.quizTotal}`;
+                    }
+                    
+                    // Interactive Explored
+                    if (activity.interactiveExplored !== undefined && activity.totalInteractive !== undefined) {
+                        interactiveElement.textContent = `Erkundet: ${activity.interactiveExplored}/${activity.totalInteractive}`;
+                    }
+                }
+                
+                btnText.textContent = '✓ Nochmal ansehen';
+            }
+        }
+
         // Calculate Progress
         function updateProgress() {
-            const portfolio = JSON.parse(localStorage.getItem('abuEbaPortfolio') || '[]');
-            const theme1Content = portfolio.filter(entry => 
-                entry.type === 'lerninhalt' && entry.theme && entry.theme.includes('1.')
+            const portfolio = loadPortfolioData();
+            
+            // Filter Theme 1 entries
+            const theme1Portfolio = portfolio.filter(entry => 
+                entry.type === 'lerninhalt' && 
+                entry.theme && 
+                (entry.theme.includes('1.') || entry.themeName?.includes('Thema 1'))
             );
 
-            const completedCount = theme1Content.length;
-            const totalCount = 4; // Total learning contents in Theme 1
-            const percentage = Math.round((completedCount / totalCount) * 100);
+            let completedCount = 0;
+            let totalPoints = 0;
+            let totalInteractiveExplored = 0;
 
-            // Calculate total points
-            const totalPoints = theme1Content.reduce((sum, entry) => {
-                return sum + (entry.activity?.quizScore || 0);
-            }, 0);
+            // Check each lerninhalt
+            Object.keys(LERNINHALTE).forEach(themeNumber => {
+                const config = LERNINHALTE[themeNumber];
+                const isCompleted = checkCompletionStatus(config.id);
+                
+                // Find portfolio entry for this lerninhalt
+                const portfolioEntry = theme1Portfolio.find(entry => 
+                    entry.lerninhaltId === config.id || 
+                    entry.theme === themeNumber
+                );
 
-            // Update UI
+                if (isCompleted) {
+                    completedCount++;
+                    
+                    if (portfolioEntry && portfolioEntry.activity) {
+                        totalPoints += portfolioEntry.activity.quizScore || 0;
+                        totalInteractiveExplored += portfolioEntry.activity.interactiveExplored || 0;
+                    }
+                }
+
+                // Update UI for this lerninhalt
+                updateLerninhaltUI(themeNumber, portfolioEntry, isCompleted);
+            });
+
+            // Calculate percentage
+            const totalCount = Object.keys(LERNINHALTE).length; // Nur verfügbare Lerninhalte zählen
+            const percentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
+            // Update Progress Bar
+            const progressBar = document.getElementById('themeProgress');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = percentage + '%';
+
+            // Update Stats
             document.getElementById('completedCount').textContent = completedCount;
-            document.getElementById('themeProgress').style.width = percentage + '%';
-            document.getElementById('themeProgress').textContent = percentage + '%';
+            document.getElementById('availableCount').textContent = totalCount;
             document.getElementById('totalPoints').textContent = totalPoints;
+            document.getElementById('interactiveCount').textContent = totalInteractiveExplored;
+
+            console.log('📊 Progress Update:', {
+                completed: completedCount,
+                total: totalCount,
+                percentage: percentage,
+                points: totalPoints,
+                interactive: totalInteractiveExplored
+            });
         }
 
         // Initialize
@@ -663,7 +850,7 @@
 
         console.log('📚 Thema 1 Übersicht geladen');
         console.log('👤 User:', userName || 'Gast');
-        console.log('✅ Verfügbare Lerninhalte: 1.1 (Lehrvertrag), 2.2 (Teamwork mit KI)');
+        console.log('✅ Verfügbare Lerninhalte: 1.1, 2.2');
     </script>
 </body>
 </html>
