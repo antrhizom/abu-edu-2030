@@ -553,6 +553,18 @@
                 
                 const entries = JSON.parse(portfolioData);
                 const userEntries = entries.filter(entry => entry.userCode === currentUser.code);
+                // AUCH user-spezifisches Portfolio durchsuchen
+const userPortfolioKey = `abuEba_${currentUser.code}_portfolio`;
+const userPortfolioData = localStorage.getItem(userPortfolioKey);
+if (userPortfolioData) {
+    try {
+        const userPortfolio = JSON.parse(userPortfolioData);
+        userEntries.push(...userPortfolio);
+        console.log('✅ Gefunden in user-portfolio:', userPortfolio.length);
+    } catch (e) {
+        console.error('Fehler beim Lesen von user-portfolio:', e);
+    }
+}
                 
                 let synced = 0;
                 let errors = 0;
