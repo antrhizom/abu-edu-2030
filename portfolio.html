@@ -941,7 +941,11 @@
                         const data = JSON.parse(localStorage.getItem(key));
                         
                         // Check if this is activity data
-                        if (key.includes('_activity') || key.includes('_interactive') || key.includes('_quiz')) {
+                        // KORREKTUR: Die alte Logik (if (key.includes('_activity') || key.includes('_interactive') || key.includes('_quiz')))
+                        // war zu breit. Sie hat Datenfragmente (_interactive, _quiz) als eigene Einträge gezählt.
+                        // Die _progress Logik (unten) sammelt diese Fragmente bereits korrekt ein.
+                        // Wir wollen hier nur "echte" _activity Keys fangen, die KEINE Quiz-Keys sind.
+                        if (key.includes('_activity') && !key.includes('_quizActivity')) {
                             const entry = convertActivityToPortfolioEntry(key, data);
                             if (entry) {
                                 allEntries.push(entry);
