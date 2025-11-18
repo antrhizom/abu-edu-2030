@@ -162,6 +162,7 @@
         let auth = null;
         let authInitializationPromise = null;
         let linkedSessionCode = '';
+        let authLinkWarningShown = false;
         let portfolioCode = '';
         let viewerName = '';
         let entryStampFilter = '';
@@ -215,14 +216,27 @@
             if (!targetCode || linkedSessionCode === targetCode) {
                 return true;
             }
-            await db.collection(AUTH_LINK_COLLECTION)
-                .doc(auth.currentUser.uid)
-                .set({
-                    userCode: targetCode,
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                }, { merge: true });
-            linkedSessionCode = targetCode;
-            return true;
+            try {
+                await db.collection(AUTH_LINK_COLLECTION)
+                    .doc(auth.currentUser.uid)
+                    .set({
+                        userCode: targetCode,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
+                linkedSessionCode = targetCode;
+                return true;
+            } catch (error) {
+                if (error && error.code === 'permission-denied') {
+                    linkedSessionCode = targetCode;
+                    if (!authLinkWarningShown) {
+                        console.warn('Hinweis: Die Sitzung konnte nicht mit dem Portfolio-Code verknüpft werden (Berechtigungen).', error);
+                        showMessage('Hinweis: Die Cloud-Berechtigungen erlauben momentan kein Speichern der Sitzung. Der Lesemodus funktioniert trotzdem.');
+                        authLinkWarningShown = true;
+                    }
+                    return true;
+                }
+                throw error;
+            }
         }
 
         async function initializeFirebase(targetCode = '') {

@@ -456,6 +456,7 @@
         let auth = null;
         let authInitializationPromise = null;
         let linkedAuthCode = '';
+        let authLinkWarningShown = false;
         const currentUser = { code: '', name: '' };
         let entries = [];
         let shareBaseUrl = '';
@@ -699,14 +700,27 @@
             if (linkedAuthCode === currentUser.code) {
                 return true;
             }
-            await db.collection(AUTH_LINK_COLLECTION)
-                .doc(auth.currentUser.uid)
-                .set({
-                    userCode: currentUser.code,
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                }, { merge: true });
-            linkedAuthCode = currentUser.code;
-            return true;
+            try {
+                await db.collection(AUTH_LINK_COLLECTION)
+                    .doc(auth.currentUser.uid)
+                    .set({
+                        userCode: currentUser.code,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
+                linkedAuthCode = currentUser.code;
+                return true;
+            } catch (error) {
+                if (error && error.code === 'permission-denied') {
+                    linkedAuthCode = currentUser.code;
+                    if (!authLinkWarningShown) {
+                        showMessage('Hinweis: Firebase erlaubt momentan kein automatisches Verknüpfen mit deinem Code. Die Synchronisation wird trotzdem versucht.', 'error');
+                        console.warn('Konnte Sitzung nicht mit dem Benutzer-Code verknüpfen (Berechtigungen).', error);
+                        authLinkWarningShown = true;
+                    }
+                    return true;
+                }
+                throw error;
+            }
         }
 
         async function initializeFirebase() {
