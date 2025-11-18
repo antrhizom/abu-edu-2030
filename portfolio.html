@@ -458,7 +458,14 @@
 
         function getEntryStamp(entry) {
             if (!entry) return null;
-            const candidates = [entry.clientCreatedAt, entry.createdAt, entry.date, entry.firebaseId, entry.id];
+            const candidates = [
+                entry.clientCreatedAt,
+                entry.createdAt,
+                entry.date,
+                entry.firebaseId,
+                entry.id,
+                entry.theme && entry.reflection ? `${entry.theme}-${entry.reflection}` : entry.theme
+            ];
             for (const candidate of candidates) {
                 const normalized = normalizeStampValue(candidate);
                 if (normalized) return normalized;
@@ -531,8 +538,30 @@
         function loadLocalEntries() {
             const stored = localStorage.getItem(localStorageKey);
             entries = stored ? JSON.parse(stored) : [];
-            entries = entries.filter(entry => entry.userCode === currentUser.code);
+            entries = deduplicateEntries(entries.filter(entry => entry.userCode === currentUser.code));
+            saveLocalEntries();
             renderEntries();
+        }
+
+        function deduplicateEntries(list = []) {
+            const uniqueMap = new Map();
+            list.forEach(entry => {
+                const stamp = getEntryStamp(entry);
+                if (!stamp) return;
+                const existing = uniqueMap.get(stamp);
+                if (!existing) {
+                    uniqueMap.set(stamp, entry);
+                } else {
+                    const existingDate = getEntryDate(existing);
+                    const newDate = getEntryDate(entry);
+                    if (newDate && (!existingDate || newDate > existingDate)) {
+                        uniqueMap.set(stamp, { ...existing, ...entry });
+                    } else {
+                        uniqueMap.set(stamp, { ...entry, ...existing });
+                    }
+                }
+            });
+            return Array.from(uniqueMap.values());
         }
 
           function renderEntries() {
@@ -787,7 +816,7 @@
                 }
             });
 
-            entries = Array.from(clientByStamp.values()).filter(entry => entry.userCode === currentUser.code);
+            entries = deduplicateEntries(Array.from(clientByStamp.values()).filter(entry => entry.userCode === currentUser.code));
             saveLocalEntries();
             renderEntries();
         }
