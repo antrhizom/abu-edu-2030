@@ -8,6 +8,7 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     
     <style>
         :root {
@@ -155,15 +156,28 @@
             appId: "1:895317724223:web:de551267b1431bea947c8a"
         };
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
+        const AUTH_LINK_COLLECTION = 'portfolioAuthLinks';
+        let firebaseReady = false;
+        let db = null;
+        let auth = null;
+        let authInitializationPromise = null;
+        let linkedSessionCode = '';
         let portfolioCode = '';
         let viewerName = '';
         let entryStampFilter = '';
         let sharedEntryId = '';
         let shareMode = false;
+        let shareOwnerCode = '';
+
+        function decodeCodeToken(token) {
+            if (!token) return '';
+            try {
+                return decodeURIComponent(escape(atob(token)));
+            } catch (error) {
+                console.warn('Konnte Code-Token nicht dekodieren:', error);
+                return '';
+            }
+        }
 
         function getEntryDate(entry) {
             const value = entry.createdAt || entry.date || entry.clientCreatedAt;
@@ -181,15 +195,76 @@
             metaEl.style.display = text ? 'block' : 'none';
         }
 
+        async function ensureAuthSession(targetCode = '') {
+            if (!auth) {
+                throw new Error('Firebase Auth wurde nicht initialisiert.');
+            }
+            if (!auth.currentUser) {
+                if (!authInitializationPromise) {
+                    authInitializationPromise = auth.signInAnonymously()
+                        .catch(error => {
+                            authInitializationPromise = null;
+                            throw error;
+                        });
+                }
+                await authInitializationPromise;
+            }
+            if (!auth.currentUser) {
+                throw new Error('Anonyme Firebase-Anmeldung fehlgeschlagen.');
+            }
+            if (!targetCode || linkedSessionCode === targetCode) {
+                return true;
+            }
+            await db.collection(AUTH_LINK_COLLECTION)
+                .doc(auth.currentUser.uid)
+                .set({
+                    userCode: targetCode,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+            linkedSessionCode = targetCode;
+            return true;
+        }
+
+        async function initializeFirebase(targetCode = '') {
+            try {
+                if (!firebaseReady) {
+                    if (!firebase.apps.length) {
+                        firebase.initializeApp(firebaseConfig);
+                    }
+                    db = firebase.firestore();
+                    auth = firebase.auth();
+                    firebaseReady = true;
+                }
+                await ensureAuthSession(targetCode);
+                return true;
+            } catch (error) {
+                console.error('Firebase init error:', error);
+                return false;
+            }
+        }
+
         // Load portfolio from URL
         async function loadPortfolio() {
             const urlParams = new URLSearchParams(window.location.search);
             sharedEntryId = urlParams.get('share') || '';
-            portfolioCode = urlParams.get('code');
+            shareOwnerCode = decodeCodeToken(urlParams.get('owner') || '');
+            const encodedCode = urlParams.get('codeToken') || '';
+            portfolioCode = urlParams.get('code') || '';
+            if (!portfolioCode && encodedCode) {
+                portfolioCode = decodeCodeToken(encodedCode);
+            }
             entryStampFilter = urlParams.get('entry') || '';
 
             if (sharedEntryId) {
                 shareMode = true;
+                if (!shareOwnerCode) {
+                    showError('Dieser Link ist nicht mehr gültig. Bitte fordere einen neuen Freigabe-Link an.');
+                    return;
+                }
+                if (!await initializeFirebase(shareOwnerCode)) {
+                    showError('Firebase-Anmeldung fehlgeschlagen.');
+                    return;
+                }
                 await loadSharedEntry(sharedEntryId);
                 return;
             }
@@ -198,6 +273,11 @@
 
             if (!portfolioCode) {
                 showError('Kein Portfolio-Code in der URL gefunden.');
+                return;
+            }
+
+            if (!await initializeFirebase(portfolioCode)) {
+                showError('Firebase-Anmeldung fehlgeschlagen.');
                 return;
             }
 

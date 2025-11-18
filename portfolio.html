@@ -11,6 +11,7 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
     <style>
         :root {
@@ -449,8 +450,12 @@
         };
 
         const localStorageKey = 'abuEbaPortfolio';
+        const AUTH_LINK_COLLECTION = 'portfolioAuthLinks';
         let firebaseReady = false;
         let db = null;
+        let auth = null;
+        let authInitializationPromise = null;
+        let linkedAuthCode = '';
         const currentUser = { code: '', name: '' };
         let entries = [];
         let shareBaseUrl = '';
@@ -474,6 +479,16 @@
                 entry.__generatedStamp = `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
             }
             return entry.__generatedStamp;
+        }
+
+        function encodeCodeToken(value) {
+            if (!value) return '';
+            try {
+                return btoa(unescape(encodeURIComponent(value)));
+            } catch (error) {
+                console.warn('Konnte Code nicht kodieren:', error);
+                return '';
+            }
         }
 
         function normalizeStampValue(value) {
@@ -661,17 +676,55 @@
             });
         }
 
+        async function ensureAuthSession() {
+            if (!auth) {
+                throw new Error('Firebase Auth wurde nicht initialisiert.');
+            }
+            if (!currentUser.code) {
+                throw new Error('Kein Benutzer-Code gefunden.');
+            }
+            if (!auth.currentUser) {
+                if (!authInitializationPromise) {
+                    authInitializationPromise = auth.signInAnonymously()
+                        .catch(error => {
+                            authInitializationPromise = null;
+                            throw error;
+                        });
+                }
+                await authInitializationPromise;
+            }
+            if (!auth.currentUser) {
+                throw new Error('Anonyme Firebase-Anmeldung fehlgeschlagen.');
+            }
+            if (linkedAuthCode === currentUser.code) {
+                return true;
+            }
+            await db.collection(AUTH_LINK_COLLECTION)
+                .doc(auth.currentUser.uid)
+                .set({
+                    userCode: currentUser.code,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+            linkedAuthCode = currentUser.code;
+            return true;
+        }
+
         async function initializeFirebase() {
-            if (firebaseReady) return true;
             try {
-                firebase.initializeApp(firebaseConfig);
-                db = firebase.firestore();
-                firebaseReady = true;
+                if (!firebaseReady) {
+                    if (!firebase.apps.length) {
+                        firebase.initializeApp(firebaseConfig);
+                    }
+                    db = firebase.firestore();
+                    auth = firebase.auth();
+                    firebaseReady = true;
+                }
+                await ensureAuthSession();
                 updateFirebaseStatus('connected', 'Firebase verbunden');
                 return true;
             } catch (error) {
                 console.error('Firebase init error', error);
-                updateFirebaseStatus('disconnected', 'Firebase nicht verfügbar');
+                updateFirebaseStatus('disconnected', 'Firebase-Anmeldung fehlgeschlagen');
                 return false;
             }
         }
@@ -883,7 +936,9 @@
                 }
                 const path = window.location.pathname;
                 const dir = path.substring(0, path.lastIndexOf('/') + 1);
-                return `${window.location.origin}${dir}portfolio-view.html?share=${encodeURIComponent(firebaseId)}`;
+                const encodedOwner = encodeCodeToken(currentUser.code);
+                const ownerParam = encodedOwner ? `&owner=${encodeURIComponent(encodedOwner)}` : '';
+                return `${window.location.origin}${dir}portfolio-view.html?share=${encodeURIComponent(firebaseId)}${ownerParam}`;
             } catch (error) {
                 console.error('Share link error', error);
                 showMessage('Konnte den Eintrag nicht zum Teilen vorbereiten: ' + error.message, 'error');
