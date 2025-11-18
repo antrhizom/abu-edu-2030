@@ -162,6 +162,8 @@
         let portfolioCode = '';
         let viewerName = '';
         let entryStampFilter = '';
+        let sharedEntryId = '';
+        let shareMode = false;
 
         function getEntryDate(entry) {
             const value = entry.createdAt || entry.date || entry.clientCreatedAt;
@@ -173,20 +175,33 @@
             return isNaN(date) ? null : date;
         }
 
+        function setMetaText(text) {
+            const metaEl = document.getElementById('portfolioMeta');
+            metaEl.textContent = text || '';
+            metaEl.style.display = text ? 'block' : 'none';
+        }
+
         // Load portfolio from URL
         async function loadPortfolio() {
             const urlParams = new URLSearchParams(window.location.search);
+            sharedEntryId = urlParams.get('share') || '';
             portfolioCode = urlParams.get('code');
             entryStampFilter = urlParams.get('entry') || '';
+
+            if (sharedEntryId) {
+                shareMode = true;
+                await loadSharedEntry(sharedEntryId);
+                return;
+            }
+
+            shareMode = false;
 
             if (!portfolioCode) {
                 showError('Kein Portfolio-Code in der URL gefunden.');
                 return;
             }
 
-            const metaEl = document.getElementById('portfolioMeta');
-            metaEl.textContent = `Portfolio-Code: ${portfolioCode}`;
-            metaEl.style.display = 'block';
+            setMetaText(`Portfolio-Code: ${portfolioCode}`);
 
             console.log('Loading portfolio for:', portfolioCode);
 
@@ -218,7 +233,7 @@
                 if (removedDuplicates > 0) {
                     metaParts.push(`bereinigte Duplikate: ${removedDuplicates}`);
                 }
-                metaEl.textContent = metaParts.join(' • ');
+                setMetaText(metaParts.join(' • '));
 
                 if (entries.length === 0) {
                     showEmpty();
@@ -227,6 +242,23 @@
                 }
             } catch (error) {
                 console.error('Load error:', error);
+                showError('Fehler: ' + error.message);
+            }
+        }
+
+        async function loadSharedEntry(entryId) {
+            try {
+                const doc = await db.collection('portfolios').doc(entryId).get();
+                if (!doc.exists) {
+                    showError('Der geteilte Eintrag wurde nicht gefunden.');
+                    return;
+                }
+                const entry = { id: doc.id, ...doc.data() };
+                setMetaText('Direkter Link zu einem einzelnen Eintrag. Der Portfolio-Code bleibt verborgen.');
+                entryStampFilter = '';
+                displayPortfolio([entry]);
+            } catch (error) {
+                console.error('Load shared entry error:', error);
                 showError('Fehler: ' + error.message);
             }
         }
@@ -242,13 +274,20 @@
             const ownerCode = (referenceEntry && referenceEntry.userCode) || portfolioCode || '–';
             let ownerName = referenceEntry && referenceEntry.userName && referenceEntry.userName.trim()
                 ? referenceEntry.userName
-                : '';
-            if (!ownerName) {
-                ownerName = ownerCode !== '–' ? `Lernende:r (${ownerCode})` : 'Lernende:r';
+                : 'Lernende:r';
+            if (!shareMode && ownerName === 'Lernende:r' && ownerCode !== '–') {
+                ownerName = `Lernende:r (${ownerCode})`;
             }
-            document.getElementById('pageTitle').textContent = `📁 Portfolio von ${ownerName}`;
+
+            const pageTitle = shareMode
+                ? `📁 Geteilter Eintrag von ${ownerName}`
+                : `📁 Portfolio von ${ownerName}`;
+            document.getElementById('pageTitle').textContent = pageTitle;
+
             let description;
-            if (entryStampFilter) {
+            if (shareMode) {
+                description = 'Du siehst nur diesen freigegebenen Eintrag und kannst Feedback hinterlassen.';
+            } else if (entryStampFilter) {
                 description = 'Der verlinkte Eintrag wird angezeigt. Du kannst weitere Einträge unten ansehen oder Feedback hinterlassen.';
             } else {
                 description = 'Hier kannst du die Portfolio-Einträge einsehen und Rückmeldungen geben.';

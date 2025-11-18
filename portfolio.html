@@ -202,6 +202,52 @@
             gap: 0.6rem;
         }
 
+        .feedback-section {
+            margin-top: 1rem;
+            border-top: 1px solid rgba(0, 102, 204, 0.1);
+            padding-top: 1rem;
+        }
+
+        .feedback-section summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--ktzh-blue);
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .feedback-items {
+            list-style: none;
+            margin-top: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .feedback-item {
+            background: var(--ktzh-ultra-light);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .feedback-emoji {
+            font-size: 1.4rem;
+        }
+
+        .feedback-meta {
+            font-size: 0.85rem;
+            color: var(--ktzh-gray);
+        }
+
+        .feedback-empty {
+            color: var(--ktzh-gray);
+            margin-top: 0.75rem;
+        }
+
         input,
         textarea,
         select {
@@ -489,9 +535,9 @@
             renderEntries();
         }
 
-        function renderEntries() {
-            const list = document.getElementById('portfolioList');
-            list.innerHTML = '';
+          function renderEntries() {
+              const list = document.getElementById('portfolioList');
+              list.innerHTML = '';
 
             const sorted = [...entries].sort((a, b) => {
                 const dateA = getEntryDate(a);
@@ -509,30 +555,69 @@
                     div.className = 'portfolio-entry';
                     const stamp = getEntryStamp(entry);
                     const formattedDate = formatDate(getEntryDate(entry));
-                    div.innerHTML = `
-                        <h3>${entry.theme || 'Ohne Titel'}</h3>
-                        <small>${formattedDate}</small>
-                        ${entry.module ? `<div class="entry-module">${entry.module}</div>` : ''}
-                        <div class="entry-reflection">${entry.reflection || ''}</div>
-                        <div class="entry-footer">
-                            <span>${entry.userName || currentUser.name}</span>
-                            <span class="reactions-pill">💬 ${(entry.reactions ? entry.reactions.length : 0)} Feedbacks</span>
-                        </div>
-                        <div class="entry-actions">
-                            <button type="button" class="secondary" onclick="copyEntryShareLink('${stamp}')">🔗 Eintrag teilen</button>
-                            <button class="danger delete-entry-btn" data-stamp="${stamp}">🗑️ Eintrag löschen</button>
-                        </div>
-                    `;
+                      div.innerHTML = `
+                          <h3>${entry.theme || 'Ohne Titel'}</h3>
+                          <small>${formattedDate}</small>
+                          ${entry.module ? `<div class="entry-module">${entry.module}</div>` : ''}
+                          <div class="entry-reflection">${entry.reflection || ''}</div>
+                          <div class="entry-footer">
+                              <span>${entry.userName || currentUser.name}</span>
+                              <span class="reactions-pill">💬 ${(entry.reactions ? entry.reactions.length : 0)} Feedbacks</span>
+                          </div>
+                          ${renderFeedbackSection(entry.reactions)}
+                          <div class="entry-actions">
+                              <button type="button" class="secondary" onclick="copyEntryShareLink('${stamp}')">🔗 Eintrag teilen</button>
+                              <button class="danger delete-entry-btn" data-stamp="${stamp}">🗑️ Eintrag löschen</button>
+                          </div>
+                      `;
                     const deleteButton = div.querySelector('.delete-entry-btn');
                     deleteButton.addEventListener('click', () => deleteEntry(stamp));
                     list.appendChild(div);
                 });
             }
 
-            const totalReactions = entries.reduce((sum, entry) => sum + ((entry.reactions || []).length), 0);
-            document.getElementById('totalEntries').textContent = sorted.length;
-            document.getElementById('totalReactions').textContent = totalReactions;
-        }
+              const totalReactions = entries.reduce((sum, entry) => sum + ((entry.reactions || []).length), 0);
+              document.getElementById('totalEntries').textContent = sorted.length;
+              document.getElementById('totalReactions').textContent = totalReactions;
+          }
+
+          function renderFeedbackSection(reactions = []) {
+              const count = reactions.length;
+              if (!count) {
+                  return `
+                      <div class="feedback-section">
+                          <details>
+                              <summary>💬 Feedback ansehen</summary>
+                              <p class="feedback-empty">Noch keine Rückmeldungen.</p>
+                          </details>
+                      </div>
+                  `;
+              }
+
+              const items = reactions.map(reaction => {
+                  const emoji = escapeHtml(reaction.emoji || '💬');
+                  const meaning = escapeHtml(reaction.meaning || 'Feedback');
+                  const author = escapeHtml(reaction.from || 'Anonym');
+                  return `
+                      <li class="feedback-item">
+                          <span class="feedback-emoji">${emoji}</span>
+                          <div>
+                              <div>${meaning}</div>
+                              <div class="feedback-meta">von ${author}</div>
+                          </div>
+                      </li>
+                  `;
+              }).join('');
+
+              return `
+                  <div class="feedback-section">
+                      <details open>
+                          <summary>💬 Feedback ansehen (${count})</summary>
+                          <ul class="feedback-items">${items}</ul>
+                      </details>
+                  </div>
+              `;
+          }
 
         function formatDate(dateInput) {
             if (!dateInput) return '';
@@ -625,7 +710,6 @@
             try {
                 const snapshot = await db.collection('portfolios')
                     .where('userCode', '==', currentUser.code)
-                    .orderBy('createdAt', 'desc')
                     .get();
 
                 const firebaseEntries = [];
@@ -634,6 +718,14 @@
                 });
 
                 mergeFirebaseEntries(firebaseEntries);
+                entries.sort((a, b) => {
+                    const dateA = getEntryDate(a);
+                    const dateB = getEntryDate(b);
+                    if (!dateA && !dateB) return 0;
+                    if (!dateA) return 1;
+                    if (!dateB) return -1;
+                    return dateB - dateA;
+                });
                 showMessage(`${firebaseEntries.length} Einträge aus Firebase geladen.`);
                 document.getElementById('lastSync').textContent = `Letzte Synchronisation: ${new Date().toLocaleString('de-CH')}`;
                 updateFirebaseStatus('connected', 'Firebase verbunden');
@@ -700,6 +792,16 @@
             renderEntries();
         }
 
+        function escapeHtml(value = '') {
+            return value
+                .toString()
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
         async function deleteEntry(stamp) {
             const index = entries.findIndex(entry => getEntryStamp(entry) === stamp);
             if (index === -1) return;
@@ -738,12 +840,63 @@
             document.getElementById('shareLink').value = shareBaseUrl;
         }
 
-        function getEntryShareLink(stamp) {
-            if (!shareBaseUrl) {
-                generateShareLink();
+        async function getEntryShareLink(stamp) {
+            const entry = entries.find(e => getEntryStamp(e) === stamp);
+            if (!entry) {
+                showMessage('Eintrag wurde nicht gefunden.', 'error');
+                return '';
             }
-            const separator = shareBaseUrl.includes('?') ? '&' : '?';
-            return `${shareBaseUrl}${separator}entry=${encodeURIComponent(stamp)}`;
+            try {
+                const firebaseId = await ensureEntryHasFirebaseId(entry);
+                if (!firebaseId) {
+                    showMessage('Eintrag konnte nicht für das Teilen vorbereitet werden.', 'error');
+                    return '';
+                }
+                const path = window.location.pathname;
+                const dir = path.substring(0, path.lastIndexOf('/') + 1);
+                return `${window.location.origin}${dir}portfolio-view.html?share=${encodeURIComponent(firebaseId)}`;
+            } catch (error) {
+                console.error('Share link error', error);
+                showMessage('Konnte den Eintrag nicht zum Teilen vorbereiten: ' + error.message, 'error');
+                return '';
+            }
+        }
+
+        async function ensureEntryHasFirebaseId(entry) {
+            if (entry.firebaseId) {
+                return entry.firebaseId;
+            }
+            if (!await initializeFirebase()) {
+                throw new Error('Firebase ist aktuell nicht erreichbar.');
+            }
+            const clientStamp = entry.clientCreatedAt || entry.createdAt || entry.date;
+            if (!clientStamp) {
+                throw new Error('Zeitstempel für den Eintrag fehlt.');
+            }
+            const snapshot = await db.collection('portfolios')
+                .where('userCode', '==', currentUser.code)
+                .where('clientCreatedAt', '==', clientStamp)
+                .limit(1)
+                .get();
+            if (!snapshot.empty) {
+                entry.firebaseId = snapshot.docs[0].id;
+                saveLocalEntries();
+                return entry.firebaseId;
+            }
+            const now = new Date().toISOString();
+            if (!entry.createdAt) entry.createdAt = now;
+            if (!entry.clientCreatedAt) entry.clientCreatedAt = now;
+            const docRef = await db.collection('portfolios').add({
+                ...entry,
+                userCode: currentUser.code,
+                userName: currentUser.name,
+                clientCreatedAt: entry.clientCreatedAt,
+                createdAt: entry.createdAt,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            entry.firebaseId = docRef.id;
+            saveLocalEntries();
+            return docRef.id;
         }
 
         async function copyTextToClipboard(text) {
@@ -775,7 +928,10 @@
         }
 
         async function copyEntryShareLink(stamp) {
-            const link = getEntryShareLink(stamp);
+            const link = await getEntryShareLink(stamp);
+            if (!link) {
+                return;
+            }
             const copied = await copyTextToClipboard(link);
             showMessage(copied ? 'Der Direktlink zum Eintrag wurde kopiert.' : 'Konnte den Link nicht kopieren.', copied ? 'success' : 'error');
         }
