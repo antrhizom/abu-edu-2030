@@ -168,6 +168,15 @@
             background: var(--ktzh-light-blue);
         }
 
+        button.danger {
+            background: var(--ktzh-danger);
+            color: var(--ktzh-white);
+        }
+
+        button.danger:hover {
+            background: #b31f17;
+        }
+
         button:disabled {
             opacity: 0.6;
             cursor: not-allowed;
@@ -178,6 +187,12 @@
         button:hover:not(:disabled) {
             transform: translateY(-1px);
             box-shadow: 0 10px 18px rgba(0, 102, 204, 0.3);
+        }
+
+        .entry-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 0.85rem;
         }
 
         input,
@@ -384,6 +399,43 @@
         const currentUser = { code: '', name: '' };
         let entries = [];
 
+        function getEntryStamp(entry) {
+            if (!entry) return null;
+            const candidates = [entry.clientCreatedAt, entry.createdAt, entry.date, entry.firebaseId, entry.id];
+            for (const candidate of candidates) {
+                const normalized = normalizeStampValue(candidate);
+                if (normalized) return normalized;
+            }
+            if (!entry.__generatedStamp) {
+                entry.__generatedStamp = `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+            }
+            return entry.__generatedStamp;
+        }
+
+        function normalizeStampValue(value) {
+            if (!value) return null;
+            if (typeof value === 'string' || typeof value === 'number') {
+                return value;
+            }
+            if (value.toDate) {
+                return value.toDate().toISOString();
+            }
+            if (value instanceof Date) {
+                return value.toISOString();
+            }
+            return null;
+        }
+
+        function getEntryDate(entry) {
+            const value = entry.createdAt || entry.date || entry.clientCreatedAt;
+            if (!value) return null;
+            if (value.toDate) {
+                return value.toDate();
+            }
+            const date = new Date(value);
+            return isNaN(date) ? null : date;
+        }
+
         function updateFirebaseStatus(status, message) {
             const container = document.getElementById('firebaseStatus');
             const icon = document.getElementById('firebaseStatusIcon');
@@ -430,23 +482,37 @@
             const list = document.getElementById('portfolioList');
             list.innerHTML = '';
 
-            const sorted = [...entries].sort((a, b) => new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date));
+            const sorted = [...entries].sort((a, b) => {
+                const dateA = getEntryDate(a);
+                const dateB = getEntryDate(b);
+                if (!dateA && !dateB) return 0;
+                if (!dateA) return 1;
+                if (!dateB) return -1;
+                return dateB - dateA;
+            });
             if (sorted.length === 0) {
-                list.innerHTML = `<div class="card" style="text-align:center;">📂 Noch keine Einträge. Starte mit einem ersten Eintrag!`;
+                list.innerHTML = `<div class="card" style="text-align:center;">📂 Noch keine Einträge. Starte mit einem ersten Eintrag!</div>`;
             } else {
                 sorted.forEach(entry => {
                     const div = document.createElement('article');
                     div.className = 'portfolio-entry';
+                    const stamp = getEntryStamp(entry);
+                    const formattedDate = formatDate(getEntryDate(entry));
                     div.innerHTML = `
                         <h3>${entry.theme || 'Ohne Titel'}</h3>
-                        <small>${formatDate(entry.createdAt || entry.date)}</small>
+                        <small>${formattedDate}</small>
                         ${entry.module ? `<div class="entry-module">${entry.module}</div>` : ''}
                         <div class="entry-reflection">${entry.reflection || ''}</div>
                         <div class="entry-footer">
                             <span>${entry.userName || currentUser.name}</span>
                             <span class="reactions-pill">💬 ${(entry.reactions ? entry.reactions.length : 0)} Feedbacks</span>
                         </div>
+                        <div class="entry-actions">
+                            <button class="danger delete-entry-btn" data-stamp="${stamp}">🗑️ Eintrag löschen</button>
+                        </div>
                     `;
+                    const deleteButton = div.querySelector('.delete-entry-btn');
+                    deleteButton.addEventListener('click', () => deleteEntry(stamp));
                     list.appendChild(div);
                 });
             }
@@ -456,9 +522,10 @@
             document.getElementById('totalReactions').textContent = totalReactions;
         }
 
-        function formatDate(dateString) {
-            if (!dateString) return '';
-            const date = new Date(dateString);
+        function formatDate(dateInput) {
+            if (!dateInput) return '';
+            const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+            if (isNaN(date)) return '';
             return date.toLocaleDateString('de-CH', {
                 year: 'numeric',
                 month: 'long',
@@ -492,6 +559,7 @@
             document.getElementById('syncButton').disabled = true;
 
             let synced = 0;
+            let updatedLocalEntries = false;
             for (const entry of entries) {
                 try {
                     const clientStamp = entry.clientCreatedAt || entry.createdAt || entry.date;
@@ -501,7 +569,7 @@
                         .get();
 
                     if (snapshot.empty) {
-                        await db.collection('portfolios').add({
+                        const docRef = await db.collection('portfolios').add({
                             ...entry,
                             userCode: currentUser.code,
                             userName: currentUser.name,
@@ -509,13 +577,18 @@
                             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                             updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                         });
+                        entry.firebaseId = docRef.id;
                         synced++;
+                        updatedLocalEntries = true;
                     }
                 } catch (error) {
                     console.error('Sync error', error);
                 }
             }
 
+            if (updatedLocalEntries) {
+                saveLocalEntries();
+            }
             showMessage(`${synced} Einträge wurden mit Firebase synchronisiert.`);
             document.getElementById('syncButton').disabled = false;
             document.getElementById('lastSync').textContent = `Letzte Synchronisation: ${new Date().toLocaleString('de-CH')}`;
@@ -551,20 +624,60 @@
         }
 
         function mergeFirebaseEntries(firebaseEntries) {
-            const clientByStamp = new Map(entries.map(entry => [entry.clientCreatedAt || entry.createdAt || entry.date, entry]));
+            const clientByStamp = new Map();
+            entries.forEach(entry => {
+                const stamp = getEntryStamp(entry);
+                clientByStamp.set(stamp, entry);
+            });
 
             firebaseEntries.forEach(entry => {
-                const stamp = entry.clientCreatedAt || entry.createdAt || entry.date;
+                const normalizedEntry = { ...entry };
+                if (entry.id && !entry.firebaseId) {
+                    normalizedEntry.firebaseId = entry.id;
+                }
+                delete normalizedEntry.id;
+                const stamp = getEntryStamp(normalizedEntry);
                 if (clientByStamp.has(stamp)) {
-                    clientByStamp.set(stamp, { ...clientByStamp.get(stamp), ...entry });
+                    clientByStamp.set(stamp, { ...clientByStamp.get(stamp), ...normalizedEntry });
                 } else {
-                    clientByStamp.set(stamp, entry);
+                    clientByStamp.set(stamp, normalizedEntry);
                 }
             });
 
             entries = Array.from(clientByStamp.values()).filter(entry => entry.userCode === currentUser.code);
             saveLocalEntries();
             renderEntries();
+        }
+
+        async function deleteEntry(stamp) {
+            const index = entries.findIndex(entry => getEntryStamp(entry) === stamp);
+            if (index === -1) return;
+            const entry = entries[index];
+            const confirmed = confirm(`Soll der Eintrag "${entry.theme || 'Ohne Titel'}" wirklich gelöscht werden?`);
+            if (!confirmed) return;
+
+            entries.splice(index, 1);
+            saveLocalEntries();
+            renderEntries();
+            showMessage('Eintrag gelöscht.');
+
+            if (entry.firebaseId) {
+                await deleteEntryInFirebase(entry);
+            }
+        }
+
+        async function deleteEntryInFirebase(entry) {
+            if (!await initializeFirebase()) {
+                showMessage('Eintrag lokal gelöscht, aber Firebase ist nicht erreichbar.', 'error');
+                return;
+            }
+            try {
+                await db.collection('portfolios').doc(entry.firebaseId).delete();
+                showMessage('Eintrag wurde auch aus Firebase gelöscht.');
+            } catch (error) {
+                console.error('Firebase delete error', error);
+                showMessage('Eintrag lokal gelöscht, aber Firebase-Löschung ist fehlgeschlagen.', 'error');
+            }
         }
 
         function generateShareLink() {
