@@ -197,6 +197,57 @@
             metaEl.style.display = text ? 'block' : 'none';
         }
 
+        function getLinkDocumentAttempts(targetCode) {
+            const normalizedCode = targetCode || '';
+            const attempts = [];
+
+            if (normalizedCode) {
+                attempts.push({
+                    ref: db.collection(AUTH_LINK_COLLECTION).doc(`code::${normalizedCode}`),
+                    type: 'code'
+                });
+            }
+
+            attempts.push({
+                ref: db.collection(AUTH_LINK_COLLECTION).doc(auth.currentUser.uid),
+                type: 'uid'
+            });
+
+            return attempts;
+        }
+
+        async function tryLinkingSession(targetCode) {
+            const linkPayload = {
+                userCode: targetCode || '',
+                viewerUid: auth.currentUser.uid,
+                viewerName: viewerName || 'Viewer',
+                context: shareMode ? 'share-view' : 'portfolio-view',
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            let permissionError = null;
+            for (const attempt of getLinkDocumentAttempts(targetCode)) {
+                try {
+                    await attempt.ref.set({
+                        ...linkPayload,
+                        linkStrategy: attempt.type
+                    }, { merge: true });
+                    return true;
+                } catch (error) {
+                    if (error && error.code === 'permission-denied') {
+                        permissionError = error;
+                        continue;
+                    }
+                    throw error;
+                }
+            }
+
+            if (permissionError) {
+                throw permissionError;
+            }
+            return true;
+        }
+
         async function ensureAuthSession(targetCode = '') {
             if (!auth) {
                 throw new Error('Firebase Auth wurde nicht initialisiert.');
@@ -225,12 +276,7 @@
                 return true;
             }
             try {
-                await db.collection(AUTH_LINK_COLLECTION)
-                    .doc(auth.currentUser.uid)
-                    .set({
-                        userCode: targetCode,
-                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                    }, { merge: true });
+                await tryLinkingSession(targetCode);
                 linkedSessionCode = targetCode;
                 return true;
             } catch (error) {
