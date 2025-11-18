@@ -161,6 +161,7 @@
         let db = null;
         let auth = null;
         let authInitializationPromise = null;
+        let authStatePromise = null;
         let linkedSessionCode = '';
         let authLinkWarningShown = false;
         let portfolioCode = '';
@@ -199,6 +200,13 @@
         async function ensureAuthSession(targetCode = '') {
             if (!auth) {
                 throw new Error('Firebase Auth wurde nicht initialisiert.');
+            }
+            if (authStatePromise) {
+                try {
+                    await authStatePromise;
+                } catch (stateError) {
+                    console.warn('Konnte Auth-Status nicht ermitteln.', stateError);
+                }
             }
             if (!auth.currentUser) {
                 if (!authInitializationPromise) {
@@ -247,6 +255,17 @@
                     }
                     db = firebase.firestore();
                     auth = firebase.auth();
+                    if (!authStatePromise) {
+                        authStatePromise = new Promise((resolve) => {
+                            const unsubscribe = auth.onAuthStateChanged(() => {
+                                unsubscribe();
+                                resolve(true);
+                            }, () => {
+                                unsubscribe();
+                                resolve(false);
+                            });
+                        });
+                    }
                     firebaseReady = true;
                 }
                 await ensureAuthSession(targetCode);
