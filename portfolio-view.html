@@ -67,6 +67,12 @@
             padding: 2rem;
             margin-bottom: 1.5rem;
             box-shadow: 0 2px 8px rgba(0, 102, 204, 0.1);
+            scroll-margin-top: 120px;
+        }
+
+        .portfolio-entry.highlight {
+            border: 2px solid var(--ktzh-light-blue);
+            box-shadow: 0 6px 16px rgba(0, 160, 224, 0.2);
         }
 
         .entry-title { color: var(--ktzh-blue); font-size: 1.5rem; margin-bottom: 0.5rem; }
@@ -155,6 +161,7 @@
 
         let portfolioCode = '';
         let viewerName = '';
+        let entryStampFilter = '';
 
         function getEntryDate(entry) {
             const value = entry.createdAt || entry.date || entry.clientCreatedAt;
@@ -170,6 +177,7 @@
         async function loadPortfolio() {
             const urlParams = new URLSearchParams(window.location.search);
             portfolioCode = urlParams.get('code');
+            entryStampFilter = urlParams.get('entry') || '';
 
             if (!portfolioCode) {
                 showError('Kein Portfolio-Code in der URL gefunden.');
@@ -187,10 +195,12 @@
                     .where('userCode', '==', portfolioCode)
                     .get();
 
-                const entries = [];
+                const rawEntries = [];
                 snapshot.forEach(doc => {
-                    entries.push({ id: doc.id, ...doc.data() });
+                    rawEntries.push({ id: doc.id, ...doc.data() });
                 });
+
+                const entries = deduplicateEntries(rawEntries);
 
                 entries.sort((a, b) => {
                     const dateA = getEntryDate(a);
@@ -201,12 +211,19 @@
                     return dateB - dateA;
                 });
 
-                console.log(`Loaded ${entries.length} entries`);
+                console.log(`Loaded ${rawEntries.length} entries (${entries.length} nach Duplikat-Prüfung)`);
+
+                const removedDuplicates = rawEntries.length - entries.length;
+                const metaParts = [`Portfolio-Code: ${portfolioCode}`, `Einträge (Cloud): ${entries.length}`];
+                if (removedDuplicates > 0) {
+                    metaParts.push(`bereinigte Duplikate: ${removedDuplicates}`);
+                }
+                metaEl.textContent = metaParts.join(' • ');
 
                 if (entries.length === 0) {
                     showEmpty();
                 } else {
-                    displayPortfolio(entries);
+                    displayPortfolio(entries, entryStampFilter);
                 }
             } catch (error) {
                 console.error('Load error:', error);
@@ -214,7 +231,7 @@
             }
         }
 
-        function displayPortfolio(entries) {
+        function displayPortfolio(entries, highlightStamp = '') {
             document.getElementById('loading').style.display = 'none';
             const ownerCode = entries[0].userCode || portfolioCode || '–';
             let ownerName = entries[0].userName && entries[0].userName.trim() ? entries[0].userName : '';
@@ -222,16 +239,25 @@
                 ownerName = ownerCode !== '–' ? `Lernende:r (${ownerCode})` : 'Lernende:r';
             }
             document.getElementById('pageTitle').textContent = `📁 Portfolio von ${ownerName}`;
-            document.getElementById('pageDescription').textContent = 'Hier kannst du die Portfolio-Einträge einsehen und Rückmeldungen geben.';
+            const description = entryStampFilter
+                ? 'Der verlinkte Eintrag wurde hervorgehoben. Du kannst weitere Einträge unten ansehen oder Feedback hinterlassen.'
+                : 'Hier kannst du die Portfolio-Einträge einsehen und Rückmeldungen geben.';
+            document.getElementById('pageDescription').textContent = description;
 
             const container = document.getElementById('portfolio');
             container.innerHTML = '';
 
             entries.forEach((entry, index) => {
                 const reactions = entry.reactions || [];
-                
+                const stamp = getEntryStamp(entry);
+                const elementId = getEntryElementId(stamp);
+
                 const entryDiv = document.createElement('div');
                 entryDiv.className = 'portfolio-entry';
+                if (highlightStamp && stamp === highlightStamp) {
+                    entryDiv.classList.add('highlight');
+                }
+                entryDiv.id = elementId;
                 entryDiv.innerHTML = `
                     <div class="entry-title">${entry.theme || 'Lernaktivität'}</div>
                     <div class="entry-date">${formatDate(getEntryDate(entry))}</div>
@@ -270,6 +296,74 @@
                 `;
                 container.appendChild(entryDiv);
             });
+
+            if (highlightStamp) {
+                const highlightedEntry = document.querySelector('.portfolio-entry.highlight');
+                if (highlightedEntry) {
+                    highlightedEntry.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    document.getElementById('pageDescription').textContent = 'Der verlinkte Eintrag wurde nicht gefunden. Es werden alle verfügbaren Einträge angezeigt.';
+                }
+            }
+        }
+
+        function getEntryStamp(entry) {
+            if (!entry) return '';
+            const candidates = [
+                entry.clientCreatedAt,
+                entry.createdAt,
+                entry.date,
+                entry.firebaseId,
+                entry.id,
+                entry.theme && entry.reflection ? `${entry.theme}-${entry.reflection}` : entry.theme
+            ];
+            for (const candidate of candidates) {
+                const normalized = normalizeStampValue(candidate);
+                if (normalized) {
+                    return normalized;
+                }
+            }
+            if (!entry.__generatedStamp) {
+                entry.__generatedStamp = `remote-${Math.random().toString(36).slice(2, 10)}`;
+            }
+            return entry.__generatedStamp;
+        }
+
+        function normalizeStampValue(value) {
+            if (!value) return null;
+            if (typeof value === 'string' || typeof value === 'number') {
+                return String(value);
+            }
+            if (value.toDate) {
+                return value.toDate().toISOString();
+            }
+            if (value instanceof Date) {
+                return value.toISOString();
+            }
+            return null;
+        }
+
+        function getEntryElementId(stamp) {
+            const safeStamp = (stamp || '').toString().replace(/[^a-zA-Z0-9_-]/g, '');
+            return `entry-${safeStamp || Math.random().toString(36).slice(2, 10)}`;
+        }
+
+        function deduplicateEntries(entries) {
+            const uniqueMap = new Map();
+            entries.forEach(entry => {
+                const stamp = getEntryStamp(entry);
+                const existing = uniqueMap.get(stamp);
+                if (!existing) {
+                    uniqueMap.set(stamp, entry);
+                } else {
+                    const existingDate = getEntryDate(existing);
+                    const newDate = getEntryDate(entry);
+                    if (newDate && (!existingDate || newDate > existingDate)) {
+                        uniqueMap.set(stamp, entry);
+                    }
+                }
+            });
+            return Array.from(uniqueMap.values());
         }
 
         async function addReaction(entryId, index, emoji, meaning) {
