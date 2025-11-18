@@ -201,7 +201,7 @@
                 return;
             }
 
-            setMetaText(`Portfolio-Code: ${portfolioCode}`);
+            setMetaText('Portfolio wird geladen...');
 
             console.log('Loading portfolio for:', portfolioCode);
 
@@ -229,10 +229,11 @@
                 console.log(`Loaded ${rawEntries.length} entries (${entries.length} nach Duplikat-Prüfung)`);
 
                 const removedDuplicates = rawEntries.length - entries.length;
-                const metaParts = [`Portfolio-Code: ${portfolioCode}`, `Einträge (Cloud): ${entries.length}`];
+                const metaParts = [`Einträge (Cloud): ${entries.length}`];
                 if (removedDuplicates > 0) {
                     metaParts.push(`bereinigte Duplikate: ${removedDuplicates}`);
                 }
+                metaParts.push('persönlicher Zugriffscode bleibt verborgen');
                 setMetaText(metaParts.join(' • '));
 
                 if (entries.length === 0) {
@@ -271,13 +272,9 @@
                 : entries;
 
             const referenceEntry = entriesToRender[0] || entries[0];
-            const ownerCode = (referenceEntry && referenceEntry.userCode) || portfolioCode || '–';
             let ownerName = referenceEntry && referenceEntry.userName && referenceEntry.userName.trim()
                 ? referenceEntry.userName
                 : 'Lernende:r';
-            if (!shareMode && ownerName === 'Lernende:r' && ownerCode !== '–') {
-                ownerName = `Lernende:r (${ownerCode})`;
-            }
 
             const pageTitle = shareMode
                 ? `📁 Geteilter Eintrag von ${ownerName}`
