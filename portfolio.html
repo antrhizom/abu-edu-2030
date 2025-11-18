@@ -151,8 +151,7 @@
             font-size: 0.9rem;
         }
 
-        .sync-actions,
-        .share-actions {
+        .sync-actions {
             display: flex;
             flex-wrap: wrap;
             gap: 0.75rem;
@@ -266,11 +265,6 @@
             resize: vertical;
         }
 
-        .share-link {
-            flex: 1;
-            background: var(--ktzh-light-gray);
-        }
-
         .portfolio-list {
             display: grid;
             gap: 1.25rem;
@@ -374,7 +368,7 @@
     <main>
         <div class="page-heading">
             <h1>📁 Mein Portfolio</h1>
-            <p>Erstelle Einträge, sichere sie automatisch in Firebase und teile dein Portfolio mit Lehrpersonen oder Berufsbildner:innen. Mit dem Link können andere Emoji-Feedbacks hinterlassen.</p>
+            <p>Erstelle Einträge, sichere sie automatisch in Firebase und lade sie bei Bedarf als Datei herunter, um sie mit Lehrpersonen oder Berufsbildner:innen zu besprechen.</p>
         </div>
 
         <div class="grid">
@@ -396,14 +390,6 @@
                 </p>
             </div>
 
-            <div class="card">
-                <h2>🔗 Teilen</h2>
-                <p style="color: var(--ktzh-gray); margin-bottom: 0.75rem;">Dieser Link zeigt dein Portfolio im Lesemodus. Personen mit dem Link können Emoji-Rückmeldungen abgeben.</p>
-                <div class="share-actions">
-                    <input id="shareLink" class="share-link" readonly>
-                    <button class="secondary" id="copyButton" onclick="copyShareLink()">📋 Link kopieren</button>
-                </div>
-            </div>
         </div>
 
         <div class="card" style="margin-bottom: 2rem;">
@@ -460,7 +446,6 @@
         let authLinkWarningShown = false;
         const currentUser = { code: '', name: '' };
         let entries = [];
-        let shareBaseUrl = '';
         let firebaseUnsubscribe = null;
 
         function getEntryStamp(entry) {
@@ -481,16 +466,6 @@
                 entry.__generatedStamp = `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
             }
             return entry.__generatedStamp;
-        }
-
-        function encodeCodeToken(value) {
-            if (!value) return '';
-            try {
-                return btoa(unescape(encodeURIComponent(value)));
-            } catch (error) {
-                console.warn('Konnte Code nicht kodieren:', error);
-                return '';
-            }
         }
 
         function normalizeStampValue(value) {
@@ -612,7 +587,7 @@
                           </div>
                           ${renderFeedbackSection(entry.reactions)}
                           <div class="entry-actions">
-                              <button type="button" class="secondary" onclick="copyEntryShareLink('${stamp}')">🔗 Eintrag teilen</button>
+                              <button type="button" class="secondary" onclick="downloadEntry('${stamp}')">⬇️ Eintrag herunterladen</button>
                               <button class="danger delete-entry-btn" data-stamp="${stamp}">🗑️ Eintrag löschen</button>
                           </div>
                       `;
@@ -992,109 +967,42 @@
             }
         }
 
-        function generateShareLink() {
-            const path = window.location.pathname;
-            const dir = path.substring(0, path.lastIndexOf('/') + 1);
-            shareBaseUrl = `${window.location.origin}${dir}portfolio-view.html?code=${encodeURIComponent(currentUser.code)}`;
-            document.getElementById('shareLink').value = shareBaseUrl;
+        function createSafeFileName(text = '') {
+            return text
+                .toLowerCase()
+                .replace(/[^a-z0-9äöüß]+/gi, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-|-$/g, '') || 'eintrag';
         }
 
-        async function getEntryShareLink(stamp) {
+        function downloadEntry(stamp) {
             const entry = entries.find(e => getEntryStamp(e) === stamp);
             if (!entry) {
-                showMessage('Eintrag wurde nicht gefunden.', 'error');
-                return '';
-            }
-            try {
-                const firebaseId = await ensureEntryHasFirebaseId(entry);
-                if (!firebaseId) {
-                    showMessage('Eintrag konnte nicht für das Teilen vorbereitet werden.', 'error');
-                    return '';
-                }
-                const path = window.location.pathname;
-                const dir = path.substring(0, path.lastIndexOf('/') + 1);
-                const encodedOwner = encodeCodeToken(currentUser.code);
-                const ownerParam = encodedOwner ? `&owner=${encodeURIComponent(encodedOwner)}` : '';
-                return `${window.location.origin}${dir}portfolio-view.html?share=${encodeURIComponent(firebaseId)}${ownerParam}`;
-            } catch (error) {
-                console.error('Share link error', error);
-                showMessage('Konnte den Eintrag nicht zum Teilen vorbereiten: ' + error.message, 'error');
-                return '';
-            }
-        }
-
-        async function ensureEntryHasFirebaseId(entry) {
-            if (entry.firebaseId) {
-                return entry.firebaseId;
-            }
-            if (!await initializeFirebase()) {
-                throw new Error('Firebase ist aktuell nicht erreichbar.');
-            }
-            const clientStamp = entry.clientCreatedAt || entry.createdAt || entry.date;
-            if (!clientStamp) {
-                throw new Error('Zeitstempel für den Eintrag fehlt.');
-            }
-            const snapshot = await db.collection('portfolios')
-                .where('userCode', '==', currentUser.code)
-                .where('clientCreatedAt', '==', clientStamp)
-                .limit(1)
-                .get();
-            if (!snapshot.empty) {
-                entry.firebaseId = snapshot.docs[0].id;
-                saveLocalEntries();
-                return entry.firebaseId;
-            }
-            const now = new Date().toISOString();
-            if (!entry.createdAt) entry.createdAt = now;
-            if (!entry.clientCreatedAt) entry.clientCreatedAt = now;
-            const docRef = await db.collection('portfolios').add({
-                ...entry,
-                userCode: currentUser.code,
-                userName: currentUser.name,
-                clientCreatedAt: entry.clientCreatedAt,
-                createdAt: entry.createdAt,
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            entry.firebaseId = docRef.id;
-            saveLocalEntries();
-            return docRef.id;
-        }
-
-        async function copyTextToClipboard(text) {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                try {
-                    await navigator.clipboard.writeText(text);
-                    return true;
-                } catch (error) {
-                    console.warn('Clipboard API failed, falling back to execCommand.', error);
-                }
-            }
-            const tempInput = document.createElement('input');
-            tempInput.style.position = 'absolute';
-            tempInput.style.left = '-9999px';
-            tempInput.value = text;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            const success = document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            return success;
-        }
-
-        async function copyShareLink() {
-            const copied = await copyTextToClipboard(shareBaseUrl || document.getElementById('shareLink').value);
-            const button = document.getElementById('copyButton');
-            const original = button.textContent;
-            button.textContent = copied ? '✅ Kopiert' : '⚠️ Nicht kopiert';
-            setTimeout(() => { button.textContent = original; }, 2000);
-        }
-
-        async function copyEntryShareLink(stamp) {
-            const link = await getEntryShareLink(stamp);
-            if (!link) {
+                showMessage('Der Eintrag konnte nicht gefunden werden.', 'error');
                 return;
             }
-            const copied = await copyTextToClipboard(link);
-            showMessage(copied ? 'Der Direktlink zum Eintrag wurde kopiert.' : 'Konnte den Link nicht kopieren.', copied ? 'success' : 'error');
+            const lines = [];
+            const title = entry.theme || 'Ohne Titel';
+            const fileDate = formatDate(getEntryDate(entry)) || new Date().toLocaleString('de-CH');
+            lines.push(`Titel: ${title}`);
+            lines.push(`Datum: ${fileDate}`);
+            lines.push(`Modul: ${entry.module || 'Kein Modul angegeben'}`);
+            lines.push(`Autor: ${(entry.userName || currentUser.name) || 'Lernende:r'} (${entry.userCode || currentUser.code})`);
+            lines.push('');
+            lines.push('Reflexion:');
+            lines.push(entry.reflection || '');
+            const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            const safeName = createSafeFileName(title);
+            const owner = createSafeFileName(currentUser.code || 'portfolio');
+            link.href = url;
+            link.download = `${owner}-${safeName}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(url), 500);
+            showMessage('Der Eintrag wurde heruntergeladen.');
         }
 
         async function handleEntrySubmit(event) {
@@ -1133,7 +1041,6 @@
         window.addEventListener('DOMContentLoaded', async () => {
             loadUserData();
             loadLocalEntries();
-            generateShareLink();
             if (await initializeFirebase()) {
                 await loadFromFirebase();
                 await syncToFirebase({ silent: true });
