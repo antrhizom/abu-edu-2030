@@ -455,6 +455,7 @@
         let db = null;
         let auth = null;
         let authInitializationPromise = null;
+        let authStatePromise = null;
         let linkedAuthCode = '';
         let authLinkWarningShown = false;
         const currentUser = { code: '', name: '' };
@@ -681,6 +682,13 @@
             if (!auth) {
                 throw new Error('Firebase Auth wurde nicht initialisiert.');
             }
+            if (authStatePromise) {
+                try {
+                    await authStatePromise;
+                } catch (stateError) {
+                    console.warn('Konnte Auth-Status nicht ermitteln.', stateError);
+                }
+            }
             if (!currentUser.code) {
                 throw new Error('Kein Benutzer-Code gefunden.');
             }
@@ -731,6 +739,17 @@
                     }
                     db = firebase.firestore();
                     auth = firebase.auth();
+                    if (!authStatePromise) {
+                        authStatePromise = new Promise((resolve) => {
+                            const unsubscribe = auth.onAuthStateChanged(() => {
+                                unsubscribe();
+                                resolve(true);
+                            }, () => {
+                                unsubscribe();
+                                resolve(false);
+                            });
+                        });
+                    }
                     firebaseReady = true;
                 }
                 await ensureAuthSession();
