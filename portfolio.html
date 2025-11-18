@@ -12,6 +12,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script type="module" src="config/firebase-config.js"></script>
 
     <style>
         :root {
@@ -426,7 +427,7 @@
     </main>
 
     <script>
-        const firebaseConfig = {
+        const firebaseConfig = window.firebaseConfig || {
             apiKey: "AIzaSyDPWkwiCptXi_Ky-yUgrvxrtpRzH1HGd_0",
             authDomain: "abu-edu-2030.firebaseapp.com",
             projectId: "abu-edu-2030",
