@@ -333,11 +333,10 @@
 
             <div class="card">
                 <h2>☁️ Synchronisation</h2>
-                <p style="color: var(--ktzh-gray); margin-bottom: 1rem;">Sichere deine Einträge in Firestore oder lade sie erneut aus der Cloud.</p>
-                <div class="sync-actions">
-                    <button id="syncButton" onclick="syncToFirebase()">🔄 In Cloud speichern</button>
-                    <button class="secondary" onclick="loadFromFirebase()">📥 Aus Cloud laden</button>
-                </div>
+                <p style="color: var(--ktzh-gray); margin-bottom: 0;">
+                    Deine Einträge werden automatisch im Hintergrund mit Firebase synchronisiert.
+                    Du kannst dich zurücklehnen – sobald du speicherst, wird die Cloud-Version aktualisiert.
+                </p>
             </div>
 
             <div class="card">
@@ -550,13 +549,12 @@
             }
         }
 
-        async function syncToFirebase() {
+        async function syncToFirebase({ silent = false } = {}) {
             if (!await initializeFirebase()) {
                 showMessage('Firebase konnte nicht verbunden werden.', 'error');
                 return;
             }
             updateFirebaseStatus('syncing', 'Synchronisiere...');
-            document.getElementById('syncButton').disabled = true;
 
             let synced = 0;
             let updatedLocalEntries = false;
@@ -580,17 +578,27 @@
                         entry.firebaseId = docRef.id;
                         synced++;
                         updatedLocalEntries = true;
+                    } else if (!entry.firebaseId) {
+                        entry.firebaseId = snapshot.docs[0].id;
+                        updatedLocalEntries = true;
                     }
                 } catch (error) {
                     console.error('Sync error', error);
+                    if (!silent) {
+                        showMessage('Fehler beim Synchronisieren: ' + error.message, 'error');
+                    }
                 }
             }
 
             if (updatedLocalEntries) {
                 saveLocalEntries();
             }
-            showMessage(`${synced} Einträge wurden mit Firebase synchronisiert.`);
-            document.getElementById('syncButton').disabled = false;
+            if (!silent) {
+                const message = synced > 0
+                    ? `${synced} Einträge wurden mit Firebase synchronisiert.`
+                    : 'Alle Einträge sind bereits synchron.';
+                showMessage(message);
+            }
             document.getElementById('lastSync').textContent = `Letzte Synchronisation: ${new Date().toLocaleString('de-CH')}`;
             updateFirebaseStatus('connected', 'Firebase verbunden');
         }
@@ -698,7 +706,7 @@
             setTimeout(() => { button.textContent = original; }, 2000);
         }
 
-        function handleEntrySubmit(event) {
+        async function handleEntrySubmit(event) {
             event.preventDefault();
             const theme = document.getElementById('entryTheme').value.trim();
             const module = document.getElementById('entryModule').value;
@@ -723,8 +731,10 @@
             entries.push(newEntry);
             saveLocalEntries();
             renderEntries();
-            showMessage('Eintrag gespeichert! Du kannst ihn jetzt mit Firebase synchronisieren.');
+            showMessage('Eintrag gespeichert! Synchronisiere mit Firebase...');
             document.getElementById('entryForm').reset();
+
+            await syncToFirebase();
         }
 
         document.getElementById('entryForm').addEventListener('submit', handleEntrySubmit);
@@ -733,7 +743,10 @@
             loadUserData();
             loadLocalEntries();
             generateShareLink();
-            await initializeFirebase();
+            if (await initializeFirebase()) {
+                await loadFromFirebase();
+                await syncToFirebase({ silent: true });
+            }
         });
     </script>
 </body>
