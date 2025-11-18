@@ -408,6 +408,7 @@
         const currentUser = { code: '', name: '' };
         let entries = [];
         let shareBaseUrl = '';
+        let firebaseUnsubscribe = null;
 
         function getEntryStamp(entry) {
             if (!entry) return null;
@@ -643,6 +644,36 @@
             }
         }
 
+        async function subscribeToFirebaseUpdates() {
+            if (!currentUser.code) return;
+            if (!await initializeFirebase()) {
+                return;
+            }
+            if (firebaseUnsubscribe) {
+                firebaseUnsubscribe();
+                firebaseUnsubscribe = null;
+            }
+            try {
+                firebaseUnsubscribe = db.collection('portfolios')
+                    .where('userCode', '==', currentUser.code)
+                    .onSnapshot(snapshot => {
+                        const remoteEntries = [];
+                        snapshot.forEach(doc => {
+                            remoteEntries.push({ id: doc.id, ...doc.data() });
+                        });
+                        mergeFirebaseEntries(remoteEntries);
+                        document.getElementById('lastSync').textContent = `Live-Update: ${new Date().toLocaleString('de-CH')}`;
+                        updateFirebaseStatus('connected', 'Live mit Firebase verbunden');
+                    }, error => {
+                        console.error('Live update error', error);
+                        updateFirebaseStatus('disconnected', 'Live-Update getrennt');
+                    });
+            } catch (error) {
+                console.error('Subscribe error', error);
+                updateFirebaseStatus('disconnected', 'Live-Update fehlgeschlagen');
+            }
+        }
+
         function mergeFirebaseEntries(firebaseEntries) {
             const clientByStamp = new Map();
             entries.forEach(entry => {
@@ -789,6 +820,13 @@
             if (await initializeFirebase()) {
                 await loadFromFirebase();
                 await syncToFirebase({ silent: true });
+                await subscribeToFirebaseUpdates();
+            }
+        });
+
+        window.addEventListener('beforeunload', () => {
+            if (firebaseUnsubscribe) {
+                firebaseUnsubscribe();
             }
         });
     </script>

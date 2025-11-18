@@ -233,21 +233,37 @@
 
         function displayPortfolio(entries, highlightStamp = '') {
             document.getElementById('loading').style.display = 'none';
-            const ownerCode = entries[0].userCode || portfolioCode || '–';
-            let ownerName = entries[0].userName && entries[0].userName.trim() ? entries[0].userName : '';
+
+            const entriesToRender = highlightStamp
+                ? entries.filter(entry => getEntryStamp(entry) === highlightStamp)
+                : entries;
+
+            const referenceEntry = entriesToRender[0] || entries[0];
+            const ownerCode = (referenceEntry && referenceEntry.userCode) || portfolioCode || '–';
+            let ownerName = referenceEntry && referenceEntry.userName && referenceEntry.userName.trim()
+                ? referenceEntry.userName
+                : '';
             if (!ownerName) {
                 ownerName = ownerCode !== '–' ? `Lernende:r (${ownerCode})` : 'Lernende:r';
             }
             document.getElementById('pageTitle').textContent = `📁 Portfolio von ${ownerName}`;
-            const description = entryStampFilter
-                ? 'Der verlinkte Eintrag wurde hervorgehoben. Du kannst weitere Einträge unten ansehen oder Feedback hinterlassen.'
-                : 'Hier kannst du die Portfolio-Einträge einsehen und Rückmeldungen geben.';
+            let description;
+            if (entryStampFilter) {
+                description = 'Der verlinkte Eintrag wird angezeigt. Du kannst weitere Einträge unten ansehen oder Feedback hinterlassen.';
+            } else {
+                description = 'Hier kannst du die Portfolio-Einträge einsehen und Rückmeldungen geben.';
+            }
             document.getElementById('pageDescription').textContent = description;
 
             const container = document.getElementById('portfolio');
             container.innerHTML = '';
 
-            entries.forEach((entry, index) => {
+            const items = entriesToRender.length > 0 ? entriesToRender : entries;
+            if (entryStampFilter && entriesToRender.length === 0) {
+                document.getElementById('pageDescription').textContent = 'Der verlinkte Eintrag wurde nicht gefunden. Alle verfügbaren Einträge werden angezeigt.';
+            }
+
+            items.forEach((entry, index) => {
                 const reactions = entry.reactions || [];
                 const stamp = getEntryStamp(entry);
                 const elementId = getEntryElementId(stamp);
@@ -301,8 +317,6 @@
                 const highlightedEntry = document.querySelector('.portfolio-entry.highlight');
                 if (highlightedEntry) {
                     highlightedEntry.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                } else {
-                    document.getElementById('pageDescription').textContent = 'Der verlinkte Eintrag wurde nicht gefunden. Es werden alle verfügbaren Einträge angezeigt.';
                 }
             }
         }
