@@ -130,7 +130,8 @@
 
     <div class="container">
         <h2 id="pageTitle" style="color: var(--ktzh-blue); font-size: 2rem; margin-bottom: 1rem;">📁 Portfolio wird geladen...</h2>
-        <p id="pageDescription" style="color: var(--ktzh-gray); margin-bottom: 2rem;">Daten werden aus der Cloud geladen...</p>
+        <p id="pageDescription" style="color: var(--ktzh-gray); margin-bottom: 0.5rem;">Daten werden aus der Cloud geladen...</p>
+        <p id="portfolioMeta" style="color: var(--ktzh-gray); margin-bottom: 2rem; font-size: 0.95rem; display: none;"></p>
 
         <div id="message" style="display: none;"></div>
         <div id="portfolio"></div>
@@ -175,6 +176,10 @@
                 return;
             }
 
+            const metaEl = document.getElementById('portfolioMeta');
+            metaEl.textContent = `Portfolio-Code: ${portfolioCode}`;
+            metaEl.style.display = 'block';
+
             console.log('Loading portfolio for:', portfolioCode);
 
             try {
@@ -211,7 +216,12 @@
 
         function displayPortfolio(entries) {
             document.getElementById('loading').style.display = 'none';
-            document.getElementById('pageTitle').textContent = `📁 Portfolio von ${entries[0].userName || 'Lernende:r'}`;
+            const ownerCode = entries[0].userCode || portfolioCode || '–';
+            let ownerName = entries[0].userName && entries[0].userName.trim() ? entries[0].userName : '';
+            if (!ownerName) {
+                ownerName = ownerCode !== '–' ? `Lernende:r (${ownerCode})` : 'Lernende:r';
+            }
+            document.getElementById('pageTitle').textContent = `📁 Portfolio von ${ownerName}`;
             document.getElementById('pageDescription').textContent = 'Hier kannst du die Portfolio-Einträge einsehen und Rückmeldungen geben.';
 
             const container = document.getElementById('portfolio');
