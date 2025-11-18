@@ -52,6 +52,12 @@
             gap: 1rem;
         }
 
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
         .user-info {
             text-align: right;
             font-size: 0.95rem;
@@ -193,6 +199,7 @@
             display: flex;
             justify-content: flex-end;
             margin-top: 0.85rem;
+            gap: 0.6rem;
         }
 
         input,
@@ -303,12 +310,15 @@
                 <strong>ABU EBA Digital</strong>
                 <div style="color: var(--ktzh-gray); font-size: 0.9rem;">Portfolio & Cloud-Speicher</div>
             </div>
-            <div class="user-info">
-                <span class="user-name" id="userName">–</span>
-                <span id="userCode" style="font-feature-settings: 'tnum' 1; letter-spacing: 0.05em;">–</span>
-                <div class="firebase-status disconnected" id="firebaseStatus">
-                    <span id="firebaseStatusIcon">⚪</span>
-                    <span id="firebaseStatusText">Firebase nicht verbunden</span>
+            <div class="header-actions">
+                <button class="secondary" type="button" onclick="window.location.href='index.html'">🏠 Zur Startseite</button>
+                <div class="user-info">
+                    <span class="user-name" id="userName">–</span>
+                    <span id="userCode" style="font-feature-settings: 'tnum' 1; letter-spacing: 0.05em;">–</span>
+                    <div class="firebase-status disconnected" id="firebaseStatus">
+                        <span id="firebaseStatusIcon">⚪</span>
+                        <span id="firebaseStatusText">Firebase nicht verbunden</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -397,6 +407,7 @@
         let db = null;
         const currentUser = { code: '', name: '' };
         let entries = [];
+        let shareBaseUrl = '';
 
         function getEntryStamp(entry) {
             if (!entry) return null;
@@ -507,6 +518,7 @@
                             <span class="reactions-pill">💬 ${(entry.reactions ? entry.reactions.length : 0)} Feedbacks</span>
                         </div>
                         <div class="entry-actions">
+                            <button type="button" class="secondary" onclick="copyEntryShareLink('${stamp}')">🔗 Eintrag teilen</button>
                             <button class="danger delete-entry-btn" data-stamp="${stamp}">🗑️ Eintrag löschen</button>
                         </div>
                     `;
@@ -691,19 +703,50 @@
         function generateShareLink() {
             const path = window.location.pathname;
             const dir = path.substring(0, path.lastIndexOf('/') + 1);
-            const shareLink = `${window.location.origin}${dir}portfolio-view.html?code=${encodeURIComponent(currentUser.code)}`;
-            document.getElementById('shareLink').value = shareLink;
+            shareBaseUrl = `${window.location.origin}${dir}portfolio-view.html?code=${encodeURIComponent(currentUser.code)}`;
+            document.getElementById('shareLink').value = shareBaseUrl;
         }
 
-        function copyShareLink() {
-            const input = document.getElementById('shareLink');
-            input.select();
-            input.setSelectionRange(0, 99999);
-            document.execCommand('copy');
+        function getEntryShareLink(stamp) {
+            if (!shareBaseUrl) {
+                generateShareLink();
+            }
+            const separator = shareBaseUrl.includes('?') ? '&' : '?';
+            return `${shareBaseUrl}${separator}entry=${encodeURIComponent(stamp)}`;
+        }
+
+        async function copyTextToClipboard(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    return true;
+                } catch (error) {
+                    console.warn('Clipboard API failed, falling back to execCommand.', error);
+                }
+            }
+            const tempInput = document.createElement('input');
+            tempInput.style.position = 'absolute';
+            tempInput.style.left = '-9999px';
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            const success = document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            return success;
+        }
+
+        async function copyShareLink() {
+            const copied = await copyTextToClipboard(shareBaseUrl || document.getElementById('shareLink').value);
             const button = document.getElementById('copyButton');
             const original = button.textContent;
-            button.textContent = '✅ Kopiert';
+            button.textContent = copied ? '✅ Kopiert' : '⚠️ Nicht kopiert';
             setTimeout(() => { button.textContent = original; }, 2000);
+        }
+
+        async function copyEntryShareLink(stamp) {
+            const link = getEntryShareLink(stamp);
+            const copied = await copyTextToClipboard(link);
+            showMessage(copied ? 'Der Direktlink zum Eintrag wurde kopiert.' : 'Konnte den Link nicht kopieren.', copied ? 'success' : 'error');
         }
 
         async function handleEntrySubmit(event) {
