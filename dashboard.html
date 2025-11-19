@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ant edu - Lernen vernetzt gedacht</title>
+    <title>Dashboard - SLP ABU 2030</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -27,124 +27,332 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
         
-        /* Zirkuläre Animation für das Logo */
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        @keyframes float-ant {
+            0%, 100% { 
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% { 
+                transform: translate(20px, -30px) rotate(5deg);
+            }
+            50% { 
+                transform: translate(10px, -50px) rotate(-5deg);
+            }
+            75% { 
+                transform: translate(-10px, -30px) rotate(3deg);
+            }
         }
         
-        .circle-animation {
-            animation: rotate 20s linear infinite;
-        }
-        
-        /* Schwebende Punkte im Hintergrund (Vernetzung) */
-        .network-dot {
+        .floating-ant {
             position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(139, 69, 19, 0.2);
-            border-radius: 50%;
+            font-size: 1.5rem;
+            opacity: 0.15;
+            pointer-events: none;
+            animation: float-ant 10s ease-in-out infinite;
         }
         
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+        .connection-line {
+            stroke: #8B4513;
+            stroke-width: 1;
+            opacity: 0.15;
+            fill: none;
         }
         
-        .float-1 { animation: float 3s ease-in-out infinite; }
-        .float-2 { animation: float 4s ease-in-out infinite 0.5s; }
-        .float-3 { animation: float 5s ease-in-out infinite 1s; }
+        .theme-card {
+            transition: all 0.3s ease;
+        }
+        
+        .theme-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(139, 69, 19, 0.15);
+        }
+        
+        @keyframes pulse-circle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .pulse-circle {
+            animation: pulse-circle 3s ease-in-out infinite;
+        }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+<body class="min-h-screen p-4 md:p-8 relative">
     
-    <!-- Vernetzungs-Punkte im Hintergrund -->
-    <div class="network-dot float-1" style="top: 10%; left: 15%;"></div>
-    <div class="network-dot float-2" style="top: 30%; right: 20%;"></div>
-    <div class="network-dot float-3" style="bottom: 20%; left: 25%;"></div>
-    <div class="network-dot float-1" style="top: 60%; right: 15%;"></div>
-    <div class="network-dot float-2" style="bottom: 30%; right: 30%;"></div>
+    <div class="floating-ant" style="top: 20%; right: 10%;">🐜</div>
     
-    <!-- Hauptcontainer -->
-    <div class="max-w-2xl w-full bg-white rounded-3xl shadow-2xl p-8 md:p-12 relative z-10">
+    <div class="max-w-5xl mx-auto relative z-10">
         
-        <!-- Logo & Branding -->
-        <div class="text-center mb-8">
-            <!-- Zirkuläres Element -->
-            <div class="relative inline-block mb-4">
-                <div class="absolute inset-0 border-4 border-ant-secondary rounded-full opacity-20 circle-animation" style="width: 80px; height: 80px;"></div>
-                <div class="text-5xl mb-2 relative z-10">
-                    📚
+        <!-- Header -->
+        <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8 mb-8">
+            <div class="flex items-center justify-between flex-wrap gap-4">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold text-ant-primary mb-2">
+                        Hallo <span id="displayName">...</span>! 👋
+                    </h1>
+                    <p class="text-gray-600">
+                        Bereit für deine Lernreise?
+                    </p>
+                </div>
+                <div class="text-6xl">
+                    🗺️
+                </div>
+            </div>
+        </div>
+        
+        <!-- Fortschritt & Aktivität Grid -->
+        <div class="grid md:grid-cols-2 gap-8 mb-8">
+            
+            <!-- Fortschrittsbalken -->
+            <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="text-3xl">📊</span>
+                    <h2 class="text-2xl font-bold text-ant-primary">
+                        Dein Fortschritt
+                    </h2>
+                </div>
+                
+                <!-- Gesamtfortschritt -->
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-semibold text-gray-700">Gesamtfortschritt</span>
+                        <span class="text-sm font-bold text-ant-accent" id="totalProgress">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                        <div id="totalProgressBar" class="bg-gradient-to-r from-ant-accent to-ant-success h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <!-- Schlüsselkompetenzen -->
+                <div class="mb-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs text-gray-600 flex items-center gap-2">
+                            <span>🔑</span>
+                            <span>Schlüsselkompetenzen</span>
+                        </span>
+                        <span class="text-xs font-bold text-ant-primary" id="schluesselProgress">0/12</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                        <div id="schluesselProgressBar" class="bg-ant-primary h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <!-- Gesellschaftliche Aspekte -->
+                <div class="mb-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs text-gray-600 flex items-center gap-2">
+                            <span>🎯</span>
+                            <span>Gesellschaftliche Aspekte</span>
+                        </span>
+                        <span class="text-xs font-bold text-ant-secondary" id="aspekteProgress">0/8</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                        <div id="aspekteProgressBar" class="bg-ant-secondary h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <!-- Sprachmodi -->
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs text-gray-600 flex items-center gap-2">
+                            <span>💬</span>
+                            <span>Sprachmodi (inkl. digital)</span>
+                        </span>
+                        <span class="text-xs font-bold text-ant-accent" id="sprachProgress">0/8</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                        <div id="sprachProgressBar" class="bg-ant-accent h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
                 </div>
             </div>
             
-            <h1 class="text-4xl font-bold text-ant-primary mb-2">
-                SLP ABU 2030
-            </h1>
-            <p class="text-ant-secondary text-lg">
-                Schullehrplan Allgemeinbildung
-            </p>
+            <!-- Aktivitäts-Übersicht -->
+            <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="text-3xl">✨</span>
+                    <h2 class="text-2xl font-bold text-ant-primary">
+                        Deine Aktivität
+                    </h2>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-4 bg-ant-bg rounded-xl border-2 border-ant-primary/20">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">🎯</span>
+                            <span class="font-semibold text-gray-700">Kompetenzen geübt</span>
+                        </div>
+                        <span class="text-2xl font-bold text-ant-primary" id="kompetenzCount">0</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-4 bg-ant-bg rounded-xl border-2 border-ant-accent/20">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">🏆</span>
+                            <span class="font-semibold text-gray-700">Challenges</span>
+                        </div>
+                        <span class="text-2xl font-bold text-ant-accent" id="challengeCount">0</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-4 bg-ant-bg rounded-xl border-2 border-ant-secondary/20">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">📝</span>
+                            <span class="font-semibold text-gray-700">Umsetzungsbeispiele</span>
+                        </div>
+                        <span class="text-2xl font-bold text-ant-secondary" id="umsetzungCount">0</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-4 bg-ant-bg rounded-xl border-2 border-ant-success/20">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">🔗</span>
+                            <span class="font-semibold text-gray-700">Verbindungen entdeckt</span>
+                        </div>
+                        <span class="text-2xl font-bold text-ant-success" id="verbindungCount">0</span>
+                    </div>
+                </div>
+            </div>
         </div>
         
-        <!-- Beschreibung -->
-        <div class="bg-ant-bg rounded-2xl p-6 mb-8 border-2 border-ant-secondary/20">
-            <div class="flex items-start gap-3">
-                <span class="text-3xl">📚</span>
-                <div>
-                    <h2 class="text-xl font-semibold text-ant-primary mb-2">
-                        Digitale Lernplattform für ABU
-                    </h2>
-                    <p class="text-gray-700 leading-relaxed">
-                        Allgemeinbildender Unterricht für die <strong>EBA-Ausbildung</strong> nach dem neuen Schullehrplan 2030
+        <!-- Zirkulärer Lernweg -->
+        <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8 mb-8">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="text-3xl">🔄</span>
+                <h2 class="text-2xl font-bold text-ant-primary">
+                    Dein zirkulärer Lernweg
+                </h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="flex justify-center">
+                    <svg width="250" height="250" viewBox="0 0 250 250">
+                        <circle cx="125" cy="125" r="35" fill="#FFF8F0" stroke="#FF6B35" stroke-width="3"/>
+                        <text x="125" y="135" text-anchor="middle" font-size="28">🎯</text>
+                        
+                        <circle id="circleSchluessel" cx="125" cy="30" r="30" fill="#E0E0E0" stroke="#8B4513" stroke-width="2"/>
+                        <text x="125" y="40" text-anchor="middle" font-size="22">🔑</text>
+                        
+                        <circle id="circleAspekte" cx="200" cy="180" r="30" fill="#E0E0E0" stroke="#D2691E" stroke-width="2"/>
+                        <text x="200" y="190" text-anchor="middle" font-size="22">🎯</text>
+                        
+                        <circle id="circleSprach" cx="50" cy="180" r="30" fill="#E0E0E0" stroke="#FF6B35" stroke-width="2"/>
+                        <text x="50" y="190" text-anchor="middle" font-size="22">💬</text>
+                        
+                        <line x1="125" y1="60" x2="125" y2="90" stroke="#8B4513" stroke-width="2" opacity="0.3"/>
+                        <line x1="160" y1="145" x2="180" y2="160" stroke="#D2691E" stroke-width="2" opacity="0.3"/>
+                        <line x1="90" y1="145" x2="70" y2="160" stroke="#FF6B35" stroke-width="2" opacity="0.3"/>
+                        
+                        <path d="M 145 50 Q 180 80 185 125" fill="none" stroke="#8B4513" stroke-width="2" opacity="0.2"/>
+                        <path d="M 185 150 Q 150 200 90 195" fill="none" stroke="#D2691E" stroke-width="2" opacity="0.2"/>
+                        <path d="M 70 165 Q 50 120 90 85" fill="none" stroke="#FF6B35" stroke-width="2" opacity="0.2"/>
+                    </svg>
+                </div>
+                
+                <div class="space-y-4">
+                    <p class="text-gray-700 mb-4">
+                        Hier siehst du, wo du auf deinem zirkulären Lernweg stehst:
+                    </p>
+                    
+                    <div id="statusSchluessel" class="flex items-center gap-3 p-3 bg-gray-100 rounded-lg">
+                        <span class="text-2xl">⬜</span>
+                        <div>
+                            <p class="font-semibold text-gray-500">Schlüsselkompetenzen</p>
+                            <p class="text-xs text-gray-400">Noch nicht begonnen</p>
+                        </div>
+                    </div>
+                    
+                    <div id="statusAspekte" class="flex items-center gap-3 p-3 bg-gray-100 rounded-lg">
+                        <span class="text-2xl">⬜</span>
+                        <div>
+                            <p class="font-semibold text-gray-500">Gesellschaftliche Aspekte</p>
+                            <p class="text-xs text-gray-400">Noch nicht begonnen</p>
+                        </div>
+                    </div>
+                    
+                    <div id="statusSprach" class="flex items-center gap-3 p-3 bg-gray-100 rounded-lg">
+                        <span class="text-2xl">⬜</span>
+                        <div>
+                            <p class="font-semibold text-gray-500">Sprachmodi</p>
+                            <p class="text-xs text-gray-400">Noch nicht begonnen</p>
+                        </div>
+                    </div>
+                    
+                    <a href="kompetenzen.html" class="block mt-6 text-center bg-ant-accent hover:bg-ant-secondary text-white font-bold py-3 px-6 rounded-full transition-all">
+                        Kompetenzen üben →
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Rest: Erklärungen (verkürzt für Performance) -->
+        <div class="space-y-8">
+            
+            <!-- 8 Themen kompakt -->
+            <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="text-3xl">📚</span>
+                    <h2 class="text-2xl font-bold text-ant-primary">8 Themen erwarten dich</h2>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                    <div class="p-3 bg-ant-bg rounded-lg">1️⃣ Berufsleben</div>
+                    <div class="p-3 bg-ant-bg rounded-lg">2️⃣ Konsum</div>
+                    <div class="p-3 bg-ant-bg rounded-lg">3️⃣ Risiko</div>
+                    <div class="p-3 bg-ant-bg rounded-lg">4️⃣ Medien</div>
+                    <div class="p-3 bg-ant-bg rounded-lg">5️⃣ Meinung</div>
+                    <div class="p-3 bg-ant-bg rounded-lg">6️⃣ Verträge</div>
+                    <div class="p-3 bg-ant-bg rounded-lg">7️⃣ Arbeit</div>
+                    <div class="p-3 bg-ant-bg rounded-lg">8️⃣ Kunst</div>
+                </div>
+            </div>
+            
+            <!-- Zirkuläres Lernen erklärt -->
+            <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="text-3xl">🔄</span>
+                    <h2 class="text-2xl font-bold text-ant-primary">So lernst du zirkulär</h2>
+                </div>
+                <div class="bg-ant-bg rounded-2xl p-6">
+                    <div class="flex items-center justify-center gap-4 text-center flex-wrap">
+                        <div>📚 Thema</div>
+                        <div class="text-2xl">→</div>
+                        <div>🎯 Kompetenzen</div>
+                        <div class="text-2xl">→</div>
+                        <div>✏️ Aufgabe</div>
+                        <div class="text-2xl">→</div>
+                        <div>💭 Reflexion</div>
+                        <div class="text-2xl">→</div>
+                        <div>🔄 Wiederholen</div>
+                    </div>
+                    <p class="text-center mt-4 text-gray-700">
+                        <strong class="text-ant-accent">💡</strong> Jeder Durchlauf macht dich kompetenter!
                     </p>
                 </div>
             </div>
-        </div>
-        
-        <!-- Login-Button -->
-        <div class="text-center">
-            <button 
-                id="loginBtn"
-                class="bg-ant-accent hover:bg-ant-secondary text-white font-bold py-4 px-8 rounded-full text-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-            >
-                Los geht's! 🐾
-            </button>
             
-            <p class="text-gray-500 text-sm mt-4">
-                Dein Zugang wird automatisch erstellt
-            </p>
+            <!-- CTA -->
+            <div class="bg-gradient-to-br from-ant-accent to-ant-secondary rounded-3xl shadow-2xl p-8 text-white text-center">
+                <div class="text-5xl mb-4">🚀</div>
+                <h2 class="text-2xl font-bold mb-4">Bereit zu starten?</h2>
+                <p class="mb-6 text-white/90">
+                    Erkunde die interaktive Kompetenzstruktur!
+                </p>
+                <a href="kompetenzen.html" class="inline-block bg-white text-ant-primary font-bold py-4 px-8 rounded-full hover:bg-ant-bg transition-all">
+                    Kompetenzen erkunden 🐾
+                </a>
+            </div>
         </div>
         
-        <!-- Zirkuläres Vernetzungs-Symbol unten -->
-        <div class="mt-8 flex justify-center">
-            <svg width="60" height="60" viewBox="0 0 60 60" class="opacity-20">
-                <circle cx="30" cy="30" r="25" fill="none" stroke="#8B4513" stroke-width="2"/>
-                <circle cx="30" cy="5" r="3" fill="#8B4513"/>
-                <circle cx="55" cy="30" r="3" fill="#D2691E"/>
-                <circle cx="30" cy="55" r="3" fill="#FF6B35"/>
-                <circle cx="5" cy="30" r="3" fill="#2196F3"/>
-                <line x1="30" y1="5" x2="55" y2="30" stroke="#8B4513" stroke-width="1" opacity="0.3"/>
-                <line x1="55" y1="30" x2="30" y2="55" stroke="#8B4513" stroke-width="1" opacity="0.3"/>
-                <line x1="30" y1="55" x2="5" y2="30" stroke="#8B4513" stroke-width="1" opacity="0.3"/>
-                <line x1="5" y1="30" x2="30" y2="5" stroke="#8B4513" stroke-width="1" opacity="0.3"/>
-            </svg>
-        </div>
-        
-        <!-- Footer / Impressum -->
-        <div class="mt-6 pt-6 border-t border-gray-200 text-center">
-            <div class="flex items-center justify-center gap-2 text-xs text-gray-400">
-                <span class="text-lg">🐜✏️👓</span>
-                <span>|</span>
-                <span id="currentYear"></span>
+        <!-- Footer -->
+        <div class="mt-8 text-center">
+            <div class="bg-white/50 backdrop-blur rounded-full px-6 py-3 inline-block">
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                    <span class="text-lg">🐜✏️👓</span>
+                    <span>|</span>
+                    <span id="currentYear"></span>
+                </div>
             </div>
         </div>
     </div>
     
-    <!-- Firebase SDK -->
     <script type="module">
-        // Firebase v9 SDK
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
-        import { getFirestore, doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
         
         const firebaseConfig = {
             apiKey: "AIzaSyDycvEwK6KJZyFEtsGIaHJBhIFTp5L4cdA",
@@ -158,89 +366,100 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         
-        // Tier-Namen und Sonderzeichen
-        const tiere = [
-            'Eichhörnchen', 'Fuchs', 'Bär', 'Ameise', 'Eule', 
-            'Igel', 'Hase', 'Reh', 'Dachs', 'Maus',
-            'Biber', 'Marder', 'Luchs', 'Wolf', 'Hirsch'
-        ];
-        
-        const sonderzeichen = ['+', '%', '-'];
-        
-        function generiereNamen() {
-            const tier = tiere[Math.floor(Math.random() * tiere.length)];
-            const zeichen = sonderzeichen[Math.floor(Math.random() * sonderzeichen.length)];
-            return `${tier} ${zeichen}`;
-        }
-        
-        function getUserId() {
-            let userId = localStorage.getItem('ant_edu_user_id');
-            if (!userId) {
-                userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                localStorage.setItem('ant_edu_user_id', userId);
-            }
-            return userId;
-        }
-        
-        document.getElementById('loginBtn').addEventListener('click', async function() {
-            const btn = this;
-            btn.disabled = true;
-            btn.innerHTML = 'Einen Moment... 🐜';
-            
-            try {
-                const userId = getUserId();
-                console.log('User ID:', userId);
-                
-                const userDoc = await getDoc(doc(db, 'users', userId));
-                console.log('User existiert:', userDoc.exists());
-                
-                if (!userDoc.exists()) {
-                    const displayName = generiereNamen();
-                    console.log('Erstelle neuen User:', displayName);
-                    
-                    await setDoc(doc(db, 'users', userId), {
-                        profile: {
-                            displayName: displayName,
-                            createdAt: new Date().toISOString()
-                        },
-                        kompetenzen: {
-                            schluessel: {},
-                            aspekte: {},
-                            sprachmodi: {}
-                        },
-                        challenges: 0,
-                        umsetzungen: 0
-                    });
-                    
-                    localStorage.setItem('ant_edu_display_name', displayName);
-                    console.log('User erstellt in Firestore!');
-                } else {
-                    const displayName = userDoc.data().profile.displayName;
-                    localStorage.setItem('ant_edu_display_name', displayName);
-                    console.log('Bestehender User geladen:', displayName);
-                }
-                
-                window.location.href = 'dashboard.html';
-                
-            } catch (error) {
-                console.error('Login-Fehler:', error);
-                btn.disabled = false;
-                btn.innerHTML = 'Los geht\'s! 🐾';
-                alert('Fehler: ' + error.message);
-            }
-        });
-        
-        window.addEventListener('load', function() {
-            const userId = localStorage.getItem('ant_edu_user_id');
-            const displayName = localStorage.getItem('ant_edu_display_name');
-            
-            if (userId && displayName) {
-                const btn = document.getElementById('loginBtn');
-                btn.innerHTML = 'Zurück zu meinem Lernen 🐾';
-            }
-            
+        window.addEventListener('load', async function() {
             document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            const displayName = localStorage.getItem('ant_edu_display_name');
+            if (displayName) {
+                document.getElementById('displayName').textContent = displayName;
+            } else {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Lade Fortschrittsdaten aus Firebase
+            const userId = localStorage.getItem('ant_edu_user_id');
+            if (userId) {
+                try {
+                    const userDoc = await getDoc(doc(db, 'users', userId));
+                    if (userDoc.exists()) {
+                        const data = userDoc.data();
+                        updateProgress(data);
+                    } else {
+                        // Keine Daten - initialisiere leer
+                        updateProgress({});
+                    }
+                } catch (error) {
+                    console.log('Fehler beim Laden:', error);
+                    updateProgress({});
+                }
+            }
         });
+        
+        function updateProgress(data) {
+            const kompetenzen = data.kompetenzen || { schluessel: {}, aspekte: {}, sprachmodi: {} };
+            
+            const schluesselCount = Object.keys(kompetenzen.schluessel || {}).length;
+            const aspekteCount = Object.keys(kompetenzen.aspekte || {}).length;
+            const sprachCount = Object.keys(kompetenzen.sprachmodi || {}).length;
+            
+            document.getElementById('schluesselProgress').textContent = `${schluesselCount}/12`;
+            document.getElementById('schluesselProgressBar').style.width = `${(schluesselCount/12)*100}%`;
+            
+            document.getElementById('aspekteProgress').textContent = `${aspekteCount}/8`;
+            document.getElementById('aspekteProgressBar').style.width = `${(aspekteCount/8)*100}%`;
+            
+            document.getElementById('sprachProgress').textContent = `${sprachCount}/8`;
+            document.getElementById('sprachProgressBar').style.width = `${(sprachCount/8)*100}%`;
+            
+            const total = schluesselCount + aspekteCount + sprachCount;
+            const maxTotal = 12 + 8 + 8;
+            const totalPercent = Math.round((total/maxTotal)*100);
+            document.getElementById('totalProgress').textContent = `${totalPercent}%`;
+            document.getElementById('totalProgressBar').style.width = `${totalPercent}%`;
+            
+            document.getElementById('kompetenzCount').textContent = total;
+            document.getElementById('challengeCount').textContent = data.challenges || 0;
+            document.getElementById('umsetzungCount').textContent = data.umsetzungen || 0;
+            document.getElementById('verbindungCount').textContent = Math.floor(total * 1.5);
+            
+            updateCircleStatus(schluesselCount, aspekteCount, sprachCount);
+        }
+        
+        function updateCircleStatus(schluessel, aspekte, sprach) {
+            if (schluessel > 0) {
+                document.getElementById('circleSchluessel').setAttribute('fill', '#8B4513');
+                document.getElementById('statusSchluessel').innerHTML = `
+                    <span class="text-2xl">✅</span>
+                    <div>
+                        <p class="font-semibold text-ant-primary">Schlüsselkompetenzen</p>
+                        <p class="text-xs text-gray-600">${schluessel} geübt</p>
+                    </div>
+                `;
+            }
+            
+            if (aspekte > 0) {
+                document.getElementById('circleAspekte').setAttribute('fill', '#D2691E');
+                document.getElementById('statusAspekte').innerHTML = `
+                    <span class="text-2xl">✅</span>
+                    <div>
+                        <p class="font-semibold text-ant-secondary">Gesellschaftliche Aspekte</p>
+                        <p class="text-xs text-gray-600">${aspekte} geübt</p>
+                    </div>
+                `;
+            }
+            
+            if (sprach > 0) {
+                document.getElementById('circleSprach').setAttribute('fill', '#FF6B35');
+                document.getElementById('statusSprach').innerHTML = `
+                    <span class="text-2xl">✅</span>
+                    <div>
+                        <p class="font-semibold text-ant-accent">Sprachmodi</p>
+                        <p class="text-xs text-gray-600">${sprach} geübt</p>
+                    </div>
+                `;
+            }
+        }
     </script>
 </body>
 </html>
