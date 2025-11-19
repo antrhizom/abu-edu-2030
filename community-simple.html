@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Galerie - ABU EBA Digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        :root {
+            --ktzh-blue: #0066CC;
+            --ktzh-light-blue: #00A0E0;
+            --ktzh-ultra-light: #E8F4F8;
+            --ktzh-white: #FFFFFF;
+            --ktzh-text: #1a1a1a;
+            --ktzh-gray: #666666;
+            --ktzh-light-gray: #f5f5f5;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, var(--ktzh-ultra-light) 0%, var(--ktzh-white) 100%);
+            color: var(--ktzh-text);
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--ktzh-white);
+            border-bottom: 1px solid rgba(0, 102, 204, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem 0;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .header-content h1 {
+            font-size: 2.5rem;
+            color: var(--ktzh-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .header-content p {
+            color: var(--ktzh-gray);
+            font-size: 1.1rem;
+        }
+
+        .community-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--ktzh-blue), var(--ktzh-light-blue));
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        main {
+            max-width: 1400px;
+            margin: 2rem auto 4rem;
+            padding: 0 2rem;
+        }
+
+        .filter-bar {
+            background: var(--ktzh-white);
+            border-radius: 18px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-bar select {
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            border: 1px solid #d9e3f1;
+            background: var(--ktzh-light-gray);
+            font-family: inherit;
+            font-size: 1rem;
+            min-width: 200px;
+        }
+
+        .stats {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--ktzh-gray);
+            font-size: 1.1rem;
+        }
+
+        .stats strong {
+            color: var(--ktzh-blue);
+            font-size: 1.5rem;
+        }
+
+        .community-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .community-post {
+            background: var(--ktzh-white);
+            border-radius: 18px;
+            padding: 1.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .community-post:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 102, 204, 0.15);
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .post-author {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .author-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--ktzh-blue), var(--ktzh-light-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: var(--ktzh-blue);
+        }
+
+        .post-date {
+            font-size: 0.85rem;
+            color: var(--ktzh-gray);
+        }
+
+        .module-badge {
+            background: var(--ktzh-ultra-light);
+            color: var(--ktzh-blue);
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .post-title {
+            font-size: 1.3rem;
+            color: var(--ktzh-text);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .post-content {
+            color: var(--ktzh-gray);
+            line-height: 1.7;
+            margin-bottom: 1.25rem;
+            white-space: pre-wrap;
+        }
+
+        .reactions-bar {
+            border-top: 1px solid rgba(0, 102, 204, 0.1);
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .reactions-display {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .reaction-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: var(--ktzh-ultra-light);
+            padding: 0.5rem 0.9rem;
+            border-radius: 20px;
+            font-size: 1.1rem;
+        }
+
+        .reaction-number {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--ktzh-blue);
+        }
+
+        .reaction-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .reaction-btn {
+            background: var(--ktzh-light-gray);
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .reaction-btn:hover {
+            background: var(--ktzh-ultra-light);
+            transform: scale(1.1);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--ktzh-gray);
+            grid-column: 1/-1;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .message {
+            padding: 1rem 1.2rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            text-align: center;
+            display: none;
+        }
+
+        .message.success {
+            background: rgba(15, 157, 88, 0.1);
+            color: #0f9d58;
+            border: 1px solid rgba(15, 157, 88, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .community-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>🌟 Community Galerie</h1>
+            <p>Lernaktivitäten und Reflexionen von Lernenden</p>
+            <div class="community-badge">🌐 Öffentlich für alle zugänglich</div>
+        </div>
+    </header>
+
+    <main>
+        <div class="stats">
+            <strong id="totalPosts">0</strong> öffentliche Beiträge • 
+            <strong id="totalReactions">0</strong> Reaktionen
+        </div>
+
+        <div class="filter-bar">
+            <label for="moduleFilter" style="font-weight: 600;">Filter nach Modul:</label>
+            <select id="moduleFilter" onchange="filterPosts()">
+                <option value="">Alle Module</option>
+                <option value="Sprache & Kommunikation">Sprache & Kommunikation</option>
+                <option value="Gesellschaft">Gesellschaft</option>
+                <option value="Zirkularität">Zirkularität</option>
+                <option value="Schlüsselkompetenzen">Schlüsselkompetenzen</option>
+            </select>
+        </div>
+
+        <div id="feedbackMessage" class="message"></div>
+
+        <div id="communityGrid" class="community-grid"></div>
+    </main>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDPWkwiCptXi_Ky-yUgrvxrtpRzH1HGd_0",
+            authDomain: "abu-edu-2030.firebaseapp.com",
+            projectId: "abu-edu-2030",
+            storageBucket: "abu-edu-2030.firebasestorage.app",
+            messagingSenderId: "895317724223",
+            appId: "1:895317724223:web:de551267b1431bea947c8a"
+        };
+
+        let db = null;
+        let allPosts = [];
+
+        async function initializeFirebase() {
+            try {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                db = firebase.firestore();
+                return true;
+            } catch (error) {
+                console.error('Firebase init error:', error);
+                return false;
+            }
+        }
+
+        function showMessage(message) {
+            const el = document.getElementById('feedbackMessage');
+            el.textContent = message;
+            el.className = 'message success';
+            el.style.display = 'block';
+            setTimeout(() => { el.style.display = 'none'; }, 2000);
+        }
+
+        function getInitials(name) {
+            if (!name) return '?';
+            const parts = name.trim().split(' ');
+            if (parts.length >= 2) {
+                return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+            }
+            return name.substring(0, 2).toUpperCase();
+        }
+
+        function formatDate(dateInput) {
+            if (!dateInput) return '';
+            let date;
+            if (dateInput.toDate) {
+                date = dateInput.toDate();
+            } else {
+                date = new Date(dateInput);
+            }
+            if (isNaN(date)) return '';
+            
+            const now = new Date();
+            const diffMs = now - date;
+            const diffDays = Math.floor(diffMs / 86400000);
+
+            if (diffDays < 1) {
+                return 'Heute';
+            } else if (diffDays < 2) {
+                return 'Gestern';
+            } else if (diffDays < 7) {
+                return `vor ${diffDays} Tagen`;
+            } else {
+                return date.toLocaleDateString('de-CH', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                });
+            }
+        }
+
+        function aggregateReactions(reactions = []) {
+            const counts = {};
+            reactions.forEach(r => {
+                const emoji = r.emoji || '👍';
+                counts[emoji] = (counts[emoji] || 0) + 1;
+            });
+            return counts;
+        }
+
+        async function addReaction(userCode, entryId, emoji) {
+            try {
+                const entryRef = db.collection('userCodes')
+                    .doc(userCode)
+                    .collection('portfolioEntries')
+                    .doc(entryId);
+                
+                const newReaction = {
+                    emoji: emoji,
+                    timestamp: new Date().toISOString(),
+                    anonymous: true
+                };
+                
+                await entryRef.update({
+                    reactions: firebase.firestore.FieldValue.arrayUnion(newReaction)
+                });
+
+                showMessage(`${emoji} hinzugefügt!`);
+                await loadPublicPosts();
+            } catch (error) {
+                console.error('Error adding reaction:', error);
+            }
+        }
+
+        function renderPosts(posts) {
+            const grid = document.getElementById('communityGrid');
+            grid.innerHTML = '';
+
+            if (posts.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <h3>Noch keine öffentlichen Beiträge</h3>
+                        <p>Sei der Erste und teile deine Lernaktivität!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            posts.forEach(post => {
+                const reactions = post.reactions || [];
+                const reactionCounts = aggregateReactions(reactions);
+
+                const postDiv = document.createElement('article');
+                postDiv.className = 'community-post';
+
+                const reactionCountsHTML = Object.entries(reactionCounts)
+                    .map(([emoji, count]) => `
+                        <div class="reaction-count">
+                            <span>${emoji}</span>
+                            <span class="reaction-number">${count}</span>
+                        </div>
+                    `).join('');
+
+                postDiv.innerHTML = `
+                    <div class="post-header">
+                        <div class="post-author">
+                            <div class="author-avatar">${getInitials(post.userName)}</div>
+                            <div class="author-info">
+                                <div class="author-name">${post.userName || 'Lernende:r'}</div>
+                                <div class="post-date">${formatDate(post.createdAt)}</div>
+                            </div>
+                        </div>
+                        ${post.module ? `<div class="module-badge">${post.module}</div>` : ''}
+                    </div>
+
+                    <h3 class="post-title">${post.theme || 'Lernaktivität'}</h3>
+                    <div class="post-content">${post.reflection || ''}</div>
+
+                    <div class="reactions-bar">
+                        ${reactionCountsHTML ? `<div class="reactions-display">${reactionCountsHTML}</div>` : ''}
+                        <div class="reaction-buttons">
+                            <button class="reaction-btn" onclick="addReaction('${post.userCode}', '${post.id}', '👍')" title="Super!">👍</button>
+                            <button class="reaction-btn" onclick="addReaction('${post.userCode}', '${post.id}', '❤️')" title="Gefällt mir">❤️</button>
+                            <button class="reaction-btn" onclick="addReaction('${post.userCode}', '${post.id}', '🎯')" title="Genau richtig">🎯</button>
+                            <button class="reaction-btn" onclick="addReaction('${post.userCode}', '${post.id}', '💡')" title="Clever!">💡</button>
+                            <button class="reaction-btn" onclick="addReaction('${post.userCode}', '${post.id}', '🌟')" title="Toll">🌟</button>
+                            <button class="reaction-btn" onclick="addReaction('${post.userCode}', '${post.id}', '🚀')" title="Weiter so!">🚀</button>
+                        </div>
+                    </div>
+                `;
+
+                grid.appendChild(postDiv);
+            });
+        }
+
+        function updateStats(posts) {
+            const totalReactions = posts.reduce((sum, post) => 
+                sum + (post.reactions ? post.reactions.length : 0), 0);
+
+            document.getElementById('totalPosts').textContent = posts.length;
+            document.getElementById('totalReactions').textContent = totalReactions;
+        }
+
+        async function loadPublicPosts() {
+            try {
+                // Query all user codes
+                const userCodesSnapshot = await db.collection('userCodes').get();
+                
+                allPosts = [];
+                
+                // For each user, get their public portfolio entries
+                for (const userDoc of userCodesSnapshot.docs) {
+                    const userCode = userDoc.id;
+                    const entriesSnapshot = await db.collection('userCodes')
+                        .doc(userCode)
+                        .collection('portfolioEntries')
+                        .where('visibility', '==', 'public')
+                        .orderBy('createdAt', 'desc')
+                        .get();
+                    
+                    entriesSnapshot.forEach(doc => {
+                        allPosts.push({ 
+                            id: doc.id, 
+                            userCode: userCode,
+                            ...doc.data() 
+                        });
+                    });
+                }
+
+                // Sort all posts by date
+                allPosts.sort((a, b) => {
+                    const dateA = a.createdAt?.toDate?.() || new Date(a.createdAt);
+                    const dateB = b.createdAt?.toDate?.() || new Date(b.createdAt);
+                    return dateB - dateA;
+                });
+
+                filterPosts();
+            } catch (error) {
+                console.error('Error loading posts:', error);
+            }
+        }
+
+        function filterPosts() {
+            const filterValue = document.getElementById('moduleFilter').value;
+            
+            let filtered = allPosts;
+            if (filterValue) {
+                filtered = allPosts.filter(post => post.module === filterValue);
+            }
+
+            renderPosts(filtered);
+            updateStats(filtered);
+        }
+
+        // Make addReaction available globally
+        window.addReaction = addReaction;
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (await initializeFirebase()) {
+                await loadPublicPosts();
+                
+                // Subscribe to real-time updates
+                setInterval(() => loadPublicPosts(), 10000); // Refresh every 10 seconds
+            }
+        });
+    </script>
+</body>
+</html>
