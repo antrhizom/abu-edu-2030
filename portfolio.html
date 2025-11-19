@@ -369,7 +369,7 @@
     <main>
         <div class="page-heading">
             <h1>📁 Mein Portfolio</h1>
-            <p>Erstelle Einträge, sichere sie automatisch in Firebase. Nur du als Besitzer kannst Einträge herunterladen.</p>
+            <p>Erstelle Einträge und sichere sie automatisch in Firebase. Rückmeldungen von anderen siehst du in der Teilen-Ansicht.</p>
         </div>
 
         <div class="grid">
@@ -378,8 +378,7 @@
                 <div class="stat-number" id="totalEntries">0</div>
                 <div class="stat-label">Einträge gesamt</div>
                 <div style="margin-top: 1.25rem;">
-                    <div><strong id="totalReactions">0</strong> Rückmeldungen erhalten</div>
-                    <div id="lastSync" style="color: var(--ktzh-gray); margin-top: 0.35rem; font-size: 0.9rem;">Noch nicht synchronisiert</div>
+                    <div id="lastSync" style="color: var(--ktzh-gray); font-size: 0.9rem;">Noch nicht synchronisiert</div>
                 </div>
             </div>
 
@@ -408,6 +407,12 @@
                     <option value="Schlüsselkompetenzen">Schlüsselkompetenzen</option>
                 </select>
 
+                <label for="entryVisibility" style="font-weight: 600; display: block; margin: 1rem 0 0.35rem;">Sichtbarkeit</label>
+                <select id="entryVisibility">
+                    <option value="private">🔒 Privat (nur ich)</option>
+                    <option value="public">🌐 Öffentlich (Community kann sehen)</option>
+                </select>
+
                 <label for="entryReflection" style="font-weight: 600; display: block; margin: 1rem 0 0.35rem;">Meine Reflexion</label>
                 <textarea id="entryReflection" placeholder="Was hast du gelernt? Was lief gut? Was möchtest du verbessern?" required></textarea>
 
@@ -420,7 +425,7 @@
         <section>
             <div class="page-heading" style="margin-bottom: 1rem;">
                 <h2 style="font-size: 1.6rem;">📚 Meine Einträge</h2>
-                <p style="color: var(--ktzh-gray);">Alle Einträge werden in Firestore gesichert. Nur du kannst sie herunterladen.</p>
+                <p style="color: var(--ktzh-gray);">Alle Einträge werden in Firestore gesichert. Teile Links, um Feedback zu erhalten.</p>
             </div>
             <div id="portfolioList" class="portfolio-list"></div>
         </section>
@@ -583,16 +588,21 @@
                     div.className = 'portfolio-entry';
                     const stamp = getEntryStamp(entry);
                     const formattedDate = formatDate(getEntryDate(entry));
+                    const isPublic = entry.visibility === 'public';
+                    const visibilityBadge = isPublic 
+                        ? '<span style="background: rgba(0, 160, 224, 0.15); color: var(--ktzh-blue); padding: 0.3rem 0.7rem; border-radius: 12px; font-size: 0.85rem; font-weight: 600;">🌐 Öffentlich</span>'
+                        : '<span style="background: var(--ktzh-light-gray); color: var(--ktzh-gray); padding: 0.3rem 0.7rem; border-radius: 12px; font-size: 0.85rem; font-weight: 600;">🔒 Privat</span>';
                       div.innerHTML = `
-                          <h3>${entry.theme || 'Ohne Titel'}</h3>
+                          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                              <h3>${entry.theme || 'Ohne Titel'}</h3>
+                              ${visibilityBadge}
+                          </div>
                           <small>${formattedDate}</small>
                           ${entry.module ? `<div class="entry-module">${entry.module}</div>` : ''}
                           <div class="entry-reflection">${entry.reflection || ''}</div>
                           <div class="entry-footer">
                               <span>${entry.userName || currentUser.name}</span>
-                              <span class="reactions-pill">💬 ${(entry.reactions ? entry.reactions.length : 0)} Feedbacks</span>
                           </div>
-                          ${renderFeedbackSection(entry.reactions)}
                           <div class="entry-actions">
                               <button type="button" class="secondary" onclick="downloadEntry('${stamp}')">⬇️ Download (nur ich)</button>
                               <button class="danger delete-entry-btn" data-stamp="${stamp}">🗑️ Löschen</button>
@@ -606,45 +616,11 @@
 
               const totalReactions = entries.reduce((sum, entry) => sum + ((entry.reactions || []).length), 0);
               document.getElementById('totalEntries').textContent = sorted.length;
-              document.getElementById('totalReactions').textContent = totalReactions;
           }
 
           function renderFeedbackSection(reactions = []) {
-              const count = reactions.length;
-              if (!count) {
-                  return `
-                      <div class="feedback-section">
-                          <details>
-                              <summary>💬 Feedback ansehen</summary>
-                              <p class="feedback-empty">Noch keine Rückmeldungen.</p>
-                          </details>
-                      </div>
-                  `;
-              }
-
-              const items = reactions.map(reaction => {
-                  const emoji = escapeHtml(reaction.emoji || '💬');
-                  const meaning = escapeHtml(reaction.meaning || 'Feedback');
-                  const author = escapeHtml(reaction.from || 'Anonym');
-                  return `
-                      <li class="feedback-item">
-                          <span class="feedback-emoji">${emoji}</span>
-                          <div>
-                              <div>${meaning}</div>
-                              <div class="feedback-meta">von ${author}</div>
-                          </div>
-                      </li>
-                  `;
-              }).join('');
-
-              return `
-                  <div class="feedback-section">
-                      <details open>
-                          <summary>💬 Feedback ansehen (${count})</summary>
-                          <ul class="feedback-items">${items}</ul>
-                      </details>
-                  </div>
-              `;
+              // Feedback section removed - reactions are only visible in portfolio-view.html
+              return '';
           }
 
         function formatDate(dateInput) {
@@ -968,15 +944,6 @@
             lines.push('Reflexion:');
             lines.push(entry.reflection || '');
             
-            if (entry.reactions && entry.reactions.length > 0) {
-                lines.push('');
-                lines.push('---');
-                lines.push(`Rückmeldungen (${entry.reactions.length}):`);
-                entry.reactions.forEach(r => {
-                    lines.push(`${r.emoji} ${r.meaning} - von ${r.from}`);
-                });
-            }
-            
             const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -996,6 +963,8 @@
             const theme = document.getElementById('entryTheme').value.trim();
             const module = document.getElementById('entryModule').value;
             const reflection = document.getElementById('entryReflection').value.trim();
+            const visibility = document.getElementById('entryVisibility').value;
+            
             if (!theme || !reflection) {
                 showMessage('Bitte Thema und Reflexion ausfüllen.', 'error');
                 return;
@@ -1006,6 +975,7 @@
                 theme,
                 module,
                 reflection,
+                visibility,
                 userName: currentUser.name,
                 userCode: currentUser.code,
                 createdAt: now,
@@ -1016,7 +986,9 @@
             entries.push(newEntry);
             saveLocalEntries();
             renderEntries();
-            showMessage('Eintrag gespeichert! Synchronisiere mit Firebase...');
+            
+            const visibilityText = visibility === 'public' ? 'öffentlich' : 'privat';
+            showMessage(`Eintrag als ${visibilityText} gespeichert! Synchronisiere mit Firebase...`);
             document.getElementById('entryForm').reset();
 
             await syncToFirebase();
