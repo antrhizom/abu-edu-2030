@@ -338,10 +338,100 @@
             border: 1px solid rgba(217, 48, 37, 0.4);
         }
 
+        /* Share Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--ktzh-white);
+            border-radius: 18px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal h3 {
+            color: var(--ktzh-blue);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .share-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .share-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            background: var(--ktzh-light-gray);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+
+        .share-option:hover {
+            background: var(--ktzh-ultra-light);
+            border-color: var(--ktzh-light-blue);
+            transform: translateX(4px);
+        }
+
+        .share-icon {
+            font-size: 1.8rem;
+        }
+
+        .share-info {
+            flex: 1;
+        }
+
+        .share-title {
+            font-weight: 600;
+            color: var(--ktzh-text);
+            margin-bottom: 0.25rem;
+        }
+
+        .share-desc {
+            font-size: 0.85rem;
+            color: var(--ktzh-gray);
+        }
+
+        .modal-close {
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+
         @media (max-width: 640px) {
             .header-content,
             main { padding: 1.25rem; }
             .entry-footer { flex-direction: column; align-items: flex-start; }
+            .entry-actions { 
+                flex-direction: column; 
+                width: 100%;
+            }
+            .entry-actions button {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -430,6 +520,15 @@
             <div id="portfolioList" class="portfolio-list"></div>
         </section>
     </main>
+
+    <!-- Share Modal -->
+    <div id="shareModal" class="modal-overlay" onclick="closeShareModal(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <h3>📤 Eintrag teilen</h3>
+            <div id="shareOptions" class="share-options"></div>
+            <button class="modal-close secondary" onclick="closeShareModal()">Schließen</button>
+        </div>
+    </div>
 
     <script>
         const firebaseConfig = window.firebaseConfig || {
@@ -604,7 +703,8 @@
                               <span>${entry.userName || currentUser.name}</span>
                           </div>
                           <div class="entry-actions">
-                              <button type="button" class="secondary" onclick="downloadEntry('${stamp}')">⬇️ Download (nur ich)</button>
+                              <button type="button" class="secondary" onclick="downloadEntry('${stamp}')">⬇️ Download</button>
+                              <button type="button" class="secondary" onclick="shareEntry('${stamp}')">📤 Teilen</button>
                               <button class="danger delete-entry-btn" data-stamp="${stamp}">🗑️ Löschen</button>
                           </div>
                       `;
@@ -956,6 +1056,171 @@
             document.body.removeChild(link);
             setTimeout(() => URL.revokeObjectURL(url), 500);
             showMessage('Der Eintrag wurde heruntergeladen.');
+        }
+
+        let currentShareEntry = null;
+
+        function shareEntry(stamp) {
+            const entry = entries.find(e => getEntryStamp(e) === stamp);
+            if (!entry) {
+                showMessage('Der Eintrag konnte nicht gefunden werden.', 'error');
+                return;
+            }
+            
+            currentShareEntry = entry;
+            const modal = document.getElementById('shareModal');
+            const optionsContainer = document.getElementById('shareOptions');
+            
+            // Create share text
+            const shareTitle = entry.theme || 'Lernaktivität';
+            const shareText = `${shareTitle}\n\n${entry.reflection || ''}`;
+            const shareUrl = window.location.origin + window.location.pathname.replace('portfolio.html', 'community-simple.html');
+            
+            // Encode for URLs
+            const encodedText = encodeURIComponent(shareText);
+            const encodedTitle = encodeURIComponent(shareTitle);
+            const encodedUrl = encodeURIComponent(shareUrl);
+            
+            optionsContainer.innerHTML = `
+                <div class="share-option" onclick="shareViaEmail('${stamp}')">
+                    <div class="share-icon">📧</div>
+                    <div class="share-info">
+                        <div class="share-title">E-Mail</div>
+                        <div class="share-desc">Per E-Mail versenden</div>
+                    </div>
+                </div>
+                
+                <div class="share-option" onclick="shareViaTeams('${stamp}')">
+                    <div class="share-icon">💼</div>
+                    <div class="share-info">
+                        <div class="share-title">Microsoft Teams</div>
+                        <div class="share-desc">In Teams teilen</div>
+                    </div>
+                </div>
+                
+                <div class="share-option" onclick="shareViaWhatsApp('${stamp}')">
+                    <div class="share-icon">💬</div>
+                    <div class="share-info">
+                        <div class="share-title">WhatsApp</div>
+                        <div class="share-desc">Per WhatsApp teilen</div>
+                    </div>
+                </div>
+                
+                <div class="share-option" onclick="copyToClipboard('${stamp}')">
+                    <div class="share-icon">📋</div>
+                    <div class="share-info">
+                        <div class="share-title">Text kopieren</div>
+                        <div class="share-desc">In Zwischenablage kopieren</div>
+                    </div>
+                </div>
+                
+                <div class="share-option" onclick="shareViaNativeShare('${stamp}')">
+                    <div class="share-icon">🔗</div>
+                    <div class="share-info">
+                        <div class="share-title">Weitere Optionen</div>
+                        <div class="share-desc">Teilen über andere Apps</div>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function closeShareModal(event) {
+            if (!event || event.target.id === 'shareModal') {
+                document.getElementById('shareModal').classList.remove('active');
+                currentShareEntry = null;
+            }
+        }
+
+        function getShareContent(stamp) {
+            const entry = entries.find(e => getEntryStamp(e) === stamp);
+            if (!entry) return null;
+            
+            const title = entry.theme || 'Lernaktivität';
+            const content = entry.reflection || '';
+            const author = entry.userName || currentUser.name;
+            const module = entry.module ? `\nModul: ${entry.module}` : '';
+            
+            return {
+                title,
+                content,
+                fullText: `${title}\n\nvon ${author}${module}\n\n${content}`,
+                shortText: `${title} - ${content.substring(0, 100)}${content.length > 100 ? '...' : ''}`
+            };
+        }
+
+        function shareViaEmail(stamp) {
+            const share = getShareContent(stamp);
+            if (!share) return;
+            
+            const subject = encodeURIComponent(`Portfolio-Eintrag: ${share.title}`);
+            const body = encodeURIComponent(share.fullText + '\n\n---\nGeteilt aus ABU EBA Digital Portfolio');
+            
+            window.location.href = `mailto:?subject=${subject}&body=${body}`;
+            closeShareModal();
+            showMessage('E-Mail-Client wird geöffnet...');
+        }
+
+        function shareViaTeams(stamp) {
+            const share = getShareContent(stamp);
+            if (!share) return;
+            
+            const text = encodeURIComponent(share.fullText);
+            const url = `https://teams.microsoft.com/share?msgText=${text}`;
+            
+            window.open(url, '_blank');
+            closeShareModal();
+            showMessage('Teams wird geöffnet...');
+        }
+
+        function shareViaWhatsApp(stamp) {
+            const share = getShareContent(stamp);
+            if (!share) return;
+            
+            const text = encodeURIComponent(share.fullText);
+            const url = `https://wa.me/?text=${text}`;
+            
+            window.open(url, '_blank');
+            closeShareModal();
+            showMessage('WhatsApp wird geöffnet...');
+        }
+
+        async function copyToClipboard(stamp) {
+            const share = getShareContent(stamp);
+            if (!share) return;
+            
+            try {
+                await navigator.clipboard.writeText(share.fullText);
+                closeShareModal();
+                showMessage('✓ In Zwischenablage kopiert!');
+            } catch (error) {
+                console.error('Clipboard error:', error);
+                showMessage('Fehler beim Kopieren', 'error');
+            }
+        }
+
+        async function shareViaNativeShare(stamp) {
+            const share = getShareContent(stamp);
+            if (!share) return;
+            
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: share.title,
+                        text: share.fullText
+                    });
+                    closeShareModal();
+                    showMessage('✓ Erfolgreich geteilt!');
+                } catch (error) {
+                    if (error.name !== 'AbortError') {
+                        console.error('Share error:', error);
+                    }
+                }
+            } else {
+                // Fallback: copy to clipboard
+                await copyToClipboard(stamp);
+            }
         }
 
         async function handleEntrySubmit(event) {
