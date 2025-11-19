@@ -12,6 +12,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script type="module" src="config/firebase-config.js"></script>
 
     <style>
         :root {
@@ -426,7 +427,7 @@
     </main>
 
     <script>
-        const firebaseConfig = {
+        const firebaseConfig = window.firebaseConfig || {
             apiKey: "AIzaSyDPWkwiCptXi_Ky-yUgrvxrtpRzH1HGd_0",
             authDomain: "abu-edu-2030.firebaseapp.com",
             projectId: "abu-edu-2030",
@@ -436,17 +437,20 @@
         };
 
         const localStorageKey = 'abuEbaPortfolio';
-        const AUTH_LINK_COLLECTION = 'portfolioAuthLinks';
         let firebaseReady = false;
         let db = null;
         let auth = null;
         let authInitializationPromise = null;
         let authStatePromise = null;
-        let linkedAuthCode = '';
         let authLinkWarningShown = false;
         const currentUser = { code: '', name: '' };
         let entries = [];
         let firebaseUnsubscribe = null;
+        let firebaseCollectionCache = null;
+
+        function normalizeUserCode(code) {
+            return (code || '').toString().trim().toUpperCase();
+        }
 
         function getEntryStamp(entry) {
             if (!entry) return null;
@@ -517,10 +521,10 @@
                 window.location.href = 'index.html';
                 return;
             }
-            currentUser.code = code;
+            currentUser.code = normalizeUserCode(code);
             currentUser.name = name;
             document.getElementById('userName').textContent = name;
-            document.getElementById('userCode').textContent = code;
+            document.getElementById('userCode').textContent = currentUser.code;
         }
 
         function saveLocalEntries() {
@@ -530,6 +534,10 @@
         function loadLocalEntries() {
             const stored = localStorage.getItem(localStorageKey);
             entries = stored ? JSON.parse(stored) : [];
+            entries = entries.map(entry => ({
+                ...entry,
+                userCode: normalizeUserCode(entry.userCode || currentUser.code)
+            }));
             entries = deduplicateEntries(entries.filter(entry => entry.userCode === currentUser.code));
             saveLocalEntries();
             renderEntries();
@@ -653,53 +661,21 @@
             });
         }
 
-        function getPortfolioLinkAttempts(targetCode) {
-            const normalizedCode = targetCode || '';
-            const attempts = [];
-            if (normalizedCode) {
-                attempts.push({
-                    ref: db.collection(AUTH_LINK_COLLECTION).doc(`code::${normalizedCode}`),
-                    type: 'code'
-                });
+        function getPortfolioCollectionRef(targetCode = currentUser.code) {
+            if (!db) {
+                throw new Error('Firestore wurde nicht initialisiert.');
             }
-            attempts.push({
-                ref: db.collection(AUTH_LINK_COLLECTION).doc(auth.currentUser.uid),
-                type: 'uid'
-            });
-            return attempts;
-        }
-
-        async function tryLinkPortfolioSession(targetCode) {
-            const linkPayload = {
-                userCode: targetCode,
-                viewerUid: auth.currentUser.uid,
-                viewerName: currentUser.name || 'Portfolio Owner',
-                context: 'portfolio-owner',
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
-
-            let permissionError = null;
-            for (const attempt of getPortfolioLinkAttempts(targetCode)) {
-                try {
-                    await attempt.ref.set({
-                        ...linkPayload,
-                        linkStrategy: attempt.type
-                    }, { merge: true });
-                    return true;
-                } catch (error) {
-                    if (error && error.code === 'permission-denied') {
-                        permissionError = error;
-                        continue;
-                    }
-                    throw error;
-                }
+            const normalizedCode = normalizeUserCode(targetCode);
+            if (!normalizedCode) {
+                throw new Error('Kein Benutzer-Code verfügbar.');
             }
-
-            if (permissionError) {
-                throw permissionError;
+            if (!firebaseCollectionCache || firebaseCollectionCache.code !== normalizedCode) {
+                firebaseCollectionCache = {
+                    code: normalizedCode,
+                    ref: db.collection('userCodes').doc(normalizedCode).collection('portfolioEntries')
+                };
             }
-
-            return true;
+            return firebaseCollectionCache.ref;
         }
 
         async function ensureAuthSession() {
@@ -712,9 +688,6 @@
                 } catch (stateError) {
                     console.warn('Konnte Auth-Status nicht ermitteln.', stateError);
                 }
-            }
-            if (!currentUser.code) {
-                throw new Error('Kein Benutzer-Code gefunden.');
             }
             if (!auth.currentUser) {
                 if (!authInitializationPromise) {
@@ -729,25 +702,12 @@
             if (!auth.currentUser) {
                 throw new Error('Anonyme Firebase-Anmeldung fehlgeschlagen.');
             }
-            if (linkedAuthCode === currentUser.code) {
-                return true;
+            const normalizedCode = normalizeUserCode(currentUser.code);
+            if (!normalizedCode && !authLinkWarningShown) {
+                console.warn('Kein Benutzer-Code zum Synchronisieren vorhanden.');
+                authLinkWarningShown = true;
             }
-            try {
-                await tryLinkPortfolioSession(currentUser.code);
-                linkedAuthCode = currentUser.code;
-                return true;
-            } catch (error) {
-                if (error && error.code === 'permission-denied') {
-                    linkedAuthCode = currentUser.code;
-                    if (!authLinkWarningShown) {
-                        showMessage('Hinweis: Firebase erlaubt momentan kein automatisches Verknüpfen mit deinem Code. Die Synchronisation wird trotzdem versucht.', 'error');
-                        console.warn('Konnte Sitzung nicht mit dem Benutzer-Code verknüpfen (Berechtigungen).', error);
-                        authLinkWarningShown = true;
-                    }
-                    return true;
-                }
-                throw error;
-            }
+            return true;
         }
 
         async function initializeFirebase() {
@@ -788,18 +748,20 @@
             }
             updateFirebaseStatus('syncing', 'Synchronisiere...');
 
+            const collectionRef = getPortfolioCollectionRef();
+
             let synced = 0;
             let updatedLocalEntries = false;
             for (const entry of entries) {
                 try {
                     const clientStamp = entry.clientCreatedAt || entry.createdAt || entry.date;
-                    const snapshot = await db.collection('portfolios')
-                        .where('userCode', '==', currentUser.code)
+                    const snapshot = await collectionRef
                         .where('clientCreatedAt', '==', clientStamp)
+                        .limit(1)
                         .get();
 
                     if (snapshot.empty) {
-                        const docRef = await db.collection('portfolios').add({
+                        const docRef = await collectionRef.add({
                             ...entry,
                             userCode: currentUser.code,
                             userName: currentUser.name,
@@ -842,9 +804,7 @@
             }
             updateFirebaseStatus('syncing', 'Lade aus der Cloud...');
             try {
-                const snapshot = await db.collection('portfolios')
-                    .where('userCode', '==', currentUser.code)
-                    .get();
+                const snapshot = await getPortfolioCollectionRef().get();
 
                 const firebaseEntries = [];
                 snapshot.forEach(doc => {
@@ -880,8 +840,7 @@
                 firebaseUnsubscribe = null;
             }
             try {
-                firebaseUnsubscribe = db.collection('portfolios')
-                    .where('userCode', '==', currentUser.code)
+                firebaseUnsubscribe = getPortfolioCollectionRef()
                     .onSnapshot(snapshot => {
                         const remoteEntries = [];
                         snapshot.forEach(doc => {
@@ -959,7 +918,7 @@
                 return;
             }
             try {
-                await db.collection('portfolios').doc(entry.firebaseId).delete();
+                await getPortfolioCollectionRef().doc(entry.firebaseId).delete();
                 showMessage('Eintrag wurde auch aus Firebase gelöscht.');
             } catch (error) {
                 console.error('Firebase delete error', error);

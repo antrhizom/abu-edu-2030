@@ -9,6 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script type="module" src="config/firebase-config.js"></script>
     
     <style>
         :root {
@@ -147,7 +148,7 @@
 
     <script>
         // Firebase Configuration - ABU EDU 2030
-        const firebaseConfig = {
+        const firebaseConfig = window.firebaseConfig || {
             apiKey: "AIzaSyDPWkwiCptXi_Ky-yUgrvxrtpRzH1HGd_0",
             authDomain: "abu-edu-2030.firebaseapp.com",
             projectId: "abu-edu-2030",
@@ -170,6 +171,28 @@
         let sharedEntryId = '';
         let shareMode = false;
         let shareOwnerCode = '';
+        let portfolioCollectionCache = null;
+
+        function normalizePortfolioCode(code) {
+            return (code || '').toString().trim().toUpperCase();
+        }
+
+        function getPortfolioCollectionRef(targetCode) {
+            if (!db) {
+                throw new Error('Firestore wurde nicht initialisiert.');
+            }
+            const normalizedCode = normalizePortfolioCode(targetCode);
+            if (!normalizedCode) {
+                throw new Error('Kein Portfolio-Code angegeben.');
+            }
+            if (!portfolioCollectionCache || portfolioCollectionCache.code !== normalizedCode) {
+                portfolioCollectionCache = {
+                    code: normalizedCode,
+                    ref: db.collection('userCodes').doc(normalizedCode).collection('portfolioEntries')
+                };
+            }
+            return portfolioCollectionCache.ref;
+        }
 
         function decodeCodeToken(token) {
             if (!token) return '';
@@ -326,11 +349,11 @@
         async function loadPortfolio() {
             const urlParams = new URLSearchParams(window.location.search);
             sharedEntryId = urlParams.get('share') || '';
-            shareOwnerCode = decodeCodeToken(urlParams.get('owner') || '');
+            shareOwnerCode = normalizePortfolioCode(decodeCodeToken(urlParams.get('owner') || ''));
             const encodedCode = urlParams.get('codeToken') || '';
-            portfolioCode = urlParams.get('code') || '';
+            portfolioCode = normalizePortfolioCode(urlParams.get('code') || '');
             if (!portfolioCode && encodedCode) {
-                portfolioCode = decodeCodeToken(encodedCode);
+                portfolioCode = normalizePortfolioCode(decodeCodeToken(encodedCode));
             }
             entryStampFilter = urlParams.get('entry') || '';
 
@@ -365,9 +388,7 @@
             console.log('Loading portfolio for:', portfolioCode);
 
             try {
-                const snapshot = await db.collection('portfolios')
-                    .where('userCode', '==', portfolioCode)
-                    .get();
+                const snapshot = await getPortfolioCollectionRef(portfolioCode).get();
 
                 const rawEntries = [];
                 snapshot.forEach(doc => {
@@ -407,8 +428,12 @@
         }
 
         async function loadSharedEntry(entryId) {
+            if (!shareOwnerCode) {
+                showError('Der geteilte Link enthält keinen gültigen Code.');
+                return;
+            }
             try {
-                const doc = await db.collection('portfolios').doc(entryId).get();
+                const doc = await getPortfolioCollectionRef(shareOwnerCode).doc(entryId).get();
                 if (!doc.exists) {
                     showError('Der geteilte Eintrag wurde nicht gefunden.');
                     return;
@@ -595,7 +620,12 @@
                     date: new Date().toISOString()
                 };
 
-                await db.collection('portfolios').doc(entryId).update({
+                const targetCode = shareMode ? shareOwnerCode : portfolioCode;
+                if (!targetCode) {
+                    alert('Dieser Portfolio-Link ist nicht mehr gültig.');
+                    return;
+                }
+                await getPortfolioCollectionRef(targetCode).doc(entryId).update({
                     reactions: firebase.firestore.FieldValue.arrayUnion(reaction),
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
