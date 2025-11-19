@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Diagnose & Sync - ABU EBA Digital</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .warning { background: #fff3cd; color: #856404; }
+        button {
+            background: #0066CC;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 1rem;
+        }
+        button:hover { background: #0052a3; }
+        button.danger { background: #d93025; }
+        button.success { background: #0f9d58; }
+        h2 { color: #0066CC; margin-top: 0; }
+        .data-preview {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        .entry-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+            border-left: 4px solid #0066CC;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 Portfolio Diagnose & Synchronisation</h1>
+    
+    <div class="box">
+        <h2>📊 System Status</h2>
+        <div id="systemStatus"></div>
+        <button onclick="checkSystem()">🔄 System überprüfen</button>
+    </div>
+
+    <div class="box">
+        <h2>💾 localStorage Daten</h2>
+        <div id="localStatus"></div>
+        <div id="localData" class="data-preview"></div>
+        <button onclick="checkLocalStorage()">📂 localStorage prüfen</button>
+        <button class="danger" onclick="clearLocalStorage()">🗑️ localStorage löschen</button>
+    </div>
+
+    <div class="box">
+        <h2>☁️ Firebase Daten</h2>
+        <div id="firebaseStatus"></div>
+        <div id="firebaseData" class="data-preview"></div>
+        <button onclick="checkFirebase()">☁️ Firebase prüfen</button>
+    </div>
+
+    <div class="box">
+        <h2>🔄 Synchronisation</h2>
+        <div id="syncStatus"></div>
+        <button class="success" onclick="forceSyncToFirebase()">⬆️ Zu Firebase hochladen (erzwingen)</button>
+        <button onclick="forceSyncFromFirebase()">⬇️ Von Firebase laden (erzwingen)</button>
+    </div>
+
+    <div class="box">
+        <h2>📋 Log</h2>
+        <div id="log"></div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDPWkwiCptXi_Ky-yUgrvxrtpRzH1HGd_0",
+            authDomain: "abu-edu-2030.firebaseapp.com",
+            projectId: "abu-edu-2030",
+            storageBucket: "abu-edu-2030.firebasestorage.app",
+            messagingSenderId: "895317724223",
+            appId: "1:895317724223:web:de551267b1431bea947c8a"
+        };
+
+        let db = null;
+        let auth = null;
+        const currentUser = { code: '', name: '', uid: '' };
+
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.textContent = `${new Date().toLocaleTimeString('de-CH')}: ${message}`;
+            logDiv.insertBefore(div, logDiv.firstChild);
+            console.log(message);
+        }
+
+        function updateSection(sectionId, content, type = 'info') {
+            const section = document.getElementById(sectionId);
+            section.innerHTML = `<div class="status ${type}">${content}</div>`;
+        }
+
+        async function checkSystem() {
+            log('🔍 Überprüfe System...', 'info');
+            
+            // Check user data
+            const code = localStorage.getItem('abuEbaCode');
+            const name = localStorage.getItem('abuEbaName');
+            
+            if (!code || !name) {
+                updateSection('systemStatus', '❌ Keine Benutzerdaten gefunden! Bitte melde dich zuerst auf der Startseite an.', 'error');
+                log('Keine Benutzerdaten', 'error');
+                return;
+            }
+            
+            currentUser.code = code.toUpperCase();
+            currentUser.name = name;
+            
+            // Initialize Firebase
+            try {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                db = firebase.firestore();
+                auth = firebase.auth();
+                
+                await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+                
+                if (!auth.currentUser) {
+                    await auth.signInAnonymously();
+                }
+                
+                currentUser.uid = auth.currentUser.uid;
+                
+                updateSection('systemStatus', 
+                    `✅ System bereit!<br>
+                    📝 Code: <strong>${currentUser.code}</strong><br>
+                    👤 Name: ${currentUser.name}<br>
+                    🔑 UID: ${currentUser.uid.substring(0, 12)}...`, 
+                    'success'
+                );
+                log('System bereit', 'success');
+                
+                // Auto-check
+                await checkLocalStorage();
+                await checkFirebase();
+                
+            } catch (error) {
+                updateSection('systemStatus', `❌ Firebase Fehler: ${error.message}`, 'error');
+                log('Firebase Fehler: ' + error.message, 'error');
+            }
+        }
+
+        function checkLocalStorage() {
+            log('📂 Prüfe localStorage...', 'info');
+            
+            const stored = localStorage.getItem('abuEbaPortfolio');
+            
+            if (!stored) {
+                updateSection('localStatus', '📂 Keine Daten im localStorage', 'warning');
+                document.getElementById('localData').textContent = 'Leer';
+                return;
+            }
+            
+            try {
+                const entries = JSON.parse(stored);
+                const userEntries = entries.filter(e => e.userCode === currentUser.code);
+                
+                updateSection('localStatus', 
+                    `✅ ${userEntries.length} Einträge im localStorage gefunden`, 
+                    'success'
+                );
+                
+                document.getElementById('localData').innerHTML = userEntries.map((entry, i) => `
+                    <div class="entry-item">
+                        <strong>${i + 1}. ${entry.theme || 'Ohne Titel'}</strong><br>
+                        <small>Erstellt: ${new Date(entry.createdAt).toLocaleString('de-CH')}</small><br>
+                        <small>Firebase ID: ${entry.firebaseId || '❌ NICHT SYNCHRONISIERT'}</small><br>
+                        <small>Sichtbarkeit: ${entry.visibility || 'private'}</small>
+                    </div>
+                `).join('');
+                
+                log(`${userEntries.length} lokale Einträge gefunden`, 'success');
+                
+            } catch (error) {
+                updateSection('localStatus', `❌ Fehler: ${error.message}`, 'error');
+                log('localStorage Fehler: ' + error.message, 'error');
+            }
+        }
+
+        async function checkFirebase() {
+            if (!db || !currentUser.code) {
+                updateSection('firebaseStatus', '❌ Führe zuerst "System überprüfen" aus', 'error');
+                return;
+            }
+            
+            log('☁️ Prüfe Firebase...', 'info');
+            
+            try {
+                // Check userCodes document
+                const userDoc = await db.collection('userCodes').doc(currentUser.code).get();
+                
+                if (!userDoc.exists) {
+                    updateSection('firebaseStatus', 
+                        `⚠️ User-Code "${currentUser.code}" existiert nicht in Firebase!<br>
+                        Dies muss zuerst erstellt werden.`, 
+                        'warning'
+                    );
+                    document.getElementById('firebaseData').textContent = 'User-Code nicht registriert';
+                    log('User-Code nicht in Firebase', 'warning');
+                    return;
+                }
+                
+                // Check entries
+                const snapshot = await db.collection('userCodes')
+                    .doc(currentUser.code)
+                    .collection('portfolioEntries')
+                    .get();
+                
+                updateSection('firebaseStatus', 
+                    `✅ ${snapshot.size} Einträge in Firebase gefunden`, 
+                    snapshot.size > 0 ? 'success' : 'warning'
+                );
+                
+                if (snapshot.size === 0) {
+                    document.getElementById('firebaseData').textContent = 'Keine Einträge in Firebase';
+                } else {
+                    const entries = [];
+                    snapshot.forEach(doc => entries.push({id: doc.id, ...doc.data()}));
+                    
+                    document.getElementById('firebaseData').innerHTML = entries.map((entry, i) => `
+                        <div class="entry-item">
+                            <strong>${i + 1}. ${entry.theme || 'Ohne Titel'}</strong><br>
+                            <small>ID: ${entry.id || doc.id}</small><br>
+                            <small>Sichtbarkeit: ${entry.visibility || 'private'}</small>
+                        </div>
+                    `).join('');
+                }
+                
+                log(`${snapshot.size} Firebase Einträge gefunden`, 'success');
+                
+            } catch (error) {
+                updateSection('firebaseStatus', `❌ Fehler: ${error.message}`, 'error');
+                document.getElementById('firebaseData').textContent = error.message;
+                log('Firebase Fehler: ' + error.message, 'error');
+            }
+        }
+
+        async function forceSyncToFirebase() {
+            if (!db || !auth || !currentUser.code) {
+                log('❌ System nicht bereit', 'error');
+                return;
+            }
+            
+            updateSection('syncStatus', '🔄 Synchronisiere zu Firebase...', 'info');
+            log('⬆️ Starte Upload zu Firebase...', 'info');
+            
+            try {
+                // 1. Register user if not exists
+                const userDocRef = db.collection('userCodes').doc(currentUser.code);
+                await userDocRef.set({
+                    userCode: currentUser.code,
+                    ownerUid: auth.currentUser.uid,
+                    ownerName: currentUser.name,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                
+                log('✅ User registriert', 'success');
+                
+                // 2. Get local entries
+                const stored = localStorage.getItem('abuEbaPortfolio');
+                if (!stored) {
+                    updateSection('syncStatus', '⚠️ Keine lokalen Daten zum Hochladen', 'warning');
+                    return;
+                }
+                
+                const allEntries = JSON.parse(stored);
+                const userEntries = allEntries.filter(e => e.userCode === currentUser.code);
+                
+                log(`📤 Lade ${userEntries.length} Einträge hoch...`, 'info');
+                
+                // 3. Upload entries
+                let uploaded = 0;
+                for (const entry of userEntries) {
+                    if (entry.firebaseId) {
+                        log(`⏭️ Überspringe "${entry.theme}" (bereits synchronisiert)`, 'info');
+                        continue;
+                    }
+                    
+                    const docRef = await userDocRef.collection('portfolioEntries').add({
+                        ...entry,
+                        userCode: currentUser.code,
+                        userName: currentUser.name,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    
+                    entry.firebaseId = docRef.id;
+                    uploaded++;
+                    log(`✅ Hochgeladen: "${entry.theme}"`, 'success');
+                }
+                
+                // 4. Save updated entries back to localStorage
+                localStorage.setItem('abuEbaPortfolio', JSON.stringify(allEntries));
+                
+                updateSection('syncStatus', 
+                    `✅ Synchronisation abgeschlossen!<br>${uploaded} Einträge hochgeladen`, 
+                    'success'
+                );
+                log(`✅ ${uploaded} Einträge erfolgreich hochgeladen`, 'success');
+                
+                // Refresh displays
+                await checkLocalStorage();
+                await checkFirebase();
+                
+            } catch (error) {
+                updateSection('syncStatus', `❌ Fehler: ${error.message}`, 'error');
+                log('Upload Fehler: ' + error.message, 'error');
+            }
+        }
+
+        async function forceSyncFromFirebase() {
+            if (!db || !currentUser.code) {
+                log('❌ System nicht bereit', 'error');
+                return;
+            }
+            
+            updateSection('syncStatus', '🔄 Lade von Firebase...', 'info');
+            log('⬇️ Starte Download von Firebase...', 'info');
+            
+            try {
+                const snapshot = await db.collection('userCodes')
+                    .doc(currentUser.code)
+                    .collection('portfolioEntries')
+                    .get();
+                
+                if (snapshot.empty) {
+                    updateSection('syncStatus', '⚠️ Keine Daten in Firebase', 'warning');
+                    log('Keine Firebase Daten', 'warning');
+                    return;
+                }
+                
+                const firebaseEntries = [];
+                snapshot.forEach(doc => {
+                    firebaseEntries.push({ 
+                        firebaseId: doc.id, 
+                        id: doc.id, 
+                        ...doc.data() 
+                    });
+                });
+                
+                // Merge with local
+                const stored = localStorage.getItem('abuEbaPortfolio');
+                const localEntries = stored ? JSON.parse(stored) : [];
+                
+                // Remove old entries for this user
+                const otherEntries = localEntries.filter(e => e.userCode !== currentUser.code);
+                
+                // Combine
+                const combined = [...otherEntries, ...firebaseEntries];
+                localStorage.setItem('abuEbaPortfolio', JSON.stringify(combined));
+                
+                updateSection('syncStatus', 
+                    `✅ ${firebaseEntries.length} Einträge von Firebase geladen`, 
+                    'success'
+                );
+                log(`✅ ${firebaseEntries.length} Einträge heruntergeladen`, 'success');
+                
+                await checkLocalStorage();
+                
+            } catch (error) {
+                updateSection('syncStatus', `❌ Fehler: ${error.message}`, 'error');
+                log('Download Fehler: ' + error.message, 'error');
+            }
+        }
+
+        function clearLocalStorage() {
+            if (!confirm('WARNUNG: Alle lokalen Daten werden gelöscht! Bist du sicher?')) {
+                return;
+            }
+            
+            localStorage.removeItem('abuEbaPortfolio');
+            updateSection('localStatus', '🗑️ localStorage gelöscht', 'warning');
+            document.getElementById('localData').textContent = 'Leer';
+            log('localStorage gelöscht', 'warning');
+        }
+
+        // Auto-start
+        window.addEventListener('DOMContentLoaded', () => {
+            log('🚀 Diagnose-Tool gestartet', 'info');
+            updateSection('systemStatus', 'Klicke auf "System überprüfen" um zu starten', 'info');
+        });
+    </script>
+</body>
+</html>
