@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Test + Löschen - ABU EBA Digital</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .warning { background: #fff3cd; color: #856404; }
+        button {
+            background: #0066CC;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0052a3; }
+        button.danger { background: #d93025; }
+        button.danger:hover { background: #b31f17; }
+        input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
+            margin: 5px;
+        }
+        .entry-list {
+            margin-top: 20px;
+        }
+        .entry-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Firebase Test + Löschen-Funktion</h1>
+    
+    <div class="test-box">
+        <h2>Status</h2>
+        <div id="status" class="status info">Initialisierung...</div>
+    </div>
+
+    <div class="test-box">
+        <h2>Setup Tests</h2>
+        <button onclick="testFirebaseInit()">1. Firebase initialisieren</button>
+        <button onclick="testAuth()">2. Anonyme Anmeldung</button>
+    </div>
+
+    <div class="test-box">
+        <h2>Test-Eintrag erstellen & löschen</h2>
+        <input type="text" id="testCode" placeholder="Test-Code (optional)" />
+        <button onclick="createTestEntry()">✅ Test-Eintrag erstellen</button>
+        <div id="testEntryInfo" style="margin-top: 10px;"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>Meine Test-Einträge</h2>
+        <button onclick="loadMyEntries()">🔄 Meine Einträge laden</button>
+        <div id="entryList" class="entry-list"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>Ergebnisse</h2>
+        <div id="results"></div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDPWkwiCptXi_Ky-yUgrvxrtpRzH1HGd_0",
+            authDomain: "abu-edu-2030.firebaseapp.com",
+            projectId: "abu-edu-2030",
+            storageBucket: "abu-edu-2030.firebasestorage.app",
+            messagingSenderId: "895317724223",
+            appId: "1:895317724223:web:de551267b1431bea947c8a"
+        };
+
+        let db = null;
+        let auth = null;
+        let currentUserCode = null;
+        let myEntries = [];
+
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.textContent = message;
+            results.appendChild(div);
+            console.log(message);
+        }
+
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+
+        async function testFirebaseInit() {
+            try {
+                log('🔄 Initialisiere Firebase...', 'info');
+                
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                
+                db = firebase.firestore();
+                auth = firebase.auth();
+                
+                log('✅ Firebase erfolgreich initialisiert!', 'success');
+                updateStatus('Firebase verbunden', 'success');
+                return true;
+            } catch (error) {
+                log('❌ Firebase Initialisierung fehlgeschlagen: ' + error.message, 'error');
+                updateStatus('Firebase Fehler', 'error');
+                return false;
+            }
+        }
+
+        async function testAuth() {
+            try {
+                if (!auth) {
+                    log('❌ Firebase Auth nicht initialisiert. Führe zuerst Test 1 aus.', 'error');
+                    return;
+                }
+
+                log('🔄 Melde anonym an...', 'info');
+                await auth.signInAnonymously();
+                
+                log('✅ Anonyme Anmeldung erfolgreich! UID: ' + auth.currentUser.uid, 'success');
+                updateStatus('Angemeldet als: ' + auth.currentUser.uid.substring(0, 8) + '...', 'success');
+                return true;
+            } catch (error) {
+                log('❌ Auth Fehler: ' + error.message, 'error');
+                return false;
+            }
+        }
+
+        async function createTestEntry() {
+            try {
+                if (!db || !auth || !auth.currentUser) {
+                    log('❌ Führe zuerst Tests 1 und 2 aus.', 'error');
+                    return;
+                }
+
+                const inputCode = document.getElementById('testCode').value.trim();
+                const testCode = inputCode || 'TEST' + Math.random().toString(36).substring(2, 6).toUpperCase();
+                currentUserCode = testCode;
+                
+                log('🔄 Erstelle Test-Eintrag mit Code: ' + testCode, 'info');
+
+                // Registriere User
+                await db.collection('userCodes').doc(testCode).set({
+                    userCode: testCode,
+                    ownerUid: auth.currentUser.uid,
+                    ownerName: 'Test User',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // Erstelle Eintrag
+                const docRef = await db.collection('userCodes')
+                    .doc(testCode)
+                    .collection('portfolioEntries')
+                    .add({
+                        theme: 'Test-Eintrag ' + new Date().toLocaleTimeString('de-CH'),
+                        reflection: 'Dies ist ein Test-Eintrag zum Testen der Lösch-Funktion.',
+                        module: 'Test',
+                        visibility: 'public',
+                        userCode: testCode,
+                        userName: 'Test User',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        clientCreatedAt: new Date().toISOString(),
+                        reactions: []
+                    });
+
+                log('✅ Test-Eintrag erstellt! ID: ' + docRef.id, 'success');
+                
+                const infoDiv = document.getElementById('testEntryInfo');
+                infoDiv.innerHTML = `
+                    <div class="status success">
+                        ✅ Eintrag erstellt!<br>
+                        📝 Code: <strong>${testCode}</strong><br>
+                        🆔 ID: ${docRef.id}
+                    </div>
+                `;
+
+                // Automatically load entries
+                await loadMyEntries();
+                
+                return true;
+            } catch (error) {
+                log('❌ Fehler beim Erstellen: ' + error.message, 'error');
+                return false;
+            }
+        }
+
+        async function loadMyEntries() {
+            try {
+                if (!db || !auth || !auth.currentUser) {
+                    log('❌ Nicht angemeldet. Führe zuerst Tests 1 und 2 aus.', 'error');
+                    return;
+                }
+
+                log('🔄 Lade Einträge...', 'info');
+
+                // Get all userCodes where ownerUid matches current user
+                const userCodesSnapshot = await db.collection('userCodes')
+                    .where('ownerUid', '==', auth.currentUser.uid)
+                    .get();
+
+                myEntries = [];
+                
+                for (const userDoc of userCodesSnapshot.docs) {
+                    const userCode = userDoc.id;
+                    const entriesSnapshot = await db.collection('userCodes')
+                        .doc(userCode)
+                        .collection('portfolioEntries')
+                        .get();
+                    
+                    entriesSnapshot.forEach(doc => {
+                        myEntries.push({
+                            id: doc.id,
+                            userCode: userCode,
+                            ...doc.data()
+                        });
+                    });
+                }
+
+                log(`✅ ${myEntries.length} Einträge gefunden`, 'success');
+                renderEntries();
+
+            } catch (error) {
+                log('❌ Fehler beim Laden: ' + error.message, 'error');
+            }
+        }
+
+        function renderEntries() {
+            const listDiv = document.getElementById('entryList');
+            
+            if (myEntries.length === 0) {
+                listDiv.innerHTML = '<div class="status info">Keine Einträge gefunden</div>';
+                return;
+            }
+
+            listDiv.innerHTML = myEntries.map(entry => `
+                <div class="entry-item">
+                    <div>
+                        <strong>${entry.theme || 'Ohne Titel'}</strong><br>
+                        <small>Code: ${entry.userCode} | ID: ${entry.id.substring(0, 8)}...</small>
+                    </div>
+                    <button class="danger" onclick="deleteEntry('${entry.userCode}', '${entry.id}')">
+                        🗑️ Löschen
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        async function deleteEntry(userCode, entryId) {
+            try {
+                if (!confirm('Eintrag wirklich löschen?')) return;
+
+                log(`🔄 Lösche Eintrag ${entryId}...`, 'info');
+
+                await db.collection('userCodes')
+                    .doc(userCode)
+                    .collection('portfolioEntries')
+                    .doc(entryId)
+                    .delete();
+
+                log('✅ Eintrag erfolgreich gelöscht!', 'success');
+                
+                // Reload entries
+                await loadMyEntries();
+
+            } catch (error) {
+                log('❌ Fehler beim Löschen: ' + error.message, 'error');
+                log('💡 Fehlercode: ' + error.code, 'warning');
+                
+                if (error.code === 'permission-denied') {
+                    log('🔒 Berechtigungsfehler! Mögliche Ursachen:', 'warning');
+                    log('  1. Firestore Rules nicht deployed', 'info');
+                    log('  2. ownerUid stimmt nicht mit auth.currentUser.uid überein', 'info');
+                    log('  3. userCodes Dokument existiert nicht', 'info');
+                }
+            }
+        }
+
+        // Make deleteEntry available globally
+        window.deleteEntry = deleteEntry;
+
+        // Auto-start
+        window.addEventListener('DOMContentLoaded', () => {
+            updateStatus('Bereit für Tests', 'info');
+            log('📋 Führe Tests 1 und 2 aus, dann kannst du Einträge erstellen und löschen.', 'info');
+        });
+    </script>
+</body>
+</html>
