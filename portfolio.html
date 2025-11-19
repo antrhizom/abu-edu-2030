@@ -12,7 +12,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script type="module" src="config/firebase-config.js"></script>
 
     <style>
         :root {
@@ -531,7 +530,7 @@
     </div>
 
     <script>
-        const firebaseConfig = window.firebaseConfig || {
+        const firebaseConfig = {
             apiKey: "AIzaSyDPWkwiCptXi_Ky-yUgrvxrtpRzH1HGd_0",
             authDomain: "abu-edu-2030.firebaseapp.com",
             projectId: "abu-edu-2030",
@@ -785,7 +784,10 @@
                     console.warn('Konnte Auth-Status nicht ermitteln.', stateError);
                 }
             }
+            
+            // Check if we already have a user
             if (!auth.currentUser) {
+                // Try to restore existing session or create new one
                 if (!authInitializationPromise) {
                     authInitializationPromise = auth.signInAnonymously()
                         .catch(error => {
@@ -795,8 +797,19 @@
                 }
                 await authInitializationPromise;
             }
+            
             if (!auth.currentUser) {
                 throw new Error('Anonyme Firebase-Anmeldung fehlgeschlagen.');
+            }
+            
+            // Store the UID for this user code
+            const storedUid = localStorage.getItem(`firebaseUid_${currentUser.code}`);
+            if (storedUid && storedUid !== auth.currentUser.uid) {
+                console.warn('UID mismatch detected! This may cause permission issues.');
+                console.warn('Stored UID:', storedUid);
+                console.warn('Current UID:', auth.currentUser.uid);
+            } else {
+                localStorage.setItem(`firebaseUid_${currentUser.code}`, auth.currentUser.uid);
             }
             
             await registerPortfolioOwner();
@@ -811,6 +824,10 @@
                     }
                     db = firebase.firestore();
                     auth = firebase.auth();
+                    
+                    // CRITICAL: Enable auth persistence so UID doesn't change on reload
+                    await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+                    
                     if (!authStatePromise) {
                         authStatePromise = new Promise((resolve) => {
                             const unsubscribe = auth.onAuthStateChanged(() => {
