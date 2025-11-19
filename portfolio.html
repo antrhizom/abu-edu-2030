@@ -369,7 +369,7 @@
     <main>
         <div class="page-heading">
             <h1>📁 Mein Portfolio</h1>
-            <p>Erstelle Einträge, sichere sie automatisch in Firebase und lade sie bei Bedarf als Datei herunter, um sie mit Lehrpersonen oder Berufsbildner:innen zu besprechen.</p>
+            <p>Erstelle Einträge, sichere sie automatisch in Firebase. Nur du als Besitzer kannst Einträge herunterladen.</p>
         </div>
 
         <div class="grid">
@@ -420,7 +420,7 @@
         <section>
             <div class="page-heading" style="margin-bottom: 1rem;">
                 <h2 style="font-size: 1.6rem;">📚 Meine Einträge</h2>
-                <p style="color: var(--ktzh-gray);">Alle Einträge werden lokal gespeichert und können in Firestore gesichert werden.</p>
+                <p style="color: var(--ktzh-gray);">Alle Einträge werden in Firestore gesichert. Nur du kannst sie herunterladen.</p>
             </div>
             <div id="portfolioList" class="portfolio-list"></div>
         </section>
@@ -442,8 +442,7 @@
         let auth = null;
         let authInitializationPromise = null;
         let authStatePromise = null;
-        let authLinkWarningShown = false;
-        const currentUser = { code: '', name: '' };
+        const currentUser = { code: '', name: '', uid: '' };
         let entries = [];
         let firebaseUnsubscribe = null;
         let firebaseCollectionCache = null;
@@ -595,8 +594,8 @@
                           </div>
                           ${renderFeedbackSection(entry.reactions)}
                           <div class="entry-actions">
-                              <button type="button" class="secondary" onclick="downloadEntry('${stamp}')">⬇️ Eintrag herunterladen</button>
-                              <button class="danger delete-entry-btn" data-stamp="${stamp}">🗑️ Eintrag löschen</button>
+                              <button type="button" class="secondary" onclick="downloadEntry('${stamp}')">⬇️ Download (nur ich)</button>
+                              <button class="danger delete-entry-btn" data-stamp="${stamp}">🗑️ Löschen</button>
                           </div>
                       `;
                     const deleteButton = div.querySelector('.delete-entry-btn');
@@ -678,6 +677,27 @@
             return firebaseCollectionCache.ref;
         }
 
+        async function registerPortfolioOwner() {
+            if (!auth.currentUser) return;
+            
+            const userDocRef = db.collection('userCodes').doc(currentUser.code);
+            
+            try {
+                await userDocRef.set({
+                    userCode: currentUser.code,
+                    ownerUid: auth.currentUser.uid,
+                    ownerName: currentUser.name,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                
+                currentUser.uid = auth.currentUser.uid;
+                console.log('Portfolio owner registered successfully');
+            } catch (error) {
+                console.error('Error registering portfolio owner:', error);
+            }
+        }
+
         async function ensureAuthSession() {
             if (!auth) {
                 throw new Error('Firebase Auth wurde nicht initialisiert.');
@@ -702,11 +722,8 @@
             if (!auth.currentUser) {
                 throw new Error('Anonyme Firebase-Anmeldung fehlgeschlagen.');
             }
-            const normalizedCode = normalizeUserCode(currentUser.code);
-            if (!normalizedCode && !authLinkWarningShown) {
-                console.warn('Kein Benutzer-Code zum Synchronisieren vorhanden.');
-                authLinkWarningShown = true;
-            }
+            
+            await registerPortfolioOwner();
             return true;
         }
 
@@ -950,6 +967,16 @@
             lines.push('');
             lines.push('Reflexion:');
             lines.push(entry.reflection || '');
+            
+            if (entry.reactions && entry.reactions.length > 0) {
+                lines.push('');
+                lines.push('---');
+                lines.push(`Rückmeldungen (${entry.reactions.length}):`);
+                entry.reactions.forEach(r => {
+                    lines.push(`${r.emoji} ${r.meaning} - von ${r.from}`);
+                });
+            }
+            
             const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
