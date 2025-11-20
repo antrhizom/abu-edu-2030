@@ -1523,27 +1523,175 @@
                 if (userDoc.exists()) {
                     const data = userDoc.data();
                     const schluessel = data.kompetenzen?.schluessel || {};
+                    const portfolio = data.portfolio || [];
                     
+                    // Sammle die Performanz-Daten (was wurde gemacht)
+                    const performanzData = collectPerformanceData(currentKompetenz);
+                    
+                    // Markiere Kompetenz als geübt
                     schluessel[currentKompetenz] = {
                         completed: true,
                         reflexion: selectedEmojis.join(''),
                         timestamp: new Date().toISOString()
                     };
                     
+                    // Erstelle Portfolio-Eintrag
+                    const komp = kompetenzen.find(k => k.id === currentKompetenz);
+                    const portfolioEntry = {
+                        id: 'sk_' + currentKompetenz + '_' + Date.now(),
+                        type: 'schluesselkompetenz',
+                        kompetenzId: currentKompetenz,
+                        kompetenzTitle: komp.title,
+                        thema: komp.thema,
+                        performanz: performanzData,
+                        reflexion: selectedEmojis.join(''),
+                        createdAt: new Date().toISOString(),
+                        shareable: true
+                    };
+                    
+                    portfolio.push(portfolioEntry);
+                    
                     await updateDoc(userRef, {
-                        'kompetenzen.schluessel': schluessel
+                        'kompetenzen.schluessel': schluessel,
+                        'portfolio': portfolio
                     });
                     
                     updateCardStatus(currentKompetenz);
                     await loadProgress();
                     closeModal();
                     
-                    alert('✅ Gespeichert!\n\nKompetenz als geübt markiert mit Reflexion: ' + selectedEmojis.join(' '));
+                    alert('✅ Gespeichert!\n\n✓ Kompetenz als geübt markiert\n✓ Ins Portfolio aufgenommen\n✓ Reflexion: ' + selectedEmojis.join(' '));
                 }
             } catch (error) {
                 console.error('Fehler beim Speichern:', error);
                 alert('Fehler beim Speichern. Versuche es nochmal.');
             }
+        }
+        
+        // Sammle die Performanz-Daten je nach Übung
+        function collectPerformanceData(kompetenzId) {
+            const data = {
+                kompetenzId: kompetenzId,
+                uebungstyp: getUebungstyp(kompetenzId)
+            };
+            
+            // Je nach Kompetenz unterschiedliche Daten sammeln
+            switch(kompetenzId) {
+                case '3.2.1': // Checklist
+                    const checks321 = document.querySelectorAll('.activity-check');
+                    data.checklist = {
+                        total: checks321.length,
+                        completed: Array.from(checks321).filter(c => c.checked).length,
+                        items: Array.from(checks321).map(c => c.checked)
+                    };
+                    break;
+                    
+                case '3.2.2': // E-Mail Kriterien
+                    const checks322 = document.querySelectorAll('.criteria-check');
+                    data.kriterien = {
+                        total: checks322.length,
+                        erfuellt: Array.from(checks322).filter(c => c.checked).length,
+                        liste: ['höflich', 'klar', 'verständlich', 'vollständig'].filter((_, i) => checks322[i]?.checked)
+                    };
+                    break;
+                    
+                case '3.2.3': // Rollenverteilung
+                    const roles = document.querySelectorAll('.role-select');
+                    data.rollen = {
+                        person1: roles[0]?.value || '',
+                        person2: roles[1]?.value || '',
+                        person3: roles[2]?.value || ''
+                    };
+                    break;
+                    
+                case '3.2.4': // Lehrvertrag
+                    const checks324 = document.querySelectorAll('.activity-check');
+                    data.pruefpunkte = {
+                        total: checks324.length,
+                        markiert: Array.from(checks324).filter(c => c.checked).length
+                    };
+                    break;
+                    
+                case '3.2.5': // Problemlösung
+                    const orders = document.querySelectorAll('.order-input');
+                    data.reihenfolge = Array.from(orders).map(o => parseInt(o.value) || 0);
+                    break;
+                    
+                case '3.2.6': // Kommunikation
+                    const checks326 = document.querySelectorAll('.activity-check');
+                    data.elemente = {
+                        total: checks326.length,
+                        ausgewaehlt: Array.from(checks326).filter(c => c.checked).length
+                    };
+                    break;
+                    
+                case '3.2.7': // Digital
+                    const calendar = document.querySelectorAll('.calendar-input');
+                    data.wochenplan = {
+                        montag: calendar[0]?.value || '',
+                        dienstag: calendar[1]?.value || '',
+                        mittwoch: calendar[2]?.value || ''
+                    };
+                    break;
+                    
+                case '3.2.8': // Lernen lernen
+                    const checks328 = document.querySelectorAll('.activity-check');
+                    data.strategien = {
+                        total: checks328.length,
+                        ausgewaehlt: Array.from(checks328).filter(c => c.checked).length
+                    };
+                    break;
+                    
+                case '3.2.9': // Anpassung
+                    const sliders329 = document.querySelectorAll('.rating-slider');
+                    data.bewertungen = Array.from(sliders329).map(s => parseInt(s.value));
+                    break;
+                    
+                case '3.2.10': // Verantwortung
+                    const quiz = document.querySelectorAll('.quiz-check');
+                    data.quiz = {
+                        total: quiz.length,
+                        antworten: Array.from(quiz).map(q => q.checked)
+                    };
+                    break;
+                    
+                case '3.2.11': // Kreativ
+                    const checks3211 = document.querySelectorAll('.activity-check');
+                    data.elemente = {
+                        total: checks3211.length,
+                        ausgewaehlt: Array.from(checks3211).filter(c => c.checked).length
+                    };
+                    break;
+                    
+                case '3.2.12': // Reflexion
+                    const sliders3212 = document.querySelectorAll('.rating-slider');
+                    const improve = document.querySelector('.improve-select');
+                    data.reflexion = {
+                        bewertungen: Array.from(sliders3212).map(s => parseInt(s.value)),
+                        verbesserung: improve?.value || ''
+                    };
+                    break;
+            }
+            
+            return data;
+        }
+        
+        function getUebungstyp(kompetenzId) {
+            const typen = {
+                '3.2.1': 'Schulmail-Checklist',
+                '3.2.2': 'E-Mail Kriterien-Check',
+                '3.2.3': 'Rollenverteilung',
+                '3.2.4': 'Lehrvertrag prüfen',
+                '3.2.5': 'Problemlösungs-Reihenfolge',
+                '3.2.6': 'Kommunikations-Elemente',
+                '3.2.7': 'Wochenplan erstellen',
+                '3.2.8': 'Lernstrategien wählen',
+                '3.2.9': 'Anpassungsfähigkeit bewerten',
+                '3.2.10': 'Pflichten-Quiz',
+                '3.2.11': 'Deckblatt-Elemente',
+                '3.2.12': 'Erste Woche Reflexion'
+            };
+            return typen[kompetenzId] || 'Übung';
         }
     </script>
 </body>
