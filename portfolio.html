@@ -4,30 +4,213 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mein Portfolio - SLP ABU 2030</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'ant-primary': '#8B4513',
-                        'ant-secondary': '#D2691E',
-                        'ant-accent': '#FF6B35',
-                        'ant-success': '#4CAF50',
-                        'ant-network': '#2196F3',
-                        'ant-bg': '#FFF8F0',
-                    }
-                }
-            }
-        }
-    </script>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             background: linear-gradient(135deg, #FFF8F0 0%, #FFE4D0 100%);
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        
+        @media (min-width: 768px) {
+            body {
+                padding: 2rem;
+            }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .header {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+            .header {
+                padding: 2rem;
+            }
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .back-btn {
+            font-size: 2rem;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+        
+        .back-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .header-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (min-width: 768px) {
+            .header-title {
+                font-size: 2.5rem;
+            }
+        }
+        
+        .header-subtitle {
+            color: #6B7280;
+        }
+        
+        .header-icon {
+            font-size: 4rem;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #8B4513;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+        
+        /* Filter Bar */
+        .filter-bar {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .filter-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            background: #E5E7EB;
+            color: #374151;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .filter-btn:hover {
+            background: #D1D5DB;
+        }
+        
+        .filter-btn.active {
+            background: #8B4513;
+            color: white;
+        }
+        
+        .sort-select {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            background: #E5E7EB;
+            color: #374151;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+        
+        .sort-select:focus {
+            border-color: #8B4513;
+            outline: none;
+        }
+        
+        /* Portfolio Grid */
+        .portfolio-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
         
         .portfolio-item {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
         
@@ -35,66 +218,398 @@
             transform: translateY(-4px);
             box-shadow: 0 8px 24px rgba(139, 69, 19, 0.2);
         }
+        
+        .portfolio-card-content {
+            padding: 1.5rem;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+        
+        .card-icon {
+            font-size: 2.5rem;
+        }
+        
+        .card-date {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            background: rgba(139, 69, 19, 0.1);
+            color: #8B4513;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+        
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-uebung {
+            font-size: 0.875rem;
+            color: #6B7280;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-thema {
+            font-size: 0.75rem;
+            color: #9CA3AF;
+            margin-bottom: 0.75rem;
+        }
+        
+        .card-reflexion {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .card-reflexion-label {
+            font-size: 0.75rem;
+            color: #9CA3AF;
+        }
+        
+        .card-reflexion-emoji {
+            font-size: 1.25rem;
+        }
+        
+        .card-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-details {
+            background: rgba(139, 69, 19, 0.1);
+            color: #8B4513;
+        }
+        
+        .btn-details:hover {
+            background: rgba(139, 69, 19, 0.2);
+        }
+        
+        .btn-share {
+            background: rgba(33, 150, 243, 0.1);
+            color: #2196F3;
+            flex: 0;
+            white-space: nowrap;
+        }
+        
+        .btn-share:hover {
+            background: rgba(33, 150, 243, 0.2);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            padding: 3rem;
+            text-align: center;
+            display: none;
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-text {
+            color: #6B7280;
+            margin-bottom: 1.5rem;
+        }
+        
+        .empty-link {
+            display: inline-block;
+            background: #FF6B35;
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        
+        .empty-link:hover {
+            background: #D2691E;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #8B4513;
+        }
+        
+        .close-btn {
+            font-size: 2rem;
+            color: #9CA3AF;
+            background: none;
+            border: none;
+            cursor: pointer;
+            line-height: 1;
+            transition: all 0.2s;
+        }
+        
+        .close-btn:hover {
+            color: #6B7280;
+            transform: scale(1.1);
+        }
+        
+        .modal-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-subtitle {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal-text {
+            font-size: 0.875rem;
+            color: #6B7280;
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal-date {
+            font-size: 0.75rem;
+            color: #9CA3AF;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 0.75rem;
+        }
+        
+        .section-box {
+            background: #FFF8F0;
+            border-radius: 12px;
+            padding: 1rem;
+        }
+        
+        .section-box-title {
+            font-weight: 600;
+            color: #8B4513;
+            margin-bottom: 0.5rem;
+        }
+        
+        .section-box-text {
+            font-size: 0.875rem;
+            color: #374151;
+            margin-bottom: 0.25rem;
+        }
+        
+        .section-box-small {
+            font-size: 0.75rem;
+            color: #6B7280;
+            margin-left: 1rem;
+        }
+        
+        .reflexion-emoji {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .reflexion-text {
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+        
+        .no-reflexion {
+            color: #9CA3AF;
+            font-style: italic;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .btn-primary {
+            flex: 1;
+            background: #FF6B35;
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary:hover {
+            background: #D2691E;
+        }
+        
+        .btn-secondary {
+            background: #2196F3;
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(33, 150, 243, 0.8);
+        }
+        
+        /* Footer */
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 9999px;
+            padding: 0.75rem 1.5rem;
+            display: inline-block;
+        }
+        
+        .footer-text {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+        
+        .footer-icon {
+            font-size: 1.125rem;
+        }
     </style>
 </head>
-<body class="min-h-screen p-4 md:p-8">
+<body>
     
-    <div class="max-w-6xl mx-auto">
+    <div class="container">
         
         <!-- Header -->
-        <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8 mb-8">
-            <div class="flex items-center justify-between flex-wrap gap-4">
-                <div class="flex items-center gap-4">
-                    <a href="dashboard.html" class="text-3xl hover:scale-110 transition-transform">←</a>
+        <div class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <a href="dashboard.html" class="back-btn">←</a>
                     <div>
-                        <h1 class="text-3xl md:text-4xl font-bold text-ant-primary mb-2">
+                        <h1 class="header-title">
                             Mein Portfolio
                         </h1>
-                        <p class="text-gray-600" id="portfolioSubtitle">
+                        <p class="header-subtitle" id="portfolioSubtitle">
                             Deine dokumentierten Arbeiten und Reflexionen
                         </p>
                     </div>
                 </div>
-                <div class="text-6xl">📁</div>
+                <div class="header-icon">📁</div>
             </div>
         </div>
         
         <!-- Statistik Cards -->
-        <div class="grid md:grid-cols-4 gap-4 mb-8">
-            <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
-                <div class="text-3xl mb-2">📝</div>
-                <div class="text-2xl font-bold text-ant-primary" id="totalWorks">0</div>
-                <div class="text-sm text-gray-600">Arbeiten</div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📝</div>
+                <div class="stat-value" id="totalWorks">0</div>
+                <div class="stat-label">Arbeiten</div>
             </div>
-            <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
-                <div class="text-3xl mb-2">🔑</div>
-                <div class="text-2xl font-bold text-ant-primary" id="schluesselWorks">0</div>
-                <div class="text-sm text-gray-600">Schlüsselkomp.</div>
+            <div class="stat-card">
+                <div class="stat-icon">🔑</div>
+                <div class="stat-value" id="schluesselWorks">0</div>
+                <div class="stat-label">Schlüsselkomp.</div>
             </div>
-            <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
-                <div class="text-3xl mb-2">💭</div>
-                <div class="text-2xl font-bold text-ant-accent" id="reflexionen">0</div>
-                <div class="text-sm text-gray-600">Reflexionen</div>
+            <div class="stat-card">
+                <div class="stat-icon">💭</div>
+                <div class="stat-value" id="reflexionen">0</div>
+                <div class="stat-label">Reflexionen</div>
             </div>
-            <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
-                <div class="text-3xl mb-2">🔗</div>
-                <div class="text-2xl font-bold text-ant-network" id="shareable">0</div>
-                <div class="text-sm text-gray-600">Teilbar</div>
+            <div class="stat-card">
+                <div class="stat-icon">🔗</div>
+                <div class="stat-value" id="shareable">0</div>
+                <div class="stat-label">Teilbar</div>
             </div>
         </div>
         
         <!-- Filter -->
-        <div class="bg-white rounded-2xl shadow-lg p-4 mb-8">
-            <div class="flex flex-wrap gap-3 items-center justify-between">
-                <div class="flex flex-wrap gap-2">
-                    <button class="filter-btn active px-4 py-2 rounded-full bg-ant-primary text-white text-sm font-semibold" data-filter="alle">
+        <div class="filter-bar">
+            <div class="filter-content">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="alle">
                         Alle
                     </button>
-                    <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 text-sm font-semibold hover:bg-ant-primary hover:text-white transition-all" data-filter="schluesselkompetenz">
+                    <button class="filter-btn" data-filter="schluesselkompetenz">
                         🔑 Schlüsselkompetenzen
                     </button>
                 </div>
-                <select id="sortSelect" class="px-4 py-2 rounded-full bg-gray-200 text-gray-700 text-sm font-semibold border-2 border-transparent focus:border-ant-primary focus:outline-none">
+                <select id="sortSelect" class="sort-select">
                     <option value="newest">Neueste zuerst</option>
                     <option value="oldest">Älteste zuerst</option>
                 </select>
@@ -102,27 +617,27 @@
         </div>
         
         <!-- Portfolio Grid -->
-        <div id="portfolioGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div id="portfolioGrid" class="portfolio-grid">
             <!-- Wird dynamisch gefüllt -->
         </div>
         
         <!-- Empty State -->
-        <div id="emptyState" class="bg-white rounded-3xl shadow-xl p-12 text-center" style="display: none;">
-            <div class="text-6xl mb-4">📂</div>
-            <h3 class="text-2xl font-bold text-ant-primary mb-4">Noch keine Einträge</h3>
-            <p class="text-gray-600 mb-6">
+        <div id="emptyState" class="empty-state">
+            <div class="empty-icon">📂</div>
+            <h3 class="empty-title">Noch keine Einträge</h3>
+            <p class="empty-text">
                 Beginne mit einer Übung und speichere sie ins Portfolio!
             </p>
-            <a href="kompetenzen.html" class="inline-block bg-ant-accent hover:bg-ant-secondary text-white font-bold py-3 px-6 rounded-full transition-all">
+            <a href="kompetenzen.html" class="empty-link">
                 Zu den Übungen →
             </a>
         </div>
         
         <!-- Footer -->
-        <div class="mt-8 text-center">
-            <div class="bg-white/50 backdrop-blur rounded-full px-6 py-3 inline-block">
-                <div class="flex items-center gap-2 text-sm text-gray-600">
-                    <span class="text-lg">🐜✏️👓</span>
+        <div class="footer">
+            <div class="footer-content">
+                <div class="footer-text">
+                    <span class="footer-icon">🐜✏️👓</span>
                     <span>|</span>
                     <span>ant edu</span>
                     <span>|</span>
@@ -133,13 +648,13 @@
     </div>
     
     <!-- Detail Modal -->
-    <div id="detailModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-2xl w-full p-8 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-start mb-6">
-                <h2 id="modalTitle" class="text-2xl font-bold text-ant-primary">Portfolio-Eintrag</h2>
-                <button onclick="closeModal()" class="text-3xl hover:scale-110 transition-transform text-gray-400 hover:text-gray-600">×</button>
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Portfolio-Eintrag</h2>
+                <button onclick="closeModal()" class="close-btn">×</button>
             </div>
-            <div id="modalContent">
+            <div id="modalContentDiv">
                 <!-- Wird dynamisch gefüllt -->
             </div>
         </div>
@@ -269,47 +784,48 @@
             });
             
             const icon = item.type === 'schluesselkompetenz' ? '🔑' : '📝';
-            const color = item.type === 'schluesselkompetenz' ? 'ant-primary' : 'ant-accent';
-            
-            // Übungstyp anzeigen
             const uebungstyp = item.performanz?.uebungstyp || 'Übung';
             
+            const shareButton = item.shareable ? `
+                <button onclick="event.stopPropagation(); shareItem('${item.id}')" class="btn btn-share">
+                    🔗 Teilen
+                </button>
+            ` : '';
+            
+            const reflexionHTML = item.reflexion ? `
+                <div class="card-reflexion">
+                    <span class="card-reflexion-label">Reflexion:</span>
+                    <span class="card-reflexion-emoji">${item.reflexion}</span>
+                </div>
+            ` : '';
+            
             return `
-                <div class="portfolio-item bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer" onclick="showDetail('${item.id}')">
-                    <div class="p-6">
-                        <div class="flex items-start justify-between mb-3">
-                            <span class="text-4xl">${icon}</span>
-                            <span class="text-xs px-2 py-1 bg-${color}/10 text-${color} rounded-full font-semibold">${date}</span>
+                <div class="portfolio-item" onclick="showDetail('${item.id}')">
+                    <div class="portfolio-card-content">
+                        <div class="card-header">
+                            <span class="card-icon">${icon}</span>
+                            <span class="card-date">${date}</span>
                         </div>
                         
-                        <h3 class="text-lg font-bold text-${color} mb-2">
+                        <h3 class="card-title">
                             ${item.kompetenzTitle || 'Kompetenz'}
                         </h3>
                         
-                        <p class="text-sm text-gray-600 mb-2">
+                        <p class="card-uebung">
                             ${uebungstyp}
                         </p>
                         
-                        <p class="text-xs text-gray-500 mb-3">
+                        <p class="card-thema">
                             ${item.thema || ''}
                         </p>
                         
-                        ${item.reflexion ? `
-                            <div class="flex items-center gap-2 mb-3">
-                                <span class="text-xs text-gray-500">Reflexion:</span>
-                                <span class="text-xl">${item.reflexion}</span>
-                            </div>
-                        ` : ''}
+                        ${reflexionHTML}
                         
-                        <div class="flex gap-2 mt-4">
-                            <button onclick="event.stopPropagation(); showDetail('${item.id}')" class="flex-1 text-xs bg-ant-primary/10 hover:bg-ant-primary/20 text-ant-primary font-semibold py-2 px-3 rounded-lg transition-all">
+                        <div class="card-actions">
+                            <button onclick="event.stopPropagation(); showDetail('${item.id}')" class="btn btn-details">
                                 Details
                             </button>
-                            ${item.shareable ? `
-                                <button onclick="event.stopPropagation(); shareItem('${item.id}')" class="text-xs bg-ant-network/10 hover:bg-ant-network/20 text-ant-network font-semibold py-2 px-3 rounded-lg transition-all">
-                                    🔗 Teilen
-                                </button>
-                            ` : ''}
+                            ${shareButton}
                         </div>
                     </div>
                 </div>
@@ -321,7 +837,7 @@
             if (!item) return;
             
             const modal = document.getElementById('detailModal');
-            const modalContent = document.getElementById('modalContent');
+            const modalContent = document.getElementById('modalContentDiv');
             
             const date = new Date(item.createdAt).toLocaleString('de-CH', {
                 day: '2-digit',
@@ -334,51 +850,59 @@
             let performanzHTML = '';
             if (item.performanz) {
                 performanzHTML = `
-                    <div class="mb-6">
-                        <h3 class="text-lg font-bold text-ant-primary mb-3">📊 Durchgeführte Übung</h3>
-                        <div class="bg-ant-bg rounded-xl p-4">
-                            <p class="font-semibold text-ant-primary mb-2">${item.performanz.uebungstyp || 'Übung'}</p>
+                    <div class="section">
+                        <h3 class="section-title">📊 Durchgeführte Übung</h3>
+                        <div class="section-box">
+                            <p class="section-box-title">${item.performanz.uebungstyp || 'Übung'}</p>
                             ${formatPerformanzData(item.performanz)}
                         </div>
                     </div>
                 `;
             }
             
+            const shareButton = item.shareable ? `
+                <button onclick="shareItem('${item.id}')" class="btn-secondary">
+                    🔗 Teilen
+                </button>
+            ` : '';
+            
             modalContent.innerHTML = `
-                <div class="mb-4">
-                    <div class="text-5xl mb-4">${item.type === 'schluesselkompetenz' ? '🔑' : '📝'}</div>
-                    <h3 class="text-xl font-bold text-ant-primary mb-2">${item.kompetenzTitle || 'Kompetenz'}</h3>
-                    <p class="text-sm text-gray-600 mb-2">${item.thema || ''}</p>
-                    <p class="text-xs text-gray-500">Erstellt: ${date}</p>
+                <div style="margin-bottom: 1rem;">
+                    <div class="modal-icon">${item.type === 'schluesselkompetenz' ? '🔑' : '📝'}</div>
+                    <h3 class="modal-subtitle">${item.kompetenzTitle || 'Kompetenz'}</h3>
+                    <p class="modal-text">${item.thema || ''}</p>
+                    <p class="modal-date">Erstellt: ${date}</p>
                 </div>
                 
                 ${performanzHTML}
                 
-                <div class="mb-6">
-                    <h3 class="text-lg font-bold text-ant-primary mb-3">💭 Reflexion</h3>
-                    <div class="bg-ant-bg rounded-xl p-4">
+                <div class="section">
+                    <h3 class="section-title">💭 Reflexion</h3>
+                    <div class="section-box">
                         ${item.reflexion ? `
-                            <div class="text-3xl mb-2">${item.reflexion}</div>
-                            <p class="text-sm text-gray-600">Emoji-Reflexion beim Speichern</p>
+                            <div class="reflexion-emoji">${item.reflexion}</div>
+                            <p class="reflexion-text">Emoji-Reflexion beim Speichern</p>
                         ` : `
-                            <p class="text-gray-500 italic">Keine Reflexion hinzugefügt</p>
+                            <p class="no-reflexion">Keine Reflexion hinzugefügt</p>
                         `}
+                        ${item.textReflexion ? `
+                            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E5E7EB;">
+                                <p class="section-box-title">Zusätzliche Reflexion:</p>
+                                <p class="section-box-text">"${item.textReflexion}"</p>
+                            </div>
+                        ` : ''}
                     </div>
                 </div>
                 
-                <div class="flex gap-3">
-                    <button onclick="addReflexion('${item.id}')" class="flex-1 bg-ant-accent hover:bg-ant-secondary text-white font-bold py-3 px-6 rounded-full transition-all">
+                <div class="modal-actions">
+                    <button onclick="addReflexion('${item.id}')" class="btn-primary">
                         💭 Reflexion hinzufügen
                     </button>
-                    ${item.shareable ? `
-                        <button onclick="shareItem('${item.id}')" class="bg-ant-network hover:bg-ant-network/80 text-white font-bold py-3 px-6 rounded-full transition-all">
-                            🔗 Teilen
-                        </button>
-                    ` : ''}
+                    ${shareButton}
                 </div>
             `;
             
-            modal.classList.remove('hidden');
+            modal.classList.add('show');
         };
         
         function formatPerformanzData(performanz) {
@@ -513,7 +1037,7 @@
         };
         
         window.closeModal = function() {
-            document.getElementById('detailModal').classList.add('hidden');
+            document.getElementById('detailModal').classList.remove('show');
         };
     </script>
 </body>
