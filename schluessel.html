@@ -434,6 +434,7 @@
         .modal-actions {
             display: flex;
             gap: 0.75rem;
+            flex-wrap: wrap;
         }
         
         .btn-save {
@@ -588,6 +589,9 @@
                 <div class="modal-actions">
                     <button id="speichernBtn" class="btn-save">
                         ✅ Als geübt markieren
+                    </button>
+                    <button id="portfolioBtn" class="btn-save" style="background: #2196F3;">
+                        📁 Ins Portfolio speichern
                     </button>
                     <button id="abbrechenBtn" class="btn-cancel">
                         Abbrechen
@@ -777,7 +781,8 @@
                 if (e.target === this) closeModal();
             });
             
-            document.getElementById('speichernBtn').addEventListener('click', saveToPortfolio);
+            document.getElementById('speichernBtn').addEventListener('click', markAsCompleted);
+            document.getElementById('portfolioBtn').addEventListener('click', saveToPortfolio);
             
             document.querySelectorAll('.emoji-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
@@ -1510,6 +1515,44 @@
             }
         }
         
+        // NUR als geübt markieren (ohne Portfolio)
+        async function markAsCompleted() {
+            if (selectedEmojis.length === 0) {
+                alert('Bitte wähle mindestens ein Emoji als Reflexion!');
+                return;
+            }
+            
+            try {
+                const userRef = doc(db, 'users', userId);
+                const userDoc = await getDoc(userRef);
+                
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    const schluessel = data.kompetenzen?.schluessel || {};
+                    
+                    schluessel[currentKompetenz] = {
+                        completed: true,
+                        reflexion: selectedEmojis.join(''),
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    await updateDoc(userRef, {
+                        'kompetenzen.schluessel': schluessel
+                    });
+                    
+                    updateCardStatus(currentKompetenz);
+                    await loadProgress();
+                    closeModal();
+                    
+                    alert('✅ Als geübt markiert!\n\nReflexion: ' + selectedEmojis.join(' '));
+                }
+            } catch (error) {
+                console.error('Fehler:', error);
+                alert('Fehler beim Speichern. Versuche es nochmal.');
+            }
+        }
+        
+        // Ins Portfolio speichern (MIT Performanz-Daten)
         async function saveToPortfolio() {
             if (selectedEmojis.length === 0) {
                 alert('Bitte wähle mindestens ein Emoji als Reflexion!');
@@ -1525,10 +1568,10 @@
                     const schluessel = data.kompetenzen?.schluessel || {};
                     const portfolio = data.portfolio || [];
                     
-                    // Sammle die Performanz-Daten (was wurde gemacht)
+                    // Sammle Performanz-Daten
                     const performanzData = collectPerformanceData(currentKompetenz);
                     
-                    // Markiere Kompetenz als geübt
+                    // Markiere auch als geübt
                     schluessel[currentKompetenz] = {
                         completed: true,
                         reflexion: selectedEmojis.join(''),
@@ -1538,7 +1581,7 @@
                     // Erstelle Portfolio-Eintrag
                     const komp = kompetenzen.find(k => k.id === currentKompetenz);
                     const portfolioEntry = {
-                        id: 'sk_' + currentKompetenz + '_' + Date.now(),
+                        id: 'sk_' + currentKompetenz.replace('.', '_') + '_' + Date.now(),
                         type: 'schluesselkompetenz',
                         kompetenzId: currentKompetenz,
                         kompetenzTitle: komp.title,
@@ -1560,10 +1603,10 @@
                     await loadProgress();
                     closeModal();
                     
-                    alert('✅ Gespeichert!\n\n✓ Kompetenz als geübt markiert\n✓ Ins Portfolio aufgenommen\n✓ Reflexion: ' + selectedEmojis.join(' '));
+                    alert('📁 Ins Portfolio gespeichert!\n\n✓ Kompetenz als geübt markiert\n✓ Performanz dokumentiert\n✓ Reflexion: ' + selectedEmojis.join(' '));
                 }
             } catch (error) {
-                console.error('Fehler beim Speichern:', error);
+                console.error('Fehler:', error);
                 alert('Fehler beim Speichern. Versuche es nochmal.');
             }
         }
