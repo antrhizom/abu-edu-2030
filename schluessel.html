@@ -464,10 +464,29 @@
                     <textarea id="antwortText" class="w-full h-40 p-4 border-2 border-gray-200 rounded-xl resize-none focus:border-ant-primary focus:outline-none" placeholder="Schreibe hier deine Antwort..."></textarea>
                 </div>
                 
+                <!-- Reflexion mit Emojis -->
+                <div class="bg-gradient-to-r from-ant-accent/10 to-ant-success/10 rounded-2xl p-6 mb-6 border-2 border-ant-accent/20">
+                    <h3 class="font-bold text-ant-primary mb-3">💭 Wie war's für dich?</h3>
+                    <p class="text-sm text-gray-600 mb-3">Wähle ein oder mehrere Emojis als Reflexion:</p>
+                    <div class="flex flex-wrap gap-3" id="emojiReflexion">
+                        <button class="emoji-btn text-4xl hover:scale-125 transition-transform" data-emoji="😊" title="Hat Spaß gemacht">😊</button>
+                        <button class="emoji-btn text-4xl hover:scale-125 transition-transform" data-emoji="💪" title="War anstrengend">💪</button>
+                        <button class="emoji-btn text-4xl hover:scale-125 transition-transform" data-emoji="🤔" title="Musste nachdenken">🤔</button>
+                        <button class="emoji-btn text-4xl hover:scale-125 transition-transform" data-emoji="❓" title="War unklar">❓</button>
+                        <button class="emoji-btn text-4xl hover:scale-125 transition-transform" data-emoji="🔥" title="War super">🔥</button>
+                        <button class="emoji-btn text-4xl hover:scale-125 transition-transform" data-emoji="😅" title="War schwierig">😅</button>
+                        <button class="emoji-btn text-4xl hover:scale-125 transition-transform" data-emoji="💡" title="Hatte eine Idee">💡</button>
+                        <button class="emoji-btn text-4xl hover:scale-125 transition-transform" data-emoji="✅" title="Gut gelaufen">✅</button>
+                    </div>
+                    <div id="selectedEmojis" class="mt-4 p-3 bg-white rounded-lg min-h-[50px] flex flex-wrap gap-2 items-center">
+                        <span class="text-sm text-gray-400" id="emojiPlaceholder">Klicke auf Emojis...</span>
+                    </div>
+                </div>
+                
                 <!-- Aktionen -->
                 <div class="flex gap-3">
-                    <button id="kompetenzAbschliessenBtn" class="flex-1 bg-ant-success hover:bg-ant-success/90 text-white font-bold py-4 px-6 rounded-xl transition-all">
-                        ✅ Als geübt markieren
+                    <button id="speichernBtn" class="flex-1 bg-ant-success hover:bg-ant-success/90 text-white font-bold py-4 px-6 rounded-xl transition-all">
+                        💾 Speichern & als geübt markieren
                     </button>
                     <button id="abbrechenBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-4 px-6 rounded-xl transition-all">
                         Abbrechen
@@ -603,7 +622,24 @@
             // Modal Event Listeners
             document.getElementById('closeModal').addEventListener('click', closeModal);
             document.getElementById('abbrechenBtn').addEventListener('click', closeModal);
-            document.getElementById('kompetenzAbschliessenBtn').addEventListener('click', markAsCompleted);
+            document.getElementById('speichernBtn').addEventListener('click', saveToPortfolio);
+            
+            // Emoji-Reflexion Event Listeners
+            let selectedEmojis = [];
+            document.querySelectorAll('.emoji-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const emoji = this.getAttribute('data-emoji');
+                    
+                    if (selectedEmojis.includes(emoji)) {
+                        selectedEmojis = selectedEmojis.filter(e => e !== emoji);
+                    } else {
+                        selectedEmojis.push(emoji);
+                    }
+                    
+                    updateSelectedEmojis();
+                });
+            });
             
             // Klick außerhalb Modal schließt es
             document.getElementById('uebungModal').addEventListener('click', function(e) {
@@ -659,7 +695,26 @@
             `;
             document.getElementById('antwortText').value = '';
             
+            // Reset Emojis
+            selectedEmojis = [];
+            updateSelectedEmojis();
+            
             document.getElementById('uebungModal').classList.add('show');
+        }
+        
+        function updateSelectedEmojis() {
+            const container = document.getElementById('selectedEmojis');
+            const placeholder = document.getElementById('emojiPlaceholder');
+            
+            if (selectedEmojis.length === 0) {
+                placeholder.style.display = 'block';
+                container.innerHTML = '<span class="text-sm text-gray-400" id="emojiPlaceholder">Klicke auf Emojis...</span>';
+            } else {
+                placeholder.style.display = 'none';
+                container.innerHTML = selectedEmojis.map(emoji => 
+                    `<span class="text-3xl">${emoji}</span>`
+                ).join('');
+            }
         }
         
         function closeModal() {
@@ -667,11 +722,16 @@
             currentKompetenz = null;
         }
         
-        async function markAsCompleted() {
+        async function saveToPortfolio() {
             const antwort = document.getElementById('antwortText').value.trim();
             
             if (!antwort) {
                 alert('Bitte schreibe zuerst eine Antwort!');
+                return;
+            }
+            
+            if (selectedEmojis.length === 0) {
+                alert('Bitte wähle mindestens ein Emoji als Reflexion!');
                 return;
             }
             
@@ -682,12 +742,29 @@
                 if (userDoc.exists()) {
                     const data = userDoc.data();
                     const schluessel = data.kompetenzen?.schluessel || {};
+                    const portfolio = data.portfolio || [];
                     
                     // Markiere Kompetenz als geübt
                     schluessel[currentKompetenz] = true;
                     
+                    // Erstelle Portfolio-Eintrag
+                    const portfolioEntry = {
+                        id: 'kompetenz_' + Date.now(),
+                        type: 'kompetenz',
+                        kategorie: 'schluessel',
+                        kompetenzId: currentKompetenz,
+                        title: kompetenzData[currentKompetenz].title,
+                        antwort: antwort,
+                        reflexion: selectedEmojis.join(''),
+                        createdAt: new Date().toISOString(),
+                        shareable: false  // Kompetenz-Einträge sind NICHT teilbar
+                    };
+                    
+                    portfolio.push(portfolioEntry);
+                    
                     await updateDoc(userRef, {
-                        'kompetenzen.schluessel': schluessel
+                        'kompetenzen.schluessel': schluessel,
+                        'portfolio': portfolio
                     });
                     
                     // Update UI
@@ -696,7 +773,7 @@
                     
                     closeModal();
                     
-                    alert('✅ Gespeichert! Die Kompetenz wurde als geübt markiert.\n\n💡 Tipp: In Challenges kannst du deine Lösungen ins Portfolio speichern und teilen!');
+                    alert('✅ Gespeichert!\n\n• Kompetenz als geübt markiert\n• Portfolio-Eintrag erstellt mit Reflexion ' + selectedEmojis.join(''));
                 } else {
                     alert('Fehler: User-Daten nicht gefunden.');
                 }
