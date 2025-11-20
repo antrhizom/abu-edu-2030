@@ -139,6 +139,11 @@
             box-shadow: 0 8px 24px rgba(139, 69, 19, 0.2);
             border-color: #FF6B35;
         }
+
+        .aspekt-card.completed {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(76, 175, 80, 0.05));
+            border-color: #4CAF50;
+        }
         
         .aspekt-header-flex {
             display: flex;
@@ -183,6 +188,23 @@
             font-weight: 600;
             display: inline-block;
         }
+
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            background: #F3F4F6;
+            color: #6B7280;
+            margin-left: auto;
+            display: none;
+        }
+        
+        .aspekt-card.completed .status-badge {
+            display: inline-block;
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            font-weight: 600;
+        }
         
         /* Modal */
         .modal {
@@ -211,6 +233,12 @@
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .modal-header {
@@ -518,32 +546,31 @@
             color: #374151;
         }
         
-        /* Portfolio Section */
-        .portfolio-section {
-            background: #F9FAFB;
-            border-radius: 12px;
+        /* Emoji Box - Style übernommen von Schlüsselkompetenzen */
+        .emoji-box {
+            background: linear-gradient(to right, rgba(255, 107, 53, 0.1), rgba(76, 175, 80, 0.1));
+            border-radius: 16px;
             padding: 1.5rem;
-            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid rgba(255, 107, 53, 0.2);
         }
         
-        .portfolio-title {
-            font-size: 1.125rem;
+        .emoji-title {
             font-weight: bold;
             color: #8B4513;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
         }
         
-        .portfolio-prompt {
+        .emoji-subtitle {
             font-size: 0.875rem;
             color: #6B7280;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
         
         .emoji-buttons {
             display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
             flex-wrap: wrap;
+            gap: 0.75rem;
         }
         
         .emoji-btn {
@@ -552,7 +579,6 @@
             border: none;
             cursor: pointer;
             transition: transform 0.2s;
-            padding: 0.25rem;
         }
         
         .emoji-btn:hover {
@@ -569,7 +595,6 @@
             flex-wrap: wrap;
             gap: 0.5rem;
             align-items: center;
-            margin-bottom: 1rem;
         }
         
         .emoji-placeholder {
@@ -580,7 +605,8 @@
         .selected-emoji {
             font-size: 2rem;
         }
-        
+
+        /* Actions - Style übernommen von Schlüsselkompetenzen */
         .modal-actions {
             display: flex;
             gap: 0.75rem;
@@ -599,13 +625,8 @@
             transition: background 0.2s;
         }
         
-        .btn-save:hover:not(:disabled) {
+        .btn-save:hover {
             background: rgba(76, 175, 80, 0.9);
-        }
-        
-        .btn-save:disabled {
-            background: #9CA3AF;
-            cursor: not-allowed;
         }
         
         .btn-cancel {
@@ -717,8 +738,42 @@
                 </div>
             </div>
             
-            <div id="modalContent" class="modal-body">
-                <!-- Wird dynamisch gefüllt -->
+            <div class="modal-body">
+                <div id="modalContent">
+                    <!-- Übungsinhalt hier -->
+                </div>
+
+                <!-- Reflexion mit Emojis - Genau wie bei Schlüsselkompetenzen -->
+                <div class="emoji-box">
+                    <h3 class="emoji-title">💭 Wie war's für dich?</h3>
+                    <p class="emoji-subtitle">Wähle ein oder mehrere Emojis als Reflexion:</p>
+                    <div class="emoji-buttons" id="emojiButtons">
+                        <button class="emoji-btn" data-emoji="😊" title="Hat Spaß gemacht">😊</button>
+                        <button class="emoji-btn" data-emoji="💪" title="War anstrengend">💪</button>
+                        <button class="emoji-btn" data-emoji="🤔" title="Musste nachdenken">🤔</button>
+                        <button class="emoji-btn" data-emoji="❓" title="War unklar">❓</button>
+                        <button class="emoji-btn" data-emoji="🔥" title="War super">🔥</button>
+                        <button class="emoji-btn" data-emoji="😅" title="War schwierig">😅</button>
+                        <button class="emoji-btn" data-emoji="💡" title="Hatte eine Idee">💡</button>
+                        <button class="emoji-btn" data-emoji="✅" title="Gut gelaufen">✅</button>
+                    </div>
+                    <div id="selectedEmojis" class="selected-emojis">
+                        <span class="emoji-placeholder" id="emojiPlaceholder">Klicke auf Emojis...</span>
+                    </div>
+                </div>
+
+                <!-- Aktionen - Genau wie bei Schlüsselkompetenzen -->
+                <div class="modal-actions">
+                    <button id="speichernBtn" class="btn-save">
+                        ✅ Als geübt markieren
+                    </button>
+                    <button id="portfolioBtn" class="btn-save" style="background: #2196F3;">
+                        📁 Ins Portfolio speichern
+                    </button>
+                    <button id="abbrechenBtn" class="btn-cancel">
+                        Abbrechen
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -742,7 +797,6 @@
         let userId = null;
         let currentAspekt = null;
         let selectedEmojis = [];
-        let uebungAbgeschlossen = false;
         
         const aspekte = [
             {
@@ -989,7 +1043,7 @@
             }
         ];
         
-        window.addEventListener('load', function() {
+        window.addEventListener('load', async function() {
             document.getElementById('currentYear').textContent = new Date().getFullYear();
             
             userId = localStorage.getItem('ant_edu_user_id');
@@ -999,18 +1053,21 @@
             }
             
             renderAspekte();
+            await loadProgress();
+            setupEventListeners();
         });
         
         function renderAspekte() {
             const grid = document.getElementById('aspekteGrid');
             grid.innerHTML = aspekte.map(aspekt => `
-                <div class="aspekt-card" onclick="openAspekt('${aspekt.id}')">
+                <div class="aspekt-card" data-aspekt="${aspekt.id}">
                     <div class="aspekt-header-flex">
                         <span class="aspekt-icon">${aspekt.icon}</span>
                         <div style="flex: 1;">
                             <h3 class="aspekt-title">${aspekt.title}</h3>
                             <p class="aspekt-description">${aspekt.description}</p>
                         </div>
+                        <span class="status-badge">✓ Geübt</span>
                     </div>
                     <div style="margin-top: 0.75rem;">
                         <span class="handlungsfelder-count">
@@ -1023,35 +1080,97 @@
                 </div>
             `).join('');
         }
+
+        async function loadProgress() {
+            try {
+                const userDoc = await getDoc(doc(db, 'users', userId));
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    const completedAspekte = data.kompetenzen?.aspekte || {};
+                    
+                    Object.keys(completedAspekte).forEach(aspektId => {
+                        updateCardStatus(aspektId);
+                    });
+                }
+            } catch (error) {
+                console.log('Error loading progress:', error);
+            }
+        }
+
+        function updateCardStatus(aspektId) {
+            const card = document.querySelector(`[data-aspekt="${aspektId}"]`);
+            if (card) {
+                card.classList.add('completed');
+            }
+        }
         
+        function setupEventListeners() {
+            document.querySelectorAll('.aspekt-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const aspektId = this.getAttribute('data-aspekt');
+                    openAspekt(aspektId);
+                });
+            });
+
+            // Modal schließen Listener
+            document.getElementById('aspektModal').addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+
+            document.getElementById('speichernBtn').addEventListener('click', markAsCompleted);
+            document.getElementById('portfolioBtn').addEventListener('click', saveToPortfolio);
+            document.getElementById('abbrechenBtn').addEventListener('click', closeModal);
+
+            // Emoji Listeners direkt hier binden
+            document.querySelectorAll('.emoji-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const emoji = this.getAttribute('data-emoji');
+                    toggleEmoji(emoji);
+                });
+            });
+        }
+
         window.openAspekt = function(aspektId) {
             currentAspekt = aspekte.find(a => a.id === aspektId);
             if (!currentAspekt) return;
             
-            uebungAbgeschlossen = false;
+            // Reset Zustand
             selectedEmojis = [];
+            updateSelectedEmojis();
             
             const modal = document.getElementById('aspektModal');
             document.getElementById('modalIcon').textContent = currentAspekt.icon;
             document.getElementById('modalTitle').textContent = currentAspekt.title;
             document.getElementById('modalSubtitle').textContent = currentAspekt.description;
             
+            // Übungsinhalt generieren
             const content = document.getElementById('modalContent');
             content.innerHTML = generateModalContent(currentAspekt);
             
             modal.classList.add('show');
             
-            // Event Listeners für Übung hinzufügen
+            // Event Listeners für die spezifische Übung hinzufügen
             setupUebungListeners(currentAspekt.uebung.typ);
-            
-            // Event Listeners für Emojis hinzufügen (falls Portfolio-Section vorhanden)
-            setTimeout(() => {
-                const emojiButtons = document.querySelectorAll('.emoji-btn');
-                if (emojiButtons.length > 0) {
-                    setupEmojiListeners();
-                }
-            }, 100);
         };
+
+        function toggleEmoji(emoji) {
+            if (selectedEmojis.includes(emoji)) {
+                selectedEmojis = selectedEmojis.filter(e => e !== emoji);
+            } else {
+                selectedEmojis.push(emoji);
+            }
+            updateSelectedEmojis();
+        }
+
+        function updateSelectedEmojis() {
+            const container = document.getElementById('selectedEmojis');
+            if (selectedEmojis.length === 0) {
+                container.innerHTML = '<span class="emoji-placeholder" id="emojiPlaceholder">Klicke auf Emojis...</span>';
+            } else {
+                container.innerHTML = selectedEmojis.map(e => `<span class="selected-emoji">${e}</span>`).join('');
+            }
+        }
         
         function generateModalContent(aspekt) {
             let html = `
@@ -1068,37 +1187,7 @@
                 </div>
                 
                 ${generateUebungHTML(aspekt.uebung)}
-                
-                <div class="portfolio-section" id="portfolioSection" style="display: none;">
-                    <h3 class="portfolio-title">💭 Wie war's für dich?</h3>
-                    <p class="portfolio-prompt">Wähle ein oder mehrere Emojis als Reflexion:</p>
-                    <div class="emoji-buttons" id="emojiButtons">
-                        <button class="emoji-btn" data-emoji="😊" title="Hat Spaß gemacht">😊</button>
-                        <button class="emoji-btn" data-emoji="💪" title="War anstrengend">💪</button>
-                        <button class="emoji-btn" data-emoji="🤔" title="Musste nachdenken">🤔</button>
-                        <button class="emoji-btn" data-emoji="❓" title="War unklar">❓</button>
-                        <button class="emoji-btn" data-emoji="🔥" title="War super">🔥</button>
-                        <button class="emoji-btn" data-emoji="😅" title="War schwierig">😅</button>
-                        <button class="emoji-btn" data-emoji="💡" title="Hatte eine Idee">💡</button>
-                        <button class="emoji-btn" data-emoji="✅" title="Gut gelaufen">✅</button>
-                    </div>
-                    <div id="selectedEmojis" class="selected-emojis">
-                        <span class="emoji-placeholder" id="emojiPlaceholder">Klicke auf Emojis...</span>
-                    </div>
-                    <div class="modal-actions">
-                        <button onclick="markAsCompleted()" class="btn-save" id="markBtn" disabled>
-                            ✅ Als geübt markieren
-                        </button>
-                        <button onclick="speichernPortfolio()" class="btn-save" id="portfolioBtn" disabled style="background: #2196F3;">
-                            📁 Ins Portfolio speichern
-                        </button>
-                        <button onclick="closeModal()" class="btn-cancel">
-                            Abbrechen
-                        </button>
-                    </div>
-                </div>
             `;
-            
             return html;
         }
         
@@ -1225,19 +1314,16 @@
             if (!checkBtn) return;
             
             if (typ === 'multiple-choice') {
-                // Choice selection
                 document.querySelectorAll('.choice-item').forEach(item => {
                     item.addEventListener('click', function() {
                         if (this.classList.contains('correct') || this.classList.contains('wrong')) return;
                         const question = this.dataset.question;
-                        // Deselect others in same question
                         document.querySelectorAll(`[data-question="${question}"]`).forEach(i => {
                             i.classList.remove('selected');
                         });
                         this.classList.add('selected');
                     });
                 });
-                
                 checkBtn.addEventListener('click', () => checkMultipleChoice());
             }
             else if (typ === 'zuordnung' || typ === 'zuordnung-ebenen' || typ === 'budget-kategorien') {
@@ -1261,9 +1347,8 @@
                 checkBtn.addEventListener('click', () => checkVertragCheck());
             }
         }
-        
-        // ========== KORRIGIERTE CHECK-FUNKTIONEN ==========
-        
+
+        // --- CHECK FUNKTIONEN (Logik übernommen) ---
         function checkMultipleChoice() {
             const uebung = currentAspekt.uebung;
             let correctCount = 0;
@@ -1275,18 +1360,14 @@
                     answeredAll = false;
                     return;
                 }
-                
                 const selectedOption = parseInt(selected.dataset.option);
                 const choiceItems = document.querySelectorAll(`[data-question="${qIndex}"]`);
                 
-                // Markiere alle Antworten und deaktiviere Klicks
                 choiceItems.forEach((item, oIndex) => {
                     item.style.pointerEvents = 'none';
                     if (oIndex === frage.richtig) {
                         item.classList.add('correct');
-                        if (oIndex === selectedOption) {
-                            correctCount++;
-                        }
+                        if (oIndex === selectedOption) correctCount++;
                     } else if (oIndex === selectedOption) {
                         item.classList.add('wrong');
                     }
@@ -1298,15 +1379,14 @@
                 return;
             }
             
-            // Zeige IMMER die Lösungen und schliesse ab
             if (correctCount === uebung.fragen.length) {
                 showFeedback(`✅ Perfekt! Alle ${uebung.fragen.length} Antworten sind richtig.`, true);
             } else {
-                showFeedback(`Du hast ${correctCount} von ${uebung.fragen.length} Fragen richtig beantwortet. Die richtigen Antworten sind grün markiert.`, true, 'partial');
+                showFeedback(`Du hast ${correctCount} von ${uebung.fragen.length} Fragen richtig beantwortet.`, true, 'partial');
             }
-            markUebungComplete();
+            disableCheckBtn();
         }
-        
+
         function checkZuordnung() {
             const uebung = currentAspekt.uebung;
             let correct = 0;
@@ -1325,7 +1405,6 @@
                 const kategorieIndex = parseInt(dropZone.dataset.kategorie);
                 const correctKategorie = item.kategorie !== undefined ? item.kategorie : item.ebene;
                 
-                // Deaktiviere Drag
                 draggable.draggable = false;
                 draggable.style.cursor = 'default';
                 
@@ -1344,36 +1423,31 @@
                 return;
             }
             
-            // Zeige IMMER die Lösungen und schliesse ab
             if (correct === total) {
                 showFeedback(`✅ Perfekt! Alle ${total} Zuordnungen sind richtig.`, true);
             } else {
-                showFeedback(`Du hast ${correct} von ${total} richtig zugeordnet. Die richtigen Zuordnungen sind grün, die falschen rot markiert.`, true, 'partial');
+                showFeedback(`Du hast ${correct} von ${total} richtig zugeordnet.`, true, 'partial');
             }
-            markUebungComplete();
+            disableCheckBtn();
         }
-        
+
         function checkBewertung() {
-            // Bewertungsübungen haben keine richtig/falsch
             showFeedback('✅ Bewertung abgeschlossen! Deine Einschätzungen wurden erfasst.', true);
-            markUebungComplete();
+            disableCheckBtn();
         }
-        
+
         function checkRanking() {
             const container = document.getElementById('rankingContainer');
             const items = Array.from(container.querySelectorAll('.draggable-item'));
             const uebung = currentAspekt.uebung;
-            
             const currentOrder = items.map(item => parseInt(item.dataset.index));
             const correctOrder = uebung.richtigeReihenfolge;
             
-            // Deaktiviere Drag
             items.forEach(item => {
                 item.draggable = false;
                 item.style.cursor = 'default';
             });
             
-            // Markiere die Items
             let correctPositions = 0;
             currentOrder.forEach((itemIndex, position) => {
                 const item = items[position];
@@ -1387,25 +1461,21 @@
                 }
             });
             
-            // Zeige IMMER die Lösungen und schliesse ab
             if (correctPositions === currentOrder.length) {
                 showFeedback('✅ Perfekt! Die Reihenfolge ist richtig sortiert.', true);
             } else {
-                showFeedback(`Du hast ${correctPositions} von ${currentOrder.length} Items an der richtigen Position. Die richtigen Positionen sind grün, die falschen rot markiert.`, true, 'partial');
+                showFeedback(`Du hast ${correctPositions} von ${currentOrder.length} Items an der richtigen Position.`, true, 'partial');
             }
-            markUebungComplete();
+            disableCheckBtn();
         }
-        
+
         function checkVertragCheck() {
             const uebung = currentAspekt.uebung;
             let correctSelections = 0;
-            const totalImportant = uebung.items.filter(item => item.wichtig).length;
             
             uebung.items.forEach((item, index) => {
                 const checkbox = document.getElementById(`check_${index}`);
                 const choiceItem = checkbox.parentElement;
-                
-                // Deaktiviere Checkbox
                 checkbox.disabled = true;
                 choiceItem.style.cursor = 'default';
                 
@@ -1417,46 +1487,46 @@
                 }
             });
             
-            // Zeige IMMER die Lösungen und schliesse ab
             if (correctSelections === uebung.items.length) {
                 showFeedback('✅ Perfekt! Du weißt genau, worauf es bei Verträgen ankommt.', true);
             } else {
-                showFeedback(`Du hast ${correctSelections} von ${uebung.items.length} Punkten richtig bewertet. Die richtigen Antworten sind grün, die falschen rot markiert.`, true, 'partial');
+                showFeedback(`Du hast ${correctSelections} von ${uebung.items.length} Punkten richtig bewertet.`, true, 'partial');
             }
-            markUebungComplete();
+            disableCheckBtn();
         }
         
-        // ========== HELPER FUNKTIONEN ==========
-        
+        // --- HELPER ---
+        function disableCheckBtn() {
+            const checkBtn = document.getElementById('checkBtn');
+            if (checkBtn) {
+                checkBtn.disabled = true;
+                checkBtn.textContent = '✓ Übung abgeschlossen';
+            }
+        }
+
         function setupDragAndDrop() {
             const draggables = document.querySelectorAll('.draggable-item');
-            
             draggables.forEach(draggable => {
                 draggable.addEventListener('dragstart', (e) => {
                     e.dataTransfer.setData('text/plain', e.target.dataset.index);
                     e.target.classList.add('dragging');
                 });
-                
                 draggable.addEventListener('dragend', (e) => {
                     e.target.classList.remove('dragging');
                 });
             });
         }
         
-        window.allowDrop = function(e) {
-            e.preventDefault();
-        };
+        window.allowDrop = function(e) { e.preventDefault(); };
         
         window.drop = function(e) {
             e.preventDefault();
             const index = e.dataTransfer.getData('text/plain');
             const draggable = document.querySelector(`[data-index="${index}"]`);
-            
             let dropTarget = e.target;
             while (dropTarget && !dropTarget.hasAttribute('data-kategorie')) {
                 dropTarget = dropTarget.parentElement;
             }
-            
             if (dropTarget) {
                 const dropZone = dropTarget.querySelector('.drop-zone');
                 dropZone.appendChild(draggable);
@@ -1466,14 +1536,12 @@
         function setupRankingDragDrop() {
             const container = document.getElementById('rankingContainer');
             const items = container.querySelectorAll('.draggable-item');
-            
             items.forEach(item => {
                 item.addEventListener('dragstart', (e) => {
                     e.dataTransfer.effectAllowed = 'move';
                     e.dataTransfer.setData('text/html', e.target.innerHTML);
                     e.target.classList.add('dragging');
                 });
-                
                 item.addEventListener('dragover', (e) => {
                     e.preventDefault();
                     e.dataTransfer.dropEffect = 'move';
@@ -1484,10 +1552,7 @@
                         container.insertBefore(dragging, next ? e.target.nextSibling : e.target);
                     }
                 });
-                
-                item.addEventListener('dragend', (e) => {
-                    e.target.classList.remove('dragging');
-                });
+                item.addEventListener('dragend', (e) => { e.target.classList.remove('dragging'); });
             });
         }
         
@@ -1496,82 +1561,13 @@
             feedback.innerHTML = `<p class="feedback-text">${message}</p>`;
             feedback.classList.add('show');
             feedback.classList.remove('success', 'partial');
-            if (success) {
-                feedback.classList.add('success');
-            }
-            if (type === 'partial') {
-                feedback.classList.add('partial');
-            }
+            if (success) feedback.classList.add('success');
+            if (type === 'partial') feedback.classList.add('partial');
         }
+
+        // --- SPEICHERN FUNKTIONEN (identisch zu schluessel.html) ---
         
-        function setupEmojiListeners() {
-            const emojiButtons = document.querySelectorAll('.emoji-btn');
-            
-            emojiButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const emoji = this.dataset.emoji;
-                    
-                    // Toggle emoji
-                    const index = selectedEmojis.indexOf(emoji);
-                    if (index > -1) {
-                        selectedEmojis.splice(index, 1);
-                    } else {
-                        selectedEmojis.push(emoji);
-                    }
-                    
-                    updateSelectedEmojisDisplay();
-                    updatePortfolioButton();
-                });
-            });
-        }
-        
-        function updateSelectedEmojisDisplay() {
-            const container = document.getElementById('selectedEmojis');
-            const placeholder = document.getElementById('emojiPlaceholder');
-            
-            if (selectedEmojis.length === 0) {
-                placeholder.style.display = 'block';
-                // Remove all emoji spans
-                container.querySelectorAll('.selected-emoji').forEach(e => e.remove());
-            } else {
-                placeholder.style.display = 'none';
-                // Clear and rebuild
-                container.querySelectorAll('.selected-emoji').forEach(e => e.remove());
-                selectedEmojis.forEach(emoji => {
-                    const span = document.createElement('span');
-                    span.className = 'selected-emoji';
-                    span.textContent = emoji;
-                    container.appendChild(span);
-                });
-            }
-        }
-        
-        function updatePortfolioButton() {
-            const portfolioBtn = document.getElementById('portfolioBtn');
-            const markBtn = document.getElementById('markBtn');
-            const hasEmojis = selectedEmojis.length > 0;
-            
-            if (portfolioBtn) portfolioBtn.disabled = !hasEmojis;
-            if (markBtn) markBtn.disabled = !hasEmojis;
-        }
-        
-        function markUebungComplete() {
-            uebungAbgeschlossen = true;
-            const checkBtn = document.getElementById('checkBtn');
-            if (checkBtn) {
-                checkBtn.disabled = true;
-                checkBtn.textContent = '✓ Übung abgeschlossen';
-            }
-            
-            const portfolioSection = document.getElementById('portfolioSection');
-            if (portfolioSection) {
-                portfolioSection.style.display = 'block';
-                // Setup emoji listeners wenn Portfolio-Section angezeigt wird
-                setTimeout(() => setupEmojiListeners(), 100);
-            }
-        }
-        
-        window.markAsCompleted = async function() {
+        async function markAsCompleted() {
             if (selectedEmojis.length === 0) {
                 alert('Bitte wähle mindestens ein Emoji als Reflexion!');
                 return;
@@ -1583,49 +1579,33 @@
                 
                 if (userDoc.exists()) {
                     const data = userDoc.data();
-                    const aspekte = data.kompetenzen?.aspekte || {};
+                    const aspekteData = data.kompetenzen?.aspekte || {};
                     
-                    aspekte[currentAspekt.id] = {
+                    aspekteData[currentAspekt.id] = {
                         completed: true,
                         reflexion: selectedEmojis.join(''),
                         timestamp: new Date().toISOString()
                     };
                     
                     await updateDoc(userRef, {
-                        'kompetenzen.aspekte': aspekte
+                        'kompetenzen.aspekte': aspekteData
                     });
                     
+                    updateCardStatus(currentAspekt.id);
                     alert('✅ Als geübt markiert!\n\nReflexion: ' + selectedEmojis.join(' '));
                     closeModal();
                 }
             } catch (error) {
                 console.error('Fehler:', error);
-                alert('⚠️ Fehler beim Speichern. Bitte überprüfe deine Internetverbindung.');
+                alert('Fehler beim Speichern.');
             }
-        };
-        
-        window.speichernPortfolio = async function() {
+        }
+
+        async function saveToPortfolio() {
             if (selectedEmojis.length === 0) {
                 alert('Bitte wähle mindestens ein Emoji als Reflexion!');
                 return;
             }
-            
-            const portfolioItem = {
-                id: Date.now().toString(),
-                type: 'aspekt',
-                aspektId: currentAspekt.id,
-                kompetenzTitle: currentAspekt.title + ': ' + currentAspekt.uebung.titel,
-                thema: 'Gesellschaftliche Aspekte',
-                handlungsfeld: currentAspekt.handlungsfelder[currentAspekt.uebungIndex],
-                reflexion: selectedEmojis.join(''),
-                createdAt: new Date().toISOString(),
-                shareable: true,
-                performanz: {
-                    uebungstyp: currentAspekt.uebung.titel,
-                    aspektTyp: currentAspekt.uebung.typ,
-                    abgeschlossen: true
-                }
-            };
             
             try {
                 const userRef = doc(db, 'users', userId);
@@ -1633,48 +1613,57 @@
                 
                 if (userDoc.exists()) {
                     const data = userDoc.data();
-                    const aspekte = data.kompetenzen?.aspekte || {};
+                    const aspekteData = data.kompetenzen?.aspekte || {};
                     const portfolio = data.portfolio || [];
                     
-                    // Markiere auch als geübt
-                    aspekte[currentAspekt.id] = {
+                    // Auch als geübt markieren
+                    aspekteData[currentAspekt.id] = {
                         completed: true,
                         reflexion: selectedEmojis.join(''),
                         timestamp: new Date().toISOString()
                     };
                     
+                    // Portfolio Eintrag
+                    const portfolioItem = {
+                        id: 'asp_' + currentAspekt.id + '_' + Date.now(),
+                        type: 'aspekt',
+                        aspektId: currentAspekt.id,
+                        kompetenzTitle: currentAspekt.title + ': ' + currentAspekt.uebung.titel,
+                        thema: 'Gesellschaftliche Aspekte',
+                        handlungsfeld: currentAspekt.handlungsfelder[currentAspekt.uebungIndex],
+                        reflexion: selectedEmojis.join(''),
+                        createdAt: new Date().toISOString(),
+                        shareable: true,
+                        performanz: {
+                            uebungstyp: currentAspekt.uebung.titel,
+                            aspektTyp: currentAspekt.uebung.typ,
+                            abgeschlossen: true
+                        }
+                    };
+                    
                     portfolio.push(portfolioItem);
                     
                     await updateDoc(userRef, {
-                        'kompetenzen.aspekte': aspekte,
-                        portfolio: portfolio
+                        'kompetenzen.aspekte': aspekteData,
+                        'portfolio': portfolio
                     });
                     
+                    updateCardStatus(currentAspekt.id);
                     alert('📁 Ins Portfolio gespeichert!\n\n✓ Aspekt als geübt markiert\n✓ Performanz dokumentiert\n✓ Reflexion: ' + selectedEmojis.join(' '));
                     closeModal();
-                } else {
-                    alert('⚠️ Fehler beim Speichern.');
                 }
             } catch (error) {
                 console.error('Fehler:', error);
-                alert('⚠️ Fehler beim Speichern. Bitte überprüfe deine Internetverbindung.');
+                alert('Fehler beim Speichern.');
             }
-        };
+        }
         
         window.closeModal = function() {
             const modal = document.getElementById('aspektModal');
             modal.classList.remove('show');
             currentAspekt = null;
             selectedEmojis = [];
-            uebungAbgeschlossen = false;
         };
-        
-        // Close modal when clicking outside
-        document.getElementById('aspektModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
     </script>
 </body>
 </html>
