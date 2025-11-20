@@ -1,1 +1,1122 @@
-
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gesellschaftliche Aspekte - SLP ABU 2030</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #FFF8F0 0%, #FFE4D0 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        
+        @media (min-width: 768px) {
+            body {
+                padding: 2rem;
+            }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .header {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+            .header {
+                padding: 2rem;
+            }
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .back-btn {
+            font-size: 2rem;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+        
+        .back-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .header-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (min-width: 768px) {
+            .header-title {
+                font-size: 2.5rem;
+            }
+        }
+        
+        .header-subtitle {
+            color: #6B7280;
+        }
+        
+        .header-icon {
+            font-size: 4rem;
+        }
+        
+        /* Info Box */
+        .info-box {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .info-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 0.75rem;
+        }
+        
+        .info-text {
+            color: #374151;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+        
+        .info-highlight {
+            background: linear-gradient(90deg, rgba(255, 107, 53, 0.1), rgba(76, 175, 80, 0.1));
+            border-left: 4px solid #FF6B35;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        
+        /* Aspekte Grid */
+        .aspekte-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+            .aspekte-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .aspekt-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .aspekt-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 24px rgba(139, 69, 19, 0.2);
+            border-color: #FF6B35;
+        }
+        
+        .aspekt-header-flex {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .aspekt-icon {
+            font-size: 3rem;
+        }
+        
+        .aspekt-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 0.25rem;
+        }
+        
+        .aspekt-description {
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+        
+        .handlungsfeld-box {
+            background: #FFF8F0;
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .handlungsfeld-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #D2691E;
+            margin-bottom: 0.25rem;
+        }
+        
+        .handlungsfeld-text {
+            font-size: 0.875rem;
+            color: #374151;
+        }
+        
+        .uebung-box {
+            background: linear-gradient(90deg, rgba(255, 107, 53, 0.1), rgba(76, 175, 80, 0.1));
+            border-radius: 8px;
+            padding: 0.75rem;
+        }
+        
+        .uebung-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #FF6B35;
+            margin-bottom: 0.25rem;
+        }
+        
+        .uebung-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #1F2937;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            position: sticky;
+            top: 0;
+            background: white;
+            border-bottom: 1px solid #E5E7EB;
+            padding: 1.5rem;
+            border-radius: 24px 24px 0 0;
+            z-index: 10;
+        }
+        
+        .modal-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .modal-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .modal-icon {
+            font-size: 3rem;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #8B4513;
+        }
+        
+        .modal-handlungsfeld {
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+        
+        .close-btn {
+            font-size: 2rem;
+            color: #9CA3AF;
+            background: none;
+            border: none;
+            cursor: pointer;
+            line-height: 1;
+            transition: all 0.2s;
+        }
+        
+        .close-btn:hover {
+            color: #6B7280;
+            transform: scale(1.1);
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .uebung-intro {
+            margin-bottom: 1.5rem;
+        }
+        
+        .uebung-intro h3 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 0.5rem;
+        }
+        
+        .uebung-intro p {
+            color: #374151;
+            margin-bottom: 1rem;
+        }
+        
+        .aufgabe-box {
+            background: #FFFBEB;
+            border-left: 4px solid #F59E0B;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .aufgabe-text {
+            font-weight: 500;
+            color: #1F2937;
+        }
+        
+        .tipp-box {
+            background: #EFF6FF;
+            border-left: 4px solid #3B82F6;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .input-group {
+            margin-bottom: 1rem;
+        }
+        
+        .input-box {
+            background: white;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        
+        .input-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #8B4513;
+            margin-bottom: 0.5rem;
+        }
+        
+        .input-sublabel {
+            font-size: 0.75rem;
+            color: #6B7280;
+            margin-bottom: 0.5rem;
+        }
+        
+        .text-input, .text-area {
+            width: 100%;
+            border: 2px solid #D1D5DB;
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-family: inherit;
+            font-size: 0.875rem;
+            transition: border-color 0.2s;
+        }
+        
+        .text-input:focus, .text-area:focus {
+            border-color: #FF6B35;
+            outline: none;
+        }
+        
+        .text-area {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #8B4513;
+        }
+        
+        .checkbox {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+        }
+        
+        /* Reflexion */
+        .reflexion-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #E5E7EB;
+        }
+        
+        .reflexion-title {
+            font-size: 1.125rem;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 1rem;
+        }
+        
+        .reflexion-prompt {
+            font-size: 0.875rem;
+            color: #6B7280;
+            margin-bottom: 0.75rem;
+        }
+        
+        .reflexion-emojis {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .reflexion-emoji {
+            font-size: 2.5rem;
+            padding: 0.75rem;
+            border-radius: 12px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .reflexion-emoji:hover {
+            background: #F3F4F6;
+        }
+        
+        .reflexion-emoji.selected {
+            background: #FF6B35;
+            transform: scale(1.1);
+        }
+        
+        .save-btn {
+            width: 100%;
+            background: linear-gradient(90deg, #FF6B35, #4CAF50);
+            color: white;
+            font-weight: bold;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .save-btn:hover {
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        /* Footer */
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 9999px;
+            padding: 0.75rem 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .footer-text {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+        
+        .footer-icon {
+            font-size: 1.125rem;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <a href="kompetenzen.html" class="back-btn">←</a>
+                    <div>
+                        <h1 class="header-title">
+                            Gesellschaftliche Aspekte
+                        </h1>
+                        <p class="header-subtitle">
+                            8 Perspektiven mit praktischen Übungen
+                        </p>
+                    </div>
+                </div>
+                <div class="header-icon">🎯</div>
+            </div>
+        </div>
+        
+        <!-- Info Box -->
+        <div class="info-box">
+            <h2 class="info-title">💡 Was sind gesellschaftliche Aspekte?</h2>
+            <p class="info-text">
+                Die 8 Aspekte sind verschiedene <strong>Blickwinkel</strong>, um Alltagsherausforderungen zu verstehen und zu lösen. 
+                Jeder Aspekt bringt eine andere Perspektive ein.
+            </p>
+            <div class="info-highlight">
+                <strong>🔗 Vernetzung:</strong> In realen Situationen arbeiten mehrere Aspekte zusammen!
+            </div>
+        </div>
+        
+        <!-- Aspekte Grid -->
+        <div class="aspekte-grid" id="aspekteGrid">
+            <!-- Wird dynamisch gefüllt -->
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-content">
+                <div class="footer-text">
+                    <span class="footer-icon">🐜✏️👓</span>
+                    <span>|</span>
+                    <span>ant edu</span>
+                    <span>|</span>
+                    <span id="currentYear"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Übungs-Modal -->
+    <div id="uebungModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-header-flex">
+                    <div class="modal-header-left">
+                        <span id="modalIcon" class="modal-icon"></span>
+                        <div>
+                            <h2 id="modalTitle" class="modal-title"></h2>
+                            <p id="modalHandlungsfeld" class="modal-handlungsfeld"></p>
+                        </div>
+                    </div>
+                    <button onclick="closeModal()" class="close-btn">×</button>
+                </div>
+            </div>
+            
+            <div id="modalContent" class="modal-body">
+                <!-- Wird dynamisch gefüllt -->
+            </div>
+        </div>
+    </div>
+    
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getFirestore, doc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyDycvEwK6KJZyFEtsGIaHJBhIFTp5L4cdA",
+            authDomain: "abueba2030.firebaseapp.com",
+            projectId: "abueba2030",
+            storageBucket: "abueba2030.firebasestorage.app",
+            messagingSenderId: "592718816412",
+            appId: "1:592718816412:web:366e44efabba256d48b959"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        let userId = null;
+        let currentAspekt = null;
+        
+        const aspekte = [
+            {
+                id: 'ethik',
+                icon: '⚖️',
+                title: 'Ethik',
+                description: 'Moralische Fragen, Werte, richtiges Handeln',
+                handlungsfeld: 'Empathisch handeln und andere Perspektiven übernehmen',
+                uebung: {
+                    typ: 'dilemma',
+                    titel: 'Moral-Dilemma analysieren',
+                    beschreibung: 'Analysiere ein ethisches Dilemma aus verschiedenen Perspektiven',
+                    aufgabe: 'Deine Kollegin bittet dich, ihr bei einer Prüfung zu helfen. Sie würde sonst durchfallen und ihre Lehrstelle verlieren. Wie handelst du?',
+                    schritte: [
+                        'Welche Perspektiven gibt es? (Kollegin, Lehrer, Arbeitgeber...)',
+                        'Welche Werte stehen im Konflikt? (Freundschaft, Ehrlichkeit, Gerechtigkeit...)',
+                        'Welche Handlungsoptionen hast du?',
+                        'Für welche Option entscheidest du dich und warum?'
+                    ]
+                }
+            },
+            {
+                id: 'identitaet',
+                icon: '👤',
+                title: 'Identität & Sozialisation',
+                description: 'Wer bin ich? Meine Rollen und Persönlichkeit',
+                handlungsfeld: 'Persönlichkeit erkunden und entwickeln',
+                uebung: {
+                    typ: 'reflexion',
+                    titel: 'Meine Rollen-Analyse',
+                    beschreibung: 'Erkunde deine verschiedenen Rollen im Leben',
+                    rollen: [
+                        { name: 'Lernende/r', fragen: 'Was bedeutet diese Rolle für mich?' },
+                        { name: 'Kolleg/in', fragen: 'Wie verhalte ich mich in dieser Rolle?' },
+                        { name: 'Freund/in', fragen: 'Was ist mir in dieser Rolle wichtig?' },
+                        { name: 'Familienmitglied', fragen: 'Welche Erwartungen gibt es?' }
+                    ]
+                }
+            },
+            {
+                id: 'kultur',
+                icon: '🎭',
+                title: 'Kultur',
+                description: 'Kunst, Vielfalt, kulturelle Ausdrucksformen',
+                handlungsfeld: 'Eigene Gestaltungs- und Ausdrucksfähigkeiten entwickeln',
+                uebung: {
+                    typ: 'kreativ',
+                    titel: 'Kultureller Ausdruck',
+                    beschreibung: 'Erstelle ein kreatives Werk zu einem Thema, das dir wichtig ist',
+                    schritte: [
+                        'Wähle ein Thema, das dich bewegt (z.B. Identität, Zukunft, Heimat, Freiheit)',
+                        'Wähle deine Ausdrucksform (Foto, Video, Gedicht, Zeichnung, Collage...)',
+                        'Erstelle dein Werk',
+                        'Reflektiere: Was möchtest du damit ausdrücken?'
+                    ]
+                }
+            },
+            {
+                id: 'oekologie',
+                icon: '🌱',
+                title: 'Ökologie',
+                description: 'Nachhaltigkeit, Umwelt, Ressourcen',
+                handlungsfeld: 'Verhaltensmuster bei Konsum und Mobilität analysieren',
+                uebung: {
+                    typ: 'tracking',
+                    titel: 'CO₂-Woche tracken',
+                    beschreibung: 'Dokumentiere eine Woche lang deinen ökologischen Fußabdruck',
+                    kategorien: [
+                        { name: 'Mobilität', beispiel: 'Auto, ÖV, Velo, zu Fuß' },
+                        { name: 'Ernährung', beispiel: 'Fleisch, vegetarisch, Herkunft' },
+                        { name: 'Konsum', beispiel: 'Online-Bestellungen, lokale Einkäufe' },
+                        { name: 'Energie', beispiel: 'Heizung, Strom, Wasser' }
+                    ]
+                }
+            },
+            {
+                id: 'politik',
+                icon: '🏛️',
+                title: 'Politik',
+                description: 'Mitbestimmung, Demokratie, politische Prozesse',
+                handlungsfeld: 'Aktuelle politische Fragen analysieren',
+                uebung: {
+                    typ: 'analyse',
+                    titel: 'Abstimmungs-Analyse',
+                    beschreibung: 'Analysiere eine aktuelle Abstimmung oder Initiative',
+                    schritte: [
+                        'Worum geht es? (Kurzbeschreibung der Vorlage)',
+                        'Wer ist dafür? Welche Argumente nutzen sie?',
+                        'Wer ist dagegen? Welche Argumente nutzen sie?',
+                        'Welche Interessen stecken dahinter?',
+                        'Wie würdest du stimmen und warum?'
+                    ]
+                }
+            },
+            {
+                id: 'recht',
+                icon: '⚖️',
+                title: 'Recht',
+                description: 'Gesetze, Verträge, rechtliche Grundlagen',
+                handlungsfeld: 'Verträge verstehen und hinterfragen',
+                uebung: {
+                    typ: 'vertragsanalyse',
+                    titel: 'Vertrags-Check',
+                    beschreibung: 'Analysiere einen Vertrag aus deinem Leben (Lehrvertrag, Handyvertrag, etc.)',
+                    pruefpunkte: [
+                        'Wer sind die Vertragsparteien?',
+                        'Welche Rechte habe ich?',
+                        'Welche Pflichten habe ich?',
+                        'Kündigungsfrist und -bedingungen?',
+                        'Was steht im Kleingedruckten?',
+                        'Verstehe ich alles? Wo brauche ich Hilfe?'
+                    ]
+                }
+            },
+            {
+                id: 'technologie',
+                icon: '💻',
+                title: 'Technologische & digitale Transformation',
+                description: 'Digitalisierung, KI, technologische Entwicklung',
+                handlungsfeld: 'Chancen und Risiken von KI analysieren',
+                uebung: {
+                    typ: 'ki-vergleich',
+                    titel: 'KI-Tool Bewertung',
+                    beschreibung: 'Teste und bewerte verschiedene KI-Tools für eine Aufgabe',
+                    schritte: [
+                        'Wähle eine Aufgabe (z.B. Text schreiben, Bild erstellen, Code schreiben)',
+                        'Teste mindestens 2 KI-Tools (ChatGPT, Copilot, Claude...)',
+                        'Bewerte die Qualität der Ergebnisse',
+                        'Analysiere: Datenschutz? Kosten? Abhängigkeit?',
+                        'Fazit: Wann nutzt du welches Tool?'
+                    ]
+                }
+            },
+            {
+                id: 'wirtschaft',
+                icon: '💰',
+                title: 'Wirtschaft',
+                description: 'Konsum, Arbeit, wirtschaftliche Zusammenhänge',
+                handlungsfeld: 'Eigenes Budget verstehen und planen',
+                uebung: {
+                    typ: 'budget',
+                    titel: 'Mein erstes Budget',
+                    beschreibung: 'Erstelle ein realistisches Monatsbudget',
+                    kategorien: [
+                        { name: 'Einnahmen', beispiele: ['Lohn', 'Lehrlingslohn', 'Nebenjob', 'Unterstützung'] },
+                        { name: 'Fixkosten', beispiele: ['Krankenkasse', 'Handy', 'ÖV-Abo', 'Miete (falls)'] },
+                        { name: 'Variable Kosten', beispiele: ['Essen', 'Ausgang', 'Kleider', 'Hobbies'] },
+                        { name: 'Sparziele', beispiele: ['Notgroschen', 'Ferien', 'Wünsche'] }
+                    ]
+                }
+            }
+        ];
+        
+        window.addEventListener('load', function() {
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            userId = localStorage.getItem('ant_edu_user_id');
+            if (!userId) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            renderAspekte();
+        });
+        
+        function renderAspekte() {
+            const grid = document.getElementById('aspekteGrid');
+            grid.innerHTML = aspekte.map(aspekt => `
+                <div class="aspekt-card" onclick="openUebung('${aspekt.id}')">
+                    <div class="aspekt-header-flex">
+                        <span class="aspekt-icon">${aspekt.icon}</span>
+                        <div style="flex: 1;">
+                            <h3 class="aspekt-title">${aspekt.title}</h3>
+                            <p class="aspekt-description">${aspekt.description}</p>
+                        </div>
+                    </div>
+                    <div class="handlungsfeld-box">
+                        <p class="handlungsfeld-label">🎯 HANDLUNGSFELD</p>
+                        <p class="handlungsfeld-text">${aspekt.handlungsfeld}</p>
+                    </div>
+                    <div class="uebung-box">
+                        <p class="uebung-label">📝 ÜBUNG</p>
+                        <p class="uebung-title">${aspekt.uebung.titel}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        window.openUebung = function(aspektId) {
+            currentAspekt = aspekte.find(a => a.id === aspektId);
+            if (!currentAspekt) return;
+            
+            const modal = document.getElementById('uebungModal');
+            document.getElementById('modalIcon').textContent = currentAspekt.icon;
+            document.getElementById('modalTitle').textContent = currentAspekt.title;
+            document.getElementById('modalHandlungsfeld').textContent = '🎯 ' + currentAspekt.handlungsfeld;
+            
+            const content = document.getElementById('modalContent');
+            content.innerHTML = generateUebungContent(currentAspekt);
+            
+            modal.classList.add('show');
+        };
+        
+        function generateUebungContent(aspekt) {
+            const uebung = aspekt.uebung;
+            let html = `
+                <div class="uebung-intro">
+                    <h3>${uebung.titel}</h3>
+                    <p>${uebung.beschreibung}</p>
+                </div>
+            `;
+            
+            // Typ-spezifische Inhalte
+            if (uebung.typ === 'dilemma') {
+                html += `
+                    <div class="aufgabe-box">
+                        <p class="aufgabe-text">${uebung.aufgabe}</p>
+                    </div>
+                    <div class="input-group">
+                        ${uebung.schritte.map((schritt, i) => `
+                            <div class="input-box">
+                                <label class="input-label">
+                                    Schritt ${i+1}: ${schritt}
+                                </label>
+                                <textarea 
+                                    id="schritt_${i}" 
+                                    rows="3" 
+                                    class="text-area"
+                                    placeholder="Deine Antwort..."></textarea>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            else if (uebung.typ === 'reflexion') {
+                html += `
+                    <div class="input-group">
+                        ${uebung.rollen.map((rolle, i) => `
+                            <div class="input-box">
+                                <label class="input-label">
+                                    ${rolle.name}
+                                </label>
+                                <p class="input-sublabel">${rolle.fragen}</p>
+                                <textarea 
+                                    id="rolle_${i}" 
+                                    rows="2" 
+                                    class="text-area"
+                                    placeholder="Deine Reflexion..."></textarea>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            else if (uebung.typ === 'kreativ') {
+                html += `
+                    <div class="input-group">
+                        ${uebung.schritte.map((schritt, i) => `
+                            <div class="input-box">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="kreativ_${i}" class="checkbox">
+                                    ${schritt}
+                                </label>
+                            </div>
+                        `).join('')}
+                        <div class="input-box">
+                            <label class="input-label">
+                                Beschreibe dein Werk und deine Intention:
+                            </label>
+                            <textarea 
+                                id="kreativ_beschreibung" 
+                                rows="4" 
+                                class="text-area"
+                                placeholder="Was hast du erstellt und was möchtest du damit ausdrücken?"></textarea>
+                        </div>
+                    </div>
+                `;
+            }
+            else if (uebung.typ === 'tracking') {
+                html += `
+                    <div class="input-group">
+                        ${uebung.kategorien.map((kat, i) => `
+                            <div class="input-box">
+                                <label class="input-label">
+                                    ${kat.name}
+                                </label>
+                                <p class="input-sublabel">Beispiel: ${kat.beispiel}</p>
+                                <textarea 
+                                    id="tracking_${i}" 
+                                    rows="2" 
+                                    class="text-area"
+                                    placeholder="Dokumentiere dein Verhalten in dieser Woche..."></textarea>
+                            </div>
+                        `).join('')}
+                        <div class="input-box">
+                            <label class="input-label">
+                                Fazit: Was kannst du ändern?
+                            </label>
+                            <textarea 
+                                id="tracking_fazit" 
+                                rows="3" 
+                                class="text-area"
+                                placeholder="Welche konkreten Verbesserungen nimmst du vor?"></textarea>
+                        </div>
+                    </div>
+                `;
+            }
+            else if (uebung.typ === 'analyse') {
+                html += `
+                    <div class="input-group">
+                        ${uebung.schritte.map((schritt, i) => `
+                            <div class="input-box">
+                                <label class="input-label">
+                                    ${schritt}
+                                </label>
+                                <textarea 
+                                    id="analyse_${i}" 
+                                    rows="2" 
+                                    class="text-area"
+                                    placeholder="Deine Analyse..."></textarea>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            else if (uebung.typ === 'vertragsanalyse') {
+                html += `
+                    <div class="tipp-box">
+                        <strong>Tipp:</strong> Nimm einen echten Vertrag zur Hand (Lehrvertrag, Handyvertrag, etc.)
+                    </div>
+                    <div class="input-group">
+                        ${uebung.pruefpunkte.map((punkt, i) => `
+                            <div class="input-box">
+                                <label class="input-label">
+                                    ${punkt}
+                                </label>
+                                <textarea 
+                                    id="vertrag_${i}" 
+                                    rows="2" 
+                                    class="text-area"
+                                    placeholder="Deine Antwort..."></textarea>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            else if (uebung.typ === 'ki-vergleich') {
+                html += `
+                    <div class="input-group">
+                        ${uebung.schritte.map((schritt, i) => `
+                            <div class="input-box">
+                                <label class="input-label">
+                                    ${schritt}
+                                </label>
+                                <textarea 
+                                    id="ki_${i}" 
+                                    rows="2" 
+                                    class="text-area"
+                                    placeholder="Deine Erkenntnisse..."></textarea>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            else if (uebung.typ === 'budget') {
+                html += `
+                    <div class="input-group">
+                        ${uebung.kategorien.map((kat, i) => `
+                            <div class="input-box">
+                                <label class="input-label">
+                                    ${kat.name}
+                                </label>
+                                <p class="input-sublabel">z.B.: ${kat.beispiele.join(', ')}</p>
+                                <input 
+                                    type="number" 
+                                    id="budget_${i}" 
+                                    class="text-input"
+                                    placeholder="Betrag in CHF"
+                                    style="margin-bottom: 0.5rem;">
+                                <textarea 
+                                    id="budget_details_${i}" 
+                                    rows="2" 
+                                    class="text-area"
+                                    placeholder="Details und Überlegungen..."></textarea>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            
+            // Reflexions-Emoji und Speichern-Button
+            html += `
+                <div class="reflexion-section">
+                    <h4 class="reflexion-title">💭 Reflexion</h4>
+                    <p class="reflexion-prompt">Wie fühlst du dich nach dieser Übung?</p>
+                    <div class="reflexion-emojis">
+                        ${['😊', '🤔', '😐', '💪', '🎯'].map(emoji => `
+                            <button onclick="selectReflexion('${emoji}')" 
+                                    class="reflexion-emoji"
+                                    data-emoji="${emoji}">
+                                ${emoji}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <button onclick="speichernAspekt()" class="save-btn">
+                        💾 Übung speichern und ins Portfolio
+                    </button>
+                </div>
+            `;
+            
+            return html;
+        }
+        
+        let selectedReflexion = null;
+        
+        window.selectReflexion = function(emoji) {
+            selectedReflexion = emoji;
+            document.querySelectorAll('.reflexion-emoji').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.target.closest('.reflexion-emoji').classList.add('selected');
+        };
+        
+        window.speichernAspekt = async function() {
+            if (!selectedReflexion) {
+                alert('Bitte wähle zuerst eine Reflexion aus! 💭');
+                return;
+            }
+            
+            // Sammle alle Eingaben
+            const performanzData = collectPerformanzData(currentAspekt);
+            
+            const portfolioItem = {
+                id: Date.now().toString(),
+                type: 'aspekt',
+                aspektId: currentAspekt.id,
+                kompetenzTitle: currentAspekt.title + ': ' + currentAspekt.uebung.titel,
+                thema: 'Gesellschaftliche Aspekte',
+                handlungsfeld: currentAspekt.handlungsfeld,
+                reflexion: selectedReflexion,
+                createdAt: new Date().toISOString(),
+                shareable: true,
+                performanz: performanzData
+            };
+            
+            try {
+                const userRef = doc(db, 'users', userId);
+                const userDoc = await getDoc(userRef);
+                
+                if (userDoc.exists()) {
+                    const portfolio = userDoc.data().portfolio || [];
+                    portfolio.push(portfolioItem);
+                    
+                    await updateDoc(userRef, { portfolio });
+                    
+                    alert('✅ Übung erfolgreich gespeichert!\n\nDu findest sie jetzt in deinem Portfolio.');
+                    closeModal();
+                } else {
+                    alert('⚠️ Fehler beim Speichern. Bitte versuche es erneut.');
+                }
+            } catch (error) {
+                console.error('Fehler:', error);
+                alert('⚠️ Fehler beim Speichern. Bitte überprüfe deine Internetverbindung.');
+            }
+        };
+        
+        function collectPerformanzData(aspekt) {
+            const uebung = aspekt.uebung;
+            const data = {
+                uebungstyp: uebung.titel,
+                aspektTyp: uebung.typ
+            };
+            
+            if (uebung.typ === 'dilemma') {
+                data.schritte = uebung.schritte.map((s, i) => ({
+                    schritt: s,
+                    antwort: document.getElementById(`schritt_${i}`)?.value || ''
+                }));
+            }
+            else if (uebung.typ === 'reflexion') {
+                data.rollen = uebung.rollen.map((r, i) => ({
+                    rolle: r.name,
+                    reflexion: document.getElementById(`rolle_${i}`)?.value || ''
+                }));
+            }
+            else if (uebung.typ === 'kreativ') {
+                data.checklist = {
+                    completed: uebung.schritte.filter((s, i) => 
+                        document.getElementById(`kreativ_${i}`)?.checked
+                    ).length,
+                    total: uebung.schritte.length
+                };
+                data.beschreibung = document.getElementById('kreativ_beschreibung')?.value || '';
+            }
+            else if (uebung.typ === 'tracking') {
+                data.kategorien = uebung.kategorien.map((k, i) => ({
+                    kategorie: k.name,
+                    dokumentation: document.getElementById(`tracking_${i}`)?.value || ''
+                }));
+                data.fazit = document.getElementById('tracking_fazit')?.value || '';
+            }
+            else if (uebung.typ === 'analyse') {
+                data.analyseSchritte = uebung.schritte.map((s, i) => ({
+                    frage: s,
+                    antwort: document.getElementById(`analyse_${i}`)?.value || ''
+                }));
+            }
+            else if (uebung.typ === 'vertragsanalyse') {
+                data.pruefpunkte = uebung.pruefpunkte.map((p, i) => ({
+                    punkt: p,
+                    ergebnis: document.getElementById(`vertrag_${i}`)?.value || ''
+                }));
+            }
+            else if (uebung.typ === 'ki-vergleich') {
+                data.schritte = uebung.schritte.map((s, i) => ({
+                    schritt: s,
+                    erkenntnis: document.getElementById(`ki_${i}`)?.value || ''
+                }));
+            }
+            else if (uebung.typ === 'budget') {
+                data.budget = uebung.kategorien.map((k, i) => ({
+                    kategorie: k.name,
+                    betrag: document.getElementById(`budget_${i}`)?.value || '0',
+                    details: document.getElementById(`budget_details_${i}`)?.value || ''
+                }));
+            }
+            
+            return data;
+        }
+        
+        window.closeModal = function() {
+            const modal = document.getElementById('uebungModal');
+            modal.classList.remove('show');
+            selectedReflexion = null;
+            currentAspekt = null;
+        };
+        
+        // Close modal when clicking outside
+        document.getElementById('uebungModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
