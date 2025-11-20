@@ -971,42 +971,161 @@
             const komp = kompetenzen.find(k => k.id === kompetenzId);
             
             document.getElementById('modalTitle').textContent = komp.title;
-            document.getElementById('modalContent').innerHTML = `
-                <div class="exercise-box">
-                    <p class="exercise-thema">${komp.thema}</p>
-                    <h3 class="exercise-title">🎯 Umsetzungsbeispiel:</h3>
-                    <p class="exercise-description">${komp.uebung}</p>
-                    
-                    <div style="background: white; border-radius: 12px; padding: 1rem; margin-top: 1rem; border: 2px solid rgba(139, 69, 19, 0.2);">
-                        <p style="font-size: 0.875rem; color: #6B7280; margin-bottom: 0.5rem;">
-                            <strong style="color: #8B4513;">💡 Hinweis:</strong> Diese Kompetenz übst du durch konkrete Aktivitäten im Unterricht oder in deinem Alltag.
+            
+            // Spezielle Interaktivität für 3.2.2 (E-Mail schreiben)
+            if (kompetenzId === '3.2.2') {
+                document.getElementById('modalContent').innerHTML = `
+                    <div class="exercise-box">
+                        <p class="exercise-thema">${komp.thema}</p>
+                        <h3 class="exercise-title">📝 Situation:</h3>
+                        <p class="exercise-description" style="margin-bottom: 1rem;">
+                            Du erhältst dieses ÜK-Aufgebot per E-Mail:
                         </p>
-                        <p style="font-size: 0.875rem; color: #6B7280;">
-                            Nach dem Üben kannst du hier festhalten, wie es war!
-                        </p>
-                    </div>
-                    
-                    <div class="tags-grid" style="margin-top: 1rem;">
-                        <div>
-                            <p class="tag-group-title">🎯 Aspekte:</p>
-                            <div class="tags">
-                                ${komp.aspekte.map(a => `<span class="tag tag-aspekt">${a}</span>`).join('')}
+                        
+                        <div style="background: white; border: 2px solid #E5E7EB; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; font-family: monospace; font-size: 0.875rem;">
+                            <strong>Betreff:</strong> ÜK-Aufgebot Herbst 2024<br><br>
+                            Guten Tag<br><br>
+                            Hiermit laden wir Sie zum überbetrieblichen Kurs ein:<br>
+                            <strong>Datum:</strong> Montag, 25. November 2024<br>
+                            <strong>Zeit:</strong> vormittags<br>
+                            <strong>Ort:</strong> Berufsbildungszentrum, Raum 3.12<br><br>
+                            Bitte bringen Sie Schreibmaterial mit.<br><br>
+                            Freundliche Grüsse<br>
+                            ÜK-Koordination
+                        </div>
+                        
+                        <div style="background: #FFF8F0; border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem; border-left: 4px solid #FF6B35;">
+                            <p style="font-size: 0.875rem; color: #374151; margin-bottom: 0.5rem;">
+                                <strong style="color: #FF6B35;">🎯 Deine Aufgabe:</strong>
+                            </p>
+                            <p style="font-size: 0.875rem; color: #6B7280;">
+                                Die Zeitangabe "vormittags" ist unklar. Schreibe eine höfliche Rückfrage-E-Mail, um die genaue Uhrzeit zu erfahren.
+                            </p>
+                        </div>
+                        
+                        <!-- Interaktiver E-Mail Editor -->
+                        <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                            <h4 style="color: #8B4513; font-weight: bold; margin-bottom: 1rem;">✍️ Schreibe deine E-Mail:</h4>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">An:</label>
+                                <input type="text" id="emailTo" value="uek-koordination@berufsbildung.ch" disabled style="width: 100%; padding: 0.5rem; border: 1px solid #E5E7EB; border-radius: 6px; background: #F9FAFB; color: #6B7280;">
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Betreff:</label>
+                                <input type="text" id="emailSubject" placeholder="z.B. Rückfrage zu ÜK-Aufgebot vom 15.11.2024" style="width: 100%; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px; font-family: inherit;">
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Nachricht:</label>
+                                <textarea id="emailBody" rows="8" placeholder="Sehr geehrte Damen und Herren,
+
+..." style="width: 100%; padding: 0.75rem; border: 2px solid #E5E7EB; border-radius: 6px; font-family: inherit; resize: vertical;"></textarea>
                             </div>
                         </div>
-                        <div>
-                            <p class="tag-group-title">💬 Sprachmodi:</p>
-                            <div class="tags">
-                                ${komp.sprachmodi.map(s => `<span class="tag tag-sprach">${s}</span>`).join('')}
+                        
+                        <!-- Kriterien Selbst-Check -->
+                        <div style="background: linear-gradient(to right, rgba(76, 175, 80, 0.1), rgba(33, 150, 243, 0.1)); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; border: 2px solid rgba(76, 175, 80, 0.3);">
+                            <h4 style="color: #4CAF50; font-weight: bold; margin-bottom: 1rem;">✅ Selbst-Check: Ist deine E-Mail...</h4>
+                            <div id="emailCriteria">
+                                <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; cursor: pointer; font-size: 0.875rem;">
+                                    <input type="checkbox" class="criteria-check" data-criteria="greeting" style="width: 18px; height: 18px; cursor: pointer;">
+                                    <span>...höflich? (Anrede, Grussformel, höfliche Formulierung)</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; cursor: pointer; font-size: 0.875rem;">
+                                    <input type="checkbox" class="criteria-check" data-criteria="clear" style="width: 18px; height: 18px; cursor: pointer;">
+                                    <span>...klar? (Die Frage ist deutlich formuliert)</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; cursor: pointer; font-size: 0.875rem;">
+                                    <input type="checkbox" class="criteria-check" data-criteria="context" style="width: 18px; height: 18px; cursor: pointer;">
+                                    <span>...verständlich? (Bezug zum Original-Aufgebot ist klar)</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.875rem;">
+                                    <input type="checkbox" class="criteria-check" data-criteria="complete" style="width: 18px; height: 18px; cursor: pointer;">
+                                    <span>...vollständig? (Betreff, Anrede, Gruss, ggf. Unterschrift)</span>
+                                </label>
+                            </div>
+                            <div id="criteriaFeedback" style="margin-top: 1rem; padding: 0.75rem; background: white; border-radius: 8px; display: none;">
+                                <p style="font-size: 0.875rem; color: #4CAF50; font-weight: 600;">🎉 Super! Alle Kriterien erfüllt!</p>
+                            </div>
+                        </div>
+                        
+                        <div class="tags-grid" style="margin-top: 1rem;">
+                            <div>
+                                <p class="tag-group-title">🎯 Aspekte:</p>
+                                <div class="tags">
+                                    ${komp.aspekte.map(a => `<span class="tag tag-aspekt">${a}</span>`).join('')}
+                                </div>
+                            </div>
+                            <div>
+                                <p class="tag-group-title">💬 Sprachmodi:</p>
+                                <div class="tags">
+                                    ${komp.sprachmodi.map(s => `<span class="tag tag-sprach">${s}</span>`).join('')}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
+                
+                // Event Listener für Kriterien-Checkboxen
+                setTimeout(() => {
+                    document.querySelectorAll('.criteria-check').forEach(checkbox => {
+                        checkbox.addEventListener('change', checkCriteria);
+                    });
+                }, 100);
+                
+            } else {
+                // Standard für andere Kompetenzen
+                document.getElementById('modalContent').innerHTML = `
+                    <div class="exercise-box">
+                        <p class="exercise-thema">${komp.thema}</p>
+                        <h3 class="exercise-title">🎯 Umsetzungsbeispiel:</h3>
+                        <p class="exercise-description">${komp.uebung}</p>
+                        
+                        <div style="background: white; border-radius: 12px; padding: 1rem; margin-top: 1rem; border: 2px solid rgba(139, 69, 19, 0.2);">
+                            <p style="font-size: 0.875rem; color: #6B7280; margin-bottom: 0.5rem;">
+                                <strong style="color: #8B4513;">💡 Hinweis:</strong> Diese Kompetenz übst du durch konkrete Aktivitäten im Unterricht oder in deinem Alltag.
+                            </p>
+                            <p style="font-size: 0.875rem; color: #6B7280;">
+                                Nach dem Üben kannst du hier festhalten, wie es war!
+                            </p>
+                        </div>
+                        
+                        <div class="tags-grid" style="margin-top: 1rem;">
+                            <div>
+                                <p class="tag-group-title">🎯 Aspekte:</p>
+                                <div class="tags">
+                                    ${komp.aspekte.map(a => `<span class="tag tag-aspekt">${a}</span>`).join('')}
+                                </div>
+                            </div>
+                            <div>
+                                <p class="tag-group-title">💬 Sprachmodi:</p>
+                                <div class="tags">
+                                    ${komp.sprachmodi.map(s => `<span class="tag tag-sprach">${s}</span>`).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
             
             selectedEmojis = [];
             updateSelectedEmojis();
             
             document.getElementById('uebungModal').classList.add('show');
+        }
+        
+        function checkCriteria() {
+            const checkboxes = document.querySelectorAll('.criteria-check');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            const feedback = document.getElementById('criteriaFeedback');
+            
+            if (allChecked) {
+                feedback.style.display = 'block';
+            } else {
+                feedback.style.display = 'none';
+            }
         }
         
         function closeModal() {
@@ -1045,16 +1164,49 @@
                 if (userDoc.exists()) {
                     const data = userDoc.data();
                     const schluessel = data.kompetenzen?.schluessel || {};
+                    const portfolio = data.portfolio || [];
+                    
+                    // Sammle E-Mail Daten wenn vorhanden (für 3.2.2)
+                    let performanzData = null;
+                    if (currentKompetenz === '3.2.2') {
+                        const emailSubject = document.getElementById('emailSubject')?.value || '';
+                        const emailBody = document.getElementById('emailBody')?.value || '';
+                        
+                        if (emailSubject && emailBody) {
+                            performanzData = {
+                                type: 'email',
+                                subject: emailSubject,
+                                body: emailBody,
+                                timestamp: new Date().toISOString()
+                            };
+                            
+                            // Erstelle Portfolio-Eintrag für die E-Mail
+                            const komp = kompetenzen.find(k => k.id === currentKompetenz);
+                            portfolio.push({
+                                id: 'email_' + Date.now(),
+                                type: 'performanz',
+                                kategorie: 'schluessel',
+                                kompetenzId: currentKompetenz,
+                                title: komp.title + ' - E-Mail',
+                                performanz: performanzData,
+                                reflexion: selectedEmojis.join(''),
+                                createdAt: new Date().toISOString(),
+                                shareable: true  // E-Mails können geteilt werden
+                            });
+                        }
+                    }
                     
                     // Markiere Kompetenz als geübt mit Reflexion
                     schluessel[currentKompetenz] = {
                         completed: true,
                         reflexion: selectedEmojis.join(''),
+                        performanz: performanzData,
                         timestamp: new Date().toISOString()
                     };
                     
                     await updateDoc(userRef, {
-                        'kompetenzen.schluessel': schluessel
+                        'kompetenzen.schluessel': schluessel,
+                        'portfolio': portfolio
                     });
                     
                     // Update UI
@@ -1063,7 +1215,11 @@
                     
                     closeModal();
                     
-                    alert('✅ Gespeichert!\n\nKompetenz als geübt markiert mit Reflexion: ' + selectedEmojis.join(' '));
+                    let message = '✅ Gespeichert!\n\nKompetenz als geübt markiert mit Reflexion: ' + selectedEmojis.join(' ');
+                    if (performanzData) {
+                        message += '\n\n📧 Deine E-Mail wurde ins Portfolio gespeichert!';
+                    }
+                    alert(message);
                 }
             } catch (error) {
                 console.error('Fehler beim Speichern:', error);
