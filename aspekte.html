@@ -1086,8 +1086,14 @@
                         <span class="emoji-placeholder" id="emojiPlaceholder">Klicke auf Emojis...</span>
                     </div>
                     <div class="modal-actions">
-                        <button onclick="speichernPortfolio()" class="btn-save" id="portfolioBtn" disabled>
-                            📂 Ins Portfolio speichern
+                        <button onclick="markAsCompleted()" class="btn-save" id="markBtn" disabled>
+                            ✅ Als geübt markieren
+                        </button>
+                        <button onclick="speichernPortfolio()" class="btn-save" id="portfolioBtn" disabled style="background: #2196F3;">
+                            📁 Ins Portfolio speichern
+                        </button>
+                        <button onclick="closeModal()" class="btn-cancel">
+                            Abbrechen
                         </button>
                     </div>
                 </div>
@@ -1542,9 +1548,11 @@
         
         function updatePortfolioButton() {
             const portfolioBtn = document.getElementById('portfolioBtn');
-            if (portfolioBtn) {
-                portfolioBtn.disabled = selectedEmojis.length === 0;
-            }
+            const markBtn = document.getElementById('markBtn');
+            const hasEmojis = selectedEmojis.length > 0;
+            
+            if (portfolioBtn) portfolioBtn.disabled = !hasEmojis;
+            if (markBtn) markBtn.disabled = !hasEmojis;
         }
         
         function markUebungComplete() {
@@ -1562,6 +1570,39 @@
                 setTimeout(() => setupEmojiListeners(), 100);
             }
         }
+        
+        window.markAsCompleted = async function() {
+            if (selectedEmojis.length === 0) {
+                alert('Bitte wähle mindestens ein Emoji als Reflexion!');
+                return;
+            }
+            
+            try {
+                const userRef = doc(db, 'users', userId);
+                const userDoc = await getDoc(userRef);
+                
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    const aspekte = data.kompetenzen?.aspekte || {};
+                    
+                    aspekte[currentAspekt.id] = {
+                        completed: true,
+                        reflexion: selectedEmojis.join(''),
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    await updateDoc(userRef, {
+                        'kompetenzen.aspekte': aspekte
+                    });
+                    
+                    alert('✅ Als geübt markiert!\n\nReflexion: ' + selectedEmojis.join(' '));
+                    closeModal();
+                }
+            } catch (error) {
+                console.error('Fehler:', error);
+                alert('⚠️ Fehler beim Speichern. Bitte überprüfe deine Internetverbindung.');
+            }
+        };
         
         window.speichernPortfolio = async function() {
             if (selectedEmojis.length === 0) {
@@ -1591,12 +1632,25 @@
                 const userDoc = await getDoc(userRef);
                 
                 if (userDoc.exists()) {
-                    const portfolio = userDoc.data().portfolio || [];
+                    const data = userDoc.data();
+                    const aspekte = data.kompetenzen?.aspekte || {};
+                    const portfolio = data.portfolio || [];
+                    
+                    // Markiere auch als geübt
+                    aspekte[currentAspekt.id] = {
+                        completed: true,
+                        reflexion: selectedEmojis.join(''),
+                        timestamp: new Date().toISOString()
+                    };
+                    
                     portfolio.push(portfolioItem);
                     
-                    await updateDoc(userRef, { portfolio });
+                    await updateDoc(userRef, {
+                        'kompetenzen.aspekte': aspekte,
+                        portfolio: portfolio
+                    });
                     
-                    alert('✅ Übung erfolgreich ins Portfolio gespeichert!');
+                    alert('📁 Ins Portfolio gespeichert!\n\n✓ Aspekt als geübt markiert\n✓ Performanz dokumentiert\n✓ Reflexion: ' + selectedEmojis.join(' '));
                     closeModal();
                 } else {
                     alert('⚠️ Fehler beim Speichern.');
