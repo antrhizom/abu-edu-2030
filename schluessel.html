@@ -1,1 +1,757 @@
-
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schlüsselkompetenzen - ABU EBA 2030</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ant-primary': '#8B4513',
+                        'ant-secondary': '#D2691E',
+                        'ant-accent': '#FF6B35',
+                        'ant-success': '#4CAF50',
+                        'ant-network': '#2196F3',
+                        'ant-bg': '#FFF8F0',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #FFF8F0 0%, #FFE4D0 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        .kompetenz-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .kompetenz-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(139, 69, 19, 0.2);
+        }
+        
+        .kompetenz-card.completed {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(76, 175, 80, 0.05));
+            border-color: #4CAF50;
+        }
+        
+        .kompetenz-card.in-progress {
+            background: linear-gradient(135deg, rgba(210, 105, 30, 0.1), rgba(210, 105, 30, 0.05));
+            border-color: #D2691E;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Ameise Styles */
+        @keyframes ant-float {
+            0%, 100% { 
+                transform: translate(0, 0) rotate(-15deg);
+            }
+            25% { 
+                transform: translate(30px, -40px) rotate(-10deg);
+            }
+            50% { 
+                transform: translate(15px, -70px) rotate(-20deg);
+            }
+            75% { 
+                transform: translate(-15px, -40px) rotate(-12deg);
+            }
+        }
+        
+        .floating-ant {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            cursor: pointer;
+            z-index: 1000;
+            animation: ant-float 8s ease-in-out infinite;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+            width: 60px;
+            height: 60px;
+        }
+        
+        .floating-ant svg {
+            pointer-events: none;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .floating-ant:hover {
+            transform: scale(1.2) rotate(5deg) !important;
+            animation-play-state: paused;
+        }
+        
+        .ant-speech-bubble {
+            position: fixed;
+            bottom: 120px;
+            right: 40px;
+            background: white;
+            padding: 16px 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            max-width: 300px;
+            z-index: 999;
+            border: 3px solid #8B4513;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        
+        .ant-speech-bubble.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .ant-speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            right: 30px;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 15px solid #8B4513;
+        }
+        
+        @keyframes antenna-wiggle-left {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-8deg); }
+            75% { transform: rotate(5deg); }
+        }
+        
+        @keyframes antenna-wiggle-right {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(8deg); }
+            75% { transform: rotate(-5deg); }
+        }
+        
+        .floating-ant svg line:nth-of-type(1),
+        .floating-ant svg circle:nth-of-type(4) {
+            transform-origin: 26px 6px;
+            animation: antenna-wiggle-left 2s ease-in-out infinite;
+        }
+        
+        .floating-ant svg line:nth-of-type(2),
+        .floating-ant svg circle:nth-of-type(5) {
+            transform-origin: 34px 6px;
+            animation: antenna-wiggle-right 2s ease-in-out infinite 0.5s;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+    
+    <div class="max-w-6xl mx-auto">
+        
+        <!-- Header -->
+        <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8 mb-8">
+            <div class="flex items-center justify-between flex-wrap gap-4">
+                <div class="flex items-center gap-4">
+                    <a href="dashboard.html" class="text-3xl hover:scale-110 transition-transform">←</a>
+                    <div>
+                        <h1 class="text-3xl md:text-4xl font-bold text-ant-primary mb-2">
+                            🔑 Schlüsselkompetenzen
+                        </h1>
+                        <p class="text-gray-600">
+                            12 Kompetenzen für lebenslanges Lernen
+                        </p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="text-3xl font-bold text-ant-primary" id="progressCount">0/12</div>
+                    <div class="text-sm text-gray-600">geübt</div>
+                </div>
+            </div>
+            
+            <!-- Fortschrittsbalken -->
+            <div class="mt-6">
+                <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                    <div id="progressBar" class="bg-ant-primary h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Info-Box -->
+        <div class="bg-gradient-to-r from-ant-primary/10 to-ant-accent/10 rounded-2xl p-6 mb-8 border-2 border-ant-primary/20">
+            <p class="text-gray-700 text-center">
+                <strong class="text-ant-primary">💡 So funktioniert's:</strong> 
+                Klick auf eine Kompetenz, übe sie und speichere dein Ergebnis ins Portfolio!
+            </p>
+        </div>
+        
+        <!-- Kompetenzen Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            
+            <!-- Kompetenz 1 -->
+            <div class="kompetenz-card bg-white rounded-2xl p-6 border-2 border-gray-200" data-kompetenz="3.2.1">
+                <div class="flex items-start justify-between mb-3">
+                    <span class="text-3xl">💪</span>
+                    <span class="status-badge text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-500">Noch nicht geübt</span>
+                </div>
+                <h3 class="text-lg font-bold text-ant-primary mb-2">
+                    3.2.1 Selbstständig arbeiten
+                </h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    Eigeninitiative zeigen, Aufgaben selbst organisieren und durchführen
+                </p>
+                <button class="w-full bg-ant-primary hover:bg-ant-primary/90 text-white font-semibold py-2 px-4 rounded-lg transition-all">
+                    Üben →
+                </button>
+            </div>
+            
+            <!-- Kompetenz 2 -->
+            <div class="kompetenz-card bg-white rounded-2xl p-6 border-2 border-gray-200" data-kompetenz="3.2.2">
+                <div class="flex items-start justify-between mb-3">
+                    <span class="text-3xl">🎯</span>
+                    <span class="status-badge text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-500">Noch nicht geübt</span>
+                </div>
+                <h3 class="text-lg font-bold text-ant-primary mb-2">
+                    3.2.2 Ziele setzen
+                </h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    Klare Ziele formulieren und Schritte zur Erreichung planen
+                </p>
+                <button class="w-full bg-ant-primary hover:bg-ant-primary/90 text-white font-semibold py-2 px-4 rounded-lg transition-all">
+                    Üben →
+                </button>
+            </div>
+            
+            <!-- Kompetenz 3 -->
+            <div class="kompetenz-card bg-white rounded-2xl p-6 border-2 border-gray-200" data-kompetenz="3.2.3">
+                <div class="flex items-start justify-between mb-3">
+                    <span class="text-3xl">🤝</span>
+                    <span class="status-badge text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-500">Noch nicht geübt</span>
+                </div>
+                <h3 class="text-lg font-bold text-ant-primary mb-2">
+                    3.2.3 Im Team zusammenarbeiten
+                </h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    Kooperieren, Rollen verteilen, gemeinsam Lösungen finden
+                </p>
+                <button class="w-full bg-ant-primary hover:bg-ant-primary/90 text-white font-semibold py-2 px-4 rounded-lg transition-all">
+                    Üben →
+                </button>
+            </div>
+            
+            <!-- Kompetenz 4 -->
+            <div class="kompetenz-card bg-white rounded-2xl p-6 border-2 border-gray-200" data-kompetenz="3.2.4">
+                <div class="flex items-start justify-between mb-3">
+                    <span class="text-3xl">🧠</span>
+                    <span class="status-badge text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-500">Noch nicht geübt</span>
+                </div>
+                <h3 class="text-lg font-bold text-ant-primary mb-2">
+                    3.2.4 Kritisch denken
+                </h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    Informationen hinterfragen, Quellen prüfen, reflektieren
+                </p>
+                <button class="w-full bg-ant-primary hover:bg-ant-primary/90 text-white font-semibold py-2 px-4 rounded-lg transition-all">
+                    Üben →
+                </button>
+            </div>
+            
+            <!-- Kompetenz 5 -->
+            <div class="kompetenz-card bg-white rounded-2xl p-6 border-2 border-gray-200" data-kompetenz="3.2.5">
+                <div class="flex items-start justify-between mb-3">
+                    <span class="text-3xl">🔧</span>
+                    <span class="status-badge text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-500">Noch nicht geübt</span>
+                </div>
+                <h3 class="text-lg font-bold text-ant-primary mb-2">
+                    3.2.5 Probleme lösen
+                </h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    Herausforderungen analysieren und kreative Lösungen entwickeln
+                </p>
+                <button class="w-full bg-ant-primary hover:bg-ant-primary/90 text-white font-semibold py-2 px-4 rounded-lg transition-all">
+                    Üben →
+                </button>
+            </div>
+            
+            <!-- Kompetenz 6 -->
+            <div class="kompetenz-card bg-white rounded-2xl p-6 border-2 border-gray-200" data-kompetenz="3.2.6">
+                <div class="flex items-start justify-between mb-3">
+                    <span class="text-3xl">💬</span>
+                    <span class="status-badge text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-500">Noch nicht geübt</span>
+                </div>
+                <h3 class="text-lg font-bold text-ant-primary mb-2">
+                    3.2.6 Kommunizieren
+                </h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    Klar und verständlich ausdrücken, aktiv zuhören
+                </p>
+                <button class="w-full bg-ant-primary hover:bg-ant-primary/90 text-white font-semibold py-2 px-4 rounded-lg transition-all">
+                    Üben →
+                </button>
+            </div>
+            
+            <!-- Kompetenz 7 -->
+            <div class="kompetenz-card bg-white rounded-2xl p-6 border-2 border-gray-200" data-kompetenz="3.2.7">
+                <div class="flex items-start justify-between mb-3">
+                    <span class="text-3xl">💻</span>
+                    <span class="status-badge text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-500">Noch nicht geübt</span>
+                </div>
+                <h3 class="text-lg font-bold text-ant-primary mb-2">
+                    3.2.7 Digital kompetent sein
+                </h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    Digitale Tools sicher und effektiv nutzen
+                </p>
+                <button class="w-full bg-ant-primary hover:bg-ant-primary/90 text-white font-semibold py-2 px-4 rounded-lg transition-all">
+                    Üben →
+                </button>
+            </div>
+            
+            <!-- Kompetenz 8 -->
+            <div class="kompetenz-card bg-white rounded-2xl p-6 border-2 border-gray-200" data-kompetenz="3.2.8">
+                <div class="flex items-start justify-between mb-3">
+                    <span class="text-3xl">📚</span>
+                    <span class="status-badge text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-500">Noch nicht geübt</span>
+                </div>
+                <h3 class="text-lg font-bold text-ant-primary mb-2">
+                    3.2.8 Lernen lernen
+                </h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    Eigene Lernstrategien entwickeln und anwenden
+                </p>
+                <button class="w-full bg-ant-primary hover:bg-ant-primary/90 text-white font-semibold py-2 px-4 rounded-lg transition-all">
+                    Üben →
+                </button>
+            </div>
+            
+            <!-- Kompetenz 9 -->
+            <div class="kompetenz-card bg-white rounded-2xl p-6 border-2 border-gray-200" data-kompetenz="3.2.9">
+                <div class="flex items-start justify-between mb-3">
+                    <span class="text-3xl">🔄</span>
+                    <span class="status-badge text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-500">Noch nicht geübt</span>
+                </div>
+                <h3 class="text-lg font-bold text-ant-primary mb-2">
+                    3.2.9 Anpassungsfähig sein
+                </h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    Flexibel auf Veränderungen reagieren und umdenken können
+                </p>
+                <button class="w-full bg-ant-primary hover:bg-ant-primary/90 text-white font-semibold py-2 px-4 rounded-lg transition-all">
+                    Üben →
+                </button>
+            </div>
+            
+            <!-- Kompetenz 10 -->
+            <div class="kompetenz-card bg-white rounded-2xl p-6 border-2 border-gray-200" data-kompetenz="3.2.10">
+                <div class="flex items-start justify-between mb-3">
+                    <span class="text-3xl">⚖️</span>
+                    <span class="status-badge text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-500">Noch nicht geübt</span>
+                </div>
+                <h3 class="text-lg font-bold text-ant-primary mb-2">
+                    3.2.10 Verantwortung übernehmen
+                </h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    Für eigene Handlungen einstehen und Konsequenzen tragen
+                </p>
+                <button class="w-full bg-ant-primary hover:bg-ant-primary/90 text-white font-semibold py-2 px-4 rounded-lg transition-all">
+                    Üben →
+                </button>
+            </div>
+            
+            <!-- Kompetenz 11 -->
+            <div class="kompetenz-card bg-white rounded-2xl p-6 border-2 border-gray-200" data-kompetenz="3.2.11">
+                <div class="flex items-start justify-between mb-3">
+                    <span class="text-3xl">🎨</span>
+                    <span class="status-badge text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-500">Noch nicht geübt</span>
+                </div>
+                <h3 class="text-lg font-bold text-ant-primary mb-2">
+                    3.2.11 Kreativ sein
+                </h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    Neue Ideen entwickeln und unkonventionell denken
+                </p>
+                <button class="w-full bg-ant-primary hover:bg-ant-primary/90 text-white font-semibold py-2 px-4 rounded-lg transition-all">
+                    Üben →
+                </button>
+            </div>
+            
+            <!-- Kompetenz 12 -->
+            <div class="kompetenz-card bg-white rounded-2xl p-6 border-2 border-gray-200" data-kompetenz="3.2.12">
+                <div class="flex items-start justify-between mb-3">
+                    <span class="text-3xl">🪞</span>
+                    <span class="status-badge text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-500">Noch nicht geübt</span>
+                </div>
+                <h3 class="text-lg font-bold text-ant-primary mb-2">
+                    3.2.12 Selbstreflexion
+                </h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    Eigenes Handeln und Lernen kritisch betrachten und bewerten
+                </p>
+                <button class="w-full bg-ant-primary hover:bg-ant-primary/90 text-white font-semibold py-2 px-4 rounded-lg transition-all">
+                    Üben →
+                </button>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="text-center">
+            <div class="bg-white/50 backdrop-blur rounded-full px-6 py-3 inline-block">
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                    <span class="text-lg">🔑✏️💡</span>
+                    <span>|</span>
+                    <span id="currentYear"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal für Übungen -->
+    <div id="uebungModal" class="modal">
+        <div class="modal-content">
+            <div class="p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-ant-primary" id="modalTitle">Übung</h2>
+                    <button id="closeModal" class="text-3xl text-gray-400 hover:text-gray-600">×</button>
+                </div>
+                
+                <div id="modalContent" class="mb-6">
+                    <!-- Wird dynamisch gefüllt -->
+                </div>
+                
+                <!-- Übungs-Bereich -->
+                <div class="bg-ant-bg rounded-2xl p-6 mb-6">
+                    <h3 class="font-bold text-ant-primary mb-3">✍️ Deine Antwort:</h3>
+                    <textarea id="antwortText" class="w-full h-40 p-4 border-2 border-gray-200 rounded-xl resize-none focus:border-ant-primary focus:outline-none" placeholder="Schreibe hier deine Antwort..."></textarea>
+                </div>
+                
+                <!-- Aktionen -->
+                <div class="flex gap-3">
+                    <button id="speichernBtn" class="flex-1 bg-ant-success hover:bg-ant-success/90 text-white font-bold py-4 px-6 rounded-xl transition-all">
+                        💾 Ins Portfolio speichern
+                    </button>
+                    <button id="abbrechenBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-4 px-6 rounded-xl transition-all">
+                        Abbrechen
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Schwebende Ameise -->
+    <div class="floating-ant" id="floatingAnt" title="Klick mich!">
+        <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="30" cy="35" rx="12" ry="15" fill="#8B4513"/>
+            <ellipse cx="30" cy="20" rx="10" ry="12" fill="#A0522D"/>
+            <circle cx="30" cy="10" r="8" fill="#8B4513"/>
+            <line x1="26" y1="6" x2="22" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <line x1="34" y1="6" x2="38" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="22" cy="0" r="2" fill="#654321"/>
+            <circle cx="38" cy="0" r="2" fill="#654321"/>
+            <line x1="20" y1="25" x2="10" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <line x1="20" y1="30" x2="8" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <line x1="22" y1="38" x2="12" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <line x1="40" y1="25" x2="50" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <line x1="40" y1="30" x2="52" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <line x1="38" y1="38" x2="48" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <ellipse cx="26" cy="10" rx="3" ry="4" fill="white"/>
+            <ellipse cx="34" cy="10" rx="3" ry="4" fill="white"/>
+            <circle cx="26" cy="11" r="2" fill="#333"/>
+            <circle cx="34" cy="11" r="2" fill="#333"/>
+            <circle cx="26.5" cy="10" r="0.8" fill="white"/>
+            <circle cx="34.5" cy="10" r="0.8" fill="white"/>
+            <path d="M 24 14 Q 30 16 36 14" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        </svg>
+    </div>
+    <div class="ant-speech-bubble" id="antSpeech">
+        <p class="text-sm font-semibold text-ant-primary" id="antText"></p>
+    </div>
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getFirestore, doc, getDoc, setDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyDycvEwK6KJZyFEtsGIaHJBhIFTp5L4cdA",
+            authDomain: "abueba2030.firebaseapp.com",
+            projectId: "abueba2030",
+            storageBucket: "abueba2030.firebasestorage.app",
+            messagingSenderId: "592718816412",
+            appId: "1:592718816412:web:366e44efabba256d48b959"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        let userId = null;
+        let currentKompetenz = null;
+        
+        // Kompetenz-Daten
+        const kompetenzData = {
+            '3.2.1': {
+                title: '3.2.1 Selbstständig arbeiten',
+                uebung: 'Beschreibe eine Situation, in der du selbstständig eine Aufgabe erledigt hast. Was hast du gelernt?'
+            },
+            '3.2.2': {
+                title: '3.2.2 Ziele setzen',
+                uebung: 'Setze dir ein konkretes Ziel für die nächsten 3 Monate. Was sind die ersten Schritte?'
+            },
+            '3.2.3': {
+                title: '3.2.3 Im Team zusammenarbeiten',
+                uebung: 'Beschreibe eine positive Teamarbeit-Erfahrung. Was hat gut funktioniert?'
+            },
+            '3.2.4': {
+                title: '3.2.4 Kritisch denken',
+                uebung: 'Finde eine Nachricht online und prüfe: Ist die Quelle vertrauenswürdig? Begründe deine Meinung.'
+            },
+            '3.2.5': {
+                title: '3.2.5 Probleme lösen',
+                uebung: 'Beschreibe ein Problem, das du kürzlich gelöst hast. Welche Schritte hast du unternommen?'
+            },
+            '3.2.6': {
+                title: '3.2.6 Kommunizieren',
+                uebung: 'Schreibe eine höfliche E-Mail, um nach fehlenden Informationen zu fragen.'
+            },
+            '3.2.7': {
+                title: '3.2.7 Digital kompetent sein',
+                uebung: 'Welche digitalen Tools nutzt du regelmäßig? Beschreibe, wie sie dir helfen.'
+            },
+            '3.2.8': {
+                title: '3.2.8 Lernen lernen',
+                uebung: 'Welche Lernstrategie funktioniert für dich am besten? Warum?'
+            },
+            '3.2.9': {
+                title: '3.2.9 Anpassungsfähig sein',
+                uebung: 'Beschreibe eine Situation, in der du dich an eine neue Situation anpassen musstest.'
+            },
+            '3.2.10': {
+                title: '3.2.10 Verantwortung übernehmen',
+                uebung: 'Wofür übernimmst du Verantwortung? Wie gehst du damit um?'
+            },
+            '3.2.11': {
+                title: '3.2.11 Kreativ sein',
+                uebung: 'Entwickle eine kreative Idee für ein kleines Projekt. Beschreibe sie.'
+            },
+            '3.2.12': {
+                title: '3.2.12 Selbstreflexion',
+                uebung: 'Reflektiere: Was hast du diese Woche gut gemacht? Was könntest du verbessern?'
+            }
+        };
+        
+        window.addEventListener('load', async function() {
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            userId = localStorage.getItem('ant_edu_user_id');
+            if (!userId) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Lade Fortschritt
+            await loadProgress();
+            
+            // Event Listeners für Kompetenz-Karten
+            document.querySelectorAll('.kompetenz-card button').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const card = this.closest('.kompetenz-card');
+                    const kompetenzId = card.getAttribute('data-kompetenz');
+                    openUebung(kompetenzId);
+                });
+            });
+            
+            // Modal Event Listeners
+            document.getElementById('closeModal').addEventListener('click', closeModal);
+            document.getElementById('abbrechenBtn').addEventListener('click', closeModal);
+            document.getElementById('speichernBtn').addEventListener('click', saveToPortfolio);
+            
+            // Klick außerhalb Modal schließt es
+            document.getElementById('uebungModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+        });
+        
+        async function loadProgress() {
+            try {
+                const userDoc = await getDoc(doc(db, 'users', userId));
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    const schluessel = data.kompetenzen?.schluessel || {};
+                    
+                    const count = Object.keys(schluessel).length;
+                    document.getElementById('progressCount').textContent = `${count}/12`;
+                    document.getElementById('progressBar').style.width = `${(count/12)*100}%`;
+                    
+                    // Update Karten-Status
+                    Object.keys(schluessel).forEach(kompetenzId => {
+                        updateCardStatus(kompetenzId, true);
+                    });
+                }
+            } catch (error) {
+                console.log('Fehler beim Laden:', error);
+            }
+        }
+        
+        function updateCardStatus(kompetenzId, completed) {
+            const card = document.querySelector(`[data-kompetenz="${kompetenzId}"]`);
+            if (card) {
+                const badge = card.querySelector('.status-badge');
+                if (completed) {
+                    card.classList.add('completed');
+                    badge.textContent = '✅ Geübt';
+                    badge.className = 'status-badge text-xs px-2 py-1 rounded-full bg-ant-success/20 text-ant-success font-semibold';
+                }
+            }
+        }
+        
+        function openUebung(kompetenzId) {
+            currentKompetenz = kompetenzId;
+            const data = kompetenzData[kompetenzId];
+            
+            document.getElementById('modalTitle').textContent = data.title;
+            document.getElementById('modalContent').innerHTML = `
+                <div class="bg-ant-primary/10 rounded-xl p-4 mb-4">
+                    <h3 class="font-bold text-ant-primary mb-2">📝 Übung:</h3>
+                    <p class="text-gray-700">${data.uebung}</p>
+                </div>
+            `;
+            document.getElementById('antwortText').value = '';
+            
+            document.getElementById('uebungModal').classList.add('show');
+        }
+        
+        function closeModal() {
+            document.getElementById('uebungModal').classList.remove('show');
+            currentKompetenz = null;
+        }
+        
+        async function saveToPortfolio() {
+            const antwort = document.getElementById('antwortText').value.trim();
+            
+            if (!antwort) {
+                alert('Bitte schreibe zuerst eine Antwort!');
+                return;
+            }
+            
+            try {
+                const userRef = doc(db, 'users', userId);
+                const userDoc = await getDoc(userRef);
+                
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    const schluessel = data.kompetenzen?.schluessel || {};
+                    
+                    // Markiere Kompetenz als geübt
+                    schluessel[currentKompetenz] = true;
+                    
+                    await updateDoc(userRef, {
+                        'kompetenzen.schluessel': schluessel
+                    });
+                    
+                    // TODO: Ins Portfolio speichern (wird später implementiert)
+                    
+                    // Update UI
+                    updateCardStatus(currentKompetenz, true);
+                    await loadProgress();
+                    
+                    closeModal();
+                    
+                    alert('✅ Gespeichert! Die Kompetenz wurde als geübt markiert.');
+                } else {
+                    alert('Fehler: User-Daten nicht gefunden.');
+                }
+            } catch (error) {
+                console.error('Fehler beim Speichern:', error);
+                alert('Fehler beim Speichern: ' + error.message);
+            }
+        }
+        
+        window.openUebung = openUebung;
+    </script>
+    
+    <!-- Ameisen-Funktionalität -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const antQuotes = [
+                "🐜 Schlüsselkompetenzen sind übertragbar - was du hier lernst, hilft dir überall!",
+                "🐜 Jede Kompetenz wird in verschiedenen Themen immer wieder geübt!",
+                "🐜 12 Kompetenzen für lebenslanges Lernen - das ist dein Fundament!",
+                "🐜 Pro-Tipp: Nach jeder Übung ins Portfolio speichern!",
+                "🐜 Selbstständigkeit, Teamwork, kritisches Denken - das sind Zukunftskompetenzen!",
+                "🐜 Klick auf eine Karte, übe die Kompetenz und sammle Erfahrungen!",
+                "🐜 Grüne Karten = Bereits geübt ✅",
+                "🐜 Ameisen-Weisheit: Kleine Schritte, große Wirkung! 🐾",
+                "🐜 Diese Kompetenzen brauchst du in ALLEN 8 Themen!",
+                "🐜 Spiralförmig bedeutet: Du vertiefst diese Kompetenzen immer weiter!",
+                "🐜 Portfolio-Tipp: Sammle deine Antworten - sie zeigen deine Entwicklung!"
+            ];
+            
+            let lastQuoteIndex = -1;
+            
+            const floatingAnt = document.getElementById('floatingAnt');
+            const speechBubble = document.getElementById('antSpeech');
+            const antText = document.getElementById('antText');
+            
+            floatingAnt.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                let randomIndex;
+                do {
+                    randomIndex = Math.floor(Math.random() * antQuotes.length);
+                } while (randomIndex === lastQuoteIndex && antQuotes.length > 1);
+                
+                lastQuoteIndex = randomIndex;
+                antText.textContent = antQuotes[randomIndex];
+                
+                speechBubble.classList.add('show');
+                
+                setTimeout(() => {
+                    speechBubble.classList.remove('show');
+                }, 6000);
+            });
+        });
+    </script>
+</body>
+</html>
