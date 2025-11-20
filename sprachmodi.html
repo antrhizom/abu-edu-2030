@@ -420,14 +420,21 @@
         .emoji-btn {
             font-size: 2.5rem;
             background: none;
-            border: none;
+            border: 2px solid transparent;
             cursor: pointer;
-            transition: transform 0.2s;
-            padding: 0.25rem;
+            transition: all 0.2s;
+            padding: 0.5rem;
+            border-radius: 8px;
         }
         
         .emoji-btn:hover {
-            transform: scale(1.25);
+            transform: scale(1.15);
+            background: rgba(255, 107, 53, 0.1);
+        }
+        
+        .emoji-btn.selected {
+            border-color: #FF6B35;
+            background: rgba(255, 107, 53, 0.15);
         }
         
         .selected-emojis {
@@ -536,7 +543,7 @@
                             💬 Sprachmodi
                         </h1>
                         <p class="header-subtitle">
-                            8 Modi der Kommunikation (inkl. digital)
+                            9 Modi der Kommunikation (inkl. digital)
                         </p>
                     </div>
                 </div>
@@ -548,9 +555,10 @@
         <div class="info-box">
             <h2 class="info-title">💡 Modi der Kommunikation</h2>
             <p class="info-text">
-                Sprachmodi beschreiben, <strong>wie</strong> du kommunizierst. 
-                Ob du liest, schreibst, sprichst oder zuhörst – und ob analog oder digital 💻 – 
-                all das sind verschiedene Modi!
+                Die Modi der Kommunikation widerspiegeln, <strong>wie Sprache im Alltag medienabhängig genutzt wird</strong>. 
+                Der Mensch hört und liest Texte in unterschiedlichen, medienabhängigen und oft multimodalen Erscheinungsformen und 
+                unterschiedlichen Kontexten für sich selbst (Rezeption) und formuliert ebenso individuell mündlich und schriftlich (Produktion). 
+                Zudem tritt er über verschiedene Medien und Ausdruckformen in Interaktion mit anderen und tauscht sich aus (Interaktion).
             </p>
         </div>
         
@@ -621,7 +629,7 @@
                 id: '4.2.1.1',
                 icon: '👂',
                 title: '4.2.1.1 Rezeption mündlich',
-                description: 'Hörmaterialien verstehen (Podcasts, Vorträge, Gespräche)',
+                description: 'Hörmaterialien aus verschiedenen Medien verstehen / Informalen und formalen Gesprächen aus verschiedenen Kontexten folgen',
                 uebung: {
                     typ: 'multiple-choice',
                     titel: 'Podcast verstehen',
@@ -664,7 +672,7 @@
                 id: '4.2.1.2',
                 icon: '📺',
                 title: '4.2.1.2 Rezeption audiovisuell',
-                description: 'Videos, Filme, visuelle Medien verstehen',
+                description: 'Audiovisuelle Materialien verstehen',
                 uebung: {
                     typ: 'video-analyse',
                     titel: 'Bewerbungsvideo analysieren',
@@ -682,8 +690,8 @@
             {
                 id: '4.2.1.3',
                 icon: '📖',
-                title: '4.2.1.3 Rezeption schriftlich/bildlich',
-                description: 'Texte und Bilder lesen und verstehen',
+                title: '4.2.1.3 Rezeption schriftlich und bildlich',
+                description: 'Analoge und digitale lineare Texte verstehen / Analoge und digitale nicht-lineare Texte verstehen',
                 uebung: {
                     typ: 'lese-verstehen',
                     titel: 'Lehrvertrag verstehen',
@@ -704,7 +712,7 @@
                 id: '4.2.2.1',
                 icon: '🗣️',
                 title: '4.2.2.1 Produktion mündlich',
-                description: 'Mündlich kommunizieren und präsentieren',
+                description: 'In verschiedenen Situationen verständlich, angemessen und adressatengerecht sprechen und präsentieren',
                 uebung: {
                     typ: 'praesentation-check',
                     titel: 'Präsentations-Vorbereitung',
@@ -723,7 +731,7 @@
                 id: '4.2.2.2',
                 icon: '✏️',
                 title: '4.2.2.2 Produktion schriftlich',
-                description: 'Texte schreiben und formulieren',
+                description: 'Verständlich, angemessen und adressatengerecht schreiben',
                 uebung: {
                     typ: 'text-schreiben',
                     titel: 'E-Mail schreiben',
@@ -744,7 +752,7 @@
                 id: '4.2.3.1',
                 icon: '💬',
                 title: '4.2.3.1 Interaktion mündlich',
-                description: 'In Gesprächen reagieren und diskutieren',
+                description: 'In verschiedenen Situationen verständlich, angemessen und adressatengerecht auf mündliche Äusserungen reagieren',
                 uebung: {
                     typ: 'gespraech-situationen',
                     titel: 'Gespräch führen',
@@ -786,8 +794,8 @@
             {
                 id: '4.2.3.2',
                 icon: '💻',
-                title: '4.2.3.2 Interaktion schriftlich/digital',
-                description: 'Digital kommunizieren (Chat, E-Mail)',
+                title: '4.2.3.2 Interaktion schriftlich und digital',
+                description: 'In verschiedenen Situationen verständlich, angemessen und adressatengerecht auf schriftliche Äusserungen reagieren',
                 uebung: {
                     typ: 'digital-kommunikation',
                     titel: 'Teams-Chat: Angemessen reagieren',
@@ -817,14 +825,42 @@
                 }
             },
             {
-                id: '4.2.4',
+                id: '4.2.4.1',
                 icon: '📝',
-                title: '4.2.4 Konventionen & Sprachbewusstheit',
-                description: 'Sprachregeln und Konventionen anwenden',
+                title: '4.2.4.1 Texttypen und Textformate',
+                description: 'Verständlich und kontextangemessen mit verschiedenen Texttypen und Textformaten umgehen',
+                uebung: {
+                    typ: 'texttypen',
+                    titel: 'Texttypen zuordnen',
+                    beschreibung: 'Ordne die Beispiele dem richtigen Texttyp zu:',
+                    beispiele: [
+                        {
+                            text: 'Stelleninserat für Praktikum',
+                            optionen: ['Informierender Text', 'Appellierender Text', 'Argumentierender Text'],
+                            richtig: 1
+                        },
+                        {
+                            text: 'Bericht über einen Unfall',
+                            optionen: ['Informierender Text', 'Appellierender Text', 'Argumentierender Text'],
+                            richtig: 0
+                        },
+                        {
+                            text: 'Leserbrief zur Klimapolitik',
+                            optionen: ['Informierender Text', 'Appellierender Text', 'Argumentierender Text'],
+                            richtig: 2
+                        }
+                    ]
+                }
+            },
+            {
+                id: '4.2.4.2',
+                icon: '🎯',
+                title: '4.2.4.2 Konventionen, Normen und Sprachbewusstheit',
+                description: 'Konventionen, Normen und sprachliche Mittel in verschiedenen Kontexten verstehen und anwenden',
                 uebung: {
                     typ: 'sprachbewusstheit',
                     titel: 'Formell oder Informell?',
-                    beschreibung: 'Entscheide: Welche Formulierung passt woher?',
+                    beschreibung: 'Entscheide: Welche Formulierung passt wohin?',
                     beispiele: [
                         {
                             satz: 'Grüezi, ich hätte eine Frage bezüglich...',
@@ -905,16 +941,7 @@
             
             modal.classList.add('show');
             
-            // Event Listeners für Übung hinzufügen
             setupUebungListeners(currentModus.uebung.typ);
-            
-            // Event Listeners für Emojis hinzufügen (später)
-            setTimeout(() => {
-                const emojiButtons = document.querySelectorAll('.emoji-btn');
-                if (emojiButtons.length > 0) {
-                    setupEmojiListeners();
-                }
-            }, 100);
         };
         
         function generateModalContent(modus) {
@@ -963,14 +990,14 @@
         function generateUebungHTML(uebung) {
             let html = '';
             
-            if (uebung.typ === 'multiple-choice' || uebung.typ === 'gespraech-situationen' || uebung.typ === 'digital-kommunikation') {
+            if (uebung.typ === 'multiple-choice' || uebung.typ === 'gespraech-situationen' || uebung.typ === 'digital-kommunikation' || uebung.typ === 'texttypen') {
                 html += `<div id="uebungContent">`;
-                const fragen = uebung.fragen || uebung.situationen || uebung.szenarien;
+                const fragen = uebung.fragen || uebung.situationen || uebung.szenarien || uebung.beispiele;
                 fragen.forEach((item, qIndex) => {
                     html += `
                         <div style="margin-bottom: 1.5rem;">
                             <p style="font-weight: 600; margin-bottom: 0.75rem; color: #374151;">
-                                ${qIndex + 1}. ${item.frage || item.situation || item.nachricht}
+                                ${qIndex + 1}. ${item.frage || item.situation || item.nachricht || item.text}
                             </p>
                             <div class="choice-grid">
                                 ${item.optionen.map((option, oIndex) => `
@@ -1071,7 +1098,7 @@
             const checkBtn = document.getElementById('checkBtn');
             if (!checkBtn) return;
             
-            if (typ === 'multiple-choice' || typ === 'gespraech-situationen' || typ === 'digital-kommunikation' || typ === 'sprachbewusstheit') {
+            if (typ === 'multiple-choice' || typ === 'gespraech-situationen' || typ === 'digital-kommunikation' || typ === 'sprachbewusstheit' || typ === 'texttypen') {
                 document.querySelectorAll('.choice-item').forEach(item => {
                     item.addEventListener('click', function() {
                         if (this.classList.contains('correct') || this.classList.contains('wrong')) return;
@@ -1196,52 +1223,6 @@
             markUebungComplete();
         }
         
-        function setupEmojiListeners() {
-            const emojiButtons = document.querySelectorAll('.emoji-btn');
-            
-            emojiButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const emoji = this.dataset.emoji;
-                    const index = selectedEmojis.indexOf(emoji);
-                    if (index > -1) {
-                        selectedEmojis.splice(index, 1);
-                    } else {
-                        selectedEmojis.push(emoji);
-                    }
-                    updateSelectedEmojisDisplay();
-                    updatePortfolioButton();
-                });
-            });
-        }
-        
-        function updateSelectedEmojisDisplay() {
-            const container = document.getElementById('selectedEmojis');
-            const placeholder = document.getElementById('emojiPlaceholder');
-            
-            if (selectedEmojis.length === 0) {
-                placeholder.style.display = 'block';
-                container.querySelectorAll('.selected-emoji').forEach(e => e.remove());
-            } else {
-                placeholder.style.display = 'none';
-                container.querySelectorAll('.selected-emoji').forEach(e => e.remove());
-                selectedEmojis.forEach(emoji => {
-                    const span = document.createElement('span');
-                    span.className = 'selected-emoji';
-                    span.textContent = emoji;
-                    container.appendChild(span);
-                });
-            }
-        }
-        
-        function updatePortfolioButton() {
-            const portfolioBtn = document.getElementById('portfolioBtn');
-            const markBtn = document.getElementById('markBtn');
-            const hasEmojis = selectedEmojis.length > 0;
-            
-            if (portfolioBtn) portfolioBtn.disabled = !hasEmojis;
-            if (markBtn) markBtn.disabled = !hasEmojis;
-        }
-        
         function markUebungComplete() {
             uebungAbgeschlossen = true;
             const checkBtn = document.getElementById('checkBtn');
@@ -1268,6 +1249,57 @@
             if (type === 'partial') {
                 feedback.classList.add('partial');
             }
+        }
+        
+        function setupEmojiListeners() {
+            const emojiButtons = document.querySelectorAll('.emoji-btn');
+            
+            emojiButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const emoji = this.dataset.emoji;
+                    const index = selectedEmojis.indexOf(emoji);
+                    
+                    if (index > -1) {
+                        selectedEmojis.splice(index, 1);
+                        this.classList.remove('selected');
+                    } else {
+                        selectedEmojis.push(emoji);
+                        this.classList.add('selected');
+                    }
+                    
+                    updateSelectedEmojisDisplay();
+                    updatePortfolioButton();
+                });
+            });
+        }
+        
+        function updateSelectedEmojisDisplay() {
+            const container = document.getElementById('selectedEmojis');
+            const placeholder = document.getElementById('emojiPlaceholder');
+            
+            container.querySelectorAll('.selected-emoji').forEach(e => e.remove());
+            
+            if (selectedEmojis.length === 0) {
+                placeholder.style.display = 'block';
+            } else {
+                placeholder.style.display = 'none';
+                selectedEmojis.forEach(emoji => {
+                    const span = document.createElement('span');
+                    span.className = 'selected-emoji';
+                    span.textContent = emoji;
+                    container.appendChild(span);
+                });
+            }
+        }
+        
+        function updatePortfolioButton() {
+            const portfolioBtn = document.getElementById('portfolioBtn');
+            const markBtn = document.getElementById('markBtn');
+            const hasEmojis = selectedEmojis.length > 0;
+            
+            if (portfolioBtn) portfolioBtn.disabled = !hasEmojis;
+            if (markBtn) markBtn.disabled = !hasEmojis;
         }
         
         window.markAsCompleted = async function() {
