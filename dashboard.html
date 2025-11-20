@@ -202,15 +202,46 @@
                 </h2>
             </div>
             
-            <div class="mb-6">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-lg font-semibold text-gray-700">Alle Kompetenzen</span>
-                    <span class="text-lg font-bold text-ant-accent" id="totalProgress">0%</span>
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Kompetenzen -->
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-lg font-semibold text-gray-700">Alle Kompetenzen</span>
+                        <span class="text-lg font-bold text-ant-accent" id="totalProgress">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-6 overflow-hidden mb-2">
+                        <div id="totalProgressBar" class="bg-gradient-to-r from-ant-accent to-ant-success h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <p class="text-sm text-gray-500" id="totalProgressText">0 von 29 Kompetenzen geübt</p>
                 </div>
-                <div class="w-full bg-gray-200 rounded-full h-6 overflow-hidden">
-                    <div id="totalProgressBar" class="bg-gradient-to-r from-ant-accent to-ant-success h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                
+                <!-- Portfolio-Aktivität -->
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-lg font-semibold text-gray-700">Portfolio-Aktivität</span>
+                        <span class="text-lg font-bold text-ant-network" id="portfolioCount">0</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-6 overflow-hidden mb-2">
+                        <div id="portfolioProgressBar" class="bg-ant-network h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <p class="text-sm text-gray-500" id="portfolioText">0 Einträge mit Reflexion</p>
                 </div>
-                <p class="text-sm text-gray-500 mt-2" id="totalProgressText">0 von 28 Kompetenzen geübt</p>
+            </div>
+            
+            <!-- Portfolio-Details -->
+            <div class="mt-6 grid md:grid-cols-3 gap-3">
+                <div class="bg-ant-primary/5 rounded-lg p-3 text-center">
+                    <div class="text-2xl font-bold text-ant-primary" id="portfolioKompetenzCount">0</div>
+                    <div class="text-xs text-gray-600">Kompetenz-Reflexionen</div>
+                </div>
+                <div class="bg-ant-network/5 rounded-lg p-3 text-center">
+                    <div class="text-2xl font-bold text-ant-network" id="portfolioChallengeCount">0</div>
+                    <div class="text-xs text-gray-600">Challenge-Lösungen</div>
+                </div>
+                <div class="bg-ant-success/5 rounded-lg p-3 text-center">
+                    <div class="text-2xl font-bold text-ant-success" id="portfolioPublicCount">0</div>
+                    <div class="text-xs text-gray-600">Öffentlich</div>
+                </div>
             </div>
         </div>
         
@@ -751,6 +782,7 @@
         
         function updateStatus(data) {
             const kompetenzen = data.kompetenzen || { schluessel: {}, aspekte: {}, sprachmodi: {} };
+            const portfolio = data.portfolio || [];
             
             // Zähle geübte Kompetenzen
             const schluesselCount = Object.keys(kompetenzen.schluessel || {}).length;
@@ -765,6 +797,20 @@
             document.getElementById('totalProgress').textContent = `${totalPercent}%`;
             document.getElementById('totalProgressBar').style.width = `${totalPercent}%`;
             document.getElementById('totalProgressText').textContent = `${total} von ${maxTotal} Kompetenzen geübt`;
+            
+            // Portfolio-Aktivität
+            const portfolioKompetenz = portfolio.filter(e => e.type === 'kompetenz').length;
+            const portfolioChallenge = portfolio.filter(e => e.type === 'challenge').length;
+            const portfolioPublic = portfolio.filter(e => e.isPublic === true).length;
+            const portfolioTotal = portfolio.length;
+            
+            document.getElementById('portfolioCount').textContent = portfolioTotal;
+            document.getElementById('portfolioProgressBar').style.width = `${Math.min(100, (portfolioTotal / maxTotal) * 100)}%`;
+            document.getElementById('portfolioText').textContent = `${portfolioTotal} Einträge mit Reflexion`;
+            
+            document.getElementById('portfolioKompetenzCount').textContent = portfolioKompetenz;
+            document.getElementById('portfolioChallengeCount').textContent = portfolioChallenge;
+            document.getElementById('portfolioPublicCount').textContent = portfolioPublic;
             
             // Schlüsselkompetenzen
             updateCompetenceStatus(
