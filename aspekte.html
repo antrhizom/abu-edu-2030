@@ -351,7 +351,7 @@
             font-size: 0.875rem;
         }
         
-        .choice-item:hover {
+        .choice-item:hover:not(.correct):not(.wrong) {
             background: #E5E7EB;
         }
         
@@ -363,11 +363,13 @@
         .choice-item.correct {
             background: #D1FAE5;
             border-color: #4CAF50;
+            cursor: default;
         }
         
         .choice-item.wrong {
             background: #FEE2E2;
             border-color: #EF4444;
+            cursor: default;
         }
         
         /* Drag and Drop */
@@ -476,7 +478,7 @@
             margin-bottom: 1rem;
         }
         
-        .check-btn:hover {
+        .check-btn:hover:not(:disabled) {
             background: #D2691E;
             transform: translateY(-1px);
         }
@@ -484,6 +486,7 @@
         .check-btn:disabled {
             background: #9CA3AF;
             cursor: not-allowed;
+            transform: none;
         }
         
         /* Feedback */
@@ -503,6 +506,11 @@
         .feedback.success {
             background: #F0FDF4;
             border-color: #4CAF50;
+        }
+        
+        .feedback.partial {
+            background: #FFF7ED;
+            border-color: #F59E0B;
         }
         
         .feedback-text {
@@ -572,7 +580,7 @@
             transition: all 0.3s;
         }
         
-        .save-btn:hover {
+        .save-btn:hover:not(:disabled) {
             box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
             transform: translateY(-2px);
         }
@@ -861,7 +869,7 @@
                         { text: 'Armee und Verteidigung', ebene: 2 },
                         { text: 'Parkplätze im Dorf', ebene: 0 },
                         { text: 'Steuersätze im Kanton', ebene: 1 },
-                        { text: 'Aussenpoliti und EU', ebene: 2 }
+                        { text: 'Aussenpolitik und EU', ebene: 2 }
                     ]
                 }
             },
@@ -1104,7 +1112,7 @@
             }
             else if (uebung.typ === 'bewertung' || uebung.typ === 'ki-bewertung') {
                 html += `<div id="uebungContent">`;
-                uebung.items.forEach((item, index) => {
+                (uebung.items || uebung.aspekte).forEach((item, index) => {
                     html += `
                         <div class="slider-container">
                             <div class="slider-question">${item.name || item.text}</div>
@@ -1166,6 +1174,7 @@
                 // Choice selection
                 document.querySelectorAll('.choice-item').forEach(item => {
                     item.addEventListener('click', function() {
+                        if (this.classList.contains('correct') || this.classList.contains('wrong')) return;
                         const question = this.dataset.question;
                         // Deselect others in same question
                         document.querySelectorAll(`[data-question="${question}"]`).forEach(i => {
@@ -1199,9 +1208,11 @@
             }
         }
         
+        // ========== KORRIGIERTE CHECK-FUNKTIONEN ==========
+        
         function checkMultipleChoice() {
             const uebung = currentAspekt.uebung;
-            let allCorrect = true;
+            let correctCount = 0;
             let answeredAll = true;
             
             uebung.fragen.forEach((frage, qIndex) => {
@@ -1214,28 +1225,154 @@
                 const selectedOption = parseInt(selected.dataset.option);
                 const choiceItems = document.querySelectorAll(`[data-question="${qIndex}"]`);
                 
+                // Markiere alle Antworten und deaktiviere Klicks
                 choiceItems.forEach((item, oIndex) => {
+                    item.style.pointerEvents = 'none';
                     if (oIndex === frage.richtig) {
                         item.classList.add('correct');
-                    } else if (oIndex === selectedOption && selectedOption !== frage.richtig) {
+                        if (oIndex === selectedOption) {
+                            correctCount++;
+                        }
+                    } else if (oIndex === selectedOption) {
                         item.classList.add('wrong');
-                        allCorrect = false;
                     }
                 });
             });
             
             if (!answeredAll) {
-                showFeedback('Bitte beantworte alle Fragen!', false);
+                showFeedback('⚠️ Bitte beantworte alle Fragen!', false);
                 return;
             }
             
-            if (allCorrect) {
-                showFeedback('✅ Ausgezeichnet! Alle Antworten sind richtig.', true);
-                markUebungComplete();
+            // Zeige IMMER die Lösungen und schliesse ab
+            if (correctCount === uebung.fragen.length) {
+                showFeedback(`✅ Perfekt! Alle ${uebung.fragen.length} Antworten sind richtig.`, true);
             } else {
-                showFeedback('❌ Noch nicht ganz richtig. Versuche es nochmal!', false);
+                showFeedback(`Du hast ${correctCount} von ${uebung.fragen.length} Fragen richtig beantwortet. Die richtigen Antworten sind grün markiert.`, true, 'partial');
             }
+            markUebungComplete();
         }
+        
+        function checkZuordnung() {
+            const uebung = currentAspekt.uebung;
+            let correct = 0;
+            let total = uebung.items.length;
+            let allPlaced = true;
+            
+            uebung.items.forEach((item, index) => {
+                const draggable = document.querySelector(`[data-index="${index}"]`);
+                const dropZone = draggable.parentElement;
+                
+                if (!dropZone || !dropZone.classList.contains('drop-zone')) {
+                    allPlaced = false;
+                    return;
+                }
+                
+                const kategorieIndex = parseInt(dropZone.dataset.kategorie);
+                const correctKategorie = item.kategorie !== undefined ? item.kategorie : item.ebene;
+                
+                // Deaktiviere Drag
+                draggable.draggable = false;
+                draggable.style.cursor = 'default';
+                
+                if (kategorieIndex === correctKategorie) {
+                    correct++;
+                    draggable.style.borderColor = '#4CAF50';
+                    draggable.style.background = '#D1FAE5';
+                } else {
+                    draggable.style.borderColor = '#EF4444';
+                    draggable.style.background = '#FEE2E2';
+                }
+            });
+            
+            if (!allPlaced) {
+                showFeedback('⚠️ Bitte ordne alle Items zu!', false);
+                return;
+            }
+            
+            // Zeige IMMER die Lösungen und schliesse ab
+            if (correct === total) {
+                showFeedback(`✅ Perfekt! Alle ${total} Zuordnungen sind richtig.`, true);
+            } else {
+                showFeedback(`Du hast ${correct} von ${total} richtig zugeordnet. Die richtigen Zuordnungen sind grün, die falschen rot markiert.`, true, 'partial');
+            }
+            markUebungComplete();
+        }
+        
+        function checkBewertung() {
+            // Bewertungsübungen haben keine richtig/falsch
+            showFeedback('✅ Bewertung abgeschlossen! Deine Einschätzungen wurden erfasst.', true);
+            markUebungComplete();
+        }
+        
+        function checkRanking() {
+            const container = document.getElementById('rankingContainer');
+            const items = Array.from(container.querySelectorAll('.draggable-item'));
+            const uebung = currentAspekt.uebung;
+            
+            const currentOrder = items.map(item => parseInt(item.dataset.index));
+            const correctOrder = uebung.richtigeReihenfolge;
+            
+            // Deaktiviere Drag
+            items.forEach(item => {
+                item.draggable = false;
+                item.style.cursor = 'default';
+            });
+            
+            // Markiere die Items
+            let correctPositions = 0;
+            currentOrder.forEach((itemIndex, position) => {
+                const item = items[position];
+                if (itemIndex === correctOrder[position]) {
+                    correctPositions++;
+                    item.style.borderColor = '#4CAF50';
+                    item.style.background = '#D1FAE5';
+                } else {
+                    item.style.borderColor = '#EF4444';
+                    item.style.background = '#FEE2E2';
+                }
+            });
+            
+            // Zeige IMMER die Lösungen und schliesse ab
+            if (correctPositions === currentOrder.length) {
+                showFeedback('✅ Perfekt! Die Reihenfolge ist richtig sortiert.', true);
+            } else {
+                showFeedback(`Du hast ${correctPositions} von ${currentOrder.length} Items an der richtigen Position. Die richtigen Positionen sind grün, die falschen rot markiert.`, true, 'partial');
+            }
+            markUebungComplete();
+        }
+        
+        function checkVertragCheck() {
+            const uebung = currentAspekt.uebung;
+            let correctSelections = 0;
+            const totalImportant = uebung.items.filter(item => item.wichtig).length;
+            
+            uebung.items.forEach((item, index) => {
+                const checkbox = document.getElementById(`check_${index}`);
+                const choiceItem = checkbox.parentElement;
+                
+                // Deaktiviere Checkbox
+                checkbox.disabled = true;
+                choiceItem.style.cursor = 'default';
+                
+                if (checkbox.checked === item.wichtig) {
+                    correctSelections++;
+                    choiceItem.classList.add('correct');
+                } else {
+                    choiceItem.classList.add('wrong');
+                }
+            });
+            
+            // Zeige IMMER die Lösungen und schliesse ab
+            if (correctSelections === uebung.items.length) {
+                showFeedback('✅ Perfekt! Du weißt genau, worauf es bei Verträgen ankommt.', true);
+            } else {
+                showFeedback(`Du hast ${correctSelections} von ${uebung.items.length} Punkten richtig bewertet. Die richtigen Antworten sind grün, die falschen rot markiert.`, true, 'partial');
+            }
+            markUebungComplete();
+        }
+        
+        // ========== HELPER FUNKTIONEN ==========
         
         function setupDragAndDrop() {
             const draggables = document.querySelectorAll('.draggable-item');
@@ -1272,41 +1409,6 @@
             }
         };
         
-        function checkZuordnung() {
-            const uebung = currentAspekt.uebung;
-            let correct = 0;
-            let total = uebung.items.length;
-            
-            uebung.items.forEach((item, index) => {
-                const draggable = document.querySelector(`[data-index="${index}"]`);
-                const dropZone = draggable.parentElement;
-                
-                if (dropZone && dropZone.classList.contains('drop-zone')) {
-                    const kategorieIndex = parseInt(dropZone.dataset.kategorie);
-                    if (kategorieIndex === (item.kategorie || item.ebene)) {
-                        correct++;
-                        draggable.style.borderColor = '#4CAF50';
-                        draggable.style.background = '#D1FAE5';
-                    } else {
-                        draggable.style.borderColor = '#EF4444';
-                        draggable.style.background = '#FEE2E2';
-                    }
-                }
-            });
-            
-            if (correct === total) {
-                showFeedback(`✅ Perfekt! Alle ${total} Zuordnungen sind richtig.`, true);
-                markUebungComplete();
-            } else {
-                showFeedback(`Du hast ${correct} von ${total} richtig zugeordnet. Versuche es nochmal!`, false);
-            }
-        }
-        
-        function checkBewertung() {
-            showFeedback('✅ Bewertung abgeschlossen! Deine Einschätzungen wurden erfasst.', true);
-            markUebungComplete();
-        }
-        
         function setupRankingDragDrop() {
             const container = document.getElementById('rankingContainer');
             const items = container.querySelectorAll('.draggable-item');
@@ -1335,63 +1437,26 @@
             });
         }
         
-        function checkRanking() {
-            const container = document.getElementById('rankingContainer');
-            const items = Array.from(container.querySelectorAll('.draggable-item'));
-            const uebung = currentAspekt.uebung;
-            
-            const currentOrder = items.map(item => parseInt(item.dataset.index));
-            const correctOrder = uebung.richtigeReihenfolge;
-            
-            const isCorrect = JSON.stringify(currentOrder) === JSON.stringify(correctOrder);
-            
-            if (isCorrect) {
-                showFeedback('✅ Perfekt! Die Reihenfolge ist richtig sortiert.', true);
-                markUebungComplete();
-            } else {
-                showFeedback('❌ Noch nicht ganz richtig. Tipp: Der höchste CO₂-Ausstoß kommt zuerst!', false);
-            }
-        }
-        
-        function checkVertragCheck() {
-            const uebung = currentAspekt.uebung;
-            let correct = 0;
-            let total = uebung.items.filter(item => item.wichtig).length;
-            
-            uebung.items.forEach((item, index) => {
-                const checkbox = document.getElementById(`check_${index}`);
-                const choiceItem = checkbox.parentElement;
-                
-                if (checkbox.checked === item.wichtig) {
-                    correct++;
-                    choiceItem.classList.add('correct');
-                } else {
-                    choiceItem.classList.add('wrong');
-                }
-            });
-            
-            if (correct === uebung.items.length) {
-                showFeedback('✅ Perfekt! Du weißt, worauf es bei Verträgen ankommt.', true);
-                markUebungComplete();
-            } else {
-                showFeedback(`Du hast ${total - (uebung.items.length - correct)} wichtige Punkte übersehen. Versuche es nochmal!`, false);
-            }
-        }
-        
-        function showFeedback(message, success) {
+        function showFeedback(message, success, type = null) {
             const feedback = document.getElementById('feedback');
             feedback.innerHTML = `<p class="feedback-text">${message}</p>`;
             feedback.classList.add('show');
+            feedback.classList.remove('success', 'partial');
             if (success) {
                 feedback.classList.add('success');
-            } else {
-                feedback.classList.remove('success');
+            }
+            if (type === 'partial') {
+                feedback.classList.add('partial');
             }
         }
         
         function markUebungComplete() {
             uebungAbgeschlossen = true;
-            document.getElementById('checkBtn').disabled = true;
+            const checkBtn = document.getElementById('checkBtn');
+            if (checkBtn) {
+                checkBtn.disabled = true;
+                checkBtn.textContent = '✓ Übung abgeschlossen';
+            }
             document.getElementById('portfolioSection').style.display = 'block';
         }
         
