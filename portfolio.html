@@ -33,7 +33,7 @@
         
         .portfolio-item:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(139, 69, 19, 0.15);
+            box-shadow: 0 8px 24px rgba(139, 69, 19, 0.2);
         }
     </style>
 </head>
@@ -50,8 +50,8 @@
                         <h1 class="text-3xl md:text-4xl font-bold text-ant-primary mb-2">
                             Mein Portfolio
                         </h1>
-                        <p class="text-gray-600" id="welcomeText">
-                            Hier siehst du alle deine Arbeiten
+                        <p class="text-gray-600" id="portfolioSubtitle">
+                            Deine dokumentierten Arbeiten und Reflexionen
                         </p>
                     </div>
                 </div>
@@ -59,93 +59,72 @@
             </div>
         </div>
         
-        <!-- Schnellstatistik -->
-        <div class="grid md:grid-cols-3 gap-4 mb-8">
+        <!-- Statistik Cards -->
+        <div class="grid md:grid-cols-4 gap-4 mb-8">
             <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
-                <div class="text-4xl mb-2">📝</div>
-                <div class="text-3xl font-bold text-ant-primary" id="totalItems">0</div>
+                <div class="text-3xl mb-2">📝</div>
+                <div class="text-2xl font-bold text-ant-primary" id="totalWorks">0</div>
                 <div class="text-sm text-gray-600">Arbeiten</div>
             </div>
             <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
-                <div class="text-4xl mb-2">🌍</div>
-                <div class="text-3xl font-bold text-ant-accent" id="publicItems">0</div>
-                <div class="text-sm text-gray-600">Öffentlich</div>
+                <div class="text-3xl mb-2">🔑</div>
+                <div class="text-2xl font-bold text-ant-primary" id="schluesselWorks">0</div>
+                <div class="text-sm text-gray-600">Schlüsselkomp.</div>
             </div>
             <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
-                <div class="text-4xl mb-2">❤️</div>
-                <div class="text-3xl font-bold text-ant-success" id="totalLikes">0</div>
-                <div class="text-sm text-gray-600">Likes erhalten</div>
+                <div class="text-3xl mb-2">💭</div>
+                <div class="text-2xl font-bold text-ant-accent" id="reflexionen">0</div>
+                <div class="text-sm text-gray-600">Reflexionen</div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
+                <div class="text-3xl mb-2">🔗</div>
+                <div class="text-2xl font-bold text-ant-network" id="shareable">0</div>
+                <div class="text-sm text-gray-600">Teilbar</div>
             </div>
         </div>
         
-        <!-- Neue Arbeit hinzufügen -->
-        <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8 mb-8">
-            <h2 class="text-2xl font-bold text-ant-primary mb-6 flex items-center gap-3">
-                <span>➕</span>
-                <span>Neue Arbeit hinzufügen</span>
-            </h2>
-            
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Titel</label>
-                    <input type="text" id="newTitle" 
-                           class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-ant-accent focus:outline-none"
-                           placeholder="z.B. Meine E-Mail an die Berufsschule">
+        <!-- Filter -->
+        <div class="bg-white rounded-2xl shadow-lg p-4 mb-8">
+            <div class="flex flex-wrap gap-3 items-center justify-between">
+                <div class="flex flex-wrap gap-2">
+                    <button class="filter-btn active px-4 py-2 rounded-full bg-ant-primary text-white text-sm font-semibold" data-filter="alle">
+                        Alle
+                    </button>
+                    <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 text-sm font-semibold hover:bg-ant-primary hover:text-white transition-all" data-filter="schluesselkompetenz">
+                        🔑 Schlüsselkompetenzen
+                    </button>
                 </div>
-                
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Beschreibung</label>
-                    <textarea id="newDescription" rows="4"
-                              class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-ant-accent focus:outline-none"
-                              placeholder="Beschreibe kurz deine Arbeit..."></textarea>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Kompetenzbereich</label>
-                    <select id="newKompetenz" 
-                            class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-ant-accent focus:outline-none">
-                        <option value="schluessel">🔑 Schlüsselkompetenzen</option>
-                        <option value="aspekte">🎯 Gesellschaftliche Aspekte</option>
-                        <option value="sprach">💬 Sprachmodi</option>
-                    </select>
-                </div>
-                
-                <div class="flex items-center gap-3 p-4 bg-ant-bg rounded-xl">
-                    <input type="checkbox" id="newPublic" class="w-5 h-5 text-ant-accent rounded">
-                    <label for="newPublic" class="text-sm font-semibold text-gray-700">
-                        🌍 Für Community öffentlich machen
-                    </label>
-                </div>
-                
-                <button onclick="addPortfolioItem()" 
-                        class="w-full bg-ant-accent hover:bg-ant-secondary text-white font-bold py-4 px-6 rounded-full transition-all transform hover:scale-105">
-                    Arbeit hinzufügen 🚀
-                </button>
+                <select id="sortSelect" class="px-4 py-2 rounded-full bg-gray-200 text-gray-700 text-sm font-semibold border-2 border-transparent focus:border-ant-primary focus:outline-none">
+                    <option value="newest">Neueste zuerst</option>
+                    <option value="oldest">Älteste zuerst</option>
+                </select>
             </div>
         </div>
         
-        <!-- Portfolio Items -->
-        <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8 mb-8">
-            <h2 class="text-2xl font-bold text-ant-primary mb-6 flex items-center gap-3">
-                <span>📚</span>
-                <span>Meine Arbeiten</span>
-            </h2>
-            
-            <div id="portfolioList" class="space-y-4">
-                <!-- Wird dynamisch gefüllt -->
-                <div class="text-center py-12 text-gray-400">
-                    <div class="text-5xl mb-4">📭</div>
-                    <p>Noch keine Arbeiten vorhanden.</p>
-                    <p class="text-sm mt-2">Füge oben deine erste Arbeit hinzu!</p>
-                </div>
-            </div>
+        <!-- Portfolio Grid -->
+        <div id="portfolioGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Wird dynamisch gefüllt -->
+        </div>
+        
+        <!-- Empty State -->
+        <div id="emptyState" class="bg-white rounded-3xl shadow-xl p-12 text-center" style="display: none;">
+            <div class="text-6xl mb-4">📂</div>
+            <h3 class="text-2xl font-bold text-ant-primary mb-4">Noch keine Einträge</h3>
+            <p class="text-gray-600 mb-6">
+                Beginne mit einer Übung und speichere sie ins Portfolio!
+            </p>
+            <a href="kompetenzen.html" class="inline-block bg-ant-accent hover:bg-ant-secondary text-white font-bold py-3 px-6 rounded-full transition-all">
+                Zu den Übungen →
+            </a>
         </div>
         
         <!-- Footer -->
-        <div class="text-center">
+        <div class="mt-8 text-center">
             <div class="bg-white/50 backdrop-blur rounded-full px-6 py-3 inline-block">
                 <div class="flex items-center gap-2 text-sm text-gray-600">
                     <span class="text-lg">🐜✏️👓</span>
+                    <span>|</span>
+                    <span>ant edu</span>
                     <span>|</span>
                     <span id="currentYear"></span>
                 </div>
@@ -153,9 +132,22 @@
         </div>
     </div>
     
+    <!-- Detail Modal -->
+    <div id="detailModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-8 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-start mb-6">
+                <h2 id="modalTitle" class="text-2xl font-bold text-ant-primary">Portfolio-Eintrag</h2>
+                <button onclick="closeModal()" class="text-3xl hover:scale-110 transition-transform text-gray-400 hover:text-gray-600">×</button>
+            </div>
+            <div id="modalContent">
+                <!-- Wird dynamisch gefüllt -->
+            </div>
+        </div>
+    </div>
+    
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
-        import { getFirestore, doc, getDoc, setDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        import { getFirestore, doc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
         
         const firebaseConfig = {
             apiKey: "AIzaSyDycvEwK6KJZyFEtsGIaHJBhIFTp5L4cdA",
@@ -170,260 +162,358 @@
         const db = getFirestore(app);
         
         let userId = null;
-        let displayName = '';
-        let portfolioData = [];
+        let allPortfolioItems = [];
+        let currentFilter = 'alle';
         
         window.addEventListener('load', async function() {
             document.getElementById('currentYear').textContent = new Date().getFullYear();
             
             userId = localStorage.getItem('ant_edu_user_id');
-            displayName = localStorage.getItem('ant_edu_display_name');
-            
             if (!userId) {
                 window.location.href = 'index.html';
                 return;
             }
             
-            document.getElementById('welcomeText').textContent = `Willkommen ${displayName}! Hier siehst du alle deine Arbeiten.`;
+            const displayName = localStorage.getItem('ant_edu_display_name');
+            if (displayName) {
+                document.getElementById('portfolioSubtitle').textContent = `${displayName}s Portfolio`;
+            }
             
             await loadPortfolio();
+            setupEventListeners();
         });
+        
+        function setupEventListeners() {
+            // Filter Buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => {
+                        b.classList.remove('active', 'bg-ant-primary', 'text-white');
+                        b.classList.add('bg-gray-200', 'text-gray-700');
+                    });
+                    this.classList.add('active', 'bg-ant-primary', 'text-white');
+                    this.classList.remove('bg-gray-200', 'text-gray-700');
+                    
+                    currentFilter = this.getAttribute('data-filter');
+                    renderPortfolio();
+                });
+            });
+            
+            // Sort
+            document.getElementById('sortSelect').addEventListener('change', function() {
+                renderPortfolio();
+            });
+        }
         
         async function loadPortfolio() {
             try {
                 const userDoc = await getDoc(doc(db, 'users', userId));
                 if (userDoc.exists()) {
                     const data = userDoc.data();
-                    portfolioData = data.portfolio || [];
+                    allPortfolioItems = data.portfolio || [];
                     
-                    renderPortfolio();
                     updateStats();
+                    renderPortfolio();
                 }
             } catch (error) {
-                console.error('Fehler beim Laden:', error);
-                alert('Fehler beim Laden der Daten: ' + error.message);
+                console.log('Offline oder Fehler:', error);
+                document.getElementById('emptyState').style.display = 'block';
             }
-        }
-        
-        function renderPortfolio() {
-            const container = document.getElementById('portfolioList');
-            
-            if (portfolioData.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-12 text-gray-400">
-                        <div class="text-5xl mb-4">📭</div>
-                        <p>Noch keine Arbeiten vorhanden.</p>
-                        <p class="text-sm mt-2">Füge oben deine erste Arbeit hinzu!</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = portfolioData.map((item, index) => {
-                const kompetenzColors = {
-                    'schluessel': 'ant-primary',
-                    'aspekte': 'ant-secondary',
-                    'sprach': 'ant-accent'
-                };
-                const color = kompetenzColors[item.kompetenz] || 'ant-primary';
-                
-                const kompetenzIcons = {
-                    'schluessel': '🔑',
-                    'aspekte': '🎯',
-                    'sprach': '💬'
-                };
-                const icon = kompetenzIcons[item.kompetenz] || '📝';
-                
-                return `
-                    <div class="portfolio-item border-2 border-gray-200 rounded-2xl p-6 bg-gradient-to-br from-white to-${color}/5">
-                        <div class="flex items-start justify-between mb-4">
-                            <div class="flex items-start gap-4 flex-1">
-                                <span class="text-4xl">${icon}</span>
-                                <div class="flex-1">
-                                    <h3 class="text-xl font-bold text-${color} mb-2">${item.title}</h3>
-                                    <p class="text-gray-700 text-sm mb-3">${item.description}</p>
-                                    <div class="flex items-center gap-4 text-xs text-gray-500">
-                                        <span>📅 ${new Date(item.createdAt).toLocaleDateString('de-DE')}</span>
-                                        ${item.isPublic ? '<span class="text-ant-success font-semibold">🌍 Öffentlich</span>' : '<span class="text-gray-400">🔒 Privat</span>'}
-                                        ${item.likes ? `<span class="text-red-500">❤️ ${item.likes}</span>` : ''}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex gap-2 flex-wrap">
-                            <button onclick="togglePublic(${index})" 
-                                    class="px-4 py-2 rounded-full text-sm font-semibold ${item.isPublic ? 'bg-gray-200 text-gray-700' : 'bg-ant-success text-white'} hover:opacity-80 transition-all">
-                                ${item.isPublic ? '🔒 Privat machen' : '🌍 Öffentlich machen'}
-                            </button>
-                            <button onclick="shareItem(${index})" 
-                                    class="px-4 py-2 bg-ant-network text-white rounded-full text-sm font-semibold hover:opacity-80 transition-all">
-                                🔗 Link teilen
-                            </button>
-                            <button onclick="downloadItem(${index})" 
-                                    class="px-4 py-2 bg-ant-accent text-white rounded-full text-sm font-semibold hover:opacity-80 transition-all">
-                                📥 Herunterladen
-                            </button>
-                            <button onclick="deleteItem(${index})" 
-                                    class="px-4 py-2 bg-red-500 text-white rounded-full text-sm font-semibold hover:opacity-80 transition-all">
-                                🗑️ Löschen
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
         }
         
         function updateStats() {
-            const total = portfolioData.length;
-            const publicCount = portfolioData.filter(item => item.isPublic).length;
-            const totalLikes = portfolioData.reduce((sum, item) => sum + (item.likes || 0), 0);
+            const total = allPortfolioItems.length;
+            const schluessel = allPortfolioItems.filter(i => i.type === 'schluesselkompetenz').length;
+            const withReflexion = allPortfolioItems.filter(i => i.reflexion && i.reflexion.length > 0).length;
+            const shareable = allPortfolioItems.filter(i => i.shareable === true).length;
             
-            document.getElementById('totalItems').textContent = total;
-            document.getElementById('publicItems').textContent = publicCount;
-            document.getElementById('totalLikes').textContent = totalLikes;
+            document.getElementById('totalWorks').textContent = total;
+            document.getElementById('schluesselWorks').textContent = schluessel;
+            document.getElementById('reflexionen').textContent = withReflexion;
+            document.getElementById('shareable').textContent = shareable;
         }
         
-        window.addPortfolioItem = async function() {
-            const title = document.getElementById('newTitle').value.trim();
-            const description = document.getElementById('newDescription').value.trim();
-            const kompetenz = document.getElementById('newKompetenz').value;
-            const isPublic = document.getElementById('newPublic').checked;
+        function renderPortfolio() {
+            const grid = document.getElementById('portfolioGrid');
+            const emptyState = document.getElementById('emptyState');
             
-            if (!title || !description) {
-                alert('Bitte fülle Titel und Beschreibung aus!');
+            // Filtern
+            let filtered = allPortfolioItems;
+            if (currentFilter !== 'alle') {
+                filtered = allPortfolioItems.filter(item => item.type === currentFilter);
+            }
+            
+            // Sortieren
+            const sortOrder = document.getElementById('sortSelect').value;
+            filtered.sort((a, b) => {
+                const dateA = new Date(a.createdAt);
+                const dateB = new Date(b.createdAt);
+                return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+            });
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.style.display = 'block';
                 return;
             }
             
-            const newItem = {
-                id: Date.now().toString(),
-                title: title,
-                description: description,
-                kompetenz: kompetenz,
-                isPublic: isPublic,
-                createdAt: new Date().toISOString(),
-                likes: 0,
-                userId: userId,
-                userName: displayName
-            };
-            
-            portfolioData.unshift(newItem);
-            
-            try {
-                await updateDoc(doc(db, 'users', userId), {
-                    portfolio: portfolioData
-                });
-                
-                // Wenn öffentlich, auch in Community-Collection speichern
-                if (isPublic) {
-                    await setDoc(doc(db, 'community', newItem.id), newItem);
-                }
-                
-                renderPortfolio();
-                updateStats();
-                
-                // Formular leeren
-                document.getElementById('newTitle').value = '';
-                document.getElementById('newDescription').value = '';
-                document.getElementById('newPublic').checked = false;
-                
-                alert('✅ Arbeit erfolgreich hinzugefügt!');
-            } catch (error) {
-                console.error('Fehler:', error);
-                alert('❌ Fehler beim Speichern: ' + error.message);
-            }
-        };
+            emptyState.style.display = 'none';
+            grid.innerHTML = filtered.map(item => createPortfolioCard(item)).join('');
+        }
         
-        window.togglePublic = async function(index) {
-            portfolioData[index].isPublic = !portfolioData[index].isPublic;
+        function createPortfolioCard(item) {
+            const date = new Date(item.createdAt).toLocaleDateString('de-CH', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
             
-            try {
-                await updateDoc(doc(db, 'users', userId), {
-                    portfolio: portfolioData
-                });
-                
-                const item = portfolioData[index];
-                
-                if (item.isPublic) {
-                    // In Community hochladen
-                    await setDoc(doc(db, 'community', item.id), item);
-                } else {
-                    // Aus Community entfernen (würde deleteDoc benötigen)
-                    // Für jetzt nur in portfolio aktualisieren
-                }
-                
-                renderPortfolio();
-                updateStats();
-            } catch (error) {
-                console.error('Fehler:', error);
-                alert('❌ Fehler: ' + error.message);
-            }
-        };
+            const icon = item.type === 'schluesselkompetenz' ? '🔑' : '📝';
+            const color = item.type === 'schluesselkompetenz' ? 'ant-primary' : 'ant-accent';
+            
+            // Übungstyp anzeigen
+            const uebungstyp = item.performanz?.uebungstyp || 'Übung';
+            
+            return `
+                <div class="portfolio-item bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer" onclick="showDetail('${item.id}')">
+                    <div class="p-6">
+                        <div class="flex items-start justify-between mb-3">
+                            <span class="text-4xl">${icon}</span>
+                            <span class="text-xs px-2 py-1 bg-${color}/10 text-${color} rounded-full font-semibold">${date}</span>
+                        </div>
+                        
+                        <h3 class="text-lg font-bold text-${color} mb-2">
+                            ${item.kompetenzTitle || 'Kompetenz'}
+                        </h3>
+                        
+                        <p class="text-sm text-gray-600 mb-2">
+                            ${uebungstyp}
+                        </p>
+                        
+                        <p class="text-xs text-gray-500 mb-3">
+                            ${item.thema || ''}
+                        </p>
+                        
+                        ${item.reflexion ? `
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-xs text-gray-500">Reflexion:</span>
+                                <span class="text-xl">${item.reflexion}</span>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="flex gap-2 mt-4">
+                            <button onclick="event.stopPropagation(); showDetail('${item.id}')" class="flex-1 text-xs bg-ant-primary/10 hover:bg-ant-primary/20 text-ant-primary font-semibold py-2 px-3 rounded-lg transition-all">
+                                Details
+                            </button>
+                            ${item.shareable ? `
+                                <button onclick="event.stopPropagation(); shareItem('${item.id}')" class="text-xs bg-ant-network/10 hover:bg-ant-network/20 text-ant-network font-semibold py-2 px-3 rounded-lg transition-all">
+                                    🔗 Teilen
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
         
-        window.shareItem = function(index) {
-            const item = portfolioData[index];
-            const shareUrl = `${window.location.origin}/community.html?item=${item.id}`;
+        window.showDetail = function(itemId) {
+            const item = allPortfolioItems.find(i => i.id === itemId);
+            if (!item) return;
             
-            if (navigator.share) {
-                navigator.share({
-                    title: item.title,
-                    text: item.description,
-                    url: shareUrl
-                });
-            } else {
-                navigator.clipboard.writeText(shareUrl);
-                alert('🔗 Link kopiert!\n\n' + shareUrl);
+            const modal = document.getElementById('detailModal');
+            const modalContent = document.getElementById('modalContent');
+            
+            const date = new Date(item.createdAt).toLocaleString('de-CH', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            let performanzHTML = '';
+            if (item.performanz) {
+                performanzHTML = `
+                    <div class="mb-6">
+                        <h3 class="text-lg font-bold text-ant-primary mb-3">📊 Durchgeführte Übung</h3>
+                        <div class="bg-ant-bg rounded-xl p-4">
+                            <p class="font-semibold text-ant-primary mb-2">${item.performanz.uebungstyp || 'Übung'}</p>
+                            ${formatPerformanzData(item.performanz)}
+                        </div>
+                    </div>
+                `;
             }
-        };
-        
-        window.downloadItem = function(index) {
-            const item = portfolioData[index];
             
-            const content = `
-# ${item.title}
-
-**Erstellt am:** ${new Date(item.createdAt).toLocaleDateString('de-DE')}
-**Kompetenzbereich:** ${item.kompetenz}
-**Von:** ${displayName}
-
-## Beschreibung
-
-${item.description}
-
----
-Erstellt mit SLP ABU 2030 - ant edu 🐜✏️👓
+            modalContent.innerHTML = `
+                <div class="mb-4">
+                    <div class="text-5xl mb-4">${item.type === 'schluesselkompetenz' ? '🔑' : '📝'}</div>
+                    <h3 class="text-xl font-bold text-ant-primary mb-2">${item.kompetenzTitle || 'Kompetenz'}</h3>
+                    <p class="text-sm text-gray-600 mb-2">${item.thema || ''}</p>
+                    <p class="text-xs text-gray-500">Erstellt: ${date}</p>
+                </div>
+                
+                ${performanzHTML}
+                
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold text-ant-primary mb-3">💭 Reflexion</h3>
+                    <div class="bg-ant-bg rounded-xl p-4">
+                        ${item.reflexion ? `
+                            <div class="text-3xl mb-2">${item.reflexion}</div>
+                            <p class="text-sm text-gray-600">Emoji-Reflexion beim Speichern</p>
+                        ` : `
+                            <p class="text-gray-500 italic">Keine Reflexion hinzugefügt</p>
+                        `}
+                    </div>
+                </div>
+                
+                <div class="flex gap-3">
+                    <button onclick="addReflexion('${item.id}')" class="flex-1 bg-ant-accent hover:bg-ant-secondary text-white font-bold py-3 px-6 rounded-full transition-all">
+                        💭 Reflexion hinzufügen
+                    </button>
+                    ${item.shareable ? `
+                        <button onclick="shareItem('${item.id}')" class="bg-ant-network hover:bg-ant-network/80 text-white font-bold py-3 px-6 rounded-full transition-all">
+                            🔗 Teilen
+                        </button>
+                    ` : ''}
+                </div>
             `;
             
-            const blob = new Blob([content], { type: 'text/markdown' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${item.title.replace(/[^a-z0-9]/gi, '_')}.md`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            modal.classList.remove('hidden');
         };
         
-        window.deleteItem = async function(index) {
-            if (!confirm('Möchtest du diese Arbeit wirklich löschen?')) {
-                return;
+        function formatPerformanzData(performanz) {
+            let html = '';
+            
+            if (performanz.checklist) {
+                html += `<p class="text-sm text-gray-700">✅ ${performanz.checklist.completed} von ${performanz.checklist.total} Schritten erledigt</p>`;
             }
             
-            portfolioData.splice(index, 1);
+            if (performanz.kriterien) {
+                html += `<p class="text-sm text-gray-700">✅ ${performanz.kriterien.erfuellt} von ${performanz.kriterien.total} Kriterien erfüllt</p>`;
+                if (performanz.kriterien.liste && performanz.kriterien.liste.length > 0) {
+                    html += `<p class="text-xs text-gray-600 mt-1">Kriterien: ${performanz.kriterien.liste.join(', ')}</p>`;
+                }
+            }
             
-            try {
-                await updateDoc(doc(db, 'users', userId), {
-                    portfolio: portfolioData
+            if (performanz.rollen) {
+                html += `<p class="text-sm text-gray-700">👥 Rollen verteilt:</p>`;
+                html += `<p class="text-xs text-gray-600 ml-4">• Person 1: ${getRoleName(performanz.rollen.person1)}</p>`;
+                html += `<p class="text-xs text-gray-600 ml-4">• Person 2: ${getRoleName(performanz.rollen.person2)}</p>`;
+                html += `<p class="text-xs text-gray-600 ml-4">• Person 3: ${getRoleName(performanz.rollen.person3)}</p>`;
+            }
+            
+            if (performanz.pruefpunkte) {
+                html += `<p class="text-sm text-gray-700">🔍 ${performanz.pruefpunkte.markiert} von ${performanz.pruefpunkte.total} Prüfpunkten markiert</p>`;
+            }
+            
+            if (performanz.reihenfolge) {
+                html += `<p class="text-sm text-gray-700">🔢 Reihenfolge: ${performanz.reihenfolge.join(' → ')}</p>`;
+            }
+            
+            if (performanz.elemente) {
+                html += `<p class="text-sm text-gray-700">📝 ${performanz.elemente.ausgewaehlt} von ${performanz.elemente.total} Elementen ausgewählt</p>`;
+            }
+            
+            if (performanz.wochenplan) {
+                html += `<p class="text-sm text-gray-700 mb-2">📅 Wochenplan erstellt:</p>`;
+                if (performanz.wochenplan.montag) html += `<p class="text-xs text-gray-600 ml-4">Mo: ${performanz.wochenplan.montag}</p>`;
+                if (performanz.wochenplan.dienstag) html += `<p class="text-xs text-gray-600 ml-4">Di: ${performanz.wochenplan.dienstag}</p>`;
+                if (performanz.wochenplan.mittwoch) html += `<p class="text-xs text-gray-600 ml-4">Mi: ${performanz.wochenplan.mittwoch}</p>`;
+            }
+            
+            if (performanz.strategien) {
+                html += `<p class="text-sm text-gray-700">📚 ${performanz.strategien.ausgewaehlt} von ${performanz.strategien.total} Lernstrategien gewählt</p>`;
+            }
+            
+            if (performanz.bewertungen) {
+                html += `<p class="text-sm text-gray-700">⭐ Bewertungen: ${performanz.bewertungen.map(b => '⭐'.repeat(b)).join(' | ')}</p>`;
+            }
+            
+            if (performanz.quiz) {
+                const correct = performanz.quiz.antworten.filter(a => a === true).length;
+                html += `<p class="text-sm text-gray-700">❓ Quiz: ${correct} von ${performanz.quiz.total} beantwortet</p>`;
+            }
+            
+            if (performanz.reflexion) {
+                html += `<p class="text-sm text-gray-700 mb-2">🪞 Reflexions-Bewertungen:</p>`;
+                if (performanz.reflexion.bewertungen) {
+                    html += `<p class="text-xs text-gray-600 ml-4">${performanz.reflexion.bewertungen.map(b => '⭐'.repeat(b)).join(' | ')}</p>`;
+                }
+                if (performanz.reflexion.verbesserung) {
+                    html += `<p class="text-xs text-gray-600 ml-4">Verbesserung: ${getVerbesserungName(performanz.reflexion.verbesserung)}</p>`;
+                }
+            }
+            
+            return html || '<p class="text-sm text-gray-500 italic">Details nicht verfügbar</p>';
+        }
+        
+        function getRoleName(role) {
+            const names = {
+                'recherche': '📚 Recherche & Inhalte',
+                'design': '🎨 Folien gestalten',
+                'praesentation': '🗣️ Präsentation halten'
+            };
+            return names[role] || role;
+        }
+        
+        function getVerbesserungName(value) {
+            const names = {
+                'punctuality': '⏰ Pünktlichkeit',
+                'questions': '❓ Mehr Fragen',
+                'organization': '📋 Organisation',
+                'communication': '💬 Kommunikation',
+                'focus': '🎯 Konzentration'
+            };
+            return names[value] || value;
+        }
+        
+        window.addReflexion = async function(itemId) {
+            const reflexion = prompt('💭 Füge eine Textreflexion hinzu:\n\n(Deine bisherige Emoji-Reflexion bleibt erhalten)');
+            
+            if (reflexion && reflexion.trim()) {
+                try {
+                    const userRef = doc(db, 'users', userId);
+                    const userDoc = await getDoc(userRef);
+                    
+                    if (userDoc.exists()) {
+                        const portfolio = userDoc.data().portfolio || [];
+                        const itemIndex = portfolio.findIndex(i => i.id === itemId);
+                        
+                        if (itemIndex !== -1) {
+                            portfolio[itemIndex].textReflexion = reflexion.trim();
+                            portfolio[itemIndex].reflexionUpdatedAt = new Date().toISOString();
+                            
+                            await updateDoc(userRef, { portfolio });
+                            
+                            alert('✅ Reflexion hinzugefügt!');
+                            await loadPortfolio();
+                            closeModal();
+                        }
+                    }
+                } catch (error) {
+                    console.error('Fehler:', error);
+                    alert('Fehler beim Speichern der Reflexion.');
+                }
+            }
+        };
+        
+        window.shareItem = function(itemId) {
+            const item = allPortfolioItems.find(i => i.id === itemId);
+            if (!item) return;
+            
+            const shareUrl = `${window.location.origin}/portfolio.html?shared=${itemId}`;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    alert('🔗 Link kopiert!\n\nTeile diesen Link, um deine Arbeit zu zeigen:\n' + shareUrl);
                 });
-                
-                renderPortfolio();
-                updateStats();
-                alert('✅ Arbeit gelöscht!');
-            } catch (error) {
-                console.error('Fehler:', error);
-                alert('❌ Fehler: ' + error.message);
+            } else {
+                alert('🔗 Teilen-Link:\n\n' + shareUrl);
             }
+        };
+        
+        window.closeModal = function() {
+            document.getElementById('detailModal').classList.add('hidden');
         };
     </script>
 </body>
