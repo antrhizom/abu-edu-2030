@@ -730,8 +730,8 @@
             {
                 id: '4.2.2.2',
                 icon: '✏️',
-                title: '4.2.2.2 Produktion schriftlich',
-                description: 'Verständlich, angemessen und adressatengerecht schreiben',
+                title: '4.2.2.2 Produktion schriftlich und bildlich',
+                description: 'Verständlich, angemessen und adressatengerecht schreiben / Bilder und Grafiken erstellen',
                 uebung: {
                     typ: 'text-schreiben',
                     titel: 'E-Mail schreiben',
@@ -749,9 +749,28 @@
                 }
             },
             {
+                id: '4.2.2.3',
+                icon: '🎬',
+                title: '4.2.2.3 Produktion multimedial',
+                description: 'Multimediale Inhalte erstellen (Videos, Podcasts, digitale Präsentationen)',
+                uebung: {
+                    typ: 'multimedia-planung',
+                    titel: 'Kurzvideo planen',
+                    beschreibung: 'Du sollst ein 60-Sekunden-Video über deinen Lehrberuf erstellen. Was planst du?',
+                    checkpoints: [
+                        'Klares Konzept und Botschaft definieren',
+                        'Storyboard oder Ablauf skizzieren',
+                        'Passende Locations und Requisiten wählen',
+                        'Kurze, prägnante Szenen planen',
+                        'Ton-Qualität beachten (ruhige Umgebung)',
+                        'Schnitt und Übergänge überlegen'
+                    ]
+                }
+            },
+            {
                 id: '4.2.3.1',
                 icon: '💬',
-                title: '4.2.3.1 Interaktion mündlich',
+                title: '4.2.3.1 Interaktion und Kollaboration mündlich',
                 description: 'In verschiedenen Situationen verständlich, angemessen und adressatengerecht auf mündliche Äusserungen reagieren',
                 uebung: {
                     typ: 'gespraech-situationen',
@@ -793,9 +812,42 @@
             },
             {
                 id: '4.2.3.2',
-                icon: '💻',
-                title: '4.2.3.2 Interaktion schriftlich und digital',
+                icon: '✉️',
+                title: '4.2.3.2 Interaktion und Kollaboration schriftlich',
                 description: 'In verschiedenen Situationen verständlich, angemessen und adressatengerecht auf schriftliche Äusserungen reagieren',
+                uebung: {
+                    typ: 'schriftliche-reaktion',
+                    titel: 'Auf E-Mail reagieren',
+                    beschreibung: 'Wähle die passende Antwort:',
+                    szenarien: [
+                        {
+                            nachricht: 'Kollegin: "Kannst du mir die Präsentation bis morgen schicken?"',
+                            optionen: [
+                                '👍',
+                                'Klar, ich sende sie dir heute Abend zu!',
+                                'vielleicht',
+                                'keine Zeit'
+                            ],
+                            richtig: 1
+                        },
+                        {
+                            nachricht: 'Chef: "Bitte bereite die Unterlagen für das Meeting vor."',
+                            optionen: [
+                                'ok',
+                                'Verstanden, ich kümmere mich darum. Welche Unterlagen genau?',
+                                'was für unterlagen',
+                                'mach ich später'
+                            ],
+                            richtig: 1
+                        }
+                    ]
+                }
+            },
+            {
+                id: '4.2.3.3',
+                icon: '💻',
+                title: '4.2.3.3 Interaktion und Kollaboration digital',
+                description: 'Digital zusammenarbeiten, Tools nutzen, online kollaborieren (Teams, Zoom, kollaborative Dokumente)',
                 uebung: {
                     typ: 'digital-kommunikation',
                     titel: 'Teams-Chat: Angemessen reagieren',
@@ -820,72 +872,6 @@
                                 'keine zeit'
                             ],
                             richtig: 1
-                        }
-                    ]
-                }
-            },
-            {
-                id: '4.2.4.1',
-                icon: '📝',
-                title: '4.2.4.1 Texttypen und Textformate',
-                description: 'Verständlich und kontextangemessen mit verschiedenen Texttypen und Textformaten umgehen',
-                uebung: {
-                    typ: 'texttypen',
-                    titel: 'Texttypen zuordnen',
-                    beschreibung: 'Ordne die Beispiele dem richtigen Texttyp zu:',
-                    beispiele: [
-                        {
-                            text: 'Stelleninserat für Praktikum',
-                            optionen: ['Informierender Text', 'Appellierender Text', 'Argumentierender Text'],
-                            richtig: 1
-                        },
-                        {
-                            text: 'Bericht über einen Unfall',
-                            optionen: ['Informierender Text', 'Appellierender Text', 'Argumentierender Text'],
-                            richtig: 0
-                        },
-                        {
-                            text: 'Leserbrief zur Klimapolitik',
-                            optionen: ['Informierender Text', 'Appellierender Text', 'Argumentierender Text'],
-                            richtig: 2
-                        }
-                    ]
-                }
-            },
-            {
-                id: '4.2.4.2',
-                icon: '🎯',
-                title: '4.2.4.2 Konventionen, Normen und Sprachbewusstheit',
-                description: 'Konventionen, Normen und sprachliche Mittel in verschiedenen Kontexten verstehen und anwenden',
-                uebung: {
-                    typ: 'sprachbewusstheit',
-                    titel: 'Formell oder Informell?',
-                    beschreibung: 'Entscheide: Welche Formulierung passt wohin?',
-                    beispiele: [
-                        {
-                            satz: 'Grüezi, ich hätte eine Frage bezüglich...',
-                            kontext: ['Formell', 'Informell'],
-                            richtig: 0
-                        },
-                        {
-                            satz: 'Hey, was geht?',
-                            kontext: ['Formell', 'Informell'],
-                            richtig: 1
-                        },
-                        {
-                            satz: 'Mit freundlichen Grüssen',
-                            kontext: ['Formell', 'Informell'],
-                            richtig: 0
-                        },
-                        {
-                            satz: 'Bis dann, ciao!',
-                            kontext: ['Formell', 'Informell'],
-                            richtig: 1
-                        },
-                        {
-                            satz: 'Sehr geehrte Damen und Herren',
-                            kontext: ['Formell', 'Informell'],
-                            richtig: 0
                         }
                     ]
                 }
@@ -990,7 +976,7 @@
         function generateUebungHTML(uebung) {
             let html = '';
             
-            if (uebung.typ === 'multiple-choice' || uebung.typ === 'gespraech-situationen' || uebung.typ === 'digital-kommunikation' || uebung.typ === 'texttypen') {
+            if (uebung.typ === 'multiple-choice' || uebung.typ === 'gespraech-situationen' || uebung.typ === 'digital-kommunikation' || uebung.typ === 'texttypen' || uebung.typ === 'schriftliche-reaktion') {
                 html += `<div id="uebungContent">`;
                 const fragen = uebung.fragen || uebung.situationen || uebung.szenarien || uebung.beispiele;
                 fragen.forEach((item, qIndex) => {
@@ -1015,7 +1001,7 @@
                     <div class="feedback" id="feedback"></div>
                 `;
             }
-            else if (uebung.typ === 'video-analyse' || uebung.typ === 'praesentation-check') {
+            else if (uebung.typ === 'video-analyse' || uebung.typ === 'praesentation-check' || uebung.typ === 'multimedia-planung') {
                 const items = uebung.checkpoints || uebung.schritte;
                 html += `<div class="choice-grid">`;
                 items.forEach((item, index) => {
@@ -1098,7 +1084,7 @@
             const checkBtn = document.getElementById('checkBtn');
             if (!checkBtn) return;
             
-            if (typ === 'multiple-choice' || typ === 'gespraech-situationen' || typ === 'digital-kommunikation' || typ === 'sprachbewusstheit' || typ === 'texttypen') {
+            if (typ === 'multiple-choice' || typ === 'gespraech-situationen' || typ === 'digital-kommunikation' || typ === 'sprachbewusstheit' || typ === 'texttypen' || typ === 'schriftliche-reaktion') {
                 document.querySelectorAll('.choice-item').forEach(item => {
                     item.addEventListener('click', function() {
                         if (this.classList.contains('correct') || this.classList.contains('wrong')) return;
@@ -1111,7 +1097,7 @@
                 });
                 checkBtn.addEventListener('click', () => checkMultipleChoice());
             }
-            else if (typ === 'video-analyse' || typ === 'praesentation-check') {
+            else if (typ === 'video-analyse' || typ === 'praesentation-check' || typ === 'multimedia-planung') {
                 checkBtn.addEventListener('click', () => checkCheckboxes());
             }
             else if (typ === 'lese-verstehen') {
