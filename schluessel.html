@@ -168,6 +168,7 @@
             padding: 1.5rem;
             border: 2px solid #E5E7EB;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         
         .kompetenz-card:hover {
@@ -328,6 +329,7 @@
         .exercise-description {
             color: #374151;
             margin-bottom: 1rem;
+            font-size: 0.875rem;
         }
         
         .tags-grid {
@@ -368,34 +370,6 @@
         .tag-sprach {
             background: rgba(255, 107, 53, 0.1);
             color: #FF6B35;
-        }
-        
-        .answer-box {
-            background: #FFF8F0;
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .answer-title {
-            font-weight: bold;
-            color: #8B4513;
-            margin-bottom: 0.75rem;
-        }
-        
-        .answer-textarea {
-            width: 100%;
-            height: 10rem;
-            padding: 1rem;
-            border: 2px solid #E5E7EB;
-            border-radius: 12px;
-            resize: none;
-            font-family: inherit;
-        }
-        
-        .answer-textarea:focus {
-            border-color: #8B4513;
-            outline: none;
         }
         
         .emoji-box {
@@ -496,6 +470,7 @@
         /* Footer */
         .footer {
             text-align: center;
+            margin-top: 2rem;
         }
         
         .footer-content {
@@ -516,79 +491,6 @@
         
         .footer-icon {
             font-size: 1.125rem;
-        }
-        
-        /* Floating Ant */
-        .floating-ant {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            cursor: pointer;
-            z-index: 1000;
-            animation: ant-float 8s ease-in-out infinite;
-            transition: transform 0.3s ease;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
-            width: 60px;
-            height: 60px;
-        }
-        
-        @keyframes ant-float {
-            0%, 100% { 
-                transform: translate(0, 0) rotate(-15deg);
-            }
-            25% { 
-                transform: translate(30px, -40px) rotate(-10deg);
-            }
-            50% { 
-                transform: translate(15px, -70px) rotate(-20deg);
-            }
-            75% { 
-                transform: translate(-15px, -40px) rotate(-12deg);
-            }
-        }
-        
-        .floating-ant:hover {
-            transform: scale(1.2) rotate(5deg) !important;
-            animation-play-state: paused;
-        }
-        
-        .ant-speech-bubble {
-            position: fixed;
-            bottom: 120px;
-            right: 40px;
-            background: white;
-            padding: 16px 20px;
-            border-radius: 20px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-            max-width: 300px;
-            z-index: 999;
-            border: 3px solid #8B4513;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-        }
-        
-        .ant-speech-bubble.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .ant-speech-bubble::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            right: 30px;
-            width: 0;
-            height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 15px solid #8B4513;
-        }
-        
-        .ant-text {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: #8B4513;
         }
     </style>
 </head>
@@ -624,10 +526,10 @@
         <!-- Info Box -->
         <div class="info-box">
             <p>
-                <strong>💡 Übungen aus Thema 1: "Ins Berufsleben einsteigen"</strong>
+                <strong>💡 Interaktive Übungen aus Thema 1: "Ins Berufsleben einsteigen"</strong>
             </p>
             <p class="info-small">
-                Klick auf eine Kompetenz, übe sie und speichere dein Ergebnis ins Portfolio!
+                Klick auf eine Kompetenz, führe die interaktive Aufgabe aus und speichere mit Emoji-Reflexion!
             </p>
         </div>
         
@@ -641,6 +543,8 @@
             <div class="footer-content">
                 <div class="footer-text">
                     <span class="footer-icon">🔑✏️💡</span>
+                    <span>|</span>
+                    <span>ant edu</span>
                     <span>|</span>
                     <span id="currentYear"></span>
                 </div>
@@ -661,7 +565,7 @@
                     <!-- Wird dynamisch gefüllt -->
                 </div>
                 
-                <!-- NUR Reflexion mit Emojis - kein Textfeld -->
+                <!-- Reflexion mit Emojis - KEIN Textfeld -->
                 <div class="emoji-box">
                     <h3 class="emoji-title">💭 Wie war's für dich?</h3>
                     <p class="emoji-subtitle">Wähle ein oder mehrere Emojis als Reflexion:</p>
@@ -693,35 +597,6 @@
         </div>
     </div>
     
-    <!-- Schwebende Ameise -->
-    <div class="floating-ant" id="floatingAnt" title="Klick mich!">
-        <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="30" cy="35" rx="12" ry="15" fill="#8B4513"/>
-            <ellipse cx="30" cy="20" rx="10" ry="12" fill="#A0522D"/>
-            <circle cx="30" cy="10" r="8" fill="#8B4513"/>
-            <line x1="26" y1="6" x2="22" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
-            <line x1="34" y1="6" x2="38" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
-            <circle cx="22" cy="0" r="2" fill="#654321"/>
-            <circle cx="38" cy="0" r="2" fill="#654321"/>
-            <line x1="20" y1="25" x2="10" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
-            <line x1="20" y1="30" x2="8" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
-            <line x1="22" y1="38" x2="12" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
-            <line x1="40" y1="25" x2="50" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
-            <line x1="40" y1="30" x2="52" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
-            <line x1="38" y1="38" x2="48" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
-            <ellipse cx="26" cy="10" rx="3" ry="4" fill="white"/>
-            <ellipse cx="34" cy="10" rx="3" ry="4" fill="white"/>
-            <circle cx="26" cy="11" r="2" fill="#333"/>
-            <circle cx="34" cy="11" r="2" fill="#333"/>
-            <circle cx="26.5" cy="10" r="0.8" fill="white"/>
-            <circle cx="34.5" cy="10" r="0.8" fill="white"/>
-            <path d="M 24 14 Q 30 16 36 14" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-        </svg>
-    </div>
-    <div class="ant-speech-bubble" id="antSpeech">
-        <p class="ant-text" id="antText"></p>
-    </div>
-    
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
@@ -749,9 +624,8 @@
                 id: '3.2.1',
                 icon: '💪',
                 title: '3.2.1 Selbstständig arbeiten',
-                description: 'Eigeninitiative zeigen, Aufgaben selbst organisieren und durchführen',
+                description: 'Eigeninitiative zeigen, Aufgaben selbst organisieren',
                 thema: 'Thema 1: Ins Berufsleben einsteigen',
-                uebung: '📧 Schulmail einrichten: Richte deine Schulmail-Adresse ein und schreibe eine erste professionelle E-Mail an deine Lehrperson. Stelle dich kurz vor und frage nach dem Stundenplan.',
                 aspekte: ['💻 Technologie', '👤 Identität'],
                 sprachmodi: ['✏️ Schreiben', '💻 Digital kommunizieren']
             },
@@ -759,9 +633,8 @@
                 id: '3.2.2',
                 icon: '🎯',
                 title: '3.2.2 Ziele setzen',
-                description: 'Klare Ziele formulieren und Schritte zur Erreichung planen',
+                description: 'Klare Ziele formulieren und Schritte planen',
                 thema: 'Thema 1: Ins Berufsleben einsteigen',
-                uebung: '📝 Rückfrage formulieren: Du erhältst ein ÜK-Aufgebot. Die Zeitangabe ist unklar (steht nur "vormittags"). Schreibe eine höfliche Rückfrage-E-Mail, um die genaue Uhrzeit zu erfahren.',
                 aspekte: ['⚖️ Recht', '👤 Identität'],
                 sprachmodi: ['📖 Lesen', '✏️ Schreiben']
             },
@@ -769,9 +642,8 @@
                 id: '3.2.3',
                 icon: '🤝',
                 title: '3.2.3 Im Team zusammenarbeiten',
-                description: 'Kooperieren, Rollen verteilen, gemeinsam Lösungen finden',
+                description: 'Kooperieren, Rollen verteilen, Lösungen finden',
                 thema: 'Thema 1: Ins Berufsleben einsteigen',
-                uebung: '🤝 Team-Projekt: Plane mit zwei Mitschüler:innen eine gemeinsame Präsentation über "Rechte und Pflichten in der Lehre". Erstellt einen Aufgabenplan mit klaren Rollen.',
                 aspekte: ['⚖️ Recht', '👤 Identität'],
                 sprachmodi: ['💬 Diskutieren', '✏️ Schreiben']
             },
@@ -779,9 +651,8 @@
                 id: '3.2.4',
                 icon: '🧠',
                 title: '3.2.4 Kritisch denken',
-                description: 'Informationen hinterfragen, Quellen prüfen, reflektieren',
+                description: 'Informationen hinterfragen und Quellen prüfen',
                 thema: 'Thema 1: Ins Berufsleben einsteigen',
-                uebung: '📄 Lehrvertrag prüfen: Analysiere einen Beispiel-Lehrvertrag. Welche Rechte hast du? Welche Pflichten? Markiere unklare Stellen und formuliere Fragen dazu.',
                 aspekte: ['⚖️ Recht', '💰 Wirtschaft'],
                 sprachmodi: ['📖 Lesen', '💬 Diskutieren']
             },
@@ -789,9 +660,8 @@
                 id: '3.2.5',
                 icon: '🔧',
                 title: '3.2.5 Probleme lösen',
-                description: 'Herausforderungen analysieren und kreative Lösungen entwickeln',
+                description: 'Herausforderungen analysieren, Lösungen entwickeln',
                 thema: 'Thema 1: Ins Berufsleben einsteigen',
-                uebung: '🔧 Konfliktlösung: Beschreibe eine Situation, in der du ein Problem am Arbeitsplatz hattest (z.B. Missverständnis mit Vorgesetzten). Wie hast du es gelöst oder wie würdest du es lösen?',
                 aspekte: ['👤 Identität', '💰 Wirtschaft'],
                 sprachmodi: ['✏️ Schreiben', '💬 Diskutieren']
             },
@@ -799,9 +669,8 @@
                 id: '3.2.6',
                 icon: '💬',
                 title: '3.2.6 Kommunizieren',
-                description: 'Klar und verständlich ausdrücken, aktiv zuhören',
+                description: 'Klar ausdrücken und aktiv zuhören',
                 thema: 'Thema 1: Ins Berufsleben einsteigen',
-                uebung: '📧 Professionelle E-Mail: Schreibe eine E-Mail an deinen Berufsbildner / deine Berufsbildnerin. Bitte höflich um einen Termin für ein Zwischengespräch über deine Ausbildung.',
                 aspekte: ['👤 Identität', '💰 Wirtschaft'],
                 sprachmodi: ['✏️ Schreiben', '💻 Digital kommunizieren']
             },
@@ -811,7 +680,6 @@
                 title: '3.2.7 Digital kompetent sein',
                 description: 'Digitale Tools sicher und effektiv nutzen',
                 thema: 'Thema 1: Ins Berufsleben einsteigen',
-                uebung: '💻 Digitale Tools: Erstelle einen digitalen Kalender für deine erste Arbeitswoche. Trage wichtige Termine ein (ÜK, Berufsschule, Arbeitszeiten). Nutze Google Calendar oder ein ähnliches Tool.',
                 aspekte: ['💻 Technologie', '👤 Identität'],
                 sprachmodi: ['💻 Digital erstellen', '📖 Lesen']
             },
@@ -821,7 +689,6 @@
                 title: '3.2.8 Lernen lernen',
                 description: 'Eigene Lernstrategien entwickeln und anwenden',
                 thema: 'Thema 1: Ins Berufsleben einsteigen',
-                uebung: '📚 Lernstrategie entwickeln: Erstelle einen Lernplan für die ersten 3 Monate deiner Ausbildung. Welche Themen möchtest du vertiefen? Wie organisierst du deine Lernzeit?',
                 aspekte: ['👤 Identität', '💰 Wirtschaft'],
                 sprachmodi: ['✏️ Schreiben', '📖 Lesen']
             },
@@ -829,9 +696,8 @@
                 id: '3.2.9',
                 icon: '🔄',
                 title: '3.2.9 Anpassungsfähig sein',
-                description: 'Flexibel auf Veränderungen reagieren und umdenken können',
+                description: 'Flexibel auf Veränderungen reagieren',
                 thema: 'Thema 1: Ins Berufsleben einsteigen',
-                uebung: '🔄 Neue Situation meistern: Beschreibe, wie du dich an den Übergang von der Schule zur Berufslehre angepasst hast. Was war die größte Herausforderung? Wie bist du damit umgegangen?',
                 aspekte: ['👤 Identität', '💰 Wirtschaft'],
                 sprachmodi: ['✏️ Schreiben', '💬 Diskutieren']
             },
@@ -839,9 +705,8 @@
                 id: '3.2.10',
                 icon: '⚖️',
                 title: '3.2.10 Verantwortung übernehmen',
-                description: 'Für eigene Handlungen einstehen und Konsequenzen tragen',
+                description: 'Für Handlungen einstehen, Konsequenzen tragen',
                 thema: 'Thema 1: Ins Berufsleben einsteigen',
-                uebung: '⚖️ Pflichten verstehen: Liste deine wichtigsten Pflichten als Lernende:r auf. Wähle eine aus und beschreibe, wie du diese Verantwortung ernst nimmst.',
                 aspekte: ['⚖️ Recht', '👤 Identität'],
                 sprachmodi: ['✏️ Schreiben', '📖 Lesen']
             },
@@ -849,9 +714,8 @@
                 id: '3.2.11',
                 icon: '🎨',
                 title: '3.2.11 Kreativ sein',
-                description: 'Neue Ideen entwickeln und unkonventionell denken',
+                description: 'Neue Ideen entwickeln, unkonventionell denken',
                 thema: 'Thema 1: Ins Berufsleben einsteigen',
-                uebung: '🎨 Bewerbungsmappe gestalten: Erstelle ein kreatives Deckblatt für dein digitales Bewerbungsdossier. Gestalte es professionell, aber mit einer persönlichen Note.',
                 aspekte: ['👤 Identität', '🎭 Kultur'],
                 sprachmodi: ['💻 Digital erstellen', '🎨 Visuell gestalten']
             },
@@ -859,9 +723,8 @@
                 id: '3.2.12',
                 icon: '🪞',
                 title: '3.2.12 Selbstreflexion',
-                description: 'Eigenes Handeln und Lernen kritisch betrachten und bewerten',
+                description: 'Eigenes Handeln kritisch betrachten und bewerten',
                 thema: 'Thema 1: Ins Berufsleben einsteigen',
-                uebung: '🪞 Erste Woche reflektieren: Schreibe einen kurzen Reflexionstext über deine erste Woche in der Berufslehre. Was lief gut? Was möchtest du verbessern? Was hast du über dich selbst gelernt?',
                 aspekte: ['👤 Identität'],
                 sprachmodi: ['✏️ Schreiben', '💭 Reflektieren']
             }
@@ -869,7 +732,6 @@
         
         // Initialisierung
         window.addEventListener('load', async function() {
-            console.log('Seite geladen');
             document.getElementById('currentYear').textContent = new Date().getFullYear();
             
             userId = localStorage.getItem('ant_edu_user_id');
@@ -878,13 +740,8 @@
                 return;
             }
             
-            // Rendere Kompetenzkarten
             renderKompetenzen();
-            
-            // Lade Fortschritt
             await loadProgress();
-            
-            // Event Listeners
             setupEventListeners();
         });
         
@@ -904,28 +761,24 @@
         }
         
         function setupEventListeners() {
-            // Buttons für Kompetenzen
             document.querySelectorAll('.kompetenz-card').forEach(card => {
                 const button = card.querySelector('.card-button');
                 button.addEventListener('click', function(e) {
                     e.preventDefault();
+                    e.stopPropagation();
                     const kompetenzId = card.getAttribute('data-kompetenz');
-                    console.log('Button geklickt:', kompetenzId);
                     openUebung(kompetenzId);
                 });
             });
             
-            // Modal schließen
             document.getElementById('closeModal').addEventListener('click', closeModal);
             document.getElementById('abbrechenBtn').addEventListener('click', closeModal);
             document.getElementById('uebungModal').addEventListener('click', function(e) {
                 if (e.target === this) closeModal();
             });
             
-            // Speichern
             document.getElementById('speichernBtn').addEventListener('click', saveToPortfolio);
             
-            // Emoji Buttons
             document.querySelectorAll('.emoji-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -946,13 +799,12 @@
                     document.getElementById('progressCount').textContent = `${count}/12`;
                     document.getElementById('progressBar').style.width = `${(count/12)*100}%`;
                     
-                    // Update Karten-Status
                     Object.keys(schluessel).forEach(kompetenzId => {
                         updateCardStatus(kompetenzId);
                     });
                 }
             } catch (error) {
-                console.log('Fehler beim Laden:', error);
+                console.log('Offline oder Fehler:', error);
             }
         }
         
@@ -972,161 +824,668 @@
             
             document.getElementById('modalTitle').textContent = komp.title;
             
-            // Spezielle Interaktivität für 3.2.2 (E-Mail schreiben)
-            if (kompetenzId === '3.2.2') {
-                document.getElementById('modalContent').innerHTML = `
-                    <div class="exercise-box">
-                        <p class="exercise-thema">${komp.thema}</p>
-                        <h3 class="exercise-title">📝 Situation:</h3>
-                        <p class="exercise-description" style="margin-bottom: 1rem;">
-                            Du erhältst dieses ÜK-Aufgebot per E-Mail:
-                        </p>
-                        
-                        <div style="background: white; border: 2px solid #E5E7EB; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; font-family: monospace; font-size: 0.875rem;">
-                            <strong>Betreff:</strong> ÜK-Aufgebot Herbst 2024<br><br>
-                            Guten Tag<br><br>
-                            Hiermit laden wir Sie zum überbetrieblichen Kurs ein:<br>
-                            <strong>Datum:</strong> Montag, 25. November 2024<br>
-                            <strong>Zeit:</strong> vormittags<br>
-                            <strong>Ort:</strong> Berufsbildungszentrum, Raum 3.12<br><br>
-                            Bitte bringen Sie Schreibmaterial mit.<br><br>
-                            Freundliche Grüsse<br>
-                            ÜK-Koordination
-                        </div>
-                        
-                        <div style="background: #FFF8F0; border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem; border-left: 4px solid #FF6B35;">
-                            <p style="font-size: 0.875rem; color: #374151; margin-bottom: 0.5rem;">
-                                <strong style="color: #FF6B35;">🎯 Deine Aufgabe:</strong>
-                            </p>
-                            <p style="font-size: 0.875rem; color: #6B7280;">
-                                Die Zeitangabe "vormittags" ist unklar. Schreibe eine höfliche Rückfrage-E-Mail, um die genaue Uhrzeit zu erfahren.
-                            </p>
-                        </div>
-                        
-                        <!-- Interaktiver E-Mail Editor -->
-                        <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
-                            <h4 style="color: #8B4513; font-weight: bold; margin-bottom: 1rem;">✍️ Schreibe deine E-Mail:</h4>
-                            
-                            <div style="margin-bottom: 1rem;">
-                                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">An:</label>
-                                <input type="text" id="emailTo" value="uek-koordination@berufsbildung.ch" disabled style="width: 100%; padding: 0.5rem; border: 1px solid #E5E7EB; border-radius: 6px; background: #F9FAFB; color: #6B7280;">
-                            </div>
-                            
-                            <div style="margin-bottom: 1rem;">
-                                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Betreff:</label>
-                                <input type="text" id="emailSubject" placeholder="z.B. Rückfrage zu ÜK-Aufgebot vom 15.11.2024" style="width: 100%; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px; font-family: inherit;">
-                            </div>
-                            
-                            <div style="margin-bottom: 1rem;">
-                                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Nachricht:</label>
-                                <textarea id="emailBody" rows="8" placeholder="Sehr geehrte Damen und Herren,
-
-..." style="width: 100%; padding: 0.75rem; border: 2px solid #E5E7EB; border-radius: 6px; font-family: inherit; resize: vertical;"></textarea>
-                            </div>
-                        </div>
-                        
-                        <!-- Kriterien Selbst-Check -->
-                        <div style="background: linear-gradient(to right, rgba(76, 175, 80, 0.1), rgba(33, 150, 243, 0.1)); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; border: 2px solid rgba(76, 175, 80, 0.3);">
-                            <h4 style="color: #4CAF50; font-weight: bold; margin-bottom: 1rem;">✅ Selbst-Check: Ist deine E-Mail...</h4>
-                            <div id="emailCriteria">
-                                <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; cursor: pointer; font-size: 0.875rem;">
-                                    <input type="checkbox" class="criteria-check" data-criteria="greeting" style="width: 18px; height: 18px; cursor: pointer;">
-                                    <span>...höflich? (Anrede, Grussformel, höfliche Formulierung)</span>
-                                </label>
-                                <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; cursor: pointer; font-size: 0.875rem;">
-                                    <input type="checkbox" class="criteria-check" data-criteria="clear" style="width: 18px; height: 18px; cursor: pointer;">
-                                    <span>...klar? (Die Frage ist deutlich formuliert)</span>
-                                </label>
-                                <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; cursor: pointer; font-size: 0.875rem;">
-                                    <input type="checkbox" class="criteria-check" data-criteria="context" style="width: 18px; height: 18px; cursor: pointer;">
-                                    <span>...verständlich? (Bezug zum Original-Aufgebot ist klar)</span>
-                                </label>
-                                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.875rem;">
-                                    <input type="checkbox" class="criteria-check" data-criteria="complete" style="width: 18px; height: 18px; cursor: pointer;">
-                                    <span>...vollständig? (Betreff, Anrede, Gruss, ggf. Unterschrift)</span>
-                                </label>
-                            </div>
-                            <div id="criteriaFeedback" style="margin-top: 1rem; padding: 0.75rem; background: white; border-radius: 8px; display: none;">
-                                <p style="font-size: 0.875rem; color: #4CAF50; font-weight: 600;">🎉 Super! Alle Kriterien erfüllt!</p>
-                            </div>
-                        </div>
-                        
-                        <div class="tags-grid" style="margin-top: 1rem;">
-                            <div>
-                                <p class="tag-group-title">🎯 Aspekte:</p>
-                                <div class="tags">
-                                    ${komp.aspekte.map(a => `<span class="tag tag-aspekt">${a}</span>`).join('')}
-                                </div>
-                            </div>
-                            <div>
-                                <p class="tag-group-title">💬 Sprachmodi:</p>
-                                <div class="tags">
-                                    ${komp.sprachmodi.map(s => `<span class="tag tag-sprach">${s}</span>`).join('')}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                // Event Listener für Kriterien-Checkboxen
-                setTimeout(() => {
-                    document.querySelectorAll('.criteria-check').forEach(checkbox => {
-                        checkbox.addEventListener('change', checkCriteria);
-                    });
-                }, 100);
-                
-            } else {
-                // Standard für andere Kompetenzen
-                document.getElementById('modalContent').innerHTML = `
-                    <div class="exercise-box">
-                        <p class="exercise-thema">${komp.thema}</p>
-                        <h3 class="exercise-title">🎯 Umsetzungsbeispiel:</h3>
-                        <p class="exercise-description">${komp.uebung}</p>
-                        
-                        <div style="background: white; border-radius: 12px; padding: 1rem; margin-top: 1rem; border: 2px solid rgba(139, 69, 19, 0.2);">
-                            <p style="font-size: 0.875rem; color: #6B7280; margin-bottom: 0.5rem;">
-                                <strong style="color: #8B4513;">💡 Hinweis:</strong> Diese Kompetenz übst du durch konkrete Aktivitäten im Unterricht oder in deinem Alltag.
-                            </p>
-                            <p style="font-size: 0.875rem; color: #6B7280;">
-                                Nach dem Üben kannst du hier festhalten, wie es war!
-                            </p>
-                        </div>
-                        
-                        <div class="tags-grid" style="margin-top: 1rem;">
-                            <div>
-                                <p class="tag-group-title">🎯 Aspekte:</p>
-                                <div class="tags">
-                                    ${komp.aspekte.map(a => `<span class="tag tag-aspekt">${a}</span>`).join('')}
-                                </div>
-                            </div>
-                            <div>
-                                <p class="tag-group-title">💬 Sprachmodi:</p>
-                                <div class="tags">
-                                    ${komp.sprachmodi.map(s => `<span class="tag tag-sprach">${s}</span>`).join('')}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
+            // Generiere interaktive Inhalte basierend auf Kompetenz
+            const exercises = {
+                '3.2.1': generate321,
+                '3.2.2': generate322,
+                '3.2.3': generate323,
+                '3.2.4': generate324,
+                '3.2.5': generate325,
+                '3.2.6': generate326,
+                '3.2.7': generate327,
+                '3.2.8': generate328,
+                '3.2.9': generate329,
+                '3.2.10': generate3210,
+                '3.2.11': generate3211,
+                '3.2.12': generate3212
+            };
+            
+            const content = exercises[kompetenzId] ? exercises[kompetenzId](komp) : getDefaultContent(komp);
+            document.getElementById('modalContent').innerHTML = content;
             
             selectedEmojis = [];
             updateSelectedEmojis();
             
+            setTimeout(() => setupActivityListeners(), 100);
+            
             document.getElementById('uebungModal').classList.add('show');
         }
         
-        function checkCriteria() {
-            const checkboxes = document.querySelectorAll('.criteria-check');
-            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-            const feedback = document.getElementById('criteriaFeedback');
+        // ==================== INTERAKTIVE ÜBUNGEN ====================
+        
+        // 3.2.1: Schulmail-Checklist
+        function generate321(komp) {
+            return `
+                <div class="exercise-box">
+                    <p class="exercise-thema">${komp.thema}</p>
+                    <h3 class="exercise-title">📧 Aufgabe: Schulmail einrichten</h3>
+                    <p class="exercise-description">Gehe Schritt für Schritt vor und hake ab:</p>
+                    
+                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
+                        <h4 style="color: #8B4513; font-weight: bold; margin-bottom: 1rem;">✅ Setup-Checklist:</h4>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;"><strong>1.</strong> Schulmail-Adresse erhalten/aktiviert</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;"><strong>2.</strong> Erstes Login durchgeführt</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;"><strong>3.</strong> Profil ausgefüllt (Name, Klasse)</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;"><strong>4.</strong> Test-E-Mail an Lehrperson gesendet</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;"><strong>5.</strong> E-Mail-Signatur erstellt</span>
+                        </label>
+                        <div id="activityFeedback" style="margin-top: 1rem; padding: 0.75rem; background: #E8F5E9; border-radius: 8px; display: none; border: 2px solid #4CAF50;">
+                            <p style="font-size: 0.875rem; color: #2E7D32; font-weight: 600;">🎉 Alle Schritte erledigt!</p>
+                        </div>
+                    </div>
+                    ${getTagsHTML(komp)}
+                </div>
+            `;
+        }
+        
+        // 3.2.2: E-Mail schreiben mit Selbst-Check
+        function generate322(komp) {
+            return `
+                <div class="exercise-box">
+                    <p class="exercise-thema">${komp.thema}</p>
+                    <h3 class="exercise-title">📝 Situation: ÜK-Aufgebot</h3>
+                    <div style="background: white; border: 2px solid #E5E7EB; border-radius: 12px; padding: 1rem; margin: 1rem 0; font-family: monospace; font-size: 0.875rem;">
+                        <strong>Betreff:</strong> ÜK-Aufgebot Herbst 2024<br><br>
+                        Guten Tag<br><br>
+                        Hiermit laden wir Sie zum überbetrieblichen Kurs ein:<br>
+                        <strong>Datum:</strong> Montag, 25. November 2024<br>
+                        <strong>Zeit:</strong> vormittags<br>
+                        <strong>Ort:</strong> Berufsbildungszentrum, Raum 3.12<br><br>
+                        Freundliche Grüsse
+                    </div>
+                    <p class="exercise-description">Die Zeitangabe "vormittags" ist unklar. Selbst-Check: Ist eine Rückfrage nötig?</p>
+                    
+                    <div style="background: linear-gradient(to right, rgba(76, 175, 80, 0.1), rgba(33, 150, 243, 0.1)); border-radius: 12px; padding: 1.5rem; border: 2px solid rgba(76, 175, 80, 0.3);">
+                        <h4 style="color: #4CAF50; font-weight: bold; margin-bottom: 1rem;">✅ Was muss in einer Rückfrage-E-Mail enthalten sein?</h4>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; cursor: pointer; font-size: 0.875rem;">
+                            <input type="checkbox" class="criteria-check" style="width: 18px; height: 18px; cursor: pointer;">
+                            <span>Höfliche Anrede und Grussformel</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; cursor: pointer; font-size: 0.875rem;">
+                            <input type="checkbox" class="criteria-check" style="width: 18px; height: 18px; cursor: pointer;">
+                            <span>Klare Frage nach der genauen Uhrzeit</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; cursor: pointer; font-size: 0.875rem;">
+                            <input type="checkbox" class="criteria-check" style="width: 18px; height: 18px; cursor: pointer;">
+                            <span>Bezug zum Original-Aufgebot</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.875rem;">
+                            <input type="checkbox" class="criteria-check" style="width: 18px; height: 18px; cursor: pointer;">
+                            <span>Vollständig (Betreff, Anrede, Gruss)</span>
+                        </label>
+                        <div id="criteriaFeedback" style="margin-top: 1rem; padding: 0.75rem; background: white; border-radius: 8px; display: none;">
+                            <p style="font-size: 0.875rem; color: #4CAF50; font-weight: 600;">🎉 Alle wichtigen Punkte erfasst!</p>
+                        </div>
+                    </div>
+                    ${getTagsHTML(komp)}
+                </div>
+            `;
+        }
+        
+        // 3.2.3: Rollenverteilung
+        function generate323(komp) {
+            return `
+                <div class="exercise-box">
+                    <p class="exercise-thema">${komp.thema}</p>
+                    <h3 class="exercise-title">🤝 Aufgabe: Team-Projekt planen</h3>
+                    <p class="exercise-description">Ihr plant zu dritt eine Präsentation über "Rechte und Pflichten in der Lehre"</p>
+                    
+                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
+                        <h4 style="color: #8B4513; font-weight: bold; margin-bottom: 1rem;">👥 Ordne Rollen zu:</h4>
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Person 1:</label>
+                            <select class="role-select" style="width: 100%; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px;">
+                                <option value="">Wähle...</option>
+                                <option value="recherche">📚 Recherche & Inhalte</option>
+                                <option value="design">🎨 Folien gestalten</option>
+                                <option value="praesentation">🗣️ Präsentation halten</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Person 2:</label>
+                            <select class="role-select" style="width: 100%; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px;">
+                                <option value="">Wähle...</option>
+                                <option value="recherche">📚 Recherche & Inhalte</option>
+                                <option value="design">🎨 Folien gestalten</option>
+                                <option value="praesentation">🗣️ Präsentation halten</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Person 3:</label>
+                            <select class="role-select" style="width: 100%; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px;">
+                                <option value="">Wähle...</option>
+                                <option value="recherche">📚 Recherche & Inhalte</option>
+                                <option value="design">🎨 Folien gestalten</option>
+                                <option value="praesentation">🗣️ Präsentation halten</option>
+                            </select>
+                        </div>
+                        <div id="roleCheck" style="margin-top: 1rem; padding: 0.75rem; background: #E8F5E9; border-radius: 8px; display: none; border: 2px solid #4CAF50;">
+                            <p style="font-size: 0.875rem; color: #2E7D32; font-weight: 600;">✅ Alle Rollen verteilt!</p>
+                        </div>
+                    </div>
+                    ${getTagsHTML(komp)}
+                </div>
+            `;
+        }
+        
+        // 3.2.4: Lehrvertrag-Prüfung
+        function generate324(komp) {
+            return `
+                <div class="exercise-box">
+                    <p class="exercise-thema">${komp.thema}</p>
+                    <h3 class="exercise-title">📄 Aufgabe: Lehrvertrag prüfen</h3>
+                    <p class="exercise-description">Was prüfst du in einem Lehrvertrag?</p>
+                    
+                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
+                        <h4 style="color: #8B4513; font-weight: bold; margin-bottom: 1rem;">🔍 Markiere wichtige Punkte:</h4>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">Probezeit: Dauer und Bedingungen</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">Arbeitszeit: Wochenstunden und Pausen</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">Lohn: Höhe und Zahlungstermine</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">Ferien: Anzahl Wochen pro Jahr</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">Kündigungsfristen</span>
+                        </label>
+                        <div id="activityFeedback" style="margin-top: 1rem; padding: 0.75rem; background: #E8F5E9; border-radius: 8px; display: none; border: 2px solid #4CAF50;">
+                            <p style="font-size: 0.875rem; color: #2E7D32; font-weight: 600;">🎉 Alle wichtigen Punkte!</p>
+                        </div>
+                    </div>
+                    ${getTagsHTML(komp)}
+                </div>
+            `;
+        }
+        
+        // 3.2.5: Problemlösungs-Reihenfolge
+        function generate325(komp) {
+            return `
+                <div class="exercise-box">
+                    <p class="exercise-thema">${komp.thema}</p>
+                    <h3 class="exercise-title">🔧 Situation: Missverständnis</h3>
+                    <p class="exercise-description">Anweisung war unklar, du hast es anders gemacht. Bringe die Schritte in die richtige Reihenfolge (1-5):</p>
+                    
+                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 8px;">
+                                <input type="number" min="1" max="5" class="order-input" data-correct="3" style="width: 50px; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px; text-align: center;">
+                                <span style="font-size: 0.875rem;">Entschuldigung für Missverständnis</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 8px;">
+                                <input type="number" min="1" max="5" class="order-input" data-correct="1" style="width: 50px; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px; text-align: center;">
+                                <span style="font-size: 0.875rem;">Ruhig bleiben, Situation analysieren</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 8px;">
+                                <input type="number" min="1" max="5" class="order-input" data-correct="5" style="width: 50px; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px; text-align: center;">
+                                <span style="font-size: 0.875rem;">Lösung umsetzen, bei Unklarheiten nachfragen</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 8px;">
+                                <input type="number" min="1" max="5" class="order-input" data-correct="2" style="width: 50px; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px; text-align: center;">
+                                <span style="font-size: 0.875rem;">Gespräch mit Vorgesetzten suchen</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 8px;">
+                                <input type="number" min="1" max="5" class="order-input" data-correct="4" style="width: 50px; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px; text-align: center;">
+                                <span style="font-size: 0.875rem;">Gemeinsam Lösung finden</span>
+                            </div>
+                        </div>
+                        <button onclick="checkOrder()" style="margin-top: 1rem; width: 100%; background: #2196F3; color: white; font-weight: 600; padding: 0.75rem; border: none; border-radius: 8px; cursor: pointer;">
+                            Prüfen
+                        </button>
+                        <div id="orderFeedback" style="margin-top: 1rem; padding: 0.75rem; border-radius: 8px; display: none;"></div>
+                    </div>
+                    ${getTagsHTML(komp)}
+                </div>
+            `;
+        }
+        
+        // 3.2.6: Kommunikation - Terminanfrage
+        function generate326(komp) {
+            return `
+                <div class="exercise-box">
+                    <p class="exercise-thema">${komp.thema}</p>
+                    <h3 class="exercise-title">📧 Aufgabe: Terminanfrage</h3>
+                    <p class="exercise-description">Was gehört in eine höfliche Terminanfrage? Wähle aus:</p>
+                    
+                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
+                        <h4 style="color: #8B4513; font-weight: bold; margin-bottom: 1rem;">✅ Elemente einer guten Terminanfrage:</h4>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">Höfliche Anrede</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">Klarer Grund für Anfrage</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">Kurz und präzise (nicht zu lang)</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">Freundliche Grussformel</span>
+                        </label>
+                        <div id="activityFeedback" style="margin-top: 1rem; padding: 0.75rem; background: #E8F5E9; border-radius: 8px; display: none; border: 2px solid #4CAF50;">
+                            <p style="font-size: 0.875rem; color: #2E7D32; font-weight: 600;">✅ Alle Elemente gewählt!</p>
+                        </div>
+                    </div>
+                    ${getTagsHTML(komp)}
+                </div>
+            `;
+        }
+        
+        // 3.2.7: Digital - Kalender planen
+        function generate327(komp) {
+            return `
+                <div class="exercise-box">
+                    <p class="exercise-thema">${komp.thema}</p>
+                    <h3 class="exercise-title">📅 Aufgabe: Wochenplan erstellen</h3>
+                    <p class="exercise-description">Trage wichtige Termine ein:</p>
+                    
+                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
+                        <div style="display: grid; gap: 1rem;">
+                            <div>
+                                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">📌 Montag:</label>
+                                <input type="text" class="calendar-input" placeholder="z.B. 08:00-17:00 Arbeit" style="width: 100%; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px;">
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">📌 Dienstag:</label>
+                                <input type="text" class="calendar-input" placeholder="z.B. 08:00-16:00 Schule" style="width: 100%; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px;">
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">📌 Mittwoch:</label>
+                                <input type="text" class="calendar-input" placeholder="z.B. 09:00-17:00 ÜK" style="width: 100%; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px;">
+                            </div>
+                        </div>
+                        <div id="calendarCheck" style="margin-top: 1rem; padding: 0.75rem; background: #E8F5E9; border-radius: 8px; display: none; border: 2px solid #4CAF50;">
+                            <p style="font-size: 0.875rem; color: #2E7D32; font-weight: 600;">✅ Wochenplan vollständig!</p>
+                        </div>
+                    </div>
+                    ${getTagsHTML(komp)}
+                </div>
+            `;
+        }
+        
+        // 3.2.8: Lernstrategien wählen
+        function generate328(komp) {
+            return `
+                <div class="exercise-box">
+                    <p class="exercise-thema">${komp.thema}</p>
+                    <h3 class="exercise-title">📚 Aufgabe: Lernstrategien wählen</h3>
+                    <p class="exercise-description">Welche Strategien passen zu dir? Wähle mindestens 3:</p>
+                    
+                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;"><strong>📝 Zusammenfassungen</strong> schreiben</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;"><strong>🗣️ Laut wiederholen</strong></span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;"><strong>🎨 Mindmaps</strong> erstellen</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;"><strong>👥 Lerngruppe</strong> bilden</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;"><strong>📱 Apps nutzen</strong> (Karteikarten, Quiz)</span>
+                        </label>
+                        <div id="activityFeedback" style="margin-top: 1rem; padding: 0.75rem; background: #E8F5E9; border-radius: 8px; display: none; border: 2px solid #4CAF50;">
+                            <p style="font-size: 0.875rem; color: #2E7D32; font-weight: 600;">✅ Lernstrategien gewählt!</p>
+                        </div>
+                    </div>
+                    ${getTagsHTML(komp)}
+                </div>
+            `;
+        }
+        
+        // 3.2.9: Anpassungsfähigkeit mit Sliders
+        function generate329(komp) {
+            return `
+                <div class="exercise-box">
+                    <p class="exercise-thema">${komp.thema}</p>
+                    <h3 class="exercise-title">🔄 Aufgabe: Übergang bewerten</h3>
+                    <p class="exercise-description">Was hat dir beim Übergang Schule → Lehre geholfen?</p>
+                    
+                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
+                        <div style="margin-bottom: 1.5rem;">
+                            <p style="font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.75rem;">Offenheit für Neues</p>
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <span style="font-size: 0.75rem; color: #6B7280;">wenig</span>
+                                <input type="range" min="1" max="5" value="3" class="rating-slider" style="flex: 1;">
+                                <span style="font-size: 0.75rem; color: #6B7280;">sehr</span>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            <p style="font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.75rem;">Fragen stellen</p>
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <span style="font-size: 0.75rem; color: #6B7280;">wenig</span>
+                                <input type="range" min="1" max="5" value="3" class="rating-slider" style="flex: 1;">
+                                <span style="font-size: 0.75rem; color: #6B7280;">sehr</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p style="font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.75rem;">Unterstützung holen</p>
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <span style="font-size: 0.75rem; color: #6B7280;">wenig</span>
+                                <input type="range" min="1" max="5" value="3" class="rating-slider" style="flex: 1;">
+                                <span style="font-size: 0.75rem; color: #6B7280;">sehr</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem; padding: 0.75rem; background: #E3F2FD; border-radius: 8px; border: 2px solid #2196F3;">
+                            <p style="font-size: 0.875rem; color: #1565C0; font-weight: 600;">💡 Bewertung abgeschlossen!</p>
+                        </div>
+                    </div>
+                    ${getTagsHTML(komp)}
+                </div>
+            `;
+        }
+        
+        // 3.2.10: Verantwortung - Pflichten Quiz
+        function generate3210(komp) {
+            return `
+                <div class="exercise-box">
+                    <p class="exercise-thema">${komp.thema}</p>
+                    <h3 class="exercise-title">⚖️ Aufgabe: Pflichten kennen</h3>
+                    <p class="exercise-description">Welche Aussagen sind richtig?</p>
+                    
+                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="quiz-check" data-correct="true" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">Ich muss pünktlich zur Arbeit erscheinen</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="quiz-check" data-correct="false" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">Ich kann Ferien nehmen, wann ich will</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="quiz-check" data-correct="true" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">Ich muss Arbeitsanweisungen befolgen</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="quiz-check" data-correct="true" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">Bei Krankheit Betrieb informieren</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="quiz-check" data-correct="false" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">Berufsschule ist freiwillig</span>
+                        </label>
+                        <button onclick="checkQuiz()" style="margin-top: 1rem; width: 100%; background: #2196F3; color: white; font-weight: 600; padding: 0.75rem; border: none; border-radius: 8px; cursor: pointer;">
+                            Prüfen
+                        </button>
+                        <div id="quizFeedback" style="margin-top: 1rem; padding: 0.75rem; border-radius: 8px; display: none;"></div>
+                    </div>
+                    ${getTagsHTML(komp)}
+                </div>
+            `;
+        }
+        
+        // 3.2.11: Kreativität - Deckblatt-Elemente
+        function generate3211(komp) {
+            return `
+                <div class="exercise-box">
+                    <p class="exercise-thema">${komp.thema}</p>
+                    <h3 class="exercise-title">🎨 Aufgabe: Deckblatt planen</h3>
+                    <p class="exercise-description">Was gehört auf ein Bewerbungsdeckblatt?</p>
+                    
+                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">📸 Professionelles Bewerbungsfoto</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">✏️ Name und Kontaktdaten</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">🎯 Titel: "Bewerbung als..."</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">🎨 Persönliche Note (Farbe, Design)</span>
+                        </label>
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
+                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">📅 Datum der Bewerbung</span>
+                        </label>
+                        <div id="activityFeedback" style="margin-top: 1rem; padding: 0.75rem; background: #E8F5E9; border-radius: 8px; display: none; border: 2px solid #4CAF50;">
+                            <p style="font-size: 0.875rem; color: #2E7D32; font-weight: 600;">✅ Alle Elemente gewählt!</p>
+                        </div>
+                    </div>
+                    ${getTagsHTML(komp)}
+                </div>
+            `;
+        }
+        
+        // 3.2.12: Selbstreflexion mit Sliders
+        function generate3212(komp) {
+            return `
+                <div class="exercise-box">
+                    <p class="exercise-thema">${komp.thema}</p>
+                    <h3 class="exercise-title">🪞 Aufgabe: Erste Woche reflektieren</h3>
+                    <p class="exercise-description">Bewerte deine erste Woche:</p>
+                    
+                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
+                        <div style="margin-bottom: 1.5rem;">
+                            <p style="font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.75rem;">Wie gut hast du dich eingelebt?</p>
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <span style="font-size: 0.75rem;">😰</span>
+                                <input type="range" min="1" max="5" value="3" class="rating-slider" style="flex: 1;">
+                                <span style="font-size: 0.75rem;">😊</span>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            <p style="font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.75rem;">Wie klar waren die Anweisungen?</p>
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <span style="font-size: 0.75rem; color: #6B7280;">unklar</span>
+                                <input type="range" min="1" max="5" value="3" class="rating-slider" style="flex: 1;">
+                                <span style="font-size: 0.75rem; color: #6B7280;">sehr klar</span>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            <p style="font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.75rem;">Wie gut war das Team?</p>
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <span style="font-size: 0.75rem;">❄️</span>
+                                <input type="range" min="1" max="5" value="3" class="rating-slider" style="flex: 1;">
+                                <span style="font-size: 0.75rem;">🔥</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p style="font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.75rem;">Was willst du verbessern?</p>
+                            <select class="improve-select" style="width: 100%; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px;">
+                                <option value="">Wähle...</option>
+                                <option value="punctuality">⏰ Pünktlichkeit</option>
+                                <option value="questions">❓ Mehr Fragen</option>
+                                <option value="organization">📋 Organisation</option>
+                                <option value="communication">💬 Kommunikation</option>
+                                <option value="focus">🎯 Konzentration</option>
+                            </select>
+                        </div>
+                        <div id="reflectionComplete" style="margin-top: 1rem; padding: 0.75rem; background: #E3F2FD; border-radius: 8px; border: 2px solid #2196F3; display: none;">
+                            <p style="font-size: 0.875rem; color: #1565C0; font-weight: 600;">💭 Reflexion abgeschlossen!</p>
+                        </div>
+                    </div>
+                    ${getTagsHTML(komp)}
+                </div>
+            `;
+        }
+        
+        function getTagsHTML(komp) {
+            return `
+                <div class="tags-grid" style="margin-top: 1.5rem;">
+                    <div>
+                        <p class="tag-group-title">🎯 Aspekte:</p>
+                        <div class="tags">
+                            ${komp.aspekte.map(a => `<span class="tag tag-aspekt">${a}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div>
+                        <p class="tag-group-title">💬 Sprachmodi:</p>
+                        <div class="tags">
+                            ${komp.sprachmodi.map(s => `<span class="tag tag-sprach">${s}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function getDefaultContent(komp) {
+            return `
+                <div class="exercise-box">
+                    <p class="exercise-thema">${komp.thema}</p>
+                    <h3 class="exercise-title">Übung in Vorbereitung</h3>
+                    <p class="exercise-description">Diese interaktive Übung wird gerade entwickelt.</p>
+                    ${getTagsHTML(komp)}
+                </div>
+            `;
+        }
+        
+        // ==================== EVENT LISTENER ====================
+        
+        function setupActivityListeners() {
+            // Checkboxen mit Feedback
+            const activityChecks = document.querySelectorAll('.activity-check');
+            if (activityChecks.length > 0) {
+                activityChecks.forEach(cb => {
+                    cb.addEventListener('change', () => {
+                        const allChecked = Array.from(activityChecks).every(c => c.checked);
+                        const feedback = document.getElementById('activityFeedback');
+                        if (feedback) feedback.style.display = allChecked ? 'block' : 'none';
+                    });
+                });
+            }
             
-            if (allChecked) {
-                feedback.style.display = 'block';
-            } else {
-                feedback.style.display = 'none';
+            // Kriterien-Checks
+            const criteriaChecks = document.querySelectorAll('.criteria-check');
+            if (criteriaChecks.length > 0) {
+                criteriaChecks.forEach(cb => {
+                    cb.addEventListener('change', () => {
+                        const allChecked = Array.from(criteriaChecks).every(c => c.checked);
+                        const feedback = document.getElementById('criteriaFeedback');
+                        if (feedback) feedback.style.display = allChecked ? 'block' : 'none';
+                    });
+                });
+            }
+            
+            // Rollen-Select
+            const roleSelects = document.querySelectorAll('.role-select');
+            if (roleSelects.length > 0) {
+                roleSelects.forEach(select => {
+                    select.addEventListener('change', () => {
+                        const allFilled = Array.from(roleSelects).every(s => s.value !== '');
+                        const values = Array.from(roleSelects).map(s => s.value);
+                        const allDifferent = new Set(values).size === values.length;
+                        const feedback = document.getElementById('roleCheck');
+                        if (feedback) feedback.style.display = (allFilled && allDifferent) ? 'block' : 'none';
+                    });
+                });
+            }
+            
+            // Kalender-Inputs
+            const calendarInputs = document.querySelectorAll('.calendar-input');
+            if (calendarInputs.length > 0) {
+                calendarInputs.forEach(input => {
+                    input.addEventListener('input', () => {
+                        const allFilled = Array.from(calendarInputs).every(i => i.value.trim() !== '');
+                        const feedback = document.getElementById('calendarCheck');
+                        if (feedback) feedback.style.display = allFilled ? 'block' : 'none';
+                    });
+                });
+            }
+            
+            // Improve Select (3.2.12)
+            const improveSelect = document.querySelector('.improve-select');
+            if (improveSelect) {
+                improveSelect.addEventListener('change', () => {
+                    const feedback = document.getElementById('reflectionComplete');
+                    if (feedback && improveSelect.value !== '') {
+                        feedback.style.display = 'block';
+                    }
+                });
             }
         }
+        
+        // Globale Funktionen für spezielle Checks
+        window.checkOrder = function() {
+            const inputs = document.querySelectorAll('.order-input');
+            let allCorrect = true;
+            inputs.forEach(input => {
+                const value = parseInt(input.value);
+                const correct = parseInt(input.dataset.correct);
+                if (value !== correct) {
+                    allCorrect = false;
+                    input.style.borderColor = '#EF4444';
+                } else {
+                    input.style.borderColor = '#4CAF50';
+                }
+            });
+            
+            const feedback = document.getElementById('orderFeedback');
+            if (allCorrect) {
+                feedback.style.display = 'block';
+                feedback.style.background = '#E8F5E9';
+                feedback.style.border = '2px solid #4CAF50';
+                feedback.innerHTML = '<p style="font-size: 0.875rem; color: #2E7D32; font-weight: 600;">🎉 Perfekt! Reihenfolge stimmt!</p>';
+            } else {
+                feedback.style.display = 'block';
+                feedback.style.background = '#FFEBEE';
+                feedback.style.border = '2px solid #EF4444';
+                feedback.innerHTML = '<p style="font-size: 0.875rem; color: #C62828; font-weight: 600;">❌ Noch nicht ganz richtig. Versuch nochmal!</p>';
+            }
+        };
+        
+        window.checkQuiz = function() {
+            const checks = document.querySelectorAll('.quiz-check');
+            let allCorrect = true;
+            checks.forEach(cb => {
+                const isCorrect = cb.dataset.correct === 'true';
+                if (cb.checked !== isCorrect) {
+                    allCorrect = false;
+                }
+            });
+            
+            const feedback = document.getElementById('quizFeedback');
+            if (allCorrect) {
+                feedback.style.display = 'block';
+                feedback.style.background = '#E8F5E9';
+                feedback.style.border = '2px solid #4CAF50';
+                feedback.innerHTML = '<p style="font-size: 0.875rem; color: #2E7D32; font-weight: 600;">🎉 Alle Antworten richtig!</p>';
+            } else {
+                feedback.style.display = 'block';
+                feedback.style.background = '#FFEBEE';
+                feedback.style.border = '2px solid #EF4444';
+                feedback.innerHTML = '<p style="font-size: 0.875rem; color: #C62828; font-weight: 600;">❌ Nicht alle richtig. Überlege nochmal!</p>';
+            }
+        };
         
         function closeModal() {
             document.getElementById('uebungModal').classList.remove('show');
@@ -1164,110 +1523,28 @@
                 if (userDoc.exists()) {
                     const data = userDoc.data();
                     const schluessel = data.kompetenzen?.schluessel || {};
-                    const portfolio = data.portfolio || [];
                     
-                    // Sammle E-Mail Daten wenn vorhanden (für 3.2.2)
-                    let performanzData = null;
-                    if (currentKompetenz === '3.2.2') {
-                        const emailSubject = document.getElementById('emailSubject')?.value || '';
-                        const emailBody = document.getElementById('emailBody')?.value || '';
-                        
-                        if (emailSubject && emailBody) {
-                            performanzData = {
-                                type: 'email',
-                                subject: emailSubject,
-                                body: emailBody,
-                                timestamp: new Date().toISOString()
-                            };
-                            
-                            // Erstelle Portfolio-Eintrag für die E-Mail
-                            const komp = kompetenzen.find(k => k.id === currentKompetenz);
-                            portfolio.push({
-                                id: 'email_' + Date.now(),
-                                type: 'performanz',
-                                kategorie: 'schluessel',
-                                kompetenzId: currentKompetenz,
-                                title: komp.title + ' - E-Mail',
-                                performanz: performanzData,
-                                reflexion: selectedEmojis.join(''),
-                                createdAt: new Date().toISOString(),
-                                shareable: true  // E-Mails können geteilt werden
-                            });
-                        }
-                    }
-                    
-                    // Markiere Kompetenz als geübt mit Reflexion
                     schluessel[currentKompetenz] = {
                         completed: true,
                         reflexion: selectedEmojis.join(''),
-                        performanz: performanzData,
                         timestamp: new Date().toISOString()
                     };
                     
                     await updateDoc(userRef, {
-                        'kompetenzen.schluessel': schluessel,
-                        'portfolio': portfolio
+                        'kompetenzen.schluessel': schluessel
                     });
                     
-                    // Update UI
                     updateCardStatus(currentKompetenz);
                     await loadProgress();
-                    
                     closeModal();
                     
-                    let message = '✅ Gespeichert!\n\nKompetenz als geübt markiert mit Reflexion: ' + selectedEmojis.join(' ');
-                    if (performanzData) {
-                        message += '\n\n📧 Deine E-Mail wurde ins Portfolio gespeichert!';
-                    }
-                    alert(message);
+                    alert('✅ Gespeichert!\n\nKompetenz als geübt markiert mit Reflexion: ' + selectedEmojis.join(' '));
                 }
             } catch (error) {
                 console.error('Fehler beim Speichern:', error);
-                alert('Fehler beim Speichern: ' + error.message);
+                alert('Fehler beim Speichern. Versuche es nochmal.');
             }
         }
-    </script>
-    
-    <!-- Ameisen-Funktionalität -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const antQuotes = [
-                "🐜 Diese Schlüsselkompetenzen übst du in ALLEN 8 Themen!",
-                "🐜 Jede Übung trainiert mehrere Kompetenzen gleichzeitig!",
-                "🐜 12 Kompetenzen für lebenslanges Lernen - das ist dein Fundament!",
-                "🐜 Pro-Tipp: Nach jeder Übung ins Portfolio speichern!",
-                "🐜 Hier siehst du konkrete Übungen aus Thema 1!",
-                "🐜 Klick auf eine Karte, übe die Kompetenz und sammle Erfahrungen!",
-                "🐜 Grüne Karten = Bereits geübt ✅",
-                "🐜 Ameisen-Weisheit: Kleine Schritte, große Wirkung! 🐾"
-            ];
-            
-            let lastQuoteIndex = -1;
-            
-            const floatingAnt = document.getElementById('floatingAnt');
-            const speechBubble = document.getElementById('antSpeech');
-            const antText = document.getElementById('antText');
-            
-            if (floatingAnt) {
-                floatingAnt.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    
-                    let randomIndex;
-                    do {
-                        randomIndex = Math.floor(Math.random() * antQuotes.length);
-                    } while (randomIndex === lastQuoteIndex && antQuotes.length > 1);
-                    
-                    lastQuoteIndex = randomIndex;
-                    antText.textContent = antQuotes[randomIndex];
-                    
-                    speechBubble.classList.add('show');
-                    
-                    setTimeout(() => {
-                        speechBubble.classList.remove('show');
-                    }, 6000);
-                });
-            }
-        });
     </script>
 </body>
 </html>
