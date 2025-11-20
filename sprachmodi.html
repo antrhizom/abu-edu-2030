@@ -1,1 +1,1377 @@
-
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprachmodi - SLP ABU 2030</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #FFF8F0 0%, #FFE4D0 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        
+        @media (min-width: 768px) {
+            body {
+                padding: 2rem;
+            }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .header {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+            .header {
+                padding: 2rem;
+            }
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .back-btn {
+            font-size: 2rem;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+        
+        .back-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .header-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (min-width: 768px) {
+            .header-title {
+                font-size: 2.5rem;
+            }
+        }
+        
+        .header-subtitle {
+            color: #6B7280;
+        }
+        
+        .header-icon {
+            font-size: 4rem;
+        }
+        
+        /* Info Box */
+        .info-box {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .info-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 0.75rem;
+        }
+        
+        .info-text {
+            color: #374151;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+        
+        /* Modi Grid */
+        .modi-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+            .modi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .modus-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .modus-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(139, 69, 19, 0.2);
+            border-color: #FF6B35;
+        }
+        
+        .modus-header-flex {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .modus-icon {
+            font-size: 3rem;
+        }
+        
+        .modus-title {
+            font-size: 1.125rem;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 0.25rem;
+        }
+        
+        .modus-description {
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+        
+        .uebung-badge {
+            background: linear-gradient(90deg, rgba(255, 107, 53, 0.15), rgba(76, 175, 80, 0.15));
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+            color: #FF6B35;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            position: sticky;
+            top: 0;
+            background: white;
+            border-bottom: 1px solid #E5E7EB;
+            padding: 1.5rem;
+            border-radius: 24px 24px 0 0;
+            z-index: 10;
+        }
+        
+        .modal-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .modal-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .modal-icon {
+            font-size: 3rem;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #8B4513;
+        }
+        
+        .modal-subtitle {
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+        
+        .close-btn {
+            font-size: 2rem;
+            color: #9CA3AF;
+            background: none;
+            border: none;
+            cursor: pointer;
+            line-height: 1;
+            transition: all 0.2s;
+        }
+        
+        .close-btn:hover {
+            color: #6B7280;
+            transform: scale(1.1);
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        /* Übung Section */
+        .uebung-section {
+            background: white;
+            border: 2px solid #FF6B35;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .uebung-title {
+            font-size: 1.125rem;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 0.5rem;
+        }
+        
+        .uebung-beschreibung {
+            color: #6B7280;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+        }
+        
+        /* Interactive Elements */
+        .choice-grid {
+            display: grid;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .choice-item {
+            background: #F3F4F6;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+        
+        .choice-item:hover:not(.correct):not(.wrong) {
+            background: #E5E7EB;
+        }
+        
+        .choice-item.selected {
+            background: #D1FAE5;
+            border-color: #4CAF50;
+        }
+        
+        .choice-item.correct {
+            background: #D1FAE5;
+            border-color: #4CAF50;
+            cursor: default;
+        }
+        
+        .choice-item.wrong {
+            background: #FEE2E2;
+            border-color: #EF4444;
+            cursor: default;
+        }
+        
+        /* Text Input */
+        .text-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+            font-family: inherit;
+        }
+        
+        textarea.text-input {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        /* Check Button */
+        .check-btn {
+            background: #FF6B35;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        
+        .check-btn:hover:not(:disabled) {
+            background: #D2691E;
+            transform: translateY(-1px);
+        }
+        
+        .check-btn:disabled {
+            background: #9CA3AF;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Feedback */
+        .feedback {
+            background: #F0F9FF;
+            border-left: 4px solid #3B82F6;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        .feedback.show {
+            display: block;
+        }
+        
+        .feedback.success {
+            background: #F0FDF4;
+            border-color: #4CAF50;
+        }
+        
+        .feedback.partial {
+            background: #FFF7ED;
+            border-color: #F59E0B;
+        }
+        
+        .feedback-text {
+            font-size: 0.875rem;
+            color: #374151;
+        }
+        
+        /* Portfolio Section */
+        .portfolio-section {
+            background: #F9FAFB;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .portfolio-title {
+            font-size: 1.125rem;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 0.5rem;
+        }
+        
+        .portfolio-prompt {
+            font-size: 0.875rem;
+            color: #6B7280;
+            margin-bottom: 1rem;
+        }
+        
+        .emoji-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .emoji-btn {
+            font-size: 2.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+            padding: 0.25rem;
+        }
+        
+        .emoji-btn:hover {
+            transform: scale(1.25);
+        }
+        
+        .selected-emojis {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 8px;
+            min-height: 50px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .emoji-placeholder {
+            font-size: 0.875rem;
+            color: #9CA3AF;
+        }
+        
+        .selected-emoji {
+            font-size: 2rem;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn-save {
+            flex: 1;
+            background: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .btn-save:hover:not(:disabled) {
+            background: rgba(76, 175, 80, 0.9);
+        }
+        
+        .btn-save:disabled {
+            background: #9CA3AF;
+            cursor: not-allowed;
+        }
+        
+        .btn-cancel {
+            background: #E5E7EB;
+            color: #374151;
+            font-weight: 600;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .btn-cancel:hover {
+            background: #D1D5DB;
+        }
+        
+        /* Footer */
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 9999px;
+            padding: 0.75rem 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .footer-text {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+        
+        .footer-icon {
+            font-size: 1.125rem;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <a href="kompetenzen.html" class="back-btn">←</a>
+                    <div>
+                        <h1 class="header-title">
+                            💬 Sprachmodi
+                        </h1>
+                        <p class="header-subtitle">
+                            8 Modi der Kommunikation (inkl. digital)
+                        </p>
+                    </div>
+                </div>
+                <div class="header-icon">💬</div>
+            </div>
+        </div>
+        
+        <!-- Info Box -->
+        <div class="info-box">
+            <h2 class="info-title">💡 Modi der Kommunikation</h2>
+            <p class="info-text">
+                Sprachmodi beschreiben, <strong>wie</strong> du kommunizierst. 
+                Ob du liest, schreibst, sprichst oder zuhörst – und ob analog oder digital 💻 – 
+                all das sind verschiedene Modi!
+            </p>
+        </div>
+        
+        <!-- Modi Grid -->
+        <div class="modi-grid" id="modiGrid">
+            <!-- Wird dynamisch gefüllt -->
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-content">
+                <div class="footer-text">
+                    <span class="footer-icon">🐜✏️👓</span>
+                    <span>|</span>
+                    <span>ant edu</span>
+                    <span>|</span>
+                    <span id="currentYear"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modus Modal -->
+    <div id="modusModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-header-flex">
+                    <div class="modal-header-left">
+                        <span id="modalIcon" class="modal-icon"></span>
+                        <div>
+                            <h2 id="modalTitle" class="modal-title"></h2>
+                            <p id="modalSubtitle" class="modal-subtitle"></p>
+                        </div>
+                    </div>
+                    <button onclick="closeModal()" class="close-btn">×</button>
+                </div>
+            </div>
+            
+            <div id="modalContent" class="modal-body">
+                <!-- Wird dynamisch gefüllt -->
+            </div>
+        </div>
+    </div>
+    
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getFirestore, doc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyDycvEwK6KJZyFEtsGIaHJBhIFTp5L4cdA",
+            authDomain: "abueba2030.firebaseapp.com",
+            projectId: "abueba2030",
+            storageBucket: "abueba2030.firebasestorage.app",
+            messagingSenderId: "592718816412",
+            appId: "1:592718816412:web:366e44efabba256d48b959"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        let userId = null;
+        let currentModus = null;
+        let selectedEmojis = [];
+        let uebungAbgeschlossen = false;
+        
+        const modi = [
+            {
+                id: '4.2.1.1',
+                icon: '👂',
+                title: '4.2.1.1 Rezeption mündlich',
+                description: 'Hörmaterialien verstehen (Podcasts, Vorträge, Gespräche)',
+                uebung: {
+                    typ: 'multiple-choice',
+                    titel: 'Podcast verstehen',
+                    beschreibung: 'Du hörst einen Podcast über "Rechte in der Lehre". Beantworte die Fragen:',
+                    fragen: [
+                        {
+                            frage: 'Wie viele Ferienwochen haben Lernende unter 20 Jahren mindestens?',
+                            optionen: [
+                                '4 Wochen',
+                                '5 Wochen',
+                                '6 Wochen',
+                                'Je nach Betrieb unterschiedlich'
+                            ],
+                            richtig: 1
+                        },
+                        {
+                            frage: 'Was ist bei Krankheit zu tun?',
+                            optionen: [
+                                'Einfach zuhause bleiben',
+                                'Betrieb sofort informieren',
+                                'Erst nach 3 Tagen melden',
+                                'Nur bei länger als einer Woche'
+                            ],
+                            richtig: 1
+                        },
+                        {
+                            frage: 'Wer zahlt die Berufsschule?',
+                            optionen: [
+                                'Die Lernenden selbst',
+                                'Der Betrieb',
+                                'Der Kanton',
+                                'Hälftig Betrieb und Lernende'
+                            ],
+                            richtig: 2
+                        }
+                    ]
+                }
+            },
+            {
+                id: '4.2.1.2',
+                icon: '📺',
+                title: '4.2.1.2 Rezeption audiovisuell',
+                description: 'Videos, Filme, visuelle Medien verstehen',
+                uebung: {
+                    typ: 'video-analyse',
+                    titel: 'Bewerbungsvideo analysieren',
+                    beschreibung: 'Stelle dir vor, du hast ein Bewerbungsvideo gesehen. Was war wichtig?',
+                    checkpoints: [
+                        'Klare Aussprache und Stimme',
+                        'Professioneller Hintergrund',
+                        'Angemessene Kleidung',
+                        'Blickkontakt zur Kamera',
+                        'Selbstbewusste Körpersprache',
+                        'Kurz und präzise (max. 2 Min.)'
+                    ]
+                }
+            },
+            {
+                id: '4.2.1.3',
+                icon: '📖',
+                title: '4.2.1.3 Rezeption schriftlich/bildlich',
+                description: 'Texte und Bilder lesen und verstehen',
+                uebung: {
+                    typ: 'lese-verstehen',
+                    titel: 'Lehrvertrag verstehen',
+                    beschreibung: 'Welche Informationen findest du in einem Lehrvertrag?',
+                    items: [
+                        { text: 'Probezeit-Dauer', korrekt: true },
+                        { text: 'Hobbys des Chefs', korrekt: false },
+                        { text: 'Arbeitszeiten', korrekt: true },
+                        { text: 'Lohnhöhe', korrekt: true },
+                        { text: 'Lieblingsfarbe', korrekt: false },
+                        { text: 'Ferienanspruch', korrekt: true },
+                        { text: 'Anzahl Mitarbeitende', korrekt: false },
+                        { text: 'Kündigungsfristen', korrekt: true }
+                    ]
+                }
+            },
+            {
+                id: '4.2.2.1',
+                icon: '🗣️',
+                title: '4.2.2.1 Produktion mündlich',
+                description: 'Mündlich kommunizieren und präsentieren',
+                uebung: {
+                    typ: 'praesentation-check',
+                    titel: 'Präsentations-Vorbereitung',
+                    beschreibung: 'Du bereitest eine 5-Minuten-Präsentation vor. Was ist wichtig?',
+                    schritte: [
+                        'Klare Struktur: Einleitung - Hauptteil - Schluss',
+                        'Nicht ablesen, sondern frei sprechen',
+                        'Blickkontakt zum Publikum',
+                        'Deutlich und in angemessenem Tempo sprechen',
+                        'Visuelle Unterstützung (Folien, Bilder)',
+                        'Zeit im Blick behalten'
+                    ]
+                }
+            },
+            {
+                id: '4.2.2.2',
+                icon: '✏️',
+                title: '4.2.2.2 Produktion schriftlich',
+                description: 'Texte schreiben und formulieren',
+                uebung: {
+                    typ: 'text-schreiben',
+                    titel: 'E-Mail schreiben',
+                    beschreibung: 'Schreibe eine kurze E-Mail an deinen Berufsbildner wegen einer Frage zur Arbeit:',
+                    vorlage: {
+                        betreff: 'Frage zum Projekt...',
+                        elemente: [
+                            'Höfliche Anrede',
+                            'Konkretes Anliegen',
+                            'Klare Frage',
+                            'Freundliche Grussformel',
+                            'Name und Unterschrift'
+                        ]
+                    }
+                }
+            },
+            {
+                id: '4.2.3.1',
+                icon: '💬',
+                title: '4.2.3.1 Interaktion mündlich',
+                description: 'In Gesprächen reagieren und diskutieren',
+                uebung: {
+                    typ: 'gespraech-situationen',
+                    titel: 'Gespräch führen',
+                    beschreibung: 'Wie reagierst du in diesen Situationen?',
+                    situationen: [
+                        {
+                            situation: 'Kollege unterbricht dich ständig',
+                            optionen: [
+                                'Laut werden und zurück unterbrechen',
+                                'Höflich sagen: "Lass mich bitte ausreden"',
+                                'Nichts sagen und aufgeben',
+                                'Den Raum verlassen'
+                            ],
+                            richtig: 1
+                        },
+                        {
+                            situation: 'Chef fragt nach deiner Meinung',
+                            optionen: [
+                                'Sagen: "Keine Ahnung"',
+                                'Ehrlich und sachlich antworten',
+                                'Einfach nicken',
+                                'Dem Chef nach dem Mund reden'
+                            ],
+                            richtig: 1
+                        },
+                        {
+                            situation: 'Kunde beschwert sich über Wartezeit',
+                            optionen: [
+                                'Sagen: "Nicht meine Schuld"',
+                                'Verständnis zeigen und Lösung anbieten',
+                                'Ignorieren',
+                                'Diskutieren wer Schuld hat'
+                            ],
+                            richtig: 1
+                        }
+                    ]
+                }
+            },
+            {
+                id: '4.2.3.2',
+                icon: '💻',
+                title: '4.2.3.2 Interaktion schriftlich/digital',
+                description: 'Digital kommunizieren (Chat, E-Mail)',
+                uebung: {
+                    typ: 'digital-kommunikation',
+                    titel: 'Teams-Chat: Angemessen reagieren',
+                    beschreibung: 'Wähle die passende Antwort für den Arbeits-Chat:',
+                    szenarien: [
+                        {
+                            nachricht: 'Chef: "Kannst du morgen eine Stunde früher kommen?"',
+                            optionen: [
+                                '👍',
+                                'Klar, kein Problem. Um welche Uhrzeit genau?',
+                                'nö',
+                                'mal schauen'
+                            ],
+                            richtig: 1
+                        },
+                        {
+                            nachricht: 'Kollegin: "Hast du die Unterlagen für das Meeting?"',
+                            optionen: [
+                                'vergessen lol 😅',
+                                'Ja, ich schicke sie dir gleich zu!',
+                                'was für unterlagen',
+                                'keine zeit'
+                            ],
+                            richtig: 1
+                        }
+                    ]
+                }
+            },
+            {
+                id: '4.2.4',
+                icon: '📝',
+                title: '4.2.4 Konventionen & Sprachbewusstheit',
+                description: 'Sprachregeln und Konventionen anwenden',
+                uebung: {
+                    typ: 'sprachbewusstheit',
+                    titel: 'Formell oder Informell?',
+                    beschreibung: 'Entscheide: Welche Formulierung passt woher?',
+                    beispiele: [
+                        {
+                            satz: 'Grüezi, ich hätte eine Frage bezüglich...',
+                            kontext: ['Formell', 'Informell'],
+                            richtig: 0
+                        },
+                        {
+                            satz: 'Hey, was geht?',
+                            kontext: ['Formell', 'Informell'],
+                            richtig: 1
+                        },
+                        {
+                            satz: 'Mit freundlichen Grüssen',
+                            kontext: ['Formell', 'Informell'],
+                            richtig: 0
+                        },
+                        {
+                            satz: 'Bis dann, ciao!',
+                            kontext: ['Formell', 'Informell'],
+                            richtig: 1
+                        },
+                        {
+                            satz: 'Sehr geehrte Damen und Herren',
+                            kontext: ['Formell', 'Informell'],
+                            richtig: 0
+                        }
+                    ]
+                }
+            }
+        ];
+        
+        window.addEventListener('load', function() {
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            userId = localStorage.getItem('ant_edu_user_id');
+            if (!userId) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            renderModi();
+        });
+        
+        function renderModi() {
+            const grid = document.getElementById('modiGrid');
+            grid.innerHTML = modi.map(modus => `
+                <div class="modus-card" onclick="openModus('${modus.id}')">
+                    <div class="modus-header-flex">
+                        <span class="modus-icon">${modus.icon}</span>
+                        <div style="flex: 1;">
+                            <h3 class="modus-title">${modus.title}</h3>
+                            <p class="modus-description">${modus.description}</p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 0.75rem;">
+                        <span class="uebung-badge">
+                            📝 1 Übung
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        window.openModus = function(modusId) {
+            currentModus = modi.find(m => m.id === modusId);
+            if (!currentModus) return;
+            
+            uebungAbgeschlossen = false;
+            selectedEmojis = [];
+            
+            const modal = document.getElementById('modusModal');
+            document.getElementById('modalIcon').textContent = currentModus.icon;
+            document.getElementById('modalTitle').textContent = currentModus.title;
+            document.getElementById('modalSubtitle').textContent = currentModus.description;
+            
+            const content = document.getElementById('modalContent');
+            content.innerHTML = generateModalContent(currentModus);
+            
+            modal.classList.add('show');
+            
+            // Event Listeners für Übung hinzufügen
+            setupUebungListeners(currentModus.uebung.typ);
+            
+            // Event Listeners für Emojis hinzufügen (später)
+            setTimeout(() => {
+                const emojiButtons = document.querySelectorAll('.emoji-btn');
+                if (emojiButtons.length > 0) {
+                    setupEmojiListeners();
+                }
+            }, 100);
+        };
+        
+        function generateModalContent(modus) {
+            const uebung = modus.uebung;
+            
+            let html = `
+                <div class="uebung-section">
+                    <h3 class="uebung-title">${uebung.titel}</h3>
+                    <p class="uebung-beschreibung">${uebung.beschreibung}</p>
+                    ${generateUebungHTML(uebung)}
+                </div>
+                
+                <div class="portfolio-section" id="portfolioSection" style="display: none;">
+                    <h3 class="portfolio-title">💭 Wie war's für dich?</h3>
+                    <p class="portfolio-prompt">Wähle ein oder mehrere Emojis als Reflexion:</p>
+                    <div class="emoji-buttons" id="emojiButtons">
+                        <button class="emoji-btn" data-emoji="😊" title="Hat Spaß gemacht">😊</button>
+                        <button class="emoji-btn" data-emoji="💪" title="War anstrengend">💪</button>
+                        <button class="emoji-btn" data-emoji="🤔" title="Musste nachdenken">🤔</button>
+                        <button class="emoji-btn" data-emoji="❓" title="War unklar">❓</button>
+                        <button class="emoji-btn" data-emoji="🔥" title="War super">🔥</button>
+                        <button class="emoji-btn" data-emoji="😅" title="War schwierig">😅</button>
+                        <button class="emoji-btn" data-emoji="💡" title="Hatte eine Idee">💡</button>
+                        <button class="emoji-btn" data-emoji="✅" title="Gut gelaufen">✅</button>
+                    </div>
+                    <div id="selectedEmojis" class="selected-emojis">
+                        <span class="emoji-placeholder" id="emojiPlaceholder">Klicke auf Emojis...</span>
+                    </div>
+                    <div class="modal-actions">
+                        <button onclick="markAsCompleted()" class="btn-save" id="markBtn" disabled>
+                            ✅ Als geübt markieren
+                        </button>
+                        <button onclick="speichernPortfolio()" class="btn-save" id="portfolioBtn" disabled style="background: #2196F3;">
+                            📁 Ins Portfolio speichern
+                        </button>
+                        <button onclick="closeModal()" class="btn-cancel">
+                            Abbrechen
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            return html;
+        }
+        
+        function generateUebungHTML(uebung) {
+            let html = '';
+            
+            if (uebung.typ === 'multiple-choice' || uebung.typ === 'gespraech-situationen' || uebung.typ === 'digital-kommunikation') {
+                html += `<div id="uebungContent">`;
+                const fragen = uebung.fragen || uebung.situationen || uebung.szenarien;
+                fragen.forEach((item, qIndex) => {
+                    html += `
+                        <div style="margin-bottom: 1.5rem;">
+                            <p style="font-weight: 600; margin-bottom: 0.75rem; color: #374151;">
+                                ${qIndex + 1}. ${item.frage || item.situation || item.nachricht}
+                            </p>
+                            <div class="choice-grid">
+                                ${item.optionen.map((option, oIndex) => `
+                                    <div class="choice-item" data-question="${qIndex}" data-option="${oIndex}">
+                                        ${option}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                html += `
+                    <button class="check-btn" id="checkBtn">Antworten prüfen</button>
+                    <div class="feedback" id="feedback"></div>
+                `;
+            }
+            else if (uebung.typ === 'video-analyse' || uebung.typ === 'praesentation-check') {
+                const items = uebung.checkpoints || uebung.schritte;
+                html += `<div class="choice-grid">`;
+                items.forEach((item, index) => {
+                    html += `
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB; cursor: pointer;">
+                            <input type="checkbox" class="check-item" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">${item}</span>
+                        </label>
+                    `;
+                });
+                html += `</div>`;
+                html += `
+                    <button class="check-btn" id="checkBtn">Alle Punkte bestätigen</button>
+                    <div class="feedback" id="feedback"></div>
+                `;
+            }
+            else if (uebung.typ === 'lese-verstehen') {
+                html += `<div class="choice-grid">`;
+                uebung.items.forEach((item, index) => {
+                    html += `
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB; cursor: pointer;">
+                            <input type="checkbox" class="check-item" data-korrekt="${item.korrekt}" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+                            <span style="font-size: 0.875rem;">${item.text}</span>
+                        </label>
+                    `;
+                });
+                html += `</div>`;
+                html += `
+                    <button class="check-btn" id="checkBtn">Auswahl prüfen</button>
+                    <div class="feedback" id="feedback"></div>
+                `;
+            }
+            else if (uebung.typ === 'text-schreiben') {
+                html += `
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #374151;">Betreff:</label>
+                        <input type="text" class="text-input" id="emailBetreff" placeholder="${uebung.vorlage.betreff}">
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #374151;">E-Mail Text:</label>
+                        <textarea class="text-input" id="emailText" placeholder="Schreibe deine E-Mail hier..."></textarea>
+                    </div>
+                    <div style="background: #F0F9FF; border: 2px solid #3B82F6; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                        <p style="font-size: 0.875rem; font-weight: 600; color: #1E40AF; margin-bottom: 0.5rem;">✓ Checkliste:</p>
+                        ${uebung.vorlage.elemente.map(el => `
+                            <div style="font-size: 0.875rem; color: #374151; margin-bottom: 0.25rem;">• ${el}</div>
+                        `).join('')}
+                    </div>
+                    <button class="check-btn" id="checkBtn">E-Mail abschliessen</button>
+                    <div class="feedback" id="feedback"></div>
+                `;
+            }
+            else if (uebung.typ === 'sprachbewusstheit') {
+                html += `<div id="uebungContent">`;
+                uebung.beispiele.forEach((item, index) => {
+                    html += `
+                        <div style="margin-bottom: 1.5rem; padding: 1rem; background: #F9FAFB; border-radius: 8px; border: 2px solid #E5E7EB;">
+                            <p style="font-weight: 600; margin-bottom: 0.75rem; color: #374151;">"${item.satz}"</p>
+                            <div style="display: flex; gap: 0.75rem;">
+                                ${item.kontext.map((kontext, kIndex) => `
+                                    <button class="choice-item" data-question="${index}" data-option="${kIndex}" style="flex: 1; text-align: center;">
+                                        ${kontext}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                html += `
+                    <button class="check-btn" id="checkBtn">Zuordnung prüfen</button>
+                    <div class="feedback" id="feedback"></div>
+                `;
+            }
+            
+            return html;
+        }
+        
+        function setupUebungListeners(typ) {
+            const checkBtn = document.getElementById('checkBtn');
+            if (!checkBtn) return;
+            
+            if (typ === 'multiple-choice' || typ === 'gespraech-situationen' || typ === 'digital-kommunikation' || typ === 'sprachbewusstheit') {
+                document.querySelectorAll('.choice-item').forEach(item => {
+                    item.addEventListener('click', function() {
+                        if (this.classList.contains('correct') || this.classList.contains('wrong')) return;
+                        const question = this.dataset.question;
+                        document.querySelectorAll(`[data-question="${question}"]`).forEach(i => {
+                            i.classList.remove('selected');
+                        });
+                        this.classList.add('selected');
+                    });
+                });
+                checkBtn.addEventListener('click', () => checkMultipleChoice());
+            }
+            else if (typ === 'video-analyse' || typ === 'praesentation-check') {
+                checkBtn.addEventListener('click', () => checkCheckboxes());
+            }
+            else if (typ === 'lese-verstehen') {
+                checkBtn.addEventListener('click', () => checkLeseVerstehen());
+            }
+            else if (typ === 'text-schreiben') {
+                checkBtn.addEventListener('click', () => checkTextSchreiben());
+            }
+        }
+        
+        function checkMultipleChoice() {
+            const uebung = currentModus.uebung;
+            const fragen = uebung.fragen || uebung.situationen || uebung.szenarien || uebung.beispiele;
+            let correctCount = 0;
+            let answeredAll = true;
+            
+            fragen.forEach((frage, qIndex) => {
+                const selected = document.querySelector(`[data-question="${qIndex}"].selected`);
+                if (!selected) {
+                    answeredAll = false;
+                    return;
+                }
+                
+                const selectedOption = parseInt(selected.dataset.option);
+                const choiceItems = document.querySelectorAll(`[data-question="${qIndex}"]`);
+                
+                choiceItems.forEach((item, oIndex) => {
+                    item.style.pointerEvents = 'none';
+                    if (oIndex === frage.richtig) {
+                        item.classList.add('correct');
+                        if (oIndex === selectedOption) {
+                            correctCount++;
+                        }
+                    } else if (oIndex === selectedOption) {
+                        item.classList.add('wrong');
+                    }
+                });
+            });
+            
+            if (!answeredAll) {
+                showFeedback('⚠️ Bitte beantworte alle Fragen!', false);
+                return;
+            }
+            
+            if (correctCount === fragen.length) {
+                showFeedback(`✅ Perfekt! Alle ${fragen.length} Antworten sind richtig.`, true);
+            } else {
+                showFeedback(`Du hast ${correctCount} von ${fragen.length} Fragen richtig beantwortet. Die richtigen Antworten sind grün markiert.`, true, 'partial');
+            }
+            markUebungComplete();
+        }
+        
+        function checkCheckboxes() {
+            const checks = document.querySelectorAll('.check-item');
+            const allChecked = Array.from(checks).every(c => c.checked);
+            
+            if (allChecked) {
+                showFeedback('✅ Sehr gut! Alle wichtigen Punkte berücksichtigt.', true);
+                markUebungComplete();
+            } else {
+                showFeedback('⚠️ Bitte markiere alle wichtigen Punkte!', false);
+            }
+        }
+        
+        function checkLeseVerstehen() {
+            const uebung = currentModus.uebung;
+            let correct = 0;
+            
+            uebung.items.forEach((item, index) => {
+                const checkbox = document.querySelectorAll('.check-item')[index];
+                const label = checkbox.parentElement;
+                
+                checkbox.disabled = true;
+                label.style.cursor = 'default';
+                
+                if (checkbox.checked === item.korrekt) {
+                    correct++;
+                    label.style.borderColor = '#4CAF50';
+                    label.style.background = '#D1FAE5';
+                } else {
+                    label.style.borderColor = '#EF4444';
+                    label.style.background = '#FEE2E2';
+                }
+            });
+            
+            if (correct === uebung.items.length) {
+                showFeedback('✅ Perfekt! Alle Informationen richtig erkannt.', true);
+            } else {
+                showFeedback(`Du hast ${correct} von ${uebung.items.length} richtig erkannt. Die richtigen sind grün, die falschen rot markiert.`, true, 'partial');
+            }
+            markUebungComplete();
+        }
+        
+        function checkTextSchreiben() {
+            const betreff = document.getElementById('emailBetreff').value.trim();
+            const text = document.getElementById('emailText').value.trim();
+            
+            if (betreff === '' || text === '') {
+                showFeedback('⚠️ Bitte fülle Betreff und Text aus!', false);
+                return;
+            }
+            
+            if (text.length < 50) {
+                showFeedback('⚠️ Deine E-Mail sollte etwas ausführlicher sein (min. 50 Zeichen).', false);
+                return;
+            }
+            
+            showFeedback('✅ E-Mail abgeschlossen! Denk daran: Anrede, Anliegen, Frage, Gruss und Name sollten enthalten sein.', true);
+            markUebungComplete();
+        }
+        
+        function setupEmojiListeners() {
+            const emojiButtons = document.querySelectorAll('.emoji-btn');
+            
+            emojiButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const emoji = this.dataset.emoji;
+                    const index = selectedEmojis.indexOf(emoji);
+                    if (index > -1) {
+                        selectedEmojis.splice(index, 1);
+                    } else {
+                        selectedEmojis.push(emoji);
+                    }
+                    updateSelectedEmojisDisplay();
+                    updatePortfolioButton();
+                });
+            });
+        }
+        
+        function updateSelectedEmojisDisplay() {
+            const container = document.getElementById('selectedEmojis');
+            const placeholder = document.getElementById('emojiPlaceholder');
+            
+            if (selectedEmojis.length === 0) {
+                placeholder.style.display = 'block';
+                container.querySelectorAll('.selected-emoji').forEach(e => e.remove());
+            } else {
+                placeholder.style.display = 'none';
+                container.querySelectorAll('.selected-emoji').forEach(e => e.remove());
+                selectedEmojis.forEach(emoji => {
+                    const span = document.createElement('span');
+                    span.className = 'selected-emoji';
+                    span.textContent = emoji;
+                    container.appendChild(span);
+                });
+            }
+        }
+        
+        function updatePortfolioButton() {
+            const portfolioBtn = document.getElementById('portfolioBtn');
+            const markBtn = document.getElementById('markBtn');
+            const hasEmojis = selectedEmojis.length > 0;
+            
+            if (portfolioBtn) portfolioBtn.disabled = !hasEmojis;
+            if (markBtn) markBtn.disabled = !hasEmojis;
+        }
+        
+        function markUebungComplete() {
+            uebungAbgeschlossen = true;
+            const checkBtn = document.getElementById('checkBtn');
+            if (checkBtn) {
+                checkBtn.disabled = true;
+                checkBtn.textContent = '✓ Übung abgeschlossen';
+            }
+            
+            const portfolioSection = document.getElementById('portfolioSection');
+            if (portfolioSection) {
+                portfolioSection.style.display = 'block';
+                setTimeout(() => setupEmojiListeners(), 100);
+            }
+        }
+        
+        function showFeedback(message, success, type = null) {
+            const feedback = document.getElementById('feedback');
+            feedback.innerHTML = `<p class="feedback-text">${message}</p>`;
+            feedback.classList.add('show');
+            feedback.classList.remove('success', 'partial');
+            if (success) {
+                feedback.classList.add('success');
+            }
+            if (type === 'partial') {
+                feedback.classList.add('partial');
+            }
+        }
+        
+        window.markAsCompleted = async function() {
+            if (selectedEmojis.length === 0) {
+                alert('Bitte wähle mindestens ein Emoji als Reflexion!');
+                return;
+            }
+            
+            try {
+                const userRef = doc(db, 'users', userId);
+                const userDoc = await getDoc(userRef);
+                
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    const sprachmodi = data.kompetenzen?.sprachmodi || {};
+                    
+                    sprachmodi[currentModus.id] = {
+                        completed: true,
+                        reflexion: selectedEmojis.join(''),
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    await updateDoc(userRef, {
+                        'kompetenzen.sprachmodi': sprachmodi
+                    });
+                    
+                    alert('✅ Als geübt markiert!\n\nReflexion: ' + selectedEmojis.join(' '));
+                    closeModal();
+                }
+            } catch (error) {
+                console.error('Fehler:', error);
+                alert('⚠️ Fehler beim Speichern. Bitte überprüfe deine Internetverbindung.');
+            }
+        };
+        
+        window.speichernPortfolio = async function() {
+            if (selectedEmojis.length === 0) {
+                alert('Bitte wähle mindestens ein Emoji als Reflexion!');
+                return;
+            }
+            
+            const portfolioItem = {
+                id: Date.now().toString(),
+                type: 'sprachmodus',
+                modusId: currentModus.id,
+                kompetenzTitle: currentModus.title + ': ' + currentModus.uebung.titel,
+                thema: 'Lernbereich Sprache und Kommunikation',
+                beschreibung: currentModus.description,
+                reflexion: selectedEmojis.join(''),
+                createdAt: new Date().toISOString(),
+                shareable: true,
+                performanz: {
+                    uebungstyp: currentModus.uebung.titel,
+                    modusTyp: currentModus.uebung.typ,
+                    abgeschlossen: true
+                }
+            };
+            
+            try {
+                const userRef = doc(db, 'users', userId);
+                const userDoc = await getDoc(userRef);
+                
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    const sprachmodi = data.kompetenzen?.sprachmodi || {};
+                    const portfolio = data.portfolio || [];
+                    
+                    sprachmodi[currentModus.id] = {
+                        completed: true,
+                        reflexion: selectedEmojis.join(''),
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    portfolio.push(portfolioItem);
+                    
+                    await updateDoc(userRef, {
+                        'kompetenzen.sprachmodi': sprachmodi,
+                        portfolio: portfolio
+                    });
+                    
+                    alert('📁 Ins Portfolio gespeichert!\n\n✓ Sprachmodus als geübt markiert\n✓ Performanz dokumentiert\n✓ Reflexion: ' + selectedEmojis.join(' '));
+                    closeModal();
+                } else {
+                    alert('⚠️ Fehler beim Speichern.');
+                }
+            } catch (error) {
+                console.error('Fehler:', error);
+                alert('⚠️ Fehler beim Speichern. Bitte überprüfe deine Internetverbindung.');
+            }
+        };
+        
+        window.closeModal = function() {
+            const modal = document.getElementById('modusModal');
+            modal.classList.remove('show');
+            currentModus = null;
+            selectedEmojis = [];
+            uebungAbgeschlossen = false;
+        };
+        
+        document.getElementById('modusModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
