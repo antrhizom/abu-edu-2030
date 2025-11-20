@@ -530,7 +530,7 @@
             font-size: 1.125rem;
             font-weight: bold;
             color: #8B4513;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
         
         .portfolio-prompt {
@@ -539,56 +539,88 @@
             margin-bottom: 1rem;
         }
         
-        .reflexion-emojis {
+        .emoji-buttons {
             display: flex;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
             flex-wrap: wrap;
         }
         
-        .reflexion-emoji {
+        .emoji-btn {
             font-size: 2.5rem;
-            padding: 0.75rem;
-            border-radius: 12px;
-            background: white;
-            border: 2px solid #E5E7EB;
+            background: none;
+            border: none;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: transform 0.2s;
+            padding: 0.25rem;
         }
         
-        .reflexion-emoji:hover {
-            border-color: #D1D5DB;
-            transform: scale(1.05);
+        .emoji-btn:hover {
+            transform: scale(1.25);
         }
         
-        .reflexion-emoji.selected {
-            background: #FF6B35;
-            border-color: #FF6B35;
-            transform: scale(1.1);
+        .selected-emojis {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 8px;
+            min-height: 50px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+            margin-bottom: 1rem;
         }
         
-        .save-btn {
-            width: 100%;
-            background: linear-gradient(90deg, #FF6B35, #4CAF50);
+        .emoji-placeholder {
+            font-size: 0.875rem;
+            color: #9CA3AF;
+        }
+        
+        .selected-emoji {
+            font-size: 2rem;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn-save {
+            flex: 1;
+            background: #4CAF50;
             color: white;
             font-weight: bold;
             padding: 1rem 1.5rem;
             border-radius: 12px;
             border: none;
             cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s;
+            transition: background 0.2s;
         }
         
-        .save-btn:hover:not(:disabled) {
-            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
-            transform: translateY(-2px);
+        .btn-save:hover:not(:disabled) {
+            background: rgba(76, 175, 80, 0.9);
         }
         
-        .save-btn:disabled {
+        .btn-save:disabled {
             background: #9CA3AF;
             cursor: not-allowed;
-            transform: none;
+        }
+        
+        .btn-cancel {
+            background: #E5E7EB;
+            color: #374151;
+            font-weight: 600;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .btn-cancel:hover {
+            background: #D1D5DB;
         }
         
         /* Footer */
@@ -709,7 +741,7 @@
         
         let userId = null;
         let currentAspekt = null;
-        let selectedReflexion = null;
+        let selectedEmojis = [];
         let uebungAbgeschlossen = false;
         
         const aspekte = [
@@ -997,7 +1029,7 @@
             if (!currentAspekt) return;
             
             uebungAbgeschlossen = false;
-            selectedReflexion = null;
+            selectedEmojis = [];
             
             const modal = document.getElementById('aspektModal');
             document.getElementById('modalIcon').textContent = currentAspekt.icon;
@@ -1011,6 +1043,14 @@
             
             // Event Listeners für Übung hinzufügen
             setupUebungListeners(currentAspekt.uebung.typ);
+            
+            // Event Listeners für Emojis hinzufügen (falls Portfolio-Section vorhanden)
+            setTimeout(() => {
+                const emojiButtons = document.querySelectorAll('.emoji-btn');
+                if (emojiButtons.length > 0) {
+                    setupEmojiListeners();
+                }
+            }, 100);
         };
         
         function generateModalContent(aspekt) {
@@ -1030,18 +1070,26 @@
                 ${generateUebungHTML(aspekt.uebung)}
                 
                 <div class="portfolio-section" id="portfolioSection" style="display: none;">
-                    <h3 class="portfolio-title">💾 Ins Portfolio speichern?</h3>
-                    <p class="portfolio-prompt">Wie fühlst du dich nach dieser Übung?</p>
-                    <div class="reflexion-emojis">
-                        ${['😊', '🤔', '😐', '💪', '🎯'].map(emoji => `
-                            <button onclick="selectReflexion('${emoji}')" class="reflexion-emoji">
-                                ${emoji}
-                            </button>
-                        `).join('')}
+                    <h3 class="portfolio-title">💭 Wie war's für dich?</h3>
+                    <p class="portfolio-prompt">Wähle ein oder mehrere Emojis als Reflexion:</p>
+                    <div class="emoji-buttons" id="emojiButtons">
+                        <button class="emoji-btn" data-emoji="😊" title="Hat Spaß gemacht">😊</button>
+                        <button class="emoji-btn" data-emoji="💪" title="War anstrengend">💪</button>
+                        <button class="emoji-btn" data-emoji="🤔" title="Musste nachdenken">🤔</button>
+                        <button class="emoji-btn" data-emoji="❓" title="War unklar">❓</button>
+                        <button class="emoji-btn" data-emoji="🔥" title="War super">🔥</button>
+                        <button class="emoji-btn" data-emoji="😅" title="War schwierig">😅</button>
+                        <button class="emoji-btn" data-emoji="💡" title="Hatte eine Idee">💡</button>
+                        <button class="emoji-btn" data-emoji="✅" title="Gut gelaufen">✅</button>
                     </div>
-                    <button onclick="speichernPortfolio()" class="save-btn" id="saveBtn" disabled>
-                        💾 Ins Portfolio speichern
-                    </button>
+                    <div id="selectedEmojis" class="selected-emojis">
+                        <span class="emoji-placeholder" id="emojiPlaceholder">Klicke auf Emojis...</span>
+                    </div>
+                    <div class="modal-actions">
+                        <button onclick="speichernPortfolio()" class="btn-save" id="portfolioBtn" disabled>
+                            📂 Ins Portfolio speichern
+                        </button>
+                    </div>
                 </div>
             `;
             
@@ -1450,6 +1498,55 @@
             }
         }
         
+        function setupEmojiListeners() {
+            const emojiButtons = document.querySelectorAll('.emoji-btn');
+            
+            emojiButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const emoji = this.dataset.emoji;
+                    
+                    // Toggle emoji
+                    const index = selectedEmojis.indexOf(emoji);
+                    if (index > -1) {
+                        selectedEmojis.splice(index, 1);
+                    } else {
+                        selectedEmojis.push(emoji);
+                    }
+                    
+                    updateSelectedEmojisDisplay();
+                    updatePortfolioButton();
+                });
+            });
+        }
+        
+        function updateSelectedEmojisDisplay() {
+            const container = document.getElementById('selectedEmojis');
+            const placeholder = document.getElementById('emojiPlaceholder');
+            
+            if (selectedEmojis.length === 0) {
+                placeholder.style.display = 'block';
+                // Remove all emoji spans
+                container.querySelectorAll('.selected-emoji').forEach(e => e.remove());
+            } else {
+                placeholder.style.display = 'none';
+                // Clear and rebuild
+                container.querySelectorAll('.selected-emoji').forEach(e => e.remove());
+                selectedEmojis.forEach(emoji => {
+                    const span = document.createElement('span');
+                    span.className = 'selected-emoji';
+                    span.textContent = emoji;
+                    container.appendChild(span);
+                });
+            }
+        }
+        
+        function updatePortfolioButton() {
+            const portfolioBtn = document.getElementById('portfolioBtn');
+            if (portfolioBtn) {
+                portfolioBtn.disabled = selectedEmojis.length === 0;
+            }
+        }
+        
         function markUebungComplete() {
             uebungAbgeschlossen = true;
             const checkBtn = document.getElementById('checkBtn');
@@ -1457,21 +1554,18 @@
                 checkBtn.disabled = true;
                 checkBtn.textContent = '✓ Übung abgeschlossen';
             }
-            document.getElementById('portfolioSection').style.display = 'block';
+            
+            const portfolioSection = document.getElementById('portfolioSection');
+            if (portfolioSection) {
+                portfolioSection.style.display = 'block';
+                // Setup emoji listeners wenn Portfolio-Section angezeigt wird
+                setTimeout(() => setupEmojiListeners(), 100);
+            }
         }
         
-        window.selectReflexion = function(emoji) {
-            selectedReflexion = emoji;
-            document.querySelectorAll('.reflexion-emoji').forEach(btn => {
-                btn.classList.remove('selected');
-            });
-            event.target.classList.add('selected');
-            document.getElementById('saveBtn').disabled = false;
-        };
-        
         window.speichernPortfolio = async function() {
-            if (!selectedReflexion) {
-                alert('Bitte wähle zuerst eine Reflexion!');
+            if (selectedEmojis.length === 0) {
+                alert('Bitte wähle mindestens ein Emoji als Reflexion!');
                 return;
             }
             
@@ -1482,7 +1576,7 @@
                 kompetenzTitle: currentAspekt.title + ': ' + currentAspekt.uebung.titel,
                 thema: 'Gesellschaftliche Aspekte',
                 handlungsfeld: currentAspekt.handlungsfelder[currentAspekt.uebungIndex],
-                reflexion: selectedReflexion,
+                reflexion: selectedEmojis.join(''),
                 createdAt: new Date().toISOString(),
                 shareable: true,
                 performanz: {
@@ -1517,7 +1611,7 @@
             const modal = document.getElementById('aspektModal');
             modal.classList.remove('show');
             currentAspekt = null;
-            selectedReflexion = null;
+            selectedEmojis = [];
             uebungAbgeschlossen = false;
         };
         
