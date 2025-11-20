@@ -4,36 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ABU EBA 2030 - Verstehe die Kompetenzstruktur</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'ant-primary': '#8B4513',
-                        'ant-secondary': '#D2691E',
-                        'ant-accent': '#FF6B35',
-                        'ant-success': '#4CAF50',
-                        'ant-network': '#2196F3',
-                        'ant-bg': '#FFF8F0',
-                    }
-                }
-            }
-        }
-    </script>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --ant-primary: #8B4513;
+            --ant-secondary: #D2691E;
+            --ant-accent: #FF6B35;
+            --ant-success: #4CAF50;
+            --ant-network: #2196F3;
+            --ant-bg: #FFF8F0;
+        }
+        
         body {
             background: linear-gradient(135deg, #FFF8F0 0%, #FFE4D0 100%);
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
+            color: #333;
         }
         
+        /* Animations */
         @keyframes rotate-slow {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
-        }
-        
-        .rotate-animation {
-            animation: rotate-slow 30s linear infinite;
         }
         
         @keyframes float {
@@ -41,8 +39,53 @@
             50% { transform: translateY(-10px); }
         }
         
+        @keyframes ant-float {
+            0%, 100% { transform: translate(0, 0) rotate(-15deg); }
+            25% { transform: translate(30px, -40px) rotate(-10deg); }
+            50% { transform: translate(15px, -70px) rotate(-20deg); }
+            75% { transform: translate(-15px, -40px) rotate(-12deg); }
+        }
+        
+        @keyframes antenna-wiggle-left {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-8deg); }
+            75% { transform: rotate(5deg); }
+        }
+        
+        @keyframes antenna-wiggle-right {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(8deg); }
+            75% { transform: rotate(-5deg); }
+        }
+        
+        .rotate-animation {
+            animation: rotate-slow 30s linear infinite;
+        }
+        
         .float-animation {
             animation: float 3s ease-in-out infinite;
+        }
+        
+        .scroll-hint {
+            animation: float 2s ease-in-out infinite;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            opacity: 0.1;
+            pointer-events: none;
         }
         
         .network-line {
@@ -52,31 +95,666 @@
             fill: none;
         }
         
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .hero-content {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .logo-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+        
+        .logo-circle {
+            position: absolute;
+            inset: 0;
+            border: 4px solid var(--ant-accent);
+            border-radius: 50%;
+            opacity: 0.2;
+            width: 100px;
+            height: 100px;
+        }
+        
+        .logo-icon {
+            font-size: 4rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 10;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: var(--ant-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--ant-secondary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-description {
+            font-size: 1.125rem;
+            color: #374151;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Quick Facts */
+        .quick-facts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .fact-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid transparent;
+        }
+        
+        .fact-card:nth-child(1) { border-color: rgba(139, 69, 19, 0.2); }
+        .fact-card:nth-child(2) { border-color: rgba(210, 105, 30, 0.2); }
+        .fact-card:nth-child(3) { border-color: rgba(255, 107, 53, 0.2); }
+        
+        .fact-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .fact-number {
+            font-size: 1.75rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        
+        .fact-card:nth-child(1) .fact-number { color: var(--ant-primary); }
+        .fact-card:nth-child(2) .fact-number { color: var(--ant-secondary); }
+        .fact-card:nth-child(3) .fact-number { color: var(--ant-accent); }
+        
+        .fact-label {
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+        
+        /* User Counter */
+        .user-counter {
+            background: linear-gradient(90deg, rgba(76, 175, 80, 0.2), rgba(33, 150, 243, 0.2));
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid rgba(76, 175, 80, 0.3);
+            margin-bottom: 2rem;
+        }
+        
+        .counter-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .counter-icon {
+            font-size: 2rem;
+        }
+        
+        .counter-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--ant-success);
+            min-width: 3ch;
+            transition: opacity 0.3s ease;
+        }
+        
+        .counter-text {
+            font-size: 0.875rem;
+            color: #374151;
+            font-weight: 600;
+        }
+        
+        .counter-hint {
+            font-size: 0.75rem;
+            color: #6B7280;
+            margin-top: 0.25rem;
+        }
+        
+        /* CTA Button */
+        .cta-section {
+            text-align: center;
+        }
+        
+        .cta-button {
+            background: var(--ant-accent);
+            color: white;
+            font-weight: bold;
+            padding: 1.25rem 2.5rem;
+            border-radius: 9999px;
+            font-size: 1.25rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            margin-bottom: 1rem;
+        }
+        
+        .cta-button:hover {
+            background: var(--ant-secondary);
+            transform: scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+        
+        .cta-button:disabled {
+            background: #9CA3AF;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .cta-hint {
+            color: #6B7280;
+            font-size: 0.875rem;
+        }
+        
         .scroll-hint {
-            animation: float 2s ease-in-out infinite;
+            text-align: center;
+            margin-top: 3rem;
         }
         
-        /* Schwebende Ameise */
-        @keyframes ant-float {
-            0%, 100% { 
-                transform: translate(0, 0) rotate(-15deg);
-            }
-            25% { 
-                transform: translate(30px, -40px) rotate(-10deg);
-            }
-            50% { 
-                transform: translate(15px, -70px) rotate(-20deg);
-            }
-            75% { 
-                transform: translate(-15px, -40px) rotate(-12deg);
-            }
+        .scroll-text {
+            color: #9CA3AF;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
         }
         
+        .scroll-arrow {
+            font-size: 2rem;
+            color: var(--ant-accent);
+        }
+        
+        /* Content Section */
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 1rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            padding: 3rem 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .section-icon {
+            font-size: 3rem;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--ant-primary);
+        }
+        
+        .section-text {
+            font-size: 1.125rem;
+            color: #374151;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Info Boxes */
+        .info-box {
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .info-box.theme {
+            background: linear-gradient(90deg, var(--ant-bg), rgba(139, 69, 19, 0.05));
+            border-left: 4px solid var(--ant-accent);
+        }
+        
+        .info-box.network {
+            background: linear-gradient(90deg, rgba(33, 150, 243, 0.1), rgba(76, 175, 80, 0.1));
+            border-left: 4px solid var(--ant-network);
+        }
+        
+        .info-box-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--ant-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        .theme-item {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            font-size: 0.875rem;
+        }
+        
+        /* Accordion */
+        .accordion {
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 1rem;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        
+        .accordion-button {
+            width: 100%;
+            padding: 1.5rem;
+            background: none;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .accordion.primary .accordion-button {
+            background: linear-gradient(90deg, rgba(139, 69, 19, 0.1), rgba(139, 69, 19, 0.05));
+        }
+        
+        .accordion.accent .accordion-button {
+            background: linear-gradient(90deg, rgba(255, 107, 53, 0.1), rgba(255, 107, 53, 0.05));
+        }
+        
+        .accordion.secondary .accordion-button {
+            background: linear-gradient(90deg, rgba(210, 105, 30, 0.1), rgba(210, 105, 30, 0.05));
+        }
+        
+        .accordion-button:hover {
+            opacity: 0.9;
+        }
+        
+        .accordion-header-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-align: left;
+        }
+        
+        .accordion-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .accordion.primary .accordion-title { color: var(--ant-primary); }
+        .accordion.accent .accordion-title { color: var(--ant-accent); }
+        .accordion.secondary .accordion-title { color: var(--ant-secondary); }
+        
+        .accordion-subtitle {
+            font-size: 0.875rem;
+            color: #6B7280;
+            margin-top: 0.25rem;
+        }
+        
+        .accordion-icon-toggle {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .accordion.primary .accordion-icon-toggle { color: var(--ant-primary); }
+        .accordion.accent .accordion-icon-toggle { color: var(--ant-accent); }
+        .accordion.secondary .accordion-icon-toggle { color: var(--ant-secondary); }
+        
+        .accordion-icon-toggle.rotate {
+            transform: rotate(180deg);
+        }
+        
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .accordion-content.open {
+            max-height: 3000px;
+        }
+        
+        .accordion-body {
+            padding: 1.5rem;
+            background: white;
+        }
+        
+        .competence-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 0.75rem;
+        }
+        
+        .competence-item {
+            background: var(--ant-bg);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            border-left: 4px solid var(--ant-primary);
+        }
+        
+        .competence-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .accordion.primary .competence-title { color: var(--ant-primary); }
+        .accordion.accent .competence-title { color: var(--ant-accent); }
+        .accordion.secondary .competence-title { color: var(--ant-secondary); }
+        
+        .competence-desc {
+            font-size: 0.75rem;
+            color: #6B7280;
+        }
+        
+        /* Modi Categories */
+        .modi-category {
+            margin-bottom: 1.5rem;
+        }
+        
+        .modi-category-title {
+            font-size: 1.125rem;
+            font-weight: bold;
+            color: var(--ant-accent);
+            margin-bottom: 0.75rem;
+        }
+        
+        .modi-grid {
+            display: grid;
+            gap: 0.75rem;
+        }
+        
+        .modus-item {
+            background: var(--ant-bg);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            border-left: 4px solid var(--ant-accent);
+        }
+        
+        .modus-title {
+            font-weight: 600;
+            color: var(--ant-accent);
+            margin-bottom: 0.25rem;
+        }
+        
+        .modus-desc {
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+        
+        .digital-note {
+            background: linear-gradient(90deg, rgba(255, 107, 53, 0.2), rgba(76, 175, 80, 0.2));
+            border-radius: 0.75rem;
+            padding: 1rem;
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            margin-top: 1.5rem;
+        }
+        
+        .digital-note p {
+            font-size: 0.875rem;
+            color: #374151;
+        }
+        
+        /* Example Section */
+        .example-section {
+            background: linear-gradient(135deg, var(--ant-accent), var(--ant-secondary));
+            color: white;
+            border-radius: 1.5rem;
+            padding: 3rem 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .example-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .example-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .example-text {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+        
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .example-card {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 0.75rem;
+            padding: 1rem;
+        }
+        
+        .example-card-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .example-card-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .example-list {
+            list-style: none;
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+        
+        .example-list li {
+            margin-bottom: 0.25rem;
+        }
+        
+        .example-result {
+            background: rgba(76, 175, 80, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+        }
+        
+        /* Spiral Section */
+        .spiral-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .spiral-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .spiral-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .step-number {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .step-number.step-1 { background: var(--ant-primary); }
+        .step-number.step-2 { background: var(--ant-secondary); }
+        .step-number.step-3 { background: var(--ant-accent); }
+        .step-number.step-4 { background: var(--ant-success); }
+        
+        .step-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        
+        .step-desc {
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+        
+        .note-box {
+            background: var(--ant-bg);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            border-left: 4px solid var(--ant-accent);
+            margin-top: 1.5rem;
+        }
+        
+        .note-box p {
+            font-size: 0.875rem;
+            color: #374151;
+        }
+        
+        .spiral-visual {
+            text-align: center;
+        }
+        
+        /* Why Circular Section */
+        .why-section {
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.2), rgba(76, 175, 80, 0.2));
+            border-radius: 1.5rem;
+            padding: 3rem 2rem;
+            border: 2px solid rgba(33, 150, 243, 0.3);
+            margin-bottom: 4rem;
+        }
+        
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .why-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+        }
+        
+        .why-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .why-title {
+            font-size: 1.125rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .why-text {
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+        
+        /* Final CTA */
+        .final-cta {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .final-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .final-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--ant-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .final-text {
+            font-size: 1.25rem;
+            color: #374151;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+        
+        .footer-content {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 9999px;
+            padding: 0.75rem 1.5rem;
+        }
+        
+        .footer-text {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+        
+        .footer-icon {
+            font-size: 1.125rem;
+        }
+        
+        /* Floating Ant */
         .floating-ant {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            font-size: 3rem;
             cursor: pointer;
             z-index: 1000;
             animation: ant-float 8s ease-in-out infinite;
@@ -97,17 +775,29 @@
             animation-play-state: paused;
         }
         
+        .floating-ant svg line:nth-of-type(1),
+        .floating-ant svg circle:nth-of-type(4) {
+            transform-origin: 26px 6px;
+            animation: antenna-wiggle-left 2s ease-in-out infinite;
+        }
+        
+        .floating-ant svg line:nth-of-type(2),
+        .floating-ant svg circle:nth-of-type(5) {
+            transform-origin: 34px 6px;
+            animation: antenna-wiggle-right 2s ease-in-out infinite 0.5s;
+        }
+        
         .ant-speech-bubble {
             position: fixed;
             bottom: 120px;
             right: 40px;
             background: white;
-            padding: 16px 20px;
-            border-radius: 20px;
+            padding: 1rem 1.25rem;
+            border-radius: 1.25rem;
             box-shadow: 0 8px 24px rgba(0,0,0,0.15);
             max-width: 300px;
             z-index: 999;
-            border: 3px solid #8B4513;
+            border: 3px solid var(--ant-primary);
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.3s ease;
@@ -127,69 +817,62 @@
             height: 0;
             border-left: 15px solid transparent;
             border-right: 15px solid transparent;
-            border-top: 15px solid #8B4513;
+            border-top: 15px solid var(--ant-primary);
         }
         
-        /* Accordion Styles */
-        .accordion-button {
-            transition: all 0.3s ease;
+        .ant-text {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--ant-primary);
         }
         
-        .accordion-button:hover {
-            background: rgba(139, 69, 19, 0.05);
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.25rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .accordion-title {
+                font-size: 1.25rem;
+            }
+            
+            .spiral-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .floating-ant {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+            }
+            
+            .ant-speech-bubble {
+                bottom: 90px;
+                right: 30px;
+                max-width: 250px;
+            }
         }
         
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-        
-        .accordion-content.open {
-            max-height: 2000px;
-        }
-        
-        .accordion-icon {
-            transition: transform 0.3s ease;
-        }
-        
-        .accordion-icon.rotate {
-            transform: rotate(180deg);
-        }
-        
-        /* Wackelnde Fühler für SVG-Ameise */
-        @keyframes antenna-wiggle-left {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-8deg); }
-            75% { transform: rotate(5deg); }
-        }
-        
-        @keyframes antenna-wiggle-right {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(8deg); }
-            75% { transform: rotate(-5deg); }
-        }
-        
-        .floating-ant svg line:nth-of-type(1),
-        .floating-ant svg circle:nth-of-type(4) {
-            transform-origin: 26px 6px;
-            animation: antenna-wiggle-left 2s ease-in-out infinite;
-        }
-        
-        .floating-ant svg line:nth-of-type(2),
-        .floating-ant svg circle:nth-of-type(5) {
-            transform-origin: 34px 6px;
-            animation: antenna-wiggle-right 2s ease-in-out infinite 0.5s;
+        strong {
+            font-weight: 600;
         }
     </style>
 </head>
-<body class="min-h-screen">
+<body>
     
     <!-- Hero Section -->
-    <div class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-        
-        <!-- Hintergrund-Dekoration -->
-        <div class="absolute inset-0 opacity-10 pointer-events-none">
+    <div class="hero-section">
+        <!-- Background Decoration -->
+        <div class="hero-bg">
             <svg width="100%" height="100%" viewBox="0 0 1000 1000">
                 <circle cx="200" cy="200" r="3" fill="#8B4513"/>
                 <circle cx="800" cy="300" r="3" fill="#D2691E"/>
@@ -202,397 +885,370 @@
             </svg>
         </div>
         
-        <div class="max-w-4xl w-full relative z-10">
-            
+        <div class="container">
             <!-- Logo & Branding -->
-            <div class="text-center mb-12">
-                <div class="relative inline-block mb-6">
-                    <div class="absolute inset-0 border-4 border-ant-accent rounded-full opacity-20 rotate-animation" style="width: 100px; height: 100px;"></div>
-                    <div class="text-6xl mb-2 relative z-10 float-animation">
-                        🔄
-                    </div>
+            <div class="hero-content">
+                <div class="logo-wrapper">
+                    <div class="logo-circle rotate-animation"></div>
+                    <div class="logo-icon float-animation">🔄</div>
                 </div>
                 
-                <h1 class="text-5xl md:text-6xl font-bold text-ant-primary mb-4">
-                    ABU EBA 2030
-                </h1>
-                <p class="text-xl md:text-2xl text-ant-secondary mb-6">
-                    Schullehrplan Allgemeinbildung
-                </p>
-                <p class="text-lg text-gray-700 max-w-2xl mx-auto">
-                    Verstehe die <strong class="text-ant-accent">Kompetenzstruktur</strong> – 
-                    Lerne, wie die drei Lernbereiche <strong class="text-ant-primary">zirkulär vernetzt</strong> sind
+                <h1>ABU EBA 2030</h1>
+                <p class="subtitle">Schullehrplan Allgemeinbildung</p>
+                <p class="hero-description">
+                    Verstehe die <strong style="color: var(--ant-accent)">Kompetenzstruktur</strong> – 
+                    Lerne, wie die drei Lernbereiche <strong style="color: var(--ant-primary)">zirkulär vernetzt</strong> sind
                 </p>
             </div>
             
             <!-- Quick Facts -->
-            <div class="grid md:grid-cols-3 gap-4 mb-8">
-                <div class="bg-white/80 backdrop-blur rounded-2xl p-6 text-center border-2 border-ant-primary/20">
-                    <div class="text-4xl mb-2">🔑</div>
-                    <div class="text-2xl font-bold text-ant-primary mb-1">12</div>
-                    <div class="text-sm text-gray-600">Schlüssel-<br>kompetenzen</div>
+            <div class="quick-facts">
+                <div class="fact-card">
+                    <div class="fact-icon">🔑</div>
+                    <div class="fact-number">12</div>
+                    <div class="fact-label">Schlüssel-<br>kompetenzen</div>
                 </div>
-                <div class="bg-white/80 backdrop-blur rounded-2xl p-6 text-center border-2 border-ant-secondary/20">
-                    <div class="text-4xl mb-2">🎯</div>
-                    <div class="text-2xl font-bold text-ant-secondary mb-1">8</div>
-                    <div class="text-sm text-gray-600">Gesellschaftliche<br>Aspekte</div>
+                <div class="fact-card">
+                    <div class="fact-icon">🎯</div>
+                    <div class="fact-number">8</div>
+                    <div class="fact-label">Gesellschaftliche<br>Aspekte</div>
                 </div>
-                <div class="bg-white/80 backdrop-blur rounded-2xl p-6 text-center border-2 border-ant-accent/20">
-                    <div class="text-4xl mb-2">💬</div>
-                    <div class="text-2xl font-bold text-ant-accent mb-1">9</div>
-                    <div class="text-sm text-gray-600">Sprachmodi<br>(inkl. digital)</div>
+                <div class="fact-card">
+                    <div class="fact-icon">💬</div>
+                    <div class="fact-number">9</div>
+                    <div class="fact-label">Sprachmodi<br>(inkl. digital)</div>
                 </div>
+            </div>
+            
+            <!-- User Counter -->
+            <div class="user-counter">
+                <div class="counter-display">
+                    <span class="counter-icon">👥</span>
+                    <div class="counter-number" id="userCount">...</div>
+                    <span class="counter-icon">🐜</span>
+                </div>
+                <div class="counter-text">Lernende haben bereits gestartet!</div>
+                <div class="counter-hint">Live-Anzeige • Aktualisiert automatisch</div>
             </div>
             
             <!-- CTA Button -->
-            <div class="text-center">
-                <button 
-                    id="loginBtn"
-                    class="bg-ant-accent hover:bg-ant-secondary text-white font-bold py-5 px-10 rounded-full text-xl transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl mb-4"
-                >
+            <div class="cta-section">
+                <button id="loginBtn" class="cta-button">
                     Jetzt starten & Struktur verstehen 🚀
                 </button>
-                <p class="text-gray-500 text-sm">
-                    Dein Zugang wird automatisch erstellt
-                </p>
+                <p class="cta-hint">Dein Zugang wird automatisch erstellt</p>
             </div>
             
             <!-- Scroll Hint -->
-            <div class="text-center mt-12 scroll-hint">
-                <div class="text-gray-400 text-sm mb-2">Scroll für mehr Infos</div>
-                <div class="text-3xl text-ant-accent">↓</div>
+            <div class="scroll-hint">
+                <div class="scroll-text">Scroll für mehr Infos</div>
+                <div class="scroll-arrow">↓</div>
             </div>
         </div>
     </div>
     
     <!-- Content Section -->
-    <div class="max-w-5xl mx-auto px-4 py-16 space-y-16">
+    <div class="content">
         
         <!-- Was ist das RLP-Konzept? -->
-        <section class="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
-            <div class="flex items-center gap-4 mb-8">
-                <span class="text-5xl">📚</span>
-                <h2 class="text-3xl md:text-4xl font-bold text-ant-primary">
-                    Was ist das RLP-Konzept?
-                </h2>
+        <section class="section">
+            <div class="section-header">
+                <span class="section-icon">📚</span>
+                <h2 class="section-title">Was ist das RLP-Konzept?</h2>
             </div>
             
-            <div class="prose prose-lg max-w-none">
-                <p class="text-gray-700 text-lg leading-relaxed mb-6">
-                    Der <strong class="text-ant-primary">Rahmenlehrplan (RLP) 2030</strong> für die Allgemeinbildung 
-                    basiert auf einem <strong class="text-ant-accent">themenbasierten, vernetzten Ansatz</strong>. 
-                    Das bedeutet:
+            <p class="section-text">
+                Der <strong style="color: var(--ant-primary)">Rahmenlehrplan (RLP) 2030</strong> für die Allgemeinbildung 
+                basiert auf einem <strong style="color: var(--ant-accent)">themenbasierten, vernetzten Ansatz</strong>. 
+                Das bedeutet:
+            </p>
+            
+            <div class="info-box theme">
+                <div class="info-box-title">
+                    <span>🎯</span>
+                    <span>Themenbasiertes Lernen</span>
+                </div>
+                <p>Du lernst nicht isolierte Fächer, sondern arbeitest mit <strong>Themen aus deinem Leben</strong>:</p>
+                <div class="theme-grid">
+                    <div class="theme-item">📋 Ins Berufsleben einsteigen</div>
+                    <div class="theme-item">🛒 Konsum und Geld</div>
+                    <div class="theme-item">⚠️ Risiken einschätzen</div>
+                    <div class="theme-item">📱 Medien nutzen</div>
+                </div>
+            </div>
+            
+            <div class="info-box network">
+                <div class="info-box-title">
+                    <span>🔗</span>
+                    <span>Vernetztes Lernen</span>
+                </div>
+                <p>
+                    Jedes Thema verbindet <strong>drei Lernbereiche</strong> miteinander. 
+                    Das ist das <strong style="color: var(--ant-accent)">Herzstück des RLP</strong>: 
+                    Du übst nie nur eine Sache, sondern <strong>vernetzt mehrere Kompetenzen gleichzeitig</strong>.
                 </p>
-                
-                <div class="bg-gradient-to-r from-ant-bg to-ant-primary/5 rounded-2xl p-6 border-l-4 border-ant-accent mb-6">
-                    <h3 class="text-xl font-bold text-ant-primary mb-4 flex items-center gap-2">
-                        <span>🎯</span>
-                        <span>Themenbasiertes Lernen</span>
-                    </h3>
-                    <p class="text-gray-700 mb-4">
-                        Du lernst nicht isolierte Fächer, sondern arbeitest mit <strong>Themen aus deinem Leben</strong>:
-                    </p>
-                    <div class="grid md:grid-cols-2 gap-3">
-                        <div class="bg-white rounded-lg p-3 text-sm">📋 Ins Berufsleben einsteigen</div>
-                        <div class="bg-white rounded-lg p-3 text-sm">🛒 Konsum und Geld</div>
-                        <div class="bg-white rounded-lg p-3 text-sm">⚠️ Risiken einschätzen</div>
-                        <div class="bg-white rounded-lg p-3 text-sm">📱 Medien nutzen</div>
-                    </div>
-                </div>
-                
-                <div class="bg-gradient-to-r from-ant-network/10 to-ant-success/10 rounded-2xl p-6 border-l-4 border-ant-network">
-                    <h3 class="text-xl font-bold text-ant-primary mb-4 flex items-center gap-2">
-                        <span>🔗</span>
-                        <span>Vernetztes Lernen</span>
-                    </h3>
-                    <p class="text-gray-700">
-                        Jedes Thema verbindet <strong>drei Lernbereiche</strong> miteinander. 
-                        Das ist das <strong class="text-ant-accent">Herzstück des RLP</strong>: 
-                        Du übst nie nur eine Sache, sondern <strong>vernetzt mehrere Kompetenzen gleichzeitig</strong>.
-                    </p>
-                </div>
             </div>
         </section>
         
         <!-- Die 3 Lernbereiche -->
-        <section class="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
-            <div class="flex items-center gap-4 mb-8">
-                <span class="text-5xl">🔄</span>
-                <h2 class="text-3xl md:text-4xl font-bold text-ant-primary">
-                    Die 3 Lernbereiche
-                </h2>
+        <section class="section">
+            <div class="section-header">
+                <span class="section-icon">🔄</span>
+                <h2 class="section-title">Die 3 Lernbereiche</h2>
             </div>
             
-            <p class="text-gray-700 text-lg mb-8">
-                Laut RLP werden <strong class="text-ant-accent">alle Kompetenzen vernetzt aufgebaut</strong>. 
+            <p class="section-text">
+                Laut RLP werden <strong style="color: var(--ant-accent)">alle Kompetenzen vernetzt aufgebaut</strong>. 
                 In jedem Thema arbeitest du mit mindestens:
             </p>
             
-            <div class="space-y-4">
-                
-                <!-- Accordion 1: Schlüsselkompetenzen -->
-                <div class="border-2 border-ant-primary/30 rounded-2xl overflow-hidden">
-                    <button class="accordion-button w-full p-6 bg-gradient-to-r from-ant-primary/10 to-ant-primary/5 flex items-center justify-between hover:from-ant-primary/15 hover:to-ant-primary/10" data-accordion="schluessel">
-                        <div class="flex items-center gap-4">
-                            <span class="text-4xl">🔑</span>
-                            <div class="text-left">
-                                <h3 class="text-xl md:text-2xl font-bold text-ant-primary">
-                                    1. Schlüsselkompetenzen für lebenslanges Lernen
-                                </h3>
-                                <p class="text-sm text-gray-600 mt-1">12 Grundfähigkeiten • Mindestens 2 pro Thema (EBA)</p>
-                            </div>
-                        </div>
-                        <span class="accordion-icon text-2xl text-ant-primary">▼</span>
-                    </button>
-                    <div class="accordion-content" id="accordion-schluessel">
-                        <div class="p-6 bg-white">
-                            <p class="text-gray-700 mb-4">
-                                Grundfähigkeiten, die dir in <strong>allen Lebensbereichen</strong> helfen:
-                            </p>
-                            <div class="grid md:grid-cols-2 gap-3">
-                                <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-primary">
-                                    <h4 class="font-semibold text-ant-primary mb-1">✓ Selbstständig arbeiten</h4>
-                                    <p class="text-xs text-gray-600">Eigeninitiative zeigen, selbst organisieren</p>
-                                </div>
-                                <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-primary">
-                                    <h4 class="font-semibold text-ant-primary mb-1">✓ Im Team zusammenarbeiten</h4>
-                                    <p class="text-xs text-gray-600">Kooperieren, Konflikte lösen</p>
-                                </div>
-                                <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-primary">
-                                    <h4 class="font-semibold text-ant-primary mb-1">✓ Ziele setzen & planen</h4>
-                                    <p class="text-xs text-gray-600">Strategisch denken, Prioritäten setzen</p>
-                                </div>
-                                <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-primary">
-                                    <h4 class="font-semibold text-ant-primary mb-1">✓ Kritisch denken</h4>
-                                    <p class="text-xs text-gray-600">Informationen hinterfragen, reflektieren</p>
-                                </div>
-                                <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-primary">
-                                    <h4 class="font-semibold text-ant-primary mb-1">✓ Probleme lösen</h4>
-                                    <p class="text-xs text-gray-600">Lösungen finden, kreativ sein</p>
-                                </div>
-                                <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-primary">
-                                    <h4 class="font-semibold text-ant-primary mb-1">✓ Anpassungsfähig sein</h4>
-                                    <p class="text-xs text-gray-600">Flexibel auf Veränderungen reagieren</p>
-                                </div>
-                                <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-primary">
-                                    <h4 class="font-semibold text-ant-primary mb-1">✓ Kommunizieren</h4>
-                                    <p class="text-xs text-gray-600">Klar und verständlich ausdrücken</p>
-                                </div>
-                                <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-primary">
-                                    <h4 class="font-semibold text-ant-primary mb-1">✓ Digital kompetent sein</h4>
-                                    <p class="text-xs text-gray-600">Digitale Tools sicher nutzen</p>
-                                </div>
-                                <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-primary">
-                                    <h4 class="font-semibold text-ant-primary mb-1">✓ Lernen lernen</h4>
-                                    <p class="text-xs text-gray-600">Lernstrategien entwickeln</p>
-                                </div>
-                                <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-primary">
-                                    <h4 class="font-semibold text-ant-primary mb-1">✓ Verantwortung übernehmen</h4>
-                                    <p class="text-xs text-gray-600">Für Handeln einstehen</p>
-                                </div>
-                                <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-primary">
-                                    <h4 class="font-semibold text-ant-primary mb-1">✓ Kreativ sein</h4>
-                                    <p class="text-xs text-gray-600">Neue Ideen entwickeln</p>
-                                </div>
-                                <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-primary">
-                                    <h4 class="font-semibold text-ant-primary mb-1">✓ Selbstreflexion</h4>
-                                    <p class="text-xs text-gray-600">Eigenes Handeln bewerten</p>
-                                </div>
-                            </div>
+            <!-- Accordion 1: Schlüsselkompetenzen -->
+            <div class="accordion primary">
+                <button class="accordion-button" data-accordion="schluessel">
+                    <div class="accordion-header-content">
+                        <span class="section-icon">🔑</span>
+                        <div>
+                            <div class="accordion-title">1. Schlüsselkompetenzen für lebenslanges Lernen</div>
+                            <div class="accordion-subtitle">12 Grundfähigkeiten • Mindestens 2 pro Thema (EBA)</div>
                         </div>
                     </div>
-                </div>
-                
-                <!-- Accordion 2: Sprachmodi -->
-                <div class="border-2 border-ant-accent/30 rounded-2xl overflow-hidden">
-                    <button class="accordion-button w-full p-6 bg-gradient-to-r from-ant-accent/10 to-ant-accent/5 flex items-center justify-between hover:from-ant-accent/15 hover:to-ant-accent/10" data-accordion="sprach">
-                        <div class="flex items-center gap-4">
-                            <span class="text-4xl">💬</span>
-                            <div class="text-left">
-                                <h3 class="text-xl md:text-2xl font-bold text-ant-accent">
-                                    2. Sprach- und Kommunikationskompetenzen
-                                </h3>
-                                <p class="text-sm text-gray-600 mt-1">9 Sprachmodi (analog & digital) • Mindestens 1 pro Thema (EBA)</p>
+                    <span class="accordion-icon-toggle">▼</span>
+                </button>
+                <div class="accordion-content" id="accordion-schluessel">
+                    <div class="accordion-body">
+                        <p style="margin-bottom: 1rem;">Grundfähigkeiten, die dir in <strong>allen Lebensbereichen</strong> helfen:</p>
+                        <div class="competence-grid">
+                            <div class="competence-item">
+                                <div class="competence-title">✓ Selbstständig arbeiten</div>
+                                <div class="competence-desc">Eigeninitiative zeigen, selbst organisieren</div>
                             </div>
-                        </div>
-                        <span class="accordion-icon text-2xl text-ant-accent">▼</span>
-                    </button>
-                    <div class="accordion-content" id="accordion-sprach">
-                        <div class="p-6 bg-white">
-                            <p class="text-gray-700 mb-4">
-                                Wie du kommunizierst – <strong>analog und digital</strong>:
-                            </p>
-                            
-                            <div class="mb-6">
-                                <h4 class="font-bold text-ant-accent mb-3 text-lg">📥 Rezeption (Verstehen)</h4>
-                                <div class="space-y-3">
-                                    <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-accent">
-                                        <h5 class="font-semibold text-ant-accent mb-1">👂 4.2.1.1 Rezeption mündlich</h5>
-                                        <p class="text-sm text-gray-600">Hörmaterialien verstehen (Podcasts, Vorträge, Gespräche)</p>
-                                    </div>
-                                    <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-accent">
-                                        <h5 class="font-semibold text-ant-accent mb-1">📺 4.2.1.2 Rezeption audiovisuell</h5>
-                                        <p class="text-sm text-gray-600">Videos, Filme, visuelle Medien verstehen</p>
-                                    </div>
-                                    <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-accent">
-                                        <h5 class="font-semibold text-ant-accent mb-1">📖 4.2.1.3 Rezeption schriftlich und bildlich</h5>
-                                        <p class="text-sm text-gray-600">Texte und Bilder lesen und verstehen</p>
-                                    </div>
-                                </div>
+                            <div class="competence-item">
+                                <div class="competence-title">✓ Im Team zusammenarbeiten</div>
+                                <div class="competence-desc">Kooperieren, Konflikte lösen</div>
                             </div>
-                            
-                            <div class="mb-6">
-                                <h4 class="font-bold text-ant-accent mb-3 text-lg">📤 Produktion (Erstellen)</h4>
-                                <div class="space-y-3">
-                                    <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-accent">
-                                        <h5 class="font-semibold text-ant-accent mb-1">🗣️ 4.2.2.1 Produktion mündlich</h5>
-                                        <p class="text-sm text-gray-600">Sprechen, Präsentieren, mündlich kommunizieren</p>
-                                    </div>
-                                    <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-accent">
-                                        <h5 class="font-semibold text-ant-accent mb-1">✍️ 4.2.2.2 Produktion schriftlich und bildlich</h5>
-                                        <p class="text-sm text-gray-600">Texte schreiben, Grafiken erstellen</p>
-                                    </div>
-                                    <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-accent">
-                                        <h5 class="font-semibold text-ant-accent mb-1">🎬 4.2.2.3 Produktion multimedial</h5>
-                                        <p class="text-sm text-gray-600">Videos, Podcasts, digitale Medien erstellen</p>
-                                    </div>
-                                </div>
+                            <div class="competence-item">
+                                <div class="competence-title">✓ Ziele setzen & planen</div>
+                                <div class="competence-desc">Strategisch denken, Prioritäten setzen</div>
                             </div>
-                            
-                            <div>
-                                <h4 class="font-bold text-ant-accent mb-3 text-lg">🔄 Interaktion & Kollaboration</h4>
-                                <div class="space-y-3">
-                                    <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-accent">
-                                        <h5 class="font-semibold text-ant-accent mb-1">💬 4.2.3.1 Interaktion mündlich</h5>
-                                        <p class="text-sm text-gray-600">Gespräche führen, diskutieren</p>
-                                    </div>
-                                    <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-accent">
-                                        <h5 class="font-semibold text-ant-accent mb-1">✉️ 4.2.3.2 Interaktion schriftlich</h5>
-                                        <p class="text-sm text-gray-600">Schriftlich kommunizieren, E-Mails schreiben</p>
-                                    </div>
-                                    <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-accent">
-                                        <h5 class="font-semibold text-ant-accent mb-1">💻 4.2.3.3 Interaktion digital</h5>
-                                        <p class="text-sm text-gray-600">Digital zusammenarbeiten, KI-Tools nutzen, online kollaborieren</p>
-                                    </div>
-                                </div>
+                            <div class="competence-item">
+                                <div class="competence-title">✓ Kritisch denken</div>
+                                <div class="competence-desc">Informationen hinterfragen, reflektieren</div>
                             </div>
-                            
-                            <div class="mt-6 bg-gradient-to-r from-ant-accent/20 to-ant-success/20 rounded-xl p-4 border-2 border-ant-accent/30">
-                                <p class="text-sm text-gray-700">
-                                    <strong class="text-ant-accent">💻 Digitale Kompetenzen</strong> sind integriert – 
-                                    z.B. E-Mail schreiben, Schulmail einrichten, KI-Tools nutzen, online recherchieren
-                                </p>
+                            <div class="competence-item">
+                                <div class="competence-title">✓ Probleme lösen</div>
+                                <div class="competence-desc">Lösungen finden, kreativ sein</div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Accordion 3: Gesellschaftliche Aspekte -->
-                <div class="border-2 border-ant-secondary/30 rounded-2xl overflow-hidden">
-                    <button class="accordion-button w-full p-6 bg-gradient-to-r from-ant-secondary/10 to-ant-secondary/5 flex items-center justify-between hover:from-ant-secondary/15 hover:to-ant-secondary/10" data-accordion="aspekte">
-                        <div class="flex items-center gap-4">
-                            <span class="text-4xl">🎯</span>
-                            <div class="text-left">
-                                <h3 class="text-xl md:text-2xl font-bold text-ant-secondary">
-                                    3. Gesellschaftliche Aspekte
-                                </h3>
-                                <p class="text-sm text-gray-600 mt-1">8 Perspektiven • Mindestens 2 pro Thema (EBA)</p>
+                            <div class="competence-item">
+                                <div class="competence-title">✓ Anpassungsfähig sein</div>
+                                <div class="competence-desc">Flexibel auf Veränderungen reagieren</div>
                             </div>
-                        </div>
-                        <span class="accordion-icon text-2xl text-ant-secondary">▼</span>
-                    </button>
-                    <div class="accordion-content" id="accordion-aspekte">
-                        <div class="p-6 bg-white">
-                            <p class="text-gray-700 mb-4">
-                                Verschiedene <strong>Perspektiven</strong> auf Themen:
-                            </p>
-                            <div class="grid md:grid-cols-2 gap-3">
-                                <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-secondary">
-                                    <h4 class="font-semibold text-ant-secondary mb-1">⚖️ Ethik</h4>
-                                    <p class="text-xs text-gray-600">Moralische Fragen, Werte, richtiges Handeln</p>
-                                </div>
-                                <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-secondary">
-                                    <h4 class="font-semibold text-ant-secondary mb-1">🏛️ Politik</h4>
-                                    <p class="text-xs text-gray-600">Mitbestimmung, Demokratie, politische Prozesse</p>
-                                </div>
-                                <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-secondary">
-                                    <h4 class="font-semibold text-ant-secondary mb-1">🎭 Kultur</h4>
-                                    <p class="text-xs text-gray-600">Kunst, Vielfalt, kulturelle Ausdrucksformen</p>
-                                </div>
-                                <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-secondary">
-                                    <h4 class="font-semibold text-ant-secondary mb-1">💰 Wirtschaft</h4>
-                                    <p class="text-xs text-gray-600">Konsum, Arbeit, wirtschaftliche Zusammenhänge</p>
-                                </div>
-                                <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-secondary">
-                                    <h4 class="font-semibold text-ant-secondary mb-1">⚖️ Recht</h4>
-                                    <p class="text-xs text-gray-600">Gesetze, Verträge, rechtliche Grundlagen</p>
-                                </div>
-                                <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-secondary">
-                                    <h4 class="font-semibold text-ant-secondary mb-1">💻 Technologie</h4>
-                                    <p class="text-xs text-gray-600">Digitalisierung, technologische Entwicklung</p>
-                                </div>
-                                <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-secondary">
-                                    <h4 class="font-semibold text-ant-secondary mb-1">👤 Identität</h4>
-                                    <p class="text-xs text-gray-600">Wer bin ich? Sozialisation, Persönlichkeit</p>
-                                </div>
-                                <div class="bg-ant-bg rounded-lg p-4 border-l-4 border-ant-secondary">
-                                    <h4 class="font-semibold text-ant-secondary mb-1">🌍 Ökologie</h4>
-                                    <p class="text-xs text-gray-600">Umwelt, Nachhaltigkeit, Ressourcen</p>
-                                </div>
+                            <div class="competence-item">
+                                <div class="competence-title">✓ Kommunizieren</div>
+                                <div class="competence-desc">Klar und verständlich ausdrücken</div>
+                            </div>
+                            <div class="competence-item">
+                                <div class="competence-title">✓ Digital kompetent sein</div>
+                                <div class="competence-desc">Digitale Tools sicher nutzen</div>
+                            </div>
+                            <div class="competence-item">
+                                <div class="competence-title">✓ Lernen lernen</div>
+                                <div class="competence-desc">Lernstrategien entwickeln</div>
+                            </div>
+                            <div class="competence-item">
+                                <div class="competence-title">✓ Verantwortung übernehmen</div>
+                                <div class="competence-desc">Für Handeln einstehen</div>
+                            </div>
+                            <div class="competence-item">
+                                <div class="competence-title">✓ Kreativ sein</div>
+                                <div class="competence-desc">Neue Ideen entwickeln</div>
+                            </div>
+                            <div class="competence-item">
+                                <div class="competence-title">✓ Selbstreflexion</div>
+                                <div class="competence-desc">Eigenes Handeln bewerten</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div class="mt-8 bg-gradient-to-r from-ant-primary/10 to-ant-accent/10 rounded-2xl p-6 border-2 border-ant-primary/20">
-                <p class="text-center text-gray-700">
-                    <strong class="text-ant-accent">🔗 EBA-Regel (2-jährige Grundbildung):</strong> 
+            <!-- Accordion 2: Sprachmodi -->
+            <div class="accordion accent">
+                <button class="accordion-button" data-accordion="sprach">
+                    <div class="accordion-header-content">
+                        <span class="section-icon">💬</span>
+                        <div>
+                            <div class="accordion-title">2. Sprach- und Kommunikationskompetenzen</div>
+                            <div class="accordion-subtitle">9 Sprachmodi (analog & digital) • Mindestens 1 pro Thema (EBA)</div>
+                        </div>
+                    </div>
+                    <span class="accordion-icon-toggle">▼</span>
+                </button>
+                <div class="accordion-content" id="accordion-sprach">
+                    <div class="accordion-body">
+                        <p style="margin-bottom: 1rem;">Wie du kommunizierst – <strong>analog und digital</strong>:</p>
+                        
+                        <div class="modi-category">
+                            <div class="modi-category-title">📥 Rezeption (Verstehen)</div>
+                            <div class="modi-grid">
+                                <div class="modus-item">
+                                    <div class="modus-title">👂 4.2.1.1 Rezeption mündlich</div>
+                                    <div class="modus-desc">Hörmaterialien verstehen (Podcasts, Vorträge, Gespräche)</div>
+                                </div>
+                                <div class="modus-item">
+                                    <div class="modus-title">📺 4.2.1.2 Rezeption audiovisuell</div>
+                                    <div class="modus-desc">Videos, Filme, visuelle Medien verstehen</div>
+                                </div>
+                                <div class="modus-item">
+                                    <div class="modus-title">📖 4.2.1.3 Rezeption schriftlich und bildlich</div>
+                                    <div class="modus-desc">Texte und Bilder lesen und verstehen</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="modi-category">
+                            <div class="modi-category-title">📤 Produktion (Erstellen)</div>
+                            <div class="modi-grid">
+                                <div class="modus-item">
+                                    <div class="modus-title">🗣️ 4.2.2.1 Produktion mündlich</div>
+                                    <div class="modus-desc">Sprechen, Präsentieren, mündlich kommunizieren</div>
+                                </div>
+                                <div class="modus-item">
+                                    <div class="modus-title">✍️ 4.2.2.2 Produktion schriftlich</div>
+                                    <div class="modus-desc">Texte schreiben, Dokumente erstellen</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="modi-category">
+                            <div class="modi-category-title">🔄 Interaktion</div>
+                            <div class="modi-grid">
+                                <div class="modus-item">
+                                    <div class="modus-title">💬 4.2.3.1 Interaktion mündlich</div>
+                                    <div class="modus-desc">Gespräche führen, diskutieren</div>
+                                </div>
+                                <div class="modus-item">
+                                    <div class="modus-title">💻 4.2.3.2 Interaktion schriftlich und digital</div>
+                                    <div class="modus-desc">Digital kommunizieren, E-Mails, Chat</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="modi-category">
+                            <div class="modi-category-title">📝 Grundlagen</div>
+                            <div class="modi-grid">
+                                <div class="modus-item">
+                                    <div class="modus-title">📋 4.2.4.1 Texttypen und Textformate</div>
+                                    <div class="modus-desc">Mit verschiedenen Texttypen umgehen</div>
+                                </div>
+                                <div class="modus-item">
+                                    <div class="modus-title">🎯 4.2.4.2 Konventionen, Normen und Sprachbewusstheit</div>
+                                    <div class="modus-desc">Sprachliche Mittel verstehen und anwenden</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="digital-note">
+                            <p><strong style="color: var(--ant-accent)">💻 Digitale Kompetenzen</strong> sind integriert – z.B. E-Mail schreiben, online recherchieren, digital zusammenarbeiten</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Accordion 3: Gesellschaftliche Aspekte -->
+            <div class="accordion secondary">
+                <button class="accordion-button" data-accordion="aspekte">
+                    <div class="accordion-header-content">
+                        <span class="section-icon">🎯</span>
+                        <div>
+                            <div class="accordion-title">3. Gesellschaftliche Aspekte</div>
+                            <div class="accordion-subtitle">8 Perspektiven • Mindestens 2 pro Thema (EBA)</div>
+                        </div>
+                    </div>
+                    <span class="accordion-icon-toggle">▼</span>
+                </button>
+                <div class="accordion-content" id="accordion-aspekte">
+                    <div class="accordion-body">
+                        <p style="margin-bottom: 1rem;">Verschiedene <strong>Perspektiven</strong> auf Themen:</p>
+                        <div class="competence-grid">
+                            <div class="competence-item">
+                                <div class="competence-title">⚖️ Ethik</div>
+                                <div class="competence-desc">Moralische Fragen, Werte, richtiges Handeln</div>
+                            </div>
+                            <div class="competence-item">
+                                <div class="competence-title">🏛️ Politik</div>
+                                <div class="competence-desc">Mitbestimmung, Demokratie, politische Prozesse</div>
+                            </div>
+                            <div class="competence-item">
+                                <div class="competence-title">🎭 Kultur</div>
+                                <div class="competence-desc">Kunst, Vielfalt, kulturelle Ausdrucksformen</div>
+                            </div>
+                            <div class="competence-item">
+                                <div class="competence-title">💰 Wirtschaft</div>
+                                <div class="competence-desc">Konsum, Arbeit, wirtschaftliche Zusammenhänge</div>
+                            </div>
+                            <div class="competence-item">
+                                <div class="competence-title">⚖️ Recht</div>
+                                <div class="competence-desc">Gesetze, Verträge, rechtliche Grundlagen</div>
+                            </div>
+                            <div class="competence-item">
+                                <div class="competence-title">💻 Technologie</div>
+                                <div class="competence-desc">Digitalisierung, technologische Entwicklung</div>
+                            </div>
+                            <div class="competence-item">
+                                <div class="competence-title">👤 Identität</div>
+                                <div class="competence-desc">Wer bin ich? Sozialisation, Persönlichkeit</div>
+                            </div>
+                            <div class="competence-item">
+                                <div class="competence-title">🌍 Ökologie</div>
+                                <div class="competence-desc">Umwelt, Nachhaltigkeit, Ressourcen</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-box theme" style="margin-top: 2rem;">
+                <p style="text-align: center; margin: 0;">
+                    <strong style="color: var(--ant-accent)">🔗 EBA-Regel (2-jährige Grundbildung):</strong> 
                     Pro Thema mindestens <strong>2 Schlüsselkompetenzen + 2 Aspekte + 1 Sprachmodus</strong>
                 </p>
             </div>
         </section>
         
         <!-- Beispiel: Vernetzung in Aktion -->
-        <section class="bg-gradient-to-br from-ant-accent to-ant-secondary rounded-3xl shadow-2xl p-8 md:p-12 text-white">
-            <div class="flex items-center gap-4 mb-8">
-                <span class="text-5xl">💡</span>
-                <h2 class="text-3xl md:text-4xl font-bold">
-                    Beispiel: So funktioniert Vernetzung
-                </h2>
+        <section class="example-section">
+            <div class="section-header">
+                <span class="section-icon">💡</span>
+                <h2 class="section-title" style="color: white;">Beispiel: So funktioniert Vernetzung</h2>
             </div>
             
-            <div class="bg-white/10 backdrop-blur rounded-2xl p-6 mb-6">
-                <h3 class="text-2xl font-bold mb-4">
-                    📋 Thema: "Ins Berufsleben einsteigen"
-                </h3>
-                <p class="text-white/90 text-lg mb-6">
-                    Aufgabe: Du erhältst ein ÜK-Aufgebot mit unklaren Infos. Formuliere höfliche Rückfragen.
-                </p>
+            <div class="example-box">
+                <h3 class="example-title">📋 Thema: "Ins Berufsleben einsteigen"</h3>
+                <p class="example-text">Aufgabe: Du erhältst ein ÜK-Aufgebot mit unklaren Infos. Formuliere höfliche Rückfragen.</p>
                 
-                <div class="grid md:grid-cols-3 gap-4">
-                    <div class="bg-white/20 rounded-xl p-4">
-                        <div class="text-3xl mb-2">🔑</div>
-                        <h4 class="font-bold mb-2">Schlüsselkompetenzen</h4>
-                        <ul class="text-sm space-y-1 text-white/90">
+                <div class="example-grid">
+                    <div class="example-card">
+                        <div class="example-card-icon">🔑</div>
+                        <div class="example-card-title">Schlüsselkompetenzen</div>
+                        <ul class="example-list">
                             <li>• Ziele setzen</li>
                             <li>• Planung</li>
                             <li>• Anpassungsfähigkeit</li>
                         </ul>
                     </div>
-                    <div class="bg-white/20 rounded-xl p-4">
-                        <div class="text-3xl mb-2">💬</div>
-                        <h4 class="font-bold mb-2">Sprachmodi</h4>
-                        <ul class="text-sm space-y-1 text-white/90">
+                    <div class="example-card">
+                        <div class="example-card-icon">💬</div>
+                        <div class="example-card-title">Sprachmodi</div>
+                        <ul class="example-list">
                             <li>• Texte lesen</li>
                             <li>• Schriftlich produzieren</li>
                             <li>• Digital kommunizieren</li>
                         </ul>
                     </div>
-                    <div class="bg-white/20 rounded-xl p-4">
-                        <div class="text-3xl mb-2">🎯</div>
-                        <h4 class="font-bold mb-2">Aspekte</h4>
-                        <ul class="text-sm space-y-1 text-white/90">
+                    <div class="example-card">
+                        <div class="example-card-icon">🎯</div>
+                        <div class="example-card-title">Aspekte</div>
+                        <ul class="example-list">
                             <li>• Recht (Arbeitsrecht)</li>
                             <li>• Identität (Rolle)</li>
                         </ul>
@@ -600,8 +1256,8 @@
                 </div>
             </div>
             
-            <div class="bg-ant-success/30 backdrop-blur rounded-xl p-6">
-                <p class="text-lg">
+            <div class="example-result">
+                <p style="font-size: 1.125rem; margin: 0;">
                     <strong>🌟 Das ist Vernetzung:</strong> 
                     Du übst nie nur "Schreiben" oder nur "Recht" – du verbindest <strong>mehrere Kompetenzen gleichzeitig</strong> 
                     in einer realen Situation aus deinem Leben!
@@ -610,82 +1266,72 @@
         </section>
         
         <!-- Spiralförmiges Curriculum -->
-        <section class="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
-            <div class="flex items-center gap-4 mb-8">
-                <span class="text-5xl">🌀</span>
-                <h2 class="text-3xl md:text-4xl font-bold text-ant-primary">
-                    Spiralförmiges Lernen
-                </h2>
+        <section class="section">
+            <div class="section-header">
+                <span class="section-icon">🌀</span>
+                <h2 class="section-title">Spiralförmiges Lernen</h2>
             </div>
             
-            <div class="grid md:grid-cols-2 gap-8 items-center">
+            <div class="spiral-grid">
                 <div>
-                    <p class="text-gray-700 text-lg mb-6">
-                        Laut RLP werden Kompetenzen <strong class="text-ant-accent">spiralförmig</strong> aufgebaut:
-                    </p>
+                    <p class="section-text">Laut RLP werden Kompetenzen <strong style="color: var(--ant-accent)">spiralförmig</strong> aufgebaut:</p>
                     
-                    <div class="space-y-4">
-                        <div class="flex items-start gap-3">
-                            <div class="flex-shrink-0 w-8 h-8 bg-ant-primary text-white rounded-full flex items-center justify-center font-bold">1</div>
+                    <div class="spiral-steps">
+                        <div class="spiral-step">
+                            <div class="step-number step-1">1</div>
                             <div>
-                                <h4 class="font-bold text-ant-primary mb-1">Erste Begegnung</h4>
-                                <p class="text-sm text-gray-600">Du lernst eine Kompetenz in Thema 1 kennen</p>
+                                <div class="step-title" style="color: var(--ant-primary)">Erste Begegnung</div>
+                                <div class="step-desc">Du lernst eine Kompetenz in Thema 1 kennen</div>
                             </div>
                         </div>
                         
-                        <div class="flex items-start gap-3">
-                            <div class="flex-shrink-0 w-8 h-8 bg-ant-secondary text-white rounded-full flex items-center justify-center font-bold">2</div>
+                        <div class="spiral-step">
+                            <div class="step-number step-2">2</div>
                             <div>
-                                <h4 class="font-bold text-ant-secondary mb-1">Vertiefung</h4>
-                                <p class="text-sm text-gray-600">In Thema 3 übst du sie in neuem Kontext</p>
+                                <div class="step-title" style="color: var(--ant-secondary)">Vertiefung</div>
+                                <div class="step-desc">In Thema 3 übst du sie in neuem Kontext</div>
                             </div>
                         </div>
                         
-                        <div class="flex items-start gap-3">
-                            <div class="flex-shrink-0 w-8 h-8 bg-ant-accent text-white rounded-full flex items-center justify-center font-bold">3</div>
+                        <div class="spiral-step">
+                            <div class="step-number step-3">3</div>
                             <div>
-                                <h4 class="font-bold text-ant-accent mb-1">Anwendung</h4>
-                                <p class="text-sm text-gray-600">In Thema 6 wendest du sie selbstständig an</p>
+                                <div class="step-title" style="color: var(--ant-accent)">Anwendung</div>
+                                <div class="step-desc">In Thema 6 wendest du sie selbstständig an</div>
                             </div>
                         </div>
                         
-                        <div class="flex items-start gap-3">
-                            <div class="flex-shrink-0 w-8 h-8 bg-ant-success text-white rounded-full flex items-center justify-center font-bold">4</div>
+                        <div class="spiral-step">
+                            <div class="step-number step-4">4</div>
                             <div>
-                                <h4 class="font-bold text-ant-success mb-1">Transfer</h4>
-                                <p class="text-sm text-gray-600">In Thema 8 überträgst du sie auf neue Situationen</p>
+                                <div class="step-title" style="color: var(--ant-success)">Transfer</div>
+                                <div class="step-desc">In Thema 8 überträgst du sie auf neue Situationen</div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="mt-6 bg-ant-bg rounded-xl p-4 border-l-4 border-ant-accent">
-                        <p class="text-sm text-gray-700">
-                            <strong class="text-ant-accent">💡 Wichtig:</strong> 
+                    <div class="note-box">
+                        <p>
+                            <strong style="color: var(--ant-accent)">💡 Wichtig:</strong> 
                             Jeder Durchlauf macht dich kompetenter. Du wiederholst nicht einfach – 
                             du <strong>vertiefst und vernetzt</strong>!
                         </p>
                     </div>
                 </div>
                 
-                <div class="flex justify-center">
+                <div class="spiral-visual">
                     <svg width="300" height="300" viewBox="0 0 300 300">
-                        <!-- Spirale -->
                         <path d="M 150 150 Q 180 120 200 150 T 220 200 T 200 240 T 150 260 T 100 240 T 80 180 T 100 120 T 150 100" 
                               fill="none" 
                               stroke="#FF6B35" 
                               stroke-width="4" 
                               opacity="0.8"/>
-                        
-                        <!-- Punkte auf der Spirale -->
                         <circle cx="150" cy="150" r="8" fill="#8B4513"/>
                         <text x="170" y="155" font-size="14" fill="#8B4513" font-weight="bold">Start</text>
-                        
                         <circle cx="200" cy="150" r="8" fill="#D2691E"/>
                         <circle cx="220" cy="200" r="8" fill="#FF6B35"/>
                         <circle cx="150" cy="260" r="8" fill="#4CAF50"/>
                         <text x="155" y="280" font-size="14" fill="#4CAF50" font-weight="bold">Kompetenz!</text>
-                        
-                        <!-- Pfeil -->
                         <path d="M 140 265 L 150 260 L 145 270" fill="#4CAF50"/>
                     </svg>
                 </div>
@@ -693,133 +1339,103 @@
         </section>
         
         <!-- Warum zirkulär? -->
-        <section class="bg-gradient-to-br from-ant-network/20 to-ant-success/20 rounded-3xl shadow-xl p-8 md:p-12 border-2 border-ant-network/30">
-            <div class="flex items-center gap-4 mb-6">
-                <span class="text-5xl">🤔</span>
-                <h2 class="text-3xl md:text-4xl font-bold text-ant-primary">
-                    Warum "zirkulär"?
-                </h2>
+        <section class="why-section">
+            <div class="section-header">
+                <span class="section-icon">🤔</span>
+                <h2 class="section-title">Warum "zirkulär"?</h2>
             </div>
             
-            <div class="prose prose-lg max-w-none">
-                <p class="text-gray-700 text-lg leading-relaxed mb-6">
-                    Der RLP spricht von einem <strong class="text-ant-accent">"spiralförmigen Curriculum"</strong>. 
-                    Wir nennen es <strong class="text-ant-primary">"zirkulär"</strong>, weil:
-                </p>
+            <p class="section-text">
+                Der RLP spricht von einem <strong style="color: var(--ant-accent)">"spiralförmigen Curriculum"</strong>. 
+                Wir nennen es <strong style="color: var(--ant-primary)">"zirkulär"</strong>, weil:
+            </p>
+            
+            <div class="why-grid">
+                <div class="why-card">
+                    <div class="why-icon">🔄</div>
+                    <div class="why-title" style="color: var(--ant-primary)">Kompetenzen kehren zurück</div>
+                    <div class="why-text">Du begegnest Kompetenzen immer wieder in neuen Themen – wie im Kreis</div>
+                </div>
                 
-                <div class="grid md:grid-cols-2 gap-4">
-                    <div class="bg-white rounded-xl p-6">
-                        <div class="text-3xl mb-3">🔄</div>
-                        <h3 class="text-lg font-bold text-ant-primary mb-2">Kompetenzen kehren zurück</h3>
-                        <p class="text-gray-600 text-sm">
-                            Du begegnest Kompetenzen immer wieder in neuen Themen – wie im Kreis
-                        </p>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl p-6">
-                        <div class="text-3xl mb-3">🔗</div>
-                        <h3 class="text-lg font-bold text-ant-secondary mb-2">Alles ist vernetzt</h3>
-                        <p class="text-gray-600 text-sm">
-                            Schlüsselkompetenzen, Sprache und Gesellschaft sind nicht getrennt – sie wirken zusammen
-                        </p>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl p-6">
-                        <div class="text-3xl mb-3">🎯</div>
-                        <h3 class="text-lg font-bold text-ant-accent mb-2">Kein linearer Pfad</h3>
-                        <p class="text-gray-600 text-sm">
-                            Du lernst nicht Schritt 1 → 2 → 3, sondern verfolgst mehrere Fäden gleichzeitig
-                        </p>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl p-6">
-                        <div class="text-3xl mb-3">🌟</div>
-                        <h3 class="text-lg font-bold text-ant-success mb-2">Transfer statt Auswendiglernen</h3>
-                        <p class="text-gray-600 text-sm">
-                            Du lernst, Kompetenzen auf neue Situationen zu übertragen – das ist echtes Verstehen
-                        </p>
-                    </div>
+                <div class="why-card">
+                    <div class="why-icon">🔗</div>
+                    <div class="why-title" style="color: var(--ant-secondary)">Alles ist vernetzt</div>
+                    <div class="why-text">Schlüsselkompetenzen, Sprache und Gesellschaft sind nicht getrennt – sie wirken zusammen</div>
+                </div>
+                
+                <div class="why-card">
+                    <div class="why-icon">🎯</div>
+                    <div class="why-title" style="color: var(--ant-accent)">Kein linearer Pfad</div>
+                    <div class="why-text">Du lernst nicht Schritt 1 → 2 → 3, sondern verfolgst mehrere Fäden gleichzeitig</div>
+                </div>
+                
+                <div class="why-card">
+                    <div class="why-icon">🌟</div>
+                    <div class="why-title" style="color: var(--ant-success)">Transfer statt Auswendiglernen</div>
+                    <div class="why-text">Du lernst, Kompetenzen auf neue Situationen zu übertragen – das ist echtes Verstehen</div>
                 </div>
             </div>
         </section>
         
         <!-- Final CTA -->
-        <section class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 text-center">
-            <div class="text-6xl mb-6">🚀</div>
-            <h2 class="text-3xl md:text-4xl font-bold text-ant-primary mb-4">
-                Bereit, die Struktur zu erleben?
-            </h2>
-            <p class="text-xl text-gray-700 mb-8 max-w-2xl mx-auto">
-                Starte jetzt und entdecke, wie <strong class="text-ant-accent">zirkuläres Lernen</strong> funktioniert. 
+        <section class="final-cta">
+            <div class="final-icon">🚀</div>
+            <h2 class="final-title">Bereit, die Struktur zu erleben?</h2>
+            <p class="final-text">
+                Starte jetzt und entdecke, wie <strong style="color: var(--ant-accent)">zirkuläres Lernen</strong> funktioniert. 
                 Dein Dashboard zeigt dir, welche Kompetenzen du bereits vernetzt hast!
             </p>
-            <button 
-                id="loginBtn2"
-                class="bg-ant-accent hover:bg-ant-secondary text-white font-bold py-5 px-10 rounded-full text-xl transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
-            >
-                Jetzt einsteigen 🎯
-            </button>
+            <button id="loginBtn2" class="cta-button">Jetzt einsteigen 🎯</button>
         </section>
         
         <!-- Footer -->
-        <div class="text-center py-8">
-            <div class="bg-white/50 backdrop-blur rounded-full px-6 py-3 inline-block">
-                <div class="flex items-center gap-2 text-sm text-gray-600">
-                    <span class="text-lg">🔄✏️💡</span>
+        <div class="footer">
+            <div class="footer-content">
+                <div class="footer-text">
+                    <span class="footer-icon">🐜✏️👓</span>
+                    <span>|</span>
+                    <span>ant edu</span>
                     <span>|</span>
                     <span id="currentYear"></span>
-                    <span>|</span>
-                    <span class="text-xs">Nach RLP 2030</span>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Schwebende Ameise mit Sprüchen -->
+    <!-- Floating Ant -->
     <div class="floating-ant" id="floatingAnt" title="Klick mich!">
         <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-            <!-- Körper -->
             <ellipse cx="30" cy="35" rx="12" ry="15" fill="#8B4513"/>
             <ellipse cx="30" cy="20" rx="10" ry="12" fill="#A0522D"/>
             <circle cx="30" cy="10" r="8" fill="#8B4513"/>
-            
-            <!-- Fühler -->
             <line x1="26" y1="6" x2="22" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
             <line x1="34" y1="6" x2="38" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
             <circle cx="22" cy="0" r="2" fill="#654321"/>
             <circle cx="38" cy="0" r="2" fill="#654321"/>
-            
-            <!-- Beine (3 pro Seite) -->
             <line x1="20" y1="25" x2="10" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
             <line x1="20" y1="30" x2="8" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
             <line x1="22" y1="38" x2="12" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
-            
             <line x1="40" y1="25" x2="50" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
             <line x1="40" y1="30" x2="52" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
             <line x1="38" y1="38" x2="48" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
-            
-            <!-- Augen (große, freundliche Augen die dich anschauen) -->
             <ellipse cx="26" cy="10" rx="3" ry="4" fill="white"/>
             <ellipse cx="34" cy="10" rx="3" ry="4" fill="white"/>
             <circle cx="26" cy="11" r="2" fill="#333"/>
             <circle cx="34" cy="11" r="2" fill="#333"/>
-            
-            <!-- Glanz in den Augen -->
             <circle cx="26.5" cy="10" r="0.8" fill="white"/>
             <circle cx="34.5" cy="10" r="0.8" fill="white"/>
-            
-            <!-- Lächeln -->
             <path d="M 24 14 Q 30 16 36 14" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
         </svg>
     </div>
+    
     <div class="ant-speech-bubble" id="antSpeech">
-        <p class="text-sm font-semibold text-ant-primary" id="antText"></p>
+        <p class="ant-text" id="antText"></p>
     </div>
     
-    <!-- Firebase SDK & Login Logic -->
+    <!-- Firebase & Scripts -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
-        import { getFirestore, doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        import { getFirestore, doc, setDoc, getDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
         
         const firebaseConfig = {
             apiKey: "AIzaSyDycvEwK6KJZyFEtsGIaHJBhIFTp5L4cdA",
@@ -833,12 +1449,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         
-        const tiere = [
-            'Eichhörnchen', 'Fuchs', 'Bär', 'Ameise', 'Eule', 
-            'Igel', 'Hase', 'Reh', 'Dachs', 'Maus',
-            'Biber', 'Marder', 'Luchs', 'Wolf', 'Hirsch'
-        ];
-        
+        const tiere = ['Eichhörnchen', 'Fuchs', 'Bär', 'Ameise', 'Eule', 'Igel', 'Hase', 'Reh', 'Dachs', 'Maus', 'Biber', 'Marder', 'Luchs', 'Wolf', 'Hirsch'];
         const sonderzeichen = ['+', '%', '-', '~', '*'];
         
         function generiereNamen() {
@@ -856,6 +1467,25 @@
             return userId;
         }
         
+        async function updateUserCount() {
+            try {
+                const usersSnapshot = await getDocs(collection(db, 'users'));
+                const userCount = usersSnapshot.size;
+                const countElement = document.getElementById('userCount');
+                if (countElement) {
+                    countElement.style.opacity = '0';
+                    setTimeout(() => {
+                        countElement.textContent = userCount;
+                        countElement.style.opacity = '1';
+                    }, 200);
+                }
+            } catch (error) {
+                console.error('Fehler beim Laden der User-Anzahl:', error);
+                const countElement = document.getElementById('userCount');
+                if (countElement) countElement.textContent = '—';
+            }
+        }
+        
         async function handleLogin(btnId) {
             const btn = document.getElementById(btnId);
             btn.disabled = true;
@@ -867,29 +1497,19 @@
                 
                 if (!userDoc.exists()) {
                     const displayName = generiereNamen();
-                    
                     await setDoc(doc(db, 'users', userId), {
-                        profile: {
-                            displayName: displayName,
-                            createdAt: new Date().toISOString()
-                        },
-                        kompetenzen: {
-                            schluessel: {},
-                            aspekte: {},
-                            sprachmodi: {}
-                        },
+                        profile: { displayName: displayName, createdAt: new Date().toISOString() },
+                        kompetenzen: { schluessel: {}, aspekte: {}, sprachmodi: {} },
                         challenges: 0,
                         umsetzungen: 0
                     });
-                    
                     localStorage.setItem('ant_edu_display_name', displayName);
+                    await updateUserCount();
                 } else {
                     const displayName = userDoc.data().profile.displayName;
                     localStorage.setItem('ant_edu_display_name', displayName);
                 }
-                
                 window.location.href = 'dashboard.html';
-                
             } catch (error) {
                 console.error('Login-Fehler:', error);
                 btn.disabled = false;
@@ -904,33 +1524,30 @@
         window.addEventListener('load', function() {
             const userId = localStorage.getItem('ant_edu_user_id');
             const displayName = localStorage.getItem('ant_edu_display_name');
-            
             if (userId && displayName) {
                 document.getElementById('loginBtn').innerHTML = 'Zurück zu meinem Dashboard 🎯';
                 document.getElementById('loginBtn2').innerHTML = 'Zurück zu meinem Dashboard 🎯';
             }
-            
             document.getElementById('currentYear').textContent = new Date().getFullYear();
+            updateUserCount();
+            setInterval(updateUserCount, 30000);
         });
     </script>
     
-    <!-- Accordion & Ameisen-Funktionalität (normales Script, kein module) -->
     <script>
-        // Accordion Funktionalität
         document.addEventListener('DOMContentLoaded', function() {
+            // Accordion
             document.querySelectorAll('.accordion-button').forEach(button => {
                 button.addEventListener('click', function() {
                     const accordionId = this.getAttribute('data-accordion');
                     const content = document.getElementById('accordion-' + accordionId);
-                    const icon = this.querySelector('.accordion-icon');
-                    
-                    // Toggle current accordion
+                    const icon = this.querySelector('.accordion-icon-toggle');
                     content.classList.toggle('open');
                     icon.classList.toggle('rotate');
                 });
             });
             
-            // Ameisen-Sprüche
+            // Ant Quotes
             const antQuotes = [
                 "🐜 Wusstest du? Kompetenzen sind wie Ameisenpfade – je öfter du sie nutzt, desto breiter werden sie!",
                 "🐜 Vernetzung ist alles! Genau wie wir Ameisen arbeiten auch Kompetenzen am besten zusammen!",
@@ -948,37 +1565,25 @@
                 "🐜 Hallo! Ich bin deine Lern-Ameise! Klick mich für mehr Weisheiten! 👋",
                 "🐜 Wusstest du? Ameisen können das 50-fache ihres Körpergewichts tragen. Du schaffst deine Kompetenzen auch!",
                 "🐜 Im Ameisenstaat hat jeder eine Rolle – genau wie in den 8 gesellschaftlichen Aspekten!",
-                "🐜 Ameisen kommunizieren über Duftstoffe – Menschen über 9 verschiedene Sprachmodi! 💬"
+                "🐜 Ameisen kommunizieren über Duftstoffe – Menschen über 9 verschiedene Sprachmodi! 💬",
+                "🐜 Schau dir den User-Counter an 👆 – immer mehr Lernende entdecken die Vernetzung!"
             ];
             
             let lastQuoteIndex = -1;
-            
             const floatingAnt = document.getElementById('floatingAnt');
             const speechBubble = document.getElementById('antSpeech');
             const antText = document.getElementById('antText');
             
-            console.log('Ameise gefunden:', floatingAnt); // Debug
-            
             floatingAnt.addEventListener('click', function(e) {
-                console.log('Ameise geklickt!'); // Debug
                 e.stopPropagation();
-                
-                // Wähle einen neuen Spruch (nicht den gleichen wie vorher)
                 let randomIndex;
                 do {
                     randomIndex = Math.floor(Math.random() * antQuotes.length);
                 } while (randomIndex === lastQuoteIndex && antQuotes.length > 1);
-                
                 lastQuoteIndex = randomIndex;
                 antText.textContent = antQuotes[randomIndex];
-                
-                // Zeige Sprechblase
                 speechBubble.classList.add('show');
-                
-                // Verstecke nach 6 Sekunden
-                setTimeout(() => {
-                    speechBubble.classList.remove('show');
-                }, 6000);
+                setTimeout(() => speechBubble.classList.remove('show'), 6000);
             });
         });
     </script>
