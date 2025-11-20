@@ -661,13 +661,7 @@
                     <!-- Wird dynamisch gefüllt -->
                 </div>
                 
-                <!-- Übungs-Bereich -->
-                <div class="answer-box">
-                    <h3 class="answer-title">✍️ Deine Antwort:</h3>
-                    <textarea id="antwortText" class="answer-textarea" placeholder="Schreibe hier deine Antwort..."></textarea>
-                </div>
-                
-                <!-- Reflexion mit Emojis -->
+                <!-- NUR Reflexion mit Emojis - kein Textfeld -->
                 <div class="emoji-box">
                     <h3 class="emoji-title">💭 Wie war's für dich?</h3>
                     <p class="emoji-subtitle">Wähle ein oder mehrere Emojis als Reflexion:</p>
@@ -689,7 +683,7 @@
                 <!-- Aktionen -->
                 <div class="modal-actions">
                     <button id="speichernBtn" class="btn-save">
-                        💾 Speichern & als geübt markieren
+                        ✅ Als geübt markieren
                     </button>
                     <button id="abbrechenBtn" class="btn-cancel">
                         Abbrechen
@@ -980,10 +974,19 @@
             document.getElementById('modalContent').innerHTML = `
                 <div class="exercise-box">
                     <p class="exercise-thema">${komp.thema}</p>
-                    <h3 class="exercise-title">📝 Übung:</h3>
+                    <h3 class="exercise-title">🎯 Umsetzungsbeispiel:</h3>
                     <p class="exercise-description">${komp.uebung}</p>
                     
-                    <div class="tags-grid">
+                    <div style="background: white; border-radius: 12px; padding: 1rem; margin-top: 1rem; border: 2px solid rgba(139, 69, 19, 0.2);">
+                        <p style="font-size: 0.875rem; color: #6B7280; margin-bottom: 0.5rem;">
+                            <strong style="color: #8B4513;">💡 Hinweis:</strong> Diese Kompetenz übst du durch konkrete Aktivitäten im Unterricht oder in deinem Alltag.
+                        </p>
+                        <p style="font-size: 0.875rem; color: #6B7280;">
+                            Nach dem Üben kannst du hier festhalten, wie es war!
+                        </p>
+                    </div>
+                    
+                    <div class="tags-grid" style="margin-top: 1rem;">
                         <div>
                             <p class="tag-group-title">🎯 Aspekte:</p>
                             <div class="tags">
@@ -1000,7 +1003,6 @@
                 </div>
             `;
             
-            document.getElementById('antwortText').value = '';
             selectedEmojis = [];
             updateSelectedEmojis();
             
@@ -1031,13 +1033,6 @@
         }
         
         async function saveToPortfolio() {
-            const antwort = document.getElementById('antwortText').value.trim();
-            
-            if (!antwort) {
-                alert('Bitte schreibe zuerst eine Antwort!');
-                return;
-            }
-            
             if (selectedEmojis.length === 0) {
                 alert('Bitte wähle mindestens ein Emoji als Reflexion!');
                 return;
@@ -1050,31 +1045,16 @@
                 if (userDoc.exists()) {
                     const data = userDoc.data();
                     const schluessel = data.kompetenzen?.schluessel || {};
-                    const portfolio = data.portfolio || [];
                     
-                    // Markiere Kompetenz als geübt
-                    schluessel[currentKompetenz] = true;
-                    
-                    // Erstelle Portfolio-Eintrag
-                    const komp = kompetenzen.find(k => k.id === currentKompetenz);
-                    const portfolioEntry = {
-                        id: 'kompetenz_' + Date.now(),
-                        type: 'kompetenz',
-                        kategorie: 'schluessel',
-                        kompetenzId: currentKompetenz,
-                        title: komp.title,
-                        thema: komp.thema,
-                        antwort: antwort,
+                    // Markiere Kompetenz als geübt mit Reflexion
+                    schluessel[currentKompetenz] = {
+                        completed: true,
                         reflexion: selectedEmojis.join(''),
-                        createdAt: new Date().toISOString(),
-                        shareable: false
+                        timestamp: new Date().toISOString()
                     };
                     
-                    portfolio.push(portfolioEntry);
-                    
                     await updateDoc(userRef, {
-                        'kompetenzen.schluessel': schluessel,
-                        'portfolio': portfolio
+                        'kompetenzen.schluessel': schluessel
                     });
                     
                     // Update UI
@@ -1083,7 +1063,7 @@
                     
                     closeModal();
                     
-                    alert('✅ Gespeichert!\n\n• Kompetenz als geübt markiert\n• Portfolio-Eintrag erstellt mit Reflexion ' + selectedEmojis.join(''));
+                    alert('✅ Gespeichert!\n\nKompetenz als geübt markiert mit Reflexion: ' + selectedEmojis.join(' '));
                 }
             } catch (error) {
                 console.error('Fehler beim Speichern:', error);
