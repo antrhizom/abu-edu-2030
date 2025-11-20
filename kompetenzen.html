@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kompetenzen - SLP ABU 2030</title>
+    <title>Kompetenzen verstehen - ABU EBA 2030</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -27,248 +27,587 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
         
-        @keyframes float-ant {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(15px, -20px) rotate(5deg); }
-            50% { transform: translate(5px, -35px) rotate(-5deg); }
-            75% { transform: translate(-5px, -20px) rotate(3deg); }
+        /* Ameise */
+        @keyframes ant-float {
+            0%, 100% { 
+                transform: translate(0, 0) rotate(-15deg);
+            }
+            25% { 
+                transform: translate(30px, -40px) rotate(-10deg);
+            }
+            50% { 
+                transform: translate(15px, -70px) rotate(-20deg);
+            }
+            75% { 
+                transform: translate(-15px, -40px) rotate(-12deg);
+            }
         }
         
         .floating-ant {
-            position: absolute;
-            font-size: 1.5rem;
-            opacity: 0.15;
-            pointer-events: none;
-            animation: float-ant 10s ease-in-out infinite;
-        }
-        
-        .kompetenz-card {
-            transition: all 0.3s ease;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
             cursor: pointer;
+            z-index: 1000;
+            animation: ant-float 8s ease-in-out infinite;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+            width: 60px;
+            height: 60px;
         }
         
-        .kompetenz-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 24px rgba(139, 69, 19, 0.2);
+        .floating-ant svg {
+            pointer-events: none;
+            width: 100%;
+            height: 100%;
         }
         
-        .kompetenz-card.active {
-            box-shadow: 0 0 0 3px #FF6B35;
+        .floating-ant:hover {
+            transform: scale(1.2) rotate(5deg) !important;
+            animation-play-state: paused;
+        }
+        
+        .ant-speech-bubble {
+            position: fixed;
+            bottom: 120px;
+            right: 40px;
+            background: white;
+            padding: 16px 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            max-width: 300px;
+            z-index: 999;
+            border: 3px solid #8B4513;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        
+        .ant-speech-bubble.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .ant-speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            right: 30px;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 15px solid #8B4513;
+        }
+        
+        @keyframes antenna-wiggle-left {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-8deg); }
+            75% { transform: rotate(5deg); }
+        }
+        
+        @keyframes antenna-wiggle-right {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(8deg); }
+            75% { transform: rotate(-5deg); }
+        }
+        
+        .floating-ant svg line:nth-of-type(1),
+        .floating-ant svg circle:nth-of-type(4) {
+            transform-origin: 26px 6px;
+            animation: antenna-wiggle-left 2s ease-in-out infinite;
+        }
+        
+        .floating-ant svg line:nth-of-type(2),
+        .floating-ant svg circle:nth-of-type(5) {
+            transform-origin: 34px 6px;
+            animation: antenna-wiggle-right 2s ease-in-out infinite 0.5s;
+        }
+        
+        .kompetenz-section {
+            transition: all 0.3s ease;
+        }
+        
+        .kompetenz-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
         }
     </style>
 </head>
-<body class="min-h-screen p-4 md:p-8 relative">
+<body class="min-h-screen p-4 md:p-8">
     
-    <div class="floating-ant" style="top: 15%; right: 8%;">🐜</div>
-    
-    <div class="max-w-6xl mx-auto relative z-10">
+    <div class="max-w-5xl mx-auto">
         
-        <!-- Header mit Zurück-Button -->
+        <!-- Header -->
         <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8 mb-8">
             <div class="flex items-center justify-between flex-wrap gap-4">
                 <div class="flex items-center gap-4">
                     <a href="dashboard.html" class="text-3xl hover:scale-110 transition-transform">←</a>
                     <div>
                         <h1 class="text-3xl md:text-4xl font-bold text-ant-primary mb-2">
-                            Kompetenzen üben
+                            Kompetenzen verstehen
                         </h1>
                         <p class="text-gray-600">
-                            Entdecke die Vernetzung und starte mit den Umsetzungsbeispielen
+                            Die 3 Lernbereiche erklärt mit Bezug, Output & Ressourcen
                         </p>
                     </div>
                 </div>
-                <div class="text-6xl">🎯</div>
+                <div class="text-6xl">
+                    🎓
+                </div>
             </div>
         </div>
         
-        <!-- Hauptbereich: Zirkuläre Visualisierung + Auswahl -->
-        <div class="grid lg:grid-cols-2 gap-8 mb-8">
+        <!-- Einleitung -->
+        <div class="bg-gradient-to-r from-ant-primary/10 to-ant-accent/10 rounded-3xl p-8 mb-8 border-2 border-ant-primary/20">
+            <h2 class="text-2xl font-bold text-ant-primary mb-4">🔄 Kompetenzorientierter Unterricht</h2>
+            <p class="text-gray-700 leading-relaxed mb-4">
+                Im ABU EBA 2030 lernst du nicht nur Theorie, sondern <strong class="text-ant-accent">handelst kompetent</strong> 
+                in realen Situationen. Jede Kompetenz wird anhand von:
+            </p>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="bg-white rounded-xl p-4">
+                    <div class="text-2xl mb-2">🎯</div>
+                    <h3 class="font-bold text-ant-primary mb-1">Bezug</h3>
+                    <p class="text-sm text-gray-600">Warum ist das wichtig für dich?</p>
+                </div>
+                <div class="bg-white rounded-xl p-4">
+                    <div class="text-2xl mb-2">📦</div>
+                    <h3 class="font-bold text-ant-secondary mb-1">Output</h3>
+                    <p class="text-sm text-gray-600">Was kannst du danach?</p>
+                </div>
+                <div class="bg-white rounded-xl p-4">
+                    <div class="text-2xl mb-2">🛠️</div>
+                    <h3 class="font-bold text-ant-accent mb-1">Ressource</h3>
+                    <p class="text-sm text-gray-600">Was brauchst du dafür?</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Lernbereich 1: Schlüsselkompetenzen -->
+        <div class="kompetenz-section bg-white rounded-3xl shadow-xl p-8 mb-8">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="text-5xl">🔑</span>
+                <div>
+                    <h2 class="text-3xl font-bold text-ant-primary">Schlüsselkompetenzen</h2>
+                    <p class="text-gray-600">12 Kompetenzen für lebenslanges Lernen</p>
+                </div>
+            </div>
             
-            <!-- Linke Spalte: Große zirkuläre Visualisierung -->
-            <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8">
-                <h2 class="text-2xl font-bold text-ant-primary mb-6 flex items-center gap-3">
-                    <span>🔄</span>
-                    <span>Zirkuläre Kompetenzstruktur</span>
-                </h2>
-                
-                <p class="text-gray-700 mb-6">
-                    Alle Kompetenzen sind miteinander vernetzt. Klicke auf einen Bereich, um mehr zu erfahren.
+            <!-- Bezug -->
+            <div class="mb-6">
+                <h3 class="text-xl font-bold text-ant-primary mb-3 flex items-center gap-2">
+                    <span>🎯</span>
+                    <span>Bezug: Warum sind Schlüsselkompetenzen wichtig?</span>
+                </h3>
+                <div class="bg-ant-bg rounded-xl p-6">
+                    <p class="text-gray-700 mb-4">
+                        Schlüsselkompetenzen sind <strong>übertragbare Fähigkeiten</strong>, die dir in allen Lebensbereichen helfen:
+                    </p>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-ant-accent">→</span>
+                            <span><strong>Im Beruf:</strong> Selbstständig arbeiten, im Team kooperieren, Probleme lösen</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-ant-accent">→</span>
+                            <span><strong>Im Privatleben:</strong> Ziele setzen, Verantwortung übernehmen, flexibel reagieren</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-ant-accent">→</span>
+                            <span><strong>Beim Lernen:</strong> Kritisch denken, kreativ sein, Lernstrategien entwickeln</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Output -->
+            <div class="mb-6">
+                <h3 class="text-xl font-bold text-ant-secondary mb-3 flex items-center gap-2">
+                    <span>📦</span>
+                    <span>Output: Was kannst du danach?</span>
+                </h3>
+                <div class="bg-ant-secondary/10 rounded-xl p-6">
+                    <p class="text-gray-700 mb-4">
+                        Nach dem Üben von Schlüsselkompetenzen kannst du:
+                    </p>
+                    <div class="grid md:grid-cols-2 gap-3">
+                        <div class="bg-white rounded-lg p-3 text-sm">✅ Aufgaben selbstständig planen und ausführen</div>
+                        <div class="bg-white rounded-lg p-3 text-sm">✅ In Teams effektiv zusammenarbeiten</div>
+                        <div class="bg-white rounded-lg p-3 text-sm">✅ Informationen kritisch hinterfragen</div>
+                        <div class="bg-white rounded-lg p-3 text-sm">✅ Kreative Lösungen für Probleme finden</div>
+                        <div class="bg-white rounded-lg p-3 text-sm">✅ Deine eigene Lernstrategie entwickeln</div>
+                        <div class="bg-white rounded-lg p-3 text-sm">✅ Flexibel auf Veränderungen reagieren</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Ressourcen -->
+            <div class="mb-6">
+                <h3 class="text-xl font-bold text-ant-accent mb-3 flex items-center gap-2">
+                    <span>🛠️</span>
+                    <span>Ressourcen: Was brauchst du?</span>
+                </h3>
+                <div class="bg-ant-accent/10 rounded-xl p-6">
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">📚 Wissen</h4>
+                            <p class="text-sm text-gray-600">Grundlagen zu Teamarbeit, Problemlösung, Kommunikation</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">🔧 Werkzeuge</h4>
+                            <p class="text-sm text-gray-600">Planungstools, Reflexionsmethoden, Lernstrategien</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">🎯 Übung</h4>
+                            <p class="text-sm text-gray-600">Konkrete Aufgaben, Feedback, Zeit zum Ausprobieren</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Konkretes Beispiel -->
+            <div class="bg-gradient-to-br from-ant-success/20 to-ant-network/20 rounded-2xl p-6 mb-6 border-2 border-ant-success/30">
+                <h3 class="text-xl font-bold text-ant-primary mb-4 flex items-center gap-2">
+                    <span>💡</span>
+                    <span>Konkretes handlungsorientiertes Beispiel</span>
+                </h3>
+                <div class="bg-white rounded-xl p-6">
+                    <h4 class="font-bold text-ant-primary mb-3">📋 Aufgabe: "Rückfrage zum ÜK-Aufgebot formulieren"</h4>
+                    
+                    <div class="mb-4">
+                        <p class="text-sm font-semibold text-gray-700 mb-2">🎯 Situation:</p>
+                        <p class="text-sm text-gray-600">Du erhältst ein ÜK-Aufgebot per Post. Einige Informationen sind unklar (z.B. Treffpunkt, Mitbringsel).</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <p class="text-sm font-semibold text-gray-700 mb-2">🔑 Welche Schlüsselkompetenzen übst du?</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-ant-primary/10 rounded-full text-xs font-semibold">3.2.2 Ziele setzen</span>
+                            <span class="px-3 py-1 bg-ant-primary/10 rounded-full text-xs font-semibold">3.2.6 Kommunizieren</span>
+                            <span class="px-3 py-1 bg-ant-primary/10 rounded-full text-xs font-semibold">3.2.1 Selbstständig arbeiten</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <p class="text-sm font-semibold text-gray-700 mb-2">📦 Was machst du konkret?</p>
+                        <ol class="text-sm text-gray-600 space-y-1 ml-4">
+                            <li>1. Dokument lesen und zentrale Infos markieren</li>
+                            <li>2. Fehlende Informationen identifizieren</li>
+                            <li>3. Höfliche E-Mail mit Rückfragen formulieren</li>
+                            <li>4. E-Mail Korrektur lesen und versenden</li>
+                            <li>5. Antwort abwarten und reagieren</li>
+                        </ol>
+                    </div>
+                    
+                    <div>
+                        <p class="text-sm font-semibold text-gray-700 mb-2">✅ Output:</p>
+                        <p class="text-sm text-gray-600">Eine professionelle, höfliche E-Mail mit konkreten Fragen.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CTA Button -->
+            <a href="schluessel.html" class="block bg-ant-primary hover:bg-ant-primary/90 text-white text-center font-bold py-4 px-6 rounded-2xl transition-all">
+                🔑 Zu den 12 Schlüsselkompetenzen →
+            </a>
+        </div>
+        
+        <!-- Lernbereich 2: Gesellschaftliche Aspekte -->
+        <div class="kompetenz-section bg-white rounded-3xl shadow-xl p-8 mb-8">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="text-5xl">🎯</span>
+                <div>
+                    <h2 class="text-3xl font-bold text-ant-secondary">Gesellschaftliche Aspekte</h2>
+                    <p class="text-gray-600">8 Perspektiven auf Themen</p>
+                </div>
+            </div>
+            
+            <!-- Bezug -->
+            <div class="mb-6">
+                <h3 class="text-xl font-bold text-ant-primary mb-3 flex items-center gap-2">
+                    <span>🎯</span>
+                    <span>Bezug: Warum verschiedene Perspektiven?</span>
+                </h3>
+                <div class="bg-ant-bg rounded-xl p-6">
+                    <p class="text-gray-700 mb-4">
+                        Gesellschaftliche Aspekte sind <strong>verschiedene Brillen</strong>, durch die du Themen betrachtest:
+                    </p>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-ant-secondary">→</span>
+                            <span>Jedes Thema (z.B. "Konsum") hat <strong>mehrere Dimensionen</strong>: ethisch, wirtschaftlich, rechtlich...</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-ant-secondary">→</span>
+                            <span>Du lernst, Themen <strong>aus verschiedenen Blickwinkeln</strong> zu verstehen</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-ant-secondary">→</span>
+                            <span>Das hilft dir, <strong>komplexe Zusammenhänge</strong> zu erkennen</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Output -->
+            <div class="mb-6">
+                <h3 class="text-xl font-bold text-ant-secondary mb-3 flex items-center gap-2">
+                    <span>📦</span>
+                    <span>Output: Was kannst du danach?</span>
+                </h3>
+                <div class="bg-ant-secondary/10 rounded-xl p-6">
+                    <p class="text-gray-700 mb-4">
+                        Nach dem Arbeiten mit gesellschaftlichen Aspekten kannst du:
+                    </p>
+                    <div class="grid md:grid-cols-2 gap-3">
+                        <div class="bg-white rounded-lg p-3 text-sm">✅ Ethische Fragen diskutieren und begründen</div>
+                        <div class="bg-white rounded-lg p-3 text-sm">✅ Wirtschaftliche Zusammenhänge verstehen</div>
+                        <div class="bg-white rounded-lg p-3 text-sm">✅ Rechtliche Grundlagen anwenden</div>
+                        <div class="bg-white rounded-lg p-3 text-sm">✅ Politische Prozesse nachvollziehen</div>
+                        <div class="bg-white rounded-lg p-3 text-sm">✅ Kulturelle Vielfalt wertschätzen</div>
+                        <div class="bg-white rounded-lg p-3 text-sm">✅ Technologische Entwicklungen einordnen</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Ressourcen -->
+            <div class="mb-6">
+                <h3 class="text-xl font-bold text-ant-accent mb-3 flex items-center gap-2">
+                    <span>🛠️</span>
+                    <span>Ressourcen: Was brauchst du?</span>
+                </h3>
+                <div class="bg-ant-accent/10 rounded-xl p-6">
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">📚 Grundwissen</h4>
+                            <p class="text-sm text-gray-600">Zu Ethik, Recht, Wirtschaft, Politik, Kultur, Technologie, Identität, Ökologie</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">🔍 Quellen</h4>
+                            <p class="text-sm text-gray-600">Zeitungsartikel, Gesetze, Studien, Statistiken</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">💭 Reflexion</h4>
+                            <p class="text-sm text-gray-600">Zeit zum Nachdenken, Diskutieren, Perspektivenwechsel</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Konkretes Beispiel -->
+            <div class="bg-gradient-to-br from-ant-success/20 to-ant-network/20 rounded-2xl p-6 mb-6 border-2 border-ant-success/30">
+                <h3 class="text-xl font-bold text-ant-secondary mb-4 flex items-center gap-2">
+                    <span>💡</span>
+                    <span>Konkretes handlungsorientiertes Beispiel</span>
+                </h3>
+                <div class="bg-white rounded-xl p-6">
+                    <h4 class="font-bold text-ant-secondary mb-3">📋 Aufgabe: "Hausordnung analysieren"</h4>
+                    
+                    <div class="mb-4">
+                        <p class="text-sm font-semibold text-gray-700 mb-2">🎯 Situation:</p>
+                        <p class="text-sm text-gray-600">Du erhältst die Hausordnung deines Lehrbetriebs. Analysiere sie aus verschiedenen Perspektiven.</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <p class="text-sm font-semibold text-gray-700 mb-2">🎯 Welche Aspekte betrachtest du?</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-ant-secondary/10 rounded-full text-xs font-semibold">⚖️ Recht: Was ist gesetzlich vorgeschrieben?</span>
+                            <span class="px-3 py-1 bg-ant-secondary/10 rounded-full text-xs font-semibold">⚖️ Ethik: Was ist fair?</span>
+                            <span class="px-3 py-1 bg-ant-secondary/10 rounded-full text-xs font-semibold">👤 Identität: Wie beeinflusst das meine Rolle?</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <p class="text-sm font-semibold text-gray-700 mb-2">📦 Was machst du konkret?</p>
+                        <ol class="text-sm text-gray-600 space-y-1 ml-4">
+                            <li>1. Hausordnung lesen und Regeln identifizieren</li>
+                            <li>2. Aus <strong>rechtlicher</strong> Sicht: Welche Regeln sind gesetzlich?</li>
+                            <li>3. Aus <strong>ethischer</strong> Sicht: Welche Regeln sind moralisch begründet?</li>
+                            <li>4. Aus <strong>Identitäts</strong>-Sicht: Wie prägen diese Regeln meine Rolle als Lernende/r?</li>
+                            <li>5. Reflexion schreiben: Welche Perspektive finde ich am wichtigsten?</li>
+                        </ol>
+                    </div>
+                    
+                    <div>
+                        <p class="text-sm font-semibold text-gray-700 mb-2">✅ Output:</p>
+                        <p class="text-sm text-gray-600">Eine Analyse der Hausordnung aus mindestens 2 gesellschaftlichen Aspekten.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CTA Button -->
+            <a href="aspekte.html" class="block bg-ant-secondary hover:bg-ant-secondary/90 text-white text-center font-bold py-4 px-6 rounded-2xl transition-all">
+                🎯 Zu den 8 gesellschaftlichen Aspekten →
+            </a>
+        </div>
+        
+        <!-- Lernbereich 3: Sprachmodi -->
+        <div class="kompetenz-section bg-white rounded-3xl shadow-xl p-8 mb-8">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="text-5xl">💬</span>
+                <div>
+                    <h2 class="text-3xl font-bold text-ant-accent">Sprachmodi (inkl. digital)</h2>
+                    <p class="text-gray-600">9 Arten zu kommunizieren</p>
+                </div>
+            </div>
+            
+            <!-- Bezug -->
+            <div class="mb-6">
+                <h3 class="text-xl font-bold text-ant-primary mb-3 flex items-center gap-2">
+                    <span>🎯</span>
+                    <span>Bezug: Warum verschiedene Sprachmodi?</span>
+                </h3>
+                <div class="bg-ant-bg rounded-xl p-6">
+                    <p class="text-gray-700 mb-4">
+                        Sprachmodi beschreiben <strong>WIE</strong> du kommunizierst:
+                    </p>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-ant-accent">→</span>
+                            <span>Kommunikation ist <strong>mehr als nur reden</strong>: lesen, schreiben, hören, sehen, digital interagieren</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-ant-accent">→</span>
+                            <span>Jeder Modus hat <strong>eigene Regeln</strong> (z.B. E-Mail ≠ Gespräch)</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-ant-accent">→</span>
+                            <span>Du lernst, in <strong>verschiedenen Situationen passend</strong> zu kommunizieren</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Output -->
+            <div class="mb-6">
+                <h3 class="text-xl font-bold text-ant-secondary mb-3 flex items-center gap-2">
+                    <span>📦</span>
+                    <span>Output: Was kannst du danach?</span>
+                </h3>
+                <div class="bg-ant-accent/10 rounded-xl p-6">
+                    <p class="text-gray-700 mb-4">
+                        Nach dem Üben der Sprachmodi kannst du:
+                    </p>
+                    <div class="grid md:grid-cols-2 gap-3">
+                        <div class="bg-white rounded-lg p-3 text-sm">✅ Texte verstehen und analysieren</div>
+                        <div class="bg-white rounded-lg p-3 text-sm">✅ Videos und Podcasts kritisch hören</div>
+                        <div class="bg-white rounded-lg p-3 text-sm">✅ Professionelle E-Mails schreiben</div>
+                        <div class="bg-white rounded-lg p-3 text-sm">✅ Präsentationen halten</div>
+                        <div class="bg-white rounded-lg p-3 text-sm">✅ In Diskussionen argumentieren</div>
+                        <div class="bg-white rounded-lg p-3 text-sm">✅ Digital kollaborieren (Teams, Slack, etc.)</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Ressourcen -->
+            <div class="mb-6">
+                <h3 class="text-xl font-bold text-ant-accent mb-3 flex items-center gap-2">
+                    <span>🛠️</span>
+                    <span>Ressourcen: Was brauchst du?</span>
+                </h3>
+                <div class="bg-ant-accent/10 rounded-xl p-6">
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">📚 Sprachkenntnisse</h4>
+                            <p class="text-sm text-gray-600">Grammatik, Rechtschreibung, Textstruktur, Stilmittel</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">💻 Digitale Tools</h4>
+                            <p class="text-sm text-gray-600">E-Mail, Textverarbeitung, Präsentationssoftware, Kollaborationstools</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">🎯 Übung</h4>
+                            <p class="text-sm text-gray-600">Texte schreiben, Präsentationen halten, Feedback erhalten</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Konkretes Beispiel -->
+            <div class="bg-gradient-to-br from-ant-success/20 to-ant-network/20 rounded-2xl p-6 mb-6 border-2 border-ant-success/30">
+                <h3 class="text-xl font-bold text-ant-accent mb-4 flex items-center gap-2">
+                    <span>💡</span>
+                    <span>Konkretes handlungsorientiertes Beispiel</span>
+                </h3>
+                <div class="bg-white rounded-xl p-6">
+                    <h4 class="font-bold text-ant-accent mb-3">📋 Aufgabe: "E-Mail mit Rückfragen schreiben"</h4>
+                    
+                    <div class="mb-4">
+                        <p class="text-sm font-semibold text-gray-700 mb-2">🎯 Situation:</p>
+                        <p class="text-sm text-gray-600">Du hast das ÜK-Aufgebot gelesen und musst jetzt eine E-Mail mit Rückfragen schreiben.</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <p class="text-sm font-semibold text-gray-700 mb-2">💬 Welche Sprachmodi übst du?</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-ant-accent/10 rounded-full text-xs font-semibold">📖 4.2.1.3 Rezeption schriftlich (Dokument lesen)</span>
+                            <span class="px-3 py-1 bg-ant-accent/10 rounded-full text-xs font-semibold">✍️ 4.2.2.2 Produktion schriftlich (E-Mail schreiben)</span>
+                            <span class="px-3 py-1 bg-ant-accent/10 rounded-full text-xs font-semibold">✉️ 4.2.3.2 Interaktion schriftlich (E-Mail-Konversation)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <p class="text-sm font-semibold text-gray-700 mb-2">📦 Was machst du konkret?</p>
+                        <ol class="text-sm text-gray-600 space-y-1 ml-4">
+                            <li>1. <strong>Lesen:</strong> ÜK-Aufgebot genau lesen (Rezeption schriftlich)</li>
+                            <li>2. <strong>Markieren:</strong> Unklare Stellen markieren</li>
+                            <li>3. <strong>Formulieren:</strong> Höfliche Betreffzeile und Anrede schreiben (Produktion schriftlich)</li>
+                            <li>4. <strong>Fragen:</strong> Konkrete Rückfragen formulieren</li>
+                            <li>5. <strong>Kontrollieren:</strong> Rechtschreibung, Höflichkeit, Vollständigkeit prüfen</li>
+                            <li>6. <strong>Versenden:</strong> E-Mail abschicken (Interaktion schriftlich)</li>
+                        </ol>
+                    </div>
+                    
+                    <div>
+                        <p class="text-sm font-semibold text-gray-700 mb-2">✅ Output:</p>
+                        <p class="text-sm text-gray-600">Eine professionelle, höfliche E-Mail mit konkreten Fragen in korrektem Deutsch.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CTA Button -->
+            <a href="sprachmodi.html" class="block bg-ant-accent hover:bg-ant-accent/90 text-white text-center font-bold py-4 px-6 rounded-2xl transition-all">
+                💬 Zu den 9 Sprachmodi →
+            </a>
+        </div>
+        
+        <!-- Zusammenfassung -->
+        <div class="bg-gradient-to-br from-ant-primary to-ant-secondary rounded-3xl shadow-2xl p-8 text-white mb-8">
+            <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                <span>🔄</span>
+                <span>Alles zusammen = Kompetent handeln!</span>
+            </h2>
+            <p class="text-white/90 mb-6">
+                In echten Aufgaben nutzt du <strong>IMMER</strong> mehrere Kompetenzen gleichzeitig. 
+                Die "Rückfrage zum ÜK" trainiert:
+            </p>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="bg-white/20 rounded-xl p-4">
+                    <h3 class="font-bold mb-2">🔑 3 Schlüsselkompetenzen</h3>
+                    <p class="text-sm text-white/90">Ziele setzen, Kommunizieren, Selbstständig arbeiten</p>
+                </div>
+                <div class="bg-white/20 rounded-xl p-4">
+                    <h3 class="font-bold mb-2">🎯 2 Gesellschaftliche Aspekte</h3>
+                    <p class="text-sm text-white/90">Recht (Arbeitsrecht), Identität (berufliche Rolle)</p>
+                </div>
+                <div class="bg-white/20 rounded-xl p-4">
+                    <h3 class="font-bold mb-2">💬 3 Sprachmodi</h3>
+                    <p class="text-sm text-white/90">Lesen, Schreiben, schriftlich interagieren</p>
+                </div>
+            </div>
+            <div class="mt-6 text-center">
+                <p class="text-lg font-semibold">
+                    👉 Das ist <strong>zirkuläres, vernetztes Lernen</strong>!
                 </p>
-                
-                <!-- Moderne zirkuläre Visualisierung -->
-                <div class="flex justify-center items-center" style="height: 400px;">
-                    <div class="relative" style="width: 350px; height: 350px;">
-                        
-                        <!-- Zentrum - DU -->
-                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
-                            <div class="w-24 h-24 rounded-full bg-gradient-to-br from-ant-accent to-ant-success flex items-center justify-center shadow-2xl border-4 border-white">
-                                <div class="text-center">
-                                    <div class="text-3xl mb-1">🎯</div>
-                                    <div class="text-sm font-bold text-white">DU</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Verbindungslinien (Hintergrund) -->
-                        <svg class="absolute inset-0 z-0" width="350" height="350" viewBox="0 0 350 350">
-                            <!-- Linien von Zentrum zu den 3 Bereichen -->
-                            <line x1="175" y1="175" x2="175" y2="40" stroke="#8B4513" stroke-width="2" opacity="0.2" stroke-dasharray="5,5"/>
-                            <line x1="175" y1="175" x2="310" y2="270" stroke="#D2691E" stroke-width="2" opacity="0.2" stroke-dasharray="5,5"/>
-                            <line x1="175" y1="175" x2="40" y2="270" stroke="#FF6B35" stroke-width="2" opacity="0.2" stroke-dasharray="5,5"/>
-                            
-                            <!-- Zirkuläre Verbindungen zwischen Bereichen -->
-                            <path d="M 175 60 Q 260 120 290 250" fill="none" stroke="#8B4513" stroke-width="1.5" opacity="0.15"/>
-                            <path d="M 290 270 Q 175 320 60 270" fill="none" stroke="#D2691E" stroke-width="1.5" opacity="0.15"/>
-                            <path d="M 60 250 Q 80 120 175 60" fill="none" stroke="#FF6B35" stroke-width="1.5" opacity="0.15"/>
-                        </svg>
-                        
-                        <!-- 1. Schlüsselkompetenzen (oben) -->
-                        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 z-10 kompetenz-circle-modern cursor-pointer" id="schluessel-circle-modern">
-                            <div class="w-20 h-20 rounded-full bg-ant-primary hover:bg-ant-primary/90 transition-all flex items-center justify-center shadow-xl border-3 border-white hover:scale-110 hover:shadow-2xl">
-                                <div class="text-center">
-                                    <div class="text-2xl">🔑</div>
-                                </div>
-                            </div>
-                            <div class="text-center mt-2">
-                                <p class="text-xs font-bold text-ant-primary leading-tight">Schlüssel-<br>kompetenzen</p>
-                            </div>
-                        </div>
-                        
-                        <!-- 2. Gesellschaftliche Aspekte (rechts unten) -->
-                        <div class="absolute bottom-4 right-0 z-10 kompetenz-circle-modern cursor-pointer" id="aspekte-circle-modern">
-                            <div class="w-20 h-20 rounded-full bg-ant-secondary hover:bg-ant-secondary/90 transition-all flex items-center justify-center shadow-xl border-3 border-white hover:scale-110 hover:shadow-2xl">
-                                <div class="text-center">
-                                    <div class="text-2xl">🎯</div>
-                                </div>
-                            </div>
-                            <div class="text-center mt-2">
-                                <p class="text-xs font-bold text-ant-secondary leading-tight">Gesellschaft-<br>liche Aspekte</p>
-                            </div>
-                        </div>
-                        
-                        <!-- 3. Sprachmodi (links unten) -->
-                        <div class="absolute bottom-4 left-0 z-10 kompetenz-circle-modern cursor-pointer" id="sprach-circle-modern">
-                            <div class="w-20 h-20 rounded-full bg-ant-accent hover:bg-ant-accent/90 transition-all flex items-center justify-center shadow-xl border-3 border-white hover:scale-110 hover:shadow-2xl">
-                                <div class="text-center">
-                                    <div class="text-2xl">💬</div>
-                                </div>
-                            </div>
-                            <div class="text-center mt-2">
-                                <p class="text-xs font-bold text-ant-accent leading-tight">Sprachmodi<br>(inkl. digital)</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Verbindungs-Pulse (animiert) -->
-                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0">
-                            <div class="w-32 h-32 rounded-full border-2 border-ant-accent/20 animate-ping" style="animation-duration: 3s;"></div>
-                        </div>
-                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0">
-                            <div class="w-40 h-40 rounded-full border-2 border-ant-primary/10 animate-ping" style="animation-duration: 4s; animation-delay: 1s;"></div>
-                        </div>
-                        
-                    </div>
-                </div>
-                
-                <div class="mt-6 bg-ant-bg rounded-xl p-4 text-center">
-                    <p class="text-sm text-gray-700">
-                        <strong class="text-ant-accent">💡 Tipp:</strong> 
-                        Je mehr du übst, desto mehr Verbindungen entdeckst du!
-                    </p>
-                </div>
             </div>
-            
-            <!-- Rechte Spalte: Kompetenzbereich-Auswahl -->
-            <div class="space-y-6">
-                
-                <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8">
-                    <h2 class="text-2xl font-bold text-ant-primary mb-6">
-                        Wähle einen Bereich
-                    </h2>
-                    
-                    <!-- Karte 1: Schlüsselkompetenzen -->
-                    <div class="kompetenz-card mb-4 p-6 border-3 border-ant-primary/20 rounded-2xl bg-gradient-to-br from-ant-primary/10 to-ant-primary/5" 
-                         data-kompetenz="schluessel">
-                        <div class="flex items-start gap-4">
-                            <span class="text-5xl">🔑</span>
-                            <div class="flex-1">
-                                <h3 class="text-xl font-bold text-ant-primary mb-2">
-                                    Schlüsselkompetenzen
-                                </h3>
-                                <p class="text-sm text-gray-600 mb-3">
-                                    Grundfähigkeiten wie Selbstständigkeit, Teamwork, Planung, kritisches Denken
-                                </p>
-                                <div class="flex items-center gap-2 text-xs text-ant-primary">
-                                    <span class="font-bold">12 Kompetenzen</span>
-                                    <span>•</span>
-                                    <span id="schluesselCount">0 geübt</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Karte 2: Gesellschaftliche Aspekte -->
-                    <div class="kompetenz-card mb-4 p-6 border-3 border-ant-secondary/20 rounded-2xl bg-gradient-to-br from-ant-secondary/10 to-ant-secondary/5" 
-                         data-kompetenz="aspekte">
-                        <div class="flex items-start gap-4">
-                            <span class="text-5xl">🎯</span>
-                            <div class="flex-1">
-                                <h3 class="text-xl font-bold text-ant-secondary mb-2">
-                                    Gesellschaftliche Aspekte
-                                </h3>
-                                <p class="text-sm text-gray-600 mb-3">
-                                    Ethik, Politik, Kultur, Wirtschaft, Recht, Technologie, Identität, Ökologie
-                                </p>
-                                <div class="flex items-center gap-2 text-xs text-ant-secondary">
-                                    <span class="font-bold">8 Aspekte</span>
-                                    <span>•</span>
-                                    <span id="aspekteCount">0 geübt</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Karte 3: Sprachmodi -->
-                    <div class="kompetenz-card p-6 border-3 border-ant-accent/20 rounded-2xl bg-gradient-to-br from-ant-accent/10 to-ant-accent/5" 
-                         data-kompetenz="sprach">
-                        <div class="flex items-start gap-4">
-                            <span class="text-5xl">💬</span>
-                            <div class="flex-1">
-                                <h3 class="text-xl font-bold text-ant-accent mb-2">
-                                    Sprachmodi
-                                </h3>
-                                <p class="text-sm text-gray-600 mb-3">
-                                    Lesen, Schreiben, Sprechen, Zuhören – analog und digital 💻
-                                </p>
-                                <div class="flex items-center gap-2 text-xs text-ant-accent">
-                                    <span class="font-bold">8 Modi</span>
-                                    <span>•</span>
-                                    <span id="sprachCount">0 geübt</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Info-Box -->
-                <div class="bg-gradient-to-r from-ant-accent/20 to-ant-success/20 rounded-2xl p-6 border-2 border-ant-accent/30">
-                    <p class="text-center text-gray-700">
-                        <strong class="text-ant-accent">🌟</strong> 
-                        Klicke auf einen Bereich, um Umsetzungsbeispiele zu sehen!
-                    </p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Detail-Bereich: Wird angezeigt wenn Kompetenz ausgewählt -->
-        <div id="detailBereich" class="hidden">
-            <!-- Inhalt wird dynamisch geladen -->
         </div>
         
         <!-- Footer -->
-        <div class="mt-8 text-center">
+        <div class="text-center">
             <div class="bg-white/50 backdrop-blur rounded-full px-6 py-3 inline-block">
                 <div class="flex items-center gap-2 text-sm text-gray-600">
-                    <span class="text-lg">🐜✏️👓</span>
+                    <span class="text-lg">🔄✏️💡</span>
                     <span>|</span>
                     <span id="currentYear"></span>
                 </div>
@@ -276,301 +615,77 @@
         </div>
     </div>
     
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-        import { getFirestore, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
-        
-        const firebaseConfig = {
-            apiKey: "AIzaSyDycvEwK6KJZyFEtsGIaHJBhIFTp5L4cdA",
-            authDomain: "abueba2030.firebaseapp.com",
-            projectId: "abueba2030",
-            storageBucket: "abueba2030.firebasestorage.app",
-            messagingSenderId: "592718816412",
-            appId: "1:592718816412:web:366e44efabba256d48b959"
-        };
-        
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        
-        let userId = null;
-        
-        window.addEventListener('load', async function() {
+    <!-- Schwebende Ameise -->
+    <div class="floating-ant" id="floatingAnt" title="Klick mich!">
+        <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="30" cy="35" rx="12" ry="15" fill="#8B4513"/>
+            <ellipse cx="30" cy="20" rx="10" ry="12" fill="#A0522D"/>
+            <circle cx="30" cy="10" r="8" fill="#8B4513"/>
+            <line x1="26" y1="6" x2="22" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <line x1="34" y1="6" x2="38" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="22" cy="0" r="2" fill="#654321"/>
+            <circle cx="38" cy="0" r="2" fill="#654321"/>
+            <line x1="20" y1="25" x2="10" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <line x1="20" y1="30" x2="8" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <line x1="22" y1="38" x2="12" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <line x1="40" y1="25" x2="50" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <line x1="40" y1="30" x2="52" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <line x1="38" y1="38" x2="48" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <ellipse cx="26" cy="10" rx="3" ry="4" fill="white"/>
+            <ellipse cx="34" cy="10" rx="3" ry="4" fill="white"/>
+            <circle cx="26" cy="11" r="2" fill="#333"/>
+            <circle cx="34" cy="11" r="2" fill="#333"/>
+            <circle cx="26.5" cy="10" r="0.8" fill="white"/>
+            <circle cx="34.5" cy="10" r="0.8" fill="white"/>
+            <path d="M 24 14 Q 30 16 36 14" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        </svg>
+    </div>
+    <div class="ant-speech-bubble" id="antSpeech">
+        <p class="text-sm font-semibold text-ant-primary" id="antText"></p>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('currentYear').textContent = new Date().getFullYear();
             
-            userId = localStorage.getItem('ant_edu_user_id');
-            if (!userId) {
-                window.location.href = 'index.html';
-                return;
-            }
+            // Ameisen-Sprüche
+            const antQuotes = [
+                "🐜 Bezug, Output, Ressource - das sind die 3 Säulen kompetenzorientierten Unterrichts!",
+                "🐜 Handlungsorientiert bedeutet: Du machst nicht nur Theorie, sondern HANDELST!",
+                "🐜 Die Beispiele zeigen: Kompetenzen werden immer vernetzt geübt!",
+                "🐜 3 Schlüsselkompetenzen + 2 Aspekte + 1 Sprachmodus = Das ist die EBA-Regel!",
+                "🐜 Klick auf die Buttons unten, um zu den Übungs-Seiten zu kommen!",
+                "🐜 Output = Was du kannst. Nicht was du weißt!",
+                "🐜 Ressourcen = Was du brauchst. Nicht nur Materialien, auch Zeit und Feedback!",
+                "🐜 Zirkulär = Kompetenzen kommen immer wieder in neuen Situationen!",
+                "🐜 Die 'Rückfrage zum ÜK' ist ein perfektes Beispiel für Vernetzung!",
+                "🐜 Verstehen → Üben → Anwenden. So baust du Kompetenzen auf!"
+            ];
             
-            // Lade Fortschrittsdaten
-            loadProgress();
+            let lastQuoteIndex = -1;
             
-            // Event Listeners für Kompetenzkarten
-            document.querySelectorAll('.kompetenz-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const kompetenz = this.getAttribute('data-kompetenz');
-                    showDetails(kompetenz);
-                    
-                    // Markiere als aktiv
-                    document.querySelectorAll('.kompetenz-card').forEach(c => c.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
+            const floatingAnt = document.getElementById('floatingAnt');
+            const speechBubble = document.getElementById('antSpeech');
+            const antText = document.getElementById('antText');
             
-            // Event Listeners für SVG Kreise
-            document.querySelectorAll('.kompetenz-circle-modern').forEach(circle => {
-                circle.addEventListener('click', function() {
-                    const kompetenz = this.id.replace('-circle-modern', '');
-                    showDetails(kompetenz);
-                    
-                    // Markiere entsprechende Karte
-                    document.querySelectorAll('.kompetenz-card').forEach(c => c.classList.remove('active'));
-                    document.querySelector(`[data-kompetenz="${kompetenz}"]`).classList.add('active');
-                });
+            floatingAnt.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                let randomIndex;
+                do {
+                    randomIndex = Math.floor(Math.random() * antQuotes.length);
+                } while (randomIndex === lastQuoteIndex && antQuotes.length > 1);
+                
+                lastQuoteIndex = randomIndex;
+                antText.textContent = antQuotes[randomIndex];
+                
+                speechBubble.classList.add('show');
+                
+                setTimeout(() => {
+                    speechBubble.classList.remove('show');
+                }, 6000);
             });
         });
-        
-        async function loadProgress() {
-            try {
-                const userDoc = await getDoc(doc(db, 'users', userId));
-                if (userDoc.exists()) {
-                    const data = userDoc.data();
-                    const kompetenzen = data.kompetenzen || {};
-                    
-                    const schluesselCount = Object.keys(kompetenzen.schluessel || {}).length;
-                    const aspekteCount = Object.keys(kompetenzen.aspekte || {}).length;
-                    const sprachCount = Object.keys(kompetenzen.sprachmodi || {}).length;
-                    
-                    document.getElementById('schluesselCount').textContent = `${schluesselCount} geübt`;
-                    document.getElementById('aspekteCount').textContent = `${aspekteCount} geübt`;
-                    document.getElementById('sprachCount').textContent = `${sprachCount} geübt`;
-                }
-            } catch (error) {
-                console.log('Offline oder Fehler:', error);
-            }
-        }
-        
-        function showDetails(kompetenzTyp) {
-            const detailBereich = document.getElementById('detailBereich');
-            detailBereich.classList.remove('hidden');
-            
-            // Scroll zu Details
-            detailBereich.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            
-            // Lade passende Inhalte
-            if (kompetenzTyp === 'schluessel') {
-                showSchluesselkompetenzen();
-            } else if (kompetenzTyp === 'aspekte') {
-                showAspekte();
-            } else if (kompetenzTyp === 'sprach') {
-                showSprachmodi();
-            }
-        }
-        
-        function showSchluesselkompetenzen() {
-            document.getElementById('detailBereich').innerHTML = `
-                <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8 mb-8">
-                    <h2 class="text-3xl font-bold text-ant-primary mb-6 flex items-center gap-3">
-                        <span>🔑</span>
-                        <span>Schlüsselkompetenzen</span>
-                    </h2>
-                    
-                    <div class="mb-8 bg-ant-bg rounded-2xl p-6">
-                        <p class="text-gray-700 leading-relaxed">
-                            Schlüsselkompetenzen sind grundlegende Fähigkeiten, die dir in allen Lebensbereichen helfen. 
-                            Sie sind <strong class="text-ant-accent">übertragbar</strong> – was du in einem Thema lernst, 
-                            hilft dir auch bei anderen Themen!
-                        </p>
-                    </div>
-                    
-                    <h3 class="text-xl font-bold text-ant-primary mb-4">
-                        🎯 Umsetzungsbeispiel aus Thema 1: "Ins Berufsleben einsteigen"
-                    </h3>
-                    
-                    <div class="bg-gradient-to-br from-ant-primary/5 to-ant-accent/5 rounded-2xl p-6 mb-6 border-2 border-ant-primary/20">
-                        <div class="flex items-start gap-4 mb-4">
-                            <span class="text-4xl">📝</span>
-                            <div>
-                                <h4 class="text-lg font-bold text-ant-primary mb-2">
-                                    "Rückfrage formulieren"
-                                </h4>
-                                <p class="text-gray-700 mb-4">
-                                    Du erhältst ein ÜK-Aufgebot oder eine Hausordnung. Einige Infos sind unklar. 
-                                    Lerne, zentrale Informationen herauszufiltern und höfliche Rückfragen zu formulieren.
-                                </p>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-white rounded-xl p-4 mb-4">
-                            <p class="text-sm font-semibold text-gray-700 mb-2">🔗 Trainiert diese Schlüsselkompetenzen:</p>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="px-3 py-1 bg-ant-primary/10 rounded-full text-xs font-semibold text-ant-primary">3.2.2 Ziele setzen</span>
-                                <span class="px-3 py-1 bg-ant-primary/10 rounded-full text-xs font-semibold text-ant-primary">3.2.8 Lebensphasen planen</span>
-                                <span class="px-3 py-1 bg-ant-primary/10 rounded-full text-xs font-semibold text-ant-primary">3.2.10 Anpassungsfähig sein</span>
-                            </div>
-                        </div>
-                        
-                        <button onclick="startChallenge('rueckfrage')" class="w-full bg-ant-accent hover:bg-ant-secondary text-white font-bold py-4 px-6 rounded-full transition-all transform hover:scale-105">
-                            Challenge starten 🚀
-                        </button>
-                    </div>
-                    
-                    <div class="bg-gradient-to-r from-ant-success/10 to-ant-network/10 rounded-xl p-4">
-                        <p class="text-center text-sm text-gray-700">
-                            <strong class="text-ant-success">🌟 Vernetzung:</strong> 
-                            Diese Schlüsselkompetenzen helfen dir auch bei anderen Themen wie "Verträge verstehen" oder "Arbeit und Steuerpflicht"!
-                        </p>
-                    </div>
-                </div>
-            `;
-        }
-        
-        function showAspekte() {
-            document.getElementById('detailBereich').innerHTML = `
-                <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8 mb-8">
-                    <h2 class="text-3xl font-bold text-ant-secondary mb-6 flex items-center gap-3">
-                        <span>🎯</span>
-                        <span>Gesellschaftliche Aspekte</span>
-                    </h2>
-                    
-                    <div class="mb-8 bg-ant-bg rounded-2xl p-6">
-                        <p class="text-gray-700 leading-relaxed">
-                            Gesellschaftliche Aspekte sind die verschiedenen Perspektiven, durch die du Themen betrachten kannst. 
-                            Jedes Thema berührt mehrere Aspekte – das macht die <strong class="text-ant-accent">Vernetzung</strong> sichtbar!
-                        </p>
-                    </div>
-                    
-                    <h3 class="text-xl font-bold text-ant-secondary mb-4">
-                        Die 8 gesellschaftlichen Aspekte:
-                    </h3>
-                    
-                    <div class="grid md:grid-cols-2 gap-4 mb-6">
-                        <div class="p-4 bg-gradient-to-br from-ant-secondary/10 to-ant-secondary/5 rounded-xl border-2 border-ant-secondary/20">
-                            <h4 class="font-bold text-ant-secondary mb-2">⚖️ Ethik</h4>
-                            <p class="text-sm text-gray-600">Moralische Fragen, Werte, richtiges Handeln</p>
-                        </div>
-                        <div class="p-4 bg-gradient-to-br from-ant-secondary/10 to-ant-secondary/5 rounded-xl border-2 border-ant-secondary/20">
-                            <h4 class="font-bold text-ant-secondary mb-2">🏛️ Politik</h4>
-                            <p class="text-sm text-gray-600">Mitbestimmung, Demokratie, politische Prozesse</p>
-                        </div>
-                        <div class="p-4 bg-gradient-to-br from-ant-secondary/10 to-ant-secondary/5 rounded-xl border-2 border-ant-secondary/20">
-                            <h4 class="font-bold text-ant-secondary mb-2">🎭 Kultur</h4>
-                            <p class="text-sm text-gray-600">Kunst, Vielfalt, kulturelle Ausdrucksformen</p>
-                        </div>
-                        <div class="p-4 bg-gradient-to-br from-ant-secondary/10 to-ant-secondary/5 rounded-xl border-2 border-ant-secondary/20">
-                            <h4 class="font-bold text-ant-secondary mb-2">💰 Wirtschaft</h4>
-                            <p class="text-sm text-gray-600">Konsum, Arbeit, wirtschaftliche Zusammenhänge</p>
-                        </div>
-                        <div class="p-4 bg-gradient-to-br from-ant-secondary/10 to-ant-secondary/5 rounded-xl border-2 border-ant-secondary/20">
-                            <h4 class="font-bold text-ant-secondary mb-2">⚖️ Recht</h4>
-                            <p class="text-sm text-gray-600">Gesetze, Verträge, rechtliche Grundlagen</p>
-                        </div>
-                        <div class="p-4 bg-gradient-to-br from-ant-secondary/10 to-ant-secondary/5 rounded-xl border-2 border-ant-secondary/20">
-                            <h4 class="font-bold text-ant-secondary mb-2">💻 Technologie</h4>
-                            <p class="text-sm text-gray-600">Digitalisierung, technologische Entwicklung</p>
-                        </div>
-                        <div class="p-4 bg-gradient-to-br from-ant-secondary/10 to-ant-secondary/5 rounded-xl border-2 border-ant-secondary/20">
-                            <h4 class="font-bold text-ant-secondary mb-2">👤 Identität</h4>
-                            <p class="text-sm text-gray-600">Wer bin ich? Sozialisation, Persönlichkeit</p>
-                        </div>
-                        <div class="p-4 bg-gradient-to-br from-ant-secondary/10 to-ant-secondary/5 rounded-xl border-2 border-ant-secondary/20">
-                            <h4 class="font-bold text-ant-secondary mb-2">🌍 Ökologie</h4>
-                            <p class="text-sm text-gray-600">Umwelt, Nachhaltigkeit, Ressourcen</p>
-                        </div>
-                    </div>
-                    
-                    <h3 class="text-xl font-bold text-ant-secondary mb-4">
-                        🎯 Beispiel aus Thema 1:
-                    </h3>
-                    
-                    <div class="bg-gradient-to-br from-ant-secondary/5 to-ant-accent/5 rounded-2xl p-6 border-2 border-ant-secondary/20">
-                        <p class="text-gray-700 mb-4">
-                            Beim Umsetzungsbeispiel "Rückfrage formulieren" arbeitest du mit diesen Aspekten:
-                        </p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="px-4 py-2 bg-ant-secondary/20 rounded-full text-sm font-semibold text-ant-secondary">⚖️ Recht (5.2.6.3, 5.2.6.4)</span>
-                            <span class="px-4 py-2 bg-ant-secondary/20 rounded-full text-sm font-semibold text-ant-secondary">👤 Identität (5.2.2.3)</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-        
-        function showSprachmodi() {
-            document.getElementById('detailBereich').innerHTML = `
-                <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8 mb-8">
-                    <h2 class="text-3xl font-bold text-ant-accent mb-6 flex items-center gap-3">
-                        <span>💬</span>
-                        <span>Sprachmodi (inkl. digital)</span>
-                    </h2>
-                    
-                    <div class="mb-8 bg-ant-bg rounded-2xl p-6">
-                        <p class="text-gray-700 leading-relaxed">
-                            Sprachmodi beschreiben, <strong class="text-ant-accent">wie</strong> du kommunizierst. 
-                            Ob du liest, schreibst, sprichst oder zuhörst – und ob analog oder digital 💻 – 
-                            all das sind verschiedene Modi!
-                        </p>
-                    </div>
-                    
-                    <h3 class="text-xl font-bold text-ant-accent mb-4">
-                        Die 8 Sprachmodi:
-                    </h3>
-                    
-                    <div class="space-y-3 mb-6">
-                        <div class="p-4 bg-gradient-to-r from-ant-accent/10 to-ant-accent/5 rounded-xl border-2 border-ant-accent/20">
-                            <h4 class="font-bold text-ant-accent mb-2">👂 4.2.1.1 Rezeption mündlich</h4>
-                            <p class="text-sm text-gray-600">Hörmaterialien verstehen (Podcasts, Vorträge, Gespräche)</p>
-                        </div>
-                        <div class="p-4 bg-gradient-to-r from-ant-accent/10 to-ant-accent/5 rounded-xl border-2 border-ant-accent/20">
-                            <h4 class="font-bold text-ant-accent mb-2">📺 4.2.1.2 Rezeption audiovisuell</h4>
-                            <p class="text-sm text-gray-600">Videos, Filme, visuelle Medien verstehen</p>
-                        </div>
-                        <div class="p-4 bg-gradient-to-r from-ant-accent/10 to-ant-accent/5 rounded-xl border-2 border-ant-accent/20">
-                            <h4 class="font-bold text-ant-accent mb-2">📖 4.2.1.3 Rezeption schriftlich und bildlich</h4>
-                            <p class="text-sm text-gray-600">Texte und Bilder lesen und verstehen</p>
-                        </div>
-                        <div class="p-4 bg-gradient-to-r from-ant-accent/10 to-ant-accent/5 rounded-xl border-2 border-ant-accent/20">
-                            <h4 class="font-bold text-ant-accent mb-2">🗣️ 4.2.2.1 Produktion mündlich</h4>
-                            <p class="text-sm text-gray-600">Sprechen, Präsentieren, mündlich kommunizieren</p>
-                        </div>
-                        <div class="p-4 bg-gradient-to-r from-ant-accent/10 to-ant-accent/5 rounded-xl border-2 border-ant-accent/20">
-                            <h4 class="font-bold text-ant-accent mb-2">✍️ 4.2.2.2 Produktion schriftlich und bildlich</h4>
-                            <p class="text-sm text-gray-600">Texte schreiben, Grafiken erstellen</p>
-                        </div>
-                        <div class="p-4 bg-gradient-to-r from-ant-accent/10 to-ant-accent/5 rounded-xl border-2 border-ant-accent/20">
-                            <h4 class="font-bold text-ant-accent mb-2">🎬 4.2.2.3 Produktion multimedial</h4>
-                            <p class="text-sm text-gray-600">Videos, Podcasts, digitale Medien erstellen</p>
-                        </div>
-                        <div class="p-4 bg-gradient-to-r from-ant-accent/10 to-ant-accent/5 rounded-xl border-2 border-ant-accent/20">
-                            <h4 class="font-bold text-ant-accent mb-2">💬 4.2.3.1 Interaktion und Kollaboration mündlich</h4>
-                            <p class="text-sm text-gray-600">Gespräche führen, diskutieren, zusammenarbeiten</p>
-                        </div>
-                        <div class="p-4 bg-gradient-to-r from-ant-accent/10 to-ant-accent/5 rounded-xl border-2 border-ant-accent/20">
-                            <h4 class="font-bold text-ant-accent mb-2">💻 4.2.3.3 Interaktion und Kollaboration digital</h4>
-                            <p class="text-sm text-gray-600">Digital kommunizieren, online zusammenarbeiten, KI-Tools nutzen</p>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-gradient-to-br from-ant-accent/5 to-ant-success/5 rounded-2xl p-6 border-2 border-ant-accent/20">
-                        <p class="text-gray-700 mb-2">
-                            <strong class="text-ant-accent">💻 Digitale Kompetenzen</strong> sind integriert:
-                        </p>
-                        <p class="text-sm text-gray-600">
-                            • E-Mail schreiben (4.2.2.2 + digital)<br>
-                            • Schulmail einrichten (4.2.3.3)<br>
-                            • KI-Tools nutzen (4.2.3.3)<br>
-                            • Online recherchieren (4.2.1.3 + digital)
-                        </p>
-                    </div>
-                </div>
-            `;
-        }
-        
-        window.startChallenge = function(challengeId) {
-            alert('🚀 Challenge-System kommt bald! Hier würde die Challenge "' + challengeId + '" starten.');
-            // TODO: Challenge-Seite oder Modal öffnen
-        };
     </script>
 </body>
 </html>
