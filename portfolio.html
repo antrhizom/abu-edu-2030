@@ -304,15 +304,15 @@
             background: rgba(139, 69, 19, 0.2);
         }
         
-        .btn-share {
-            background: rgba(33, 150, 243, 0.1);
-            color: #2196F3;
+        .btn-download {
+            background: rgba(76, 175, 80, 0.1);
+            color: #4CAF50;
             flex: 0;
             white-space: nowrap;
         }
         
-        .btn-share:hover {
-            background: rgba(33, 150, 243, 0.2);
+        .btn-download:hover {
+            background: rgba(76, 175, 80, 0.2);
         }
         
         /* Empty State */
@@ -492,6 +492,7 @@
         .modal-actions {
             display: flex;
             gap: 0.75rem;
+            flex-wrap: wrap;
         }
         
         .btn-primary {
@@ -504,6 +505,7 @@
             border: none;
             cursor: pointer;
             transition: all 0.2s;
+            min-width: 150px;
         }
         
         .btn-primary:hover {
@@ -511,6 +513,22 @@
         }
         
         .btn-secondary {
+            background: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 150px;
+        }
+        
+        .btn-secondary:hover {
+            background: #45a049;
+        }
+        
+        .btn-tertiary {
             background: #2196F3;
             color: white;
             font-weight: bold;
@@ -519,10 +537,11 @@
             border: none;
             cursor: pointer;
             transition: all 0.2s;
+            min-width: 150px;
         }
         
-        .btn-secondary:hover {
-            background: rgba(33, 150, 243, 0.8);
+        .btn-tertiary:hover {
+            background: #1976D2;
         }
         
         /* Footer */
@@ -592,9 +611,9 @@
                 <div class="stat-label">Reflexionen</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon">🔗</div>
-                <div class="stat-value" id="shareable">0</div>
-                <div class="stat-label">Teilbar</div>
+                <div class="stat-icon">⬇️</div>
+                <div class="stat-value" id="downloads">0</div>
+                <div class="stat-label">Downloads</div>
             </div>
         </div>
         
@@ -679,6 +698,7 @@
         let userId = null;
         let allPortfolioItems = [];
         let currentFilter = 'alle';
+        let downloadCount = 0;
         
         window.addEventListener('load', async function() {
             document.getElementById('currentYear').textContent = new Date().getFullYear();
@@ -703,11 +723,9 @@
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.filter-btn').forEach(b => {
-                        b.classList.remove('active', 'bg-ant-primary', 'text-white');
-                        b.classList.add('bg-gray-200', 'text-gray-700');
+                        b.classList.remove('active');
                     });
-                    this.classList.add('active', 'bg-ant-primary', 'text-white');
-                    this.classList.remove('bg-gray-200', 'text-gray-700');
+                    this.classList.add('active');
                     
                     currentFilter = this.getAttribute('data-filter');
                     renderPortfolio();
@@ -726,6 +744,7 @@
                 if (userDoc.exists()) {
                     const data = userDoc.data();
                     allPortfolioItems = data.portfolio || [];
+                    downloadCount = data.downloadCount || 0;
                     
                     updateStats();
                     renderPortfolio();
@@ -740,12 +759,11 @@
             const total = allPortfolioItems.length;
             const schluessel = allPortfolioItems.filter(i => i.type === 'schluesselkompetenz').length;
             const withReflexion = allPortfolioItems.filter(i => i.reflexion && i.reflexion.length > 0).length;
-            const shareable = allPortfolioItems.filter(i => i.shareable === true).length;
             
             document.getElementById('totalWorks').textContent = total;
             document.getElementById('schluesselWorks').textContent = schluessel;
             document.getElementById('reflexionen').textContent = withReflexion;
-            document.getElementById('shareable').textContent = shareable;
+            document.getElementById('downloads').textContent = downloadCount;
         }
         
         function renderPortfolio() {
@@ -786,11 +804,11 @@
             const icon = item.type === 'schluesselkompetenz' ? '🔑' : '📝';
             const uebungstyp = item.performanz?.uebungstyp || 'Übung';
             
-            const shareButton = item.shareable ? `
-                <button onclick="event.stopPropagation(); shareItem('${item.id}')" class="btn btn-share">
-                    🔗 Teilen
+            const downloadButton = `
+                <button onclick="event.stopPropagation(); downloadItem('${item.id}')" class="btn btn-download">
+                    ⬇️ Download
                 </button>
-            ` : '';
+            `;
             
             const reflexionHTML = item.reflexion ? `
                 <div class="card-reflexion">
@@ -825,7 +843,7 @@
                             <button onclick="event.stopPropagation(); showDetail('${item.id}')" class="btn btn-details">
                                 Details
                             </button>
-                            ${shareButton}
+                            ${downloadButton}
                         </div>
                     </div>
                 </div>
@@ -860,12 +878,6 @@
                 `;
             }
             
-            const shareButton = item.shareable ? `
-                <button onclick="shareItem('${item.id}')" class="btn-secondary">
-                    🔗 Teilen
-                </button>
-            ` : '';
-            
             modalContent.innerHTML = `
                 <div style="margin-bottom: 1rem;">
                     <div class="modal-icon">${item.type === 'schluesselkompetenz' ? '🔑' : '📝'}</div>
@@ -898,7 +910,12 @@
                     <button onclick="addReflexion('${item.id}')" class="btn-primary">
                         💭 Reflexion hinzufügen
                     </button>
-                    ${shareButton}
+                    <button onclick="downloadItemModal('${item.id}')" class="btn-secondary">
+                        ⬇️ Download
+                    </button>
+                    <button onclick="sendDocument('${item.id}')" class="btn-tertiary">
+                        📧 Versenden
+                    </button>
                 </div>
             `;
             
@@ -909,66 +926,66 @@
             let html = '';
             
             if (performanz.checklist) {
-                html += `<p class="text-sm text-gray-700">✅ ${performanz.checklist.completed} von ${performanz.checklist.total} Schritten erledigt</p>`;
+                html += `<p class="section-box-text">✅ ${performanz.checklist.completed} von ${performanz.checklist.total} Schritten erledigt</p>`;
             }
             
             if (performanz.kriterien) {
-                html += `<p class="text-sm text-gray-700">✅ ${performanz.kriterien.erfuellt} von ${performanz.kriterien.total} Kriterien erfüllt</p>`;
+                html += `<p class="section-box-text">✅ ${performanz.kriterien.erfuellt} von ${performanz.kriterien.total} Kriterien erfüllt</p>`;
                 if (performanz.kriterien.liste && performanz.kriterien.liste.length > 0) {
-                    html += `<p class="text-xs text-gray-600 mt-1">Kriterien: ${performanz.kriterien.liste.join(', ')}</p>`;
+                    html += `<p class="section-box-small">Kriterien: ${performanz.kriterien.liste.join(', ')}</p>`;
                 }
             }
             
             if (performanz.rollen) {
-                html += `<p class="text-sm text-gray-700">👥 Rollen verteilt:</p>`;
-                html += `<p class="text-xs text-gray-600 ml-4">• Person 1: ${getRoleName(performanz.rollen.person1)}</p>`;
-                html += `<p class="text-xs text-gray-600 ml-4">• Person 2: ${getRoleName(performanz.rollen.person2)}</p>`;
-                html += `<p class="text-xs text-gray-600 ml-4">• Person 3: ${getRoleName(performanz.rollen.person3)}</p>`;
+                html += `<p class="section-box-text">👥 Rollen verteilt:</p>`;
+                html += `<p class="section-box-small">• Person 1: ${getRoleName(performanz.rollen.person1)}</p>`;
+                html += `<p class="section-box-small">• Person 2: ${getRoleName(performanz.rollen.person2)}</p>`;
+                html += `<p class="section-box-small">• Person 3: ${getRoleName(performanz.rollen.person3)}</p>`;
             }
             
             if (performanz.pruefpunkte) {
-                html += `<p class="text-sm text-gray-700">🔍 ${performanz.pruefpunkte.markiert} von ${performanz.pruefpunkte.total} Prüfpunkten markiert</p>`;
+                html += `<p class="section-box-text">🔍 ${performanz.pruefpunkte.markiert} von ${performanz.pruefpunkte.total} Prüfpunkten markiert</p>`;
             }
             
             if (performanz.reihenfolge) {
-                html += `<p class="text-sm text-gray-700">🔢 Reihenfolge: ${performanz.reihenfolge.join(' → ')}</p>`;
+                html += `<p class="section-box-text">🔢 Reihenfolge: ${performanz.reihenfolge.join(' → ')}</p>`;
             }
             
             if (performanz.elemente) {
-                html += `<p class="text-sm text-gray-700">📝 ${performanz.elemente.ausgewaehlt} von ${performanz.elemente.total} Elementen ausgewählt</p>`;
+                html += `<p class="section-box-text">📝 ${performanz.elemente.ausgewaehlt} von ${performanz.elemente.total} Elementen ausgewählt</p>`;
             }
             
             if (performanz.wochenplan) {
-                html += `<p class="text-sm text-gray-700 mb-2">📅 Wochenplan erstellt:</p>`;
-                if (performanz.wochenplan.montag) html += `<p class="text-xs text-gray-600 ml-4">Mo: ${performanz.wochenplan.montag}</p>`;
-                if (performanz.wochenplan.dienstag) html += `<p class="text-xs text-gray-600 ml-4">Di: ${performanz.wochenplan.dienstag}</p>`;
-                if (performanz.wochenplan.mittwoch) html += `<p class="text-xs text-gray-600 ml-4">Mi: ${performanz.wochenplan.mittwoch}</p>`;
+                html += `<p class="section-box-text" style="margin-bottom: 0.5rem;">📅 Wochenplan erstellt:</p>`;
+                if (performanz.wochenplan.montag) html += `<p class="section-box-small">Mo: ${performanz.wochenplan.montag}</p>`;
+                if (performanz.wochenplan.dienstag) html += `<p class="section-box-small">Di: ${performanz.wochenplan.dienstag}</p>`;
+                if (performanz.wochenplan.mittwoch) html += `<p class="section-box-small">Mi: ${performanz.wochenplan.mittwoch}</p>`;
             }
             
             if (performanz.strategien) {
-                html += `<p class="text-sm text-gray-700">📚 ${performanz.strategien.ausgewaehlt} von ${performanz.strategien.total} Lernstrategien gewählt</p>`;
+                html += `<p class="section-box-text">📚 ${performanz.strategien.ausgewaehlt} von ${performanz.strategien.total} Lernstrategien gewählt</p>`;
             }
             
             if (performanz.bewertungen) {
-                html += `<p class="text-sm text-gray-700">⭐ Bewertungen: ${performanz.bewertungen.map(b => '⭐'.repeat(b)).join(' | ')}</p>`;
+                html += `<p class="section-box-text">⭐ Bewertungen: ${performanz.bewertungen.map(b => '⭐'.repeat(b)).join(' | ')}</p>`;
             }
             
             if (performanz.quiz) {
                 const correct = performanz.quiz.antworten.filter(a => a === true).length;
-                html += `<p class="text-sm text-gray-700">❓ Quiz: ${correct} von ${performanz.quiz.total} beantwortet</p>`;
+                html += `<p class="section-box-text">❓ Quiz: ${correct} von ${performanz.quiz.total} beantwortet</p>`;
             }
             
             if (performanz.reflexion) {
-                html += `<p class="text-sm text-gray-700 mb-2">🪞 Reflexions-Bewertungen:</p>`;
+                html += `<p class="section-box-text" style="margin-bottom: 0.5rem;">🪞 Reflexions-Bewertungen:</p>`;
                 if (performanz.reflexion.bewertungen) {
-                    html += `<p class="text-xs text-gray-600 ml-4">${performanz.reflexion.bewertungen.map(b => '⭐'.repeat(b)).join(' | ')}</p>`;
+                    html += `<p class="section-box-small">${performanz.reflexion.bewertungen.map(b => '⭐'.repeat(b)).join(' | ')}</p>`;
                 }
                 if (performanz.reflexion.verbesserung) {
-                    html += `<p class="text-xs text-gray-600 ml-4">Verbesserung: ${getVerbesserungName(performanz.reflexion.verbesserung)}</p>`;
+                    html += `<p class="section-box-small">Verbesserung: ${getVerbesserungName(performanz.reflexion.verbesserung)}</p>`;
                 }
             }
             
-            return html || '<p class="text-sm text-gray-500 italic">Details nicht verfügbar</p>';
+            return html || '<p class="section-box-text" style="color: #9CA3AF; font-style: italic;">Details nicht verfügbar</p>';
         }
         
         function getRoleName(role) {
@@ -1021,24 +1038,176 @@
             }
         };
         
-        window.shareItem = function(itemId) {
+        window.downloadItem = async function(itemId) {
             const item = allPortfolioItems.find(i => i.id === itemId);
             if (!item) return;
             
-            const shareUrl = `${window.location.origin}/portfolio.html?shared=${itemId}`;
-            
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(shareUrl).then(() => {
-                    alert('🔗 Link kopiert!\n\nTeile diesen Link, um deine Arbeit zu zeigen:\n' + shareUrl);
+            // Download-Counter erhöhen
+            try {
+                const userRef = doc(db, 'users', userId);
+                await updateDoc(userRef, {
+                    downloadCount: (downloadCount || 0) + 1
                 });
+                downloadCount++;
+                document.getElementById('downloads').textContent = downloadCount;
+            } catch (error) {
+                console.log('Download-Counter-Update fehlgeschlagen:', error);
+            }
+            
+            // Erstelle Download-Datei
+            const content = generateDownloadContent(item);
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Portfolio_${item.kompetenzTitle || 'Arbeit'}_${new Date(item.createdAt).toLocaleDateString('de-CH')}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('✅ Dokument wurde heruntergeladen!');
+        };
+        
+        window.downloadItemModal = function(itemId) {
+            downloadItem(itemId);
+        };
+        
+        window.sendDocument = function(itemId) {
+            const item = allPortfolioItems.find(i => i.id === itemId);
+            if (!item) return;
+            
+            const content = generateDownloadContent(item);
+            const encodedContent = encodeURIComponent(content);
+            
+            const choice = confirm(
+                '📧 Wie möchtest du das Dokument versenden?\n\n' +
+                'OK = Per E-Mail\n' +
+                'Abbrechen = Per Teams/Chat kopieren'
+            );
+            
+            if (choice) {
+                // E-Mail
+                const subject = encodeURIComponent(`Portfolio: ${item.kompetenzTitle || 'Arbeit'}`);
+                const body = encodedContent;
+                window.location.href = `mailto:?subject=${subject}&body=${body}`;
             } else {
-                alert('🔗 Teilen-Link:\n\n' + shareUrl);
+                // Teams/Chat - Kopiere in Zwischenablage
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(content).then(() => {
+                        alert('✅ Dokument wurde in die Zwischenablage kopiert!\n\nDu kannst es jetzt in Teams, WhatsApp oder einem anderen Chat einfügen.');
+                    }).catch(() => {
+                        alert('⚠️ Automatisches Kopieren fehlgeschlagen.\n\nBitte lade das Dokument herunter und kopiere den Inhalt manuell.');
+                    });
+                } else {
+                    alert('⚠️ Automatisches Kopieren wird nicht unterstützt.\n\nBitte lade das Dokument herunter und kopiere den Inhalt manuell.');
+                }
             }
         };
+        
+        function generateDownloadContent(item) {
+            const displayName = localStorage.getItem('ant_edu_display_name') || 'Lernende/r';
+            const date = new Date(item.createdAt).toLocaleString('de-CH', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            let content = `
+═══════════════════════════════════════════════════════
+   PORTFOLIO-EINTRAG - SLP ABU 2030
+═══════════════════════════════════════════════════════
+
+Lernende/r: ${displayName}
+Erstellt: ${date}
+
+───────────────────────────────────────────────────────
+KOMPETENZ
+───────────────────────────────────────────────────────
+
+${item.kompetenzTitle || 'Kompetenz'}
+${item.thema ? `Thema: ${item.thema}` : ''}
+Typ: ${item.type === 'schluesselkompetenz' ? 'Schlüsselkompetenz' : 'Übung'}
+
+`;
+            
+            if (item.performanz) {
+                content += `
+───────────────────────────────────────────────────────
+DURCHGEFÜHRTE ÜBUNG
+───────────────────────────────────────────────────────
+
+Übungstyp: ${item.performanz.uebungstyp || 'Übung'}
+
+`;
+                
+                if (item.performanz.checklist) {
+                    content += `✅ ${item.performanz.checklist.completed} von ${item.performanz.checklist.total} Schritten erledigt\n`;
+                }
+                
+                if (item.performanz.kriterien) {
+                    content += `✅ ${item.performanz.kriterien.erfuellt} von ${item.performanz.kriterien.total} Kriterien erfüllt\n`;
+                    if (item.performanz.kriterien.liste) {
+                        content += `   Kriterien: ${item.performanz.kriterien.liste.join(', ')}\n`;
+                    }
+                }
+                
+                if (item.performanz.rollen) {
+                    content += `\n👥 Rollen:\n`;
+                    content += `   • Person 1: ${getRoleName(item.performanz.rollen.person1)}\n`;
+                    content += `   • Person 2: ${getRoleName(item.performanz.rollen.person2)}\n`;
+                    content += `   • Person 3: ${getRoleName(item.performanz.rollen.person3)}\n`;
+                }
+                
+                if (item.performanz.wochenplan) {
+                    content += `\n📅 Wochenplan:\n`;
+                    if (item.performanz.wochenplan.montag) content += `   Mo: ${item.performanz.wochenplan.montag}\n`;
+                    if (item.performanz.wochenplan.dienstag) content += `   Di: ${item.performanz.wochenplan.dienstag}\n`;
+                    if (item.performanz.wochenplan.mittwoch) content += `   Mi: ${item.performanz.wochenplan.mittwoch}\n`;
+                }
+            }
+            
+            content += `
+───────────────────────────────────────────────────────
+REFLEXION
+───────────────────────────────────────────────────────
+
+`;
+            
+            if (item.reflexion) {
+                content += `Emoji-Reflexion: ${item.reflexion}\n`;
+            }
+            
+            if (item.textReflexion) {
+                content += `\nZusätzliche Reflexion:\n"${item.textReflexion}"\n`;
+            }
+            
+            if (!item.reflexion && !item.textReflexion) {
+                content += `Keine Reflexion hinzugefügt\n`;
+            }
+            
+            content += `
+═══════════════════════════════════════════════════════
+   Erstellt mit ant edu 🐜✏️👓
+   SLP ABU 2030 - Digitale Lernplattform
+═══════════════════════════════════════════════════════
+`;
+            
+            return content;
+        }
         
         window.closeModal = function() {
             document.getElementById('detailModal').classList.remove('show');
         };
+        
+        // Close modal when clicking outside
+        document.getElementById('detailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>
