@@ -466,8 +466,8 @@
                 
                 <!-- Aktionen -->
                 <div class="flex gap-3">
-                    <button id="speichernBtn" class="flex-1 bg-ant-success hover:bg-ant-success/90 text-white font-bold py-4 px-6 rounded-xl transition-all">
-                        💾 Ins Portfolio speichern
+                    <button id="kompetenzAbschliessenBtn" class="flex-1 bg-ant-success hover:bg-ant-success/90 text-white font-bold py-4 px-6 rounded-xl transition-all">
+                        ✅ Als geübt markieren
                     </button>
                     <button id="abbrechenBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-4 px-6 rounded-xl transition-all">
                         Abbrechen
@@ -603,7 +603,7 @@
             // Modal Event Listeners
             document.getElementById('closeModal').addEventListener('click', closeModal);
             document.getElementById('abbrechenBtn').addEventListener('click', closeModal);
-            document.getElementById('speichernBtn').addEventListener('click', saveToPortfolio);
+            document.getElementById('kompetenzAbschliessenBtn').addEventListener('click', markAsCompleted);
             
             // Klick außerhalb Modal schließt es
             document.getElementById('uebungModal').addEventListener('click', function(e) {
@@ -667,7 +667,7 @@
             currentKompetenz = null;
         }
         
-        async function saveToPortfolio() {
+        async function markAsCompleted() {
             const antwort = document.getElementById('antwortText').value.trim();
             
             if (!antwort) {
@@ -690,15 +690,13 @@
                         'kompetenzen.schluessel': schluessel
                     });
                     
-                    // TODO: Ins Portfolio speichern (wird später implementiert)
-                    
                     // Update UI
                     updateCardStatus(currentKompetenz, true);
                     await loadProgress();
                     
                     closeModal();
                     
-                    alert('✅ Gespeichert! Die Kompetenz wurde als geübt markiert.');
+                    alert('✅ Gespeichert! Die Kompetenz wurde als geübt markiert.\n\n💡 Tipp: In Challenges kannst du deine Lösungen ins Portfolio speichern und teilen!');
                 } else {
                     alert('Fehler: User-Daten nicht gefunden.');
                 }
