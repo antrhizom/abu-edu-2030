@@ -856,15 +856,36 @@
         }
         
         function checkSaveButton() {
-            const hasChallenge = document.getElementById('challengeInput').value.trim().length > 20;
-            const hasSolution = document.getElementById('solutionText').value.trim().length > 20;
+            const challengeInput = document.getElementById('challengeInput');
+            const solutionText = document.getElementById('solutionText');
+            
+            if (!challengeInput || !solutionText) {
+                console.log('Felder nicht gefunden');
+                return;
+            }
+            
+            const hasChallenge = challengeInput.value.trim().length > 20;
+            const hasSolution = solutionText.value.trim().length > 20;
             const hasEmojis = selectedEmojis.length > 0;
             
+            console.log('Check:', { hasChallenge, hasSolution, hasEmojis, 
+                challengeLen: challengeInput.value.trim().length,
+                solutionLen: solutionText.value.trim().length,
+                emojis: selectedEmojis.length
+            });
+            
             const saveBtn = document.getElementById('saveBtn');
+            if (!saveBtn) {
+                console.log('Button nicht gefunden');
+                return;
+            }
+            
             const isComplete = hasChallenge && hasSolution && hasEmojis;
             
             saveBtn.disabled = !isComplete;
             saveBtn.style.opacity = isComplete ? '1' : '0.5';
+            
+            console.log('Button Status:', isComplete ? 'AKTIV' : 'INAKTIV');
         }
         
         window.openChallenge = function(challengeId) {
@@ -927,6 +948,9 @@ Schreibe direkt auf Deutsch, ohne Einleitung.`;
             document.getElementById('promptBox').textContent = prompt;
             document.getElementById('promptSection').classList.add('show');
             document.getElementById('promptSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            // Button-Status initial überprüfen
+            checkSaveButton();
         };
         
         window.downloadAsText = function() {
@@ -984,6 +1008,13 @@ ABU EBA 2030 - Kompetenzen lernen
             document.querySelectorAll('.emoji-option').forEach(e => e.classList.remove('selected'));
             updateSelectedEmojis();
             currentSelection = null;
+            
+            // Button zurücksetzen
+            const saveBtn = document.getElementById('saveBtn');
+            if (saveBtn) {
+                saveBtn.disabled = true;
+                saveBtn.style.opacity = '0.5';
+            }
             
             // Scroll zurück nach oben
             document.querySelector('.modal-content').scrollTop = 0;
