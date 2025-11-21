@@ -318,7 +318,7 @@
         
         .generate-btn {
             width: 100%;
-            background: #2196F3;
+            background: #FF6B35;
             color: white;
             font-weight: 600;
             padding: 1rem;
@@ -331,7 +331,7 @@
         }
         
         .generate-btn:hover {
-            background: #1976D2;
+            background: #D2691E;
             transform: translateY(-2px);
         }
         
@@ -352,6 +352,18 @@
         
         .generated-challenge.show {
             display: block;
+        }
+        
+        .prompt-box {
+            background: #FFF8F0;
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid #FF6B35;
+            font-family: monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            line-height: 1.6;
         }
         
         .emoji-selector {
@@ -489,6 +501,18 @@
             margin-top: 1.5rem;
             margin-bottom: 0.75rem;
         }
+        
+        .instruction-box {
+            background: rgba(33, 150, 243, 0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .instruction-box strong {
+            color: #2196F3;
+        }
     </style>
 </head>
 <body>
@@ -522,15 +546,15 @@
         
         <!-- Challenge Grid -->
         <div class="grid">
-            <!-- Challenge 1: Challenge-Generator -->
+            <!-- Challenge 1: Herausforderungsgenerator -->
             <div class="challenge-card" id="card-challenge1" onclick="openChallenge('challenge1')">
                 <div class="card-header">
                     <span class="card-icon">🎲</span>
                     <span class="status-badge" id="badge-challenge1">Offen</span>
                 </div>
-                <h3 class="card-title">Challenge-Generator</h3>
+                <h3 class="card-title">Herausforderungsgenerator</h3>
                 <p class="card-description">
-                    Wähle Kompetenzen aus verschiedenen Bereichen und lass dir eine personalisierte Challenge generieren!
+                    Stelle deine Kompetenzen zusammen und erstelle eine personalisierte Herausforderung mit einer externen KI!
                 </p>
                 <button class="card-button">
                     Challenge starten 🚀
@@ -569,36 +593,36 @@
         </div>
     </div>
     
-    <!-- Modal Challenge 1 -->
+    <!-- Modal Challenge 1: Herausforderungsgenerator -->
     <div id="modal-challenge1" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">🎲 Challenge-Generator</h2>
+                <h2 class="modal-title">🎲 Herausforderungsgenerator</h2>
                 <span class="close" onclick="closeModal('challenge1')">&times;</span>
             </div>
             
             <div class="challenge-section">
-                <p><strong>🎯 Wähle deine Kompetenzen:</strong></p>
-                <p>Kombiniere Schlüsselkompetenzen, Sprachmodi und gesellschaftliche Aspekte zu einer Challenge!</p>
+                <p><strong>🎯 Stelle deine Kompetenzen zusammen:</strong></p>
+                <p>Kombiniere Kompetenzen aus verschiedenen Bereichen. Du kannst die Herausforderung anschliessend mit einer externen KI erstellen lassen (z.B. ChatGPT, Claude, Gemini).</p>
             </div>
             
-            <!-- Auswahlbereich -->
+            <!-- Schritt 1: Kompetenzauswahl -->
             <div class="activity-area">
                 <h3 style="margin-top: 0;">1️⃣ Wähle eine Schlüsselkompetenz</h3>
                 <select id="schluesselSelect" class="select-field">
                     <option value="">-- Wähle eine Kompetenz --</option>
-                    <option value="3.2.1">🔍 Zwischen relevanten und irrelevanten Quellen unterscheiden</option>
-                    <option value="3.2.2">🎯 Sich selbst Ziele setzen und adaptiv verhalten</option>
-                    <option value="3.2.3">💡 Innovative Wege der Problemlösung erkennen</option>
-                    <option value="3.2.4">👥 In unterschiedlichen Teams zielgerichtet arbeiten</option>
-                    <option value="3.2.5">🧭 Eigene Werthaltungen kritisch reflektieren</option>
-                    <option value="3.2.6">💬 Klar, überzeugend und adressatengerecht kommunizieren</option>
-                    <option value="3.2.7">📖 Komplexe Texte und Zusammenhänge verstehen</option>
-                    <option value="3.2.8">✍️ Gedanken strukturiert und verständlich ausdrücken</option>
-                    <option value="3.2.9">🎭 Sich in andere hineinversetzen und Perspektiven wechseln</option>
-                    <option value="3.2.10">🔧 Mit digitalen Werkzeugen kompetent umgehen</option>
-                    <option value="3.2.11">🌍 Verantwortungsvoll und nachhaltig handeln</option>
-                    <option value="3.2.12">🧘 Mit Stress und Unsicherheit konstruktiv umgehen</option>
+                    <option value="3.2.1">3.2.1 Zwischen relevanten und irrelevanten Quellen und Inhalten unterscheiden</option>
+                    <option value="3.2.2">3.2.2 Sich selbst Ziele setzen, die Zielsetzung überprüfen und sich adaptiv verhalten</option>
+                    <option value="3.2.3">3.2.3 Antizipative, unternehmerische und innovative Wege der Problemlösung erkennen, entwickeln und umsetzen</option>
+                    <option value="3.2.4">3.2.4 In unterschiedlichen Teams zielgerichtet und effizient arbeiten</option>
+                    <option value="3.2.5">3.2.5 Die eigenen Werthaltungen und Überzeugungen erkennen, verstehen, kritisch reflektieren und weiterentwickeln</option>
+                    <option value="3.2.6">3.2.6 Ihre eigenen Standpunkte begründen und andere davon überzeugen</option>
+                    <option value="3.2.7">3.2.7 Unterschiedliche Standpunkte nachvollziehen und das gegenseitige Verständnis fördern</option>
+                    <option value="3.2.8">3.2.8 Ihre Lebensphasen planen und mit Unwägbarkeiten umgehen</option>
+                    <option value="3.2.9">3.2.9 Vernetzt und systemisch denken, um sozial, ökologisch und ökonomisch nachhaltig zu handeln</option>
+                    <option value="3.2.10">3.2.10 Sich in einem sich ständig verändernden Umfeld zurechtfinden und sich an dieses anpassen</option>
+                    <option value="3.2.11">3.2.11 Mit Mehrdeutigkeiten umgehen</option>
+                    <option value="3.2.12">3.2.12 An gesellschaftlichen Prozessen partizipieren und Handlungsspielräume nutzen</option>
                 </select>
             </div>
             
@@ -606,14 +630,15 @@
                 <h3 style="margin-top: 0;">2️⃣ Wähle einen Sprachmodus</h3>
                 <select id="sprachSelect" class="select-field">
                     <option value="">-- Wähle einen Modus --</option>
-                    <option value="4.2.1.1">👂 Rezeption mündlich (Hörmaterialien verstehen)</option>
-                    <option value="4.2.1.2">📺 Rezeption audiovisuell (Videos, Filme verstehen)</option>
-                    <option value="4.2.1.3">📖 Rezeption schriftlich und bildlich (Texte lesen)</option>
-                    <option value="4.2.2.1">🗣️ Produktion mündlich (Sprechen, präsentieren)</option>
-                    <option value="4.2.2.2">📹 Produktion audiovisuell (Videos erstellen)</option>
-                    <option value="4.2.2.3">✍️ Produktion schriftlich und bildlich (Texte schreiben)</option>
-                    <option value="4.2.3.1">💬 Interaktion mündlich (Gespräche führen)</option>
-                    <option value="4.2.3.2">💻 Interaktion digital (Online-Kommunikation)</option>
+                    <option value="4.2.1.1">4.2.1.1 Rezeption mündlich (Hörmaterialien aus verschiedenen Medien verstehen)</option>
+                    <option value="4.2.1.2">4.2.1.2 Rezeption audiovisuell (Audiovisuelle Materialien verstehen)</option>
+                    <option value="4.2.1.3">4.2.1.3 Rezeption schriftlich und bildlich (Analoge und digitale Texte verstehen)</option>
+                    <option value="4.2.2.1">4.2.2.1 Produktion mündlich (Faktenorientiert kommunizieren: beschreiben, erklären, berichten)</option>
+                    <option value="4.2.2.2">4.2.2.2 Produktion schriftlich und bildlich (Faktenorientiert schreiben: erklären, zusammenfassen, protokollieren)</option>
+                    <option value="4.2.2.3">4.2.2.3 Produktion multimedial (Multimedia-Präsentation erstellen)</option>
+                    <option value="4.2.3.1">4.2.3.1 Interaktion und Kollaboration mündlich (An Gesprächen aktiv teilnehmen, diskutieren, verhandeln)</option>
+                    <option value="4.2.3.2">4.2.3.2 Interaktion und Kollaboration schriftlich (Formal und informal korrespondieren)</option>
+                    <option value="4.2.3.3">4.2.3.3 Interaktion und Kollaboration digital (An Online-Kommunikation teilnehmen)</option>
                 </select>
             </div>
             
@@ -621,14 +646,14 @@
                 <h3 style="margin-top: 0;">3️⃣ Wähle einen gesellschaftlichen Aspekt</h3>
                 <select id="aspektSelect" class="select-field">
                     <option value="">-- Wähle einen Aspekt --</option>
-                    <option value="5.2.1">⚖️ Ethik (Moralische Reflexion)</option>
-                    <option value="5.2.2">🪪 Identität und Sozialisation</option>
-                    <option value="5.2.3">🎭 Kultur (Kulturelle Ausdrucksformen)</option>
-                    <option value="5.2.4">🌱 Ökologie (Nachhaltige Entwicklung)</option>
-                    <option value="5.2.5">🏛️ Politik (Demokratie und Partizipation)</option>
-                    <option value="5.2.6">⚖️ Recht (Rechtliche Grundlagen)</option>
-                    <option value="5.2.7">💻 Technologie (Digitaler Wandel)</option>
-                    <option value="5.2.8">💰 Wirtschaft (Ökonomisches Handeln)</option>
+                    <option value="5.2.1">5.2.1 Ethik (Systematische und kritische Reflexion der gelebten Moral)</option>
+                    <option value="5.2.2">5.2.2 Identität und Sozialisation (Persönlichkeit erkunden und entwickeln)</option>
+                    <option value="5.2.3">5.2.3 Kultur (Ausdrucksformen von Alltagskultur bis Kunst)</option>
+                    <option value="5.2.4">5.2.4 Ökologie (Nachhaltige Entwicklung und Umweltverantwortung)</option>
+                    <option value="5.2.5">5.2.5 Politik (Demokratische Prozesse und Partizipation)</option>
+                    <option value="5.2.6">5.2.6 Recht (Rechtliche Grundlagen und Gesetze)</option>
+                    <option value="5.2.7">5.2.7 Technologie (Digitaler Wandel und technische Entwicklungen)</option>
+                    <option value="5.2.8">5.2.8 Wirtschaft (Ökonomisches Handeln und Konsumentscheidungen)</option>
                 </select>
             </div>
             
@@ -636,33 +661,52 @@
                 <h3 style="margin-top: 0;">4️⃣ Wähle ein Thema</h3>
                 <select id="themaSelect" class="select-field">
                     <option value="">-- Wähle ein Thema --</option>
-                    <option value="Thema 1">💼 Ins Berufsleben einsteigen</option>
-                    <option value="Thema 2">🛒 Bewusst konsumieren</option>
-                    <option value="Thema 3">📱 Medien- und Digitalwelt</option>
-                    <option value="Thema 4">💰 Arbeit und Besteuerung</option>
-                    <option value="Thema 5">🏡 Wohnen und Zusammenleben</option>
-                    <option value="Thema 6">❤️ Beziehungen und Lebensentwürfe</option>
-                    <option value="Thema 7">🌍 Demokratie und Mitbestimmung</option>
-                    <option value="Thema 8">🔮 Zukunftsperspektiven</option>
+                    <option value="Thema 1">Thema 1: Ins Berufsleben einsteigen</option>
+                    <option value="Thema 2">Thema 2: Bewusst konsumieren und Zusammenleben verstehen</option>
+                    <option value="Thema 3">Thema 3: Risiko und Sicherheit</option>
+                    <option value="Thema 4">Thema 4: Medien und digitale Welt</option>
+                    <option value="Thema 5">Thema 5: Meinung bilden und akzeptieren und mitgestalten</option>
+                    <option value="Thema 6">Thema 6: Verträge verstehen – fair handeln</option>
+                    <option value="Thema 7">Thema 7: Arbeit und Steuerpflicht</option>
+                    <option value="Thema 8">Thema 8: Kunst und Kultur</option>
                 </select>
             </div>
             
-            <button id="generateBtn" class="generate-btn" onclick="generateChallenge()" disabled>
-                🎲 Challenge generieren
+            <button id="generateBtn" class="generate-btn" onclick="showPromptSection()" disabled>
+                📥 Zusammenstellung generieren
             </button>
             
-            <!-- Generierte Challenge -->
-            <div id="generatedChallenge" class="generated-challenge">
-                <h3 style="margin-top: 0;">🎯 Deine personalisierte Challenge:</h3>
-                <div id="challengeText" style="line-height: 1.6; margin: 1rem 0;"></div>
+            <!-- Schritt 2: Prompt-Bereich -->
+            <div id="promptSection" class="generated-challenge">
+                <h3 style="margin-top: 0;">📥 Deine Zusammenstellung</h3>
                 
                 <div class="kompetenzen-tags" id="selectedTags"></div>
                 
-                <h3>📝 Deine Lösung:</h3>
-                <textarea id="solutionText" class="input-field" placeholder="Beschreibe hier, wie du die Challenge lösen würdest..."></textarea>
+                <button class="btn btn-primary" onclick="downloadAsText()" style="margin: 1rem 0;">
+                    💾 Als Textdatei herunterladen
+                </button>
                 
-                <h3>💭 Reflexion mit Emojis:</h3>
-                <p>Wie hat dir diese Challenge gefallen?</p>
+                <h3 style="color: #2196F3;">🤖 Standardprompt für externe KI</h3>
+                <div class="instruction-box">
+                    <strong>Anleitung:</strong> Kopiere den untenstehenden Prompt und füge ihn in eine KI deiner Wahl ein (z.B. ChatGPT, Claude, Gemini). Die KI erstellt dann eine Herausforderung für dich.
+                </div>
+                
+                <div class="prompt-box" id="promptBox"></div>
+                
+                <button class="btn btn-primary" onclick="copyPrompt()" style="margin: 0.5rem 0;">
+                    📋 Prompt kopieren
+                </button>
+                
+                <!-- Schritt 3: Challenge-Eingabe -->
+                <h3 style="margin-top: 2rem;">✏️ Herausforderung einfügen</h3>
+                <p style="margin: 0.5rem 0;">Füge hier die von der KI generierte Herausforderung ein:</p>
+                <textarea id="challengeInput" class="input-field" placeholder="Füge hier die Herausforderung ein, die du mit einer externen KI erstellt hast..."></textarea>
+                
+                <h3>📝 Deine Lösung</h3>
+                <textarea id="solutionText" class="input-field" placeholder="Beschreibe hier, wie du die Herausforderung lösen würdest..."></textarea>
+                
+                <h3>💭 Reflexion mit Emojis</h3>
+                <p>Wie hat dir diese Herausforderung gefallen?</p>
                 <div class="emoji-selector">
                     <span class="emoji-option" data-emoji="😊">😊</span>
                     <span class="emoji-option" data-emoji="💪">💪</span>
@@ -678,9 +722,8 @@
                 </div>
                 
                 <div class="button-group">
-                    <button class="btn btn-secondary" onclick="resetGenerator()">Neue Challenge</button>
-                    <button class="btn btn-primary" onclick="markCompleted()" id="markBtn" disabled>Als geübt markieren ✓</button>
-                    <button class="btn btn-success" onclick="saveToPortfolio()" id="saveBtn" disabled>Ins Portfolio 📂</button>
+                    <button class="btn btn-secondary" onclick="resetGenerator()">Neue Herausforderung</button>
+                    <button class="btn btn-success" onclick="saveToPortfolio()" id="saveBtn" disabled>Ins Portfolio speichern 📂</button>
                 </div>
             </div>
         </div>
@@ -704,7 +747,7 @@
         
         let userId = null;
         let selectedEmojis = [];
-        let generatedChallengeData = null;
+        let currentSelection = null;
         
         window.addEventListener('load', async function() {
             userId = localStorage.getItem('ant_edu_user_id');
@@ -759,6 +802,9 @@
             selects.forEach(id => {
                 document.getElementById(id).addEventListener('change', checkGenerateButton);
             });
+            
+            document.getElementById('challengeInput').addEventListener('input', checkSaveButton);
+            document.getElementById('solutionText').addEventListener('input', checkSaveButton);
         }
         
         function checkGenerateButton() {
@@ -785,7 +831,7 @@
                     }
                     
                     updateSelectedEmojis();
-                    updateActionButtons();
+                    checkSaveButton();
                 });
             });
         }
@@ -799,12 +845,12 @@
             }
         }
         
-        function updateActionButtons() {
-            const hasEmojis = selectedEmojis.length > 0;
+        function checkSaveButton() {
+            const hasChallenge = document.getElementById('challengeInput').value.trim().length > 20;
             const hasSolution = document.getElementById('solutionText').value.trim().length > 20;
+            const hasEmojis = selectedEmojis.length > 0;
             
-            document.getElementById('markBtn').disabled = !hasEmojis;
-            document.getElementById('saveBtn').disabled = !(hasEmojis && hasSolution);
+            document.getElementById('saveBtn').disabled = !(hasChallenge && hasSolution && hasEmojis);
         }
         
         window.openChallenge = function(challengeId) {
@@ -817,41 +863,37 @@
             document.body.style.overflow = 'auto';
         };
         
-        window.generateChallenge = async function() {
+        window.showPromptSection = function() {
             const schluessel = document.getElementById('schluesselSelect');
             const sprach = document.getElementById('sprachSelect');
             const aspekt = document.getElementById('aspektSelect');
             const thema = document.getElementById('themaSelect');
             
-            generatedChallengeData = {
+            currentSelection = {
                 schluessel: { value: schluessel.value, text: schluessel.options[schluessel.selectedIndex].text },
                 sprach: { value: sprach.value, text: sprach.options[sprach.selectedIndex].text },
                 aspekt: { value: aspekt.value, text: aspekt.options[aspekt.selectedIndex].text },
                 thema: { value: thema.value, text: thema.options[thema.selectedIndex].text }
             };
             
-            document.getElementById('generateBtn').innerHTML = '<div class="loading">⏳ Generiere Challenge...</div>';
-            document.getElementById('generateBtn').disabled = true;
+            // Tags anzeigen
+            const tagsHtml = `
+                <span class="kompetenz-tag">🔑 ${currentSelection.schluessel.text.split(' ')[0]}</span>
+                <span class="kompetenz-tag">💬 ${currentSelection.sprach.text.split(' ')[0]}</span>
+                <span class="kompetenz-tag">🎯 ${currentSelection.aspekt.text.split(' ')[0]}</span>
+                <span class="kompetenz-tag">📚 ${currentSelection.thema.text}</span>
+            `;
+            document.getElementById('selectedTags').innerHTML = tagsHtml;
             
-            try {
-                const response = await fetch('https://api.anthropic.com/v1/messages', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        model: 'claude-sonnet-4-20250514',
-                        max_tokens: 1000,
-                        messages: [{
-                            role: 'user',
-                            content: `Du bist ein Bildungsexperte für den Schweizer ABU-Unterricht (Allgemeinbildung EBA 2030).
+            // Prompt generieren
+            const prompt = `Du bist ein Bildungsexperte für den Schweizer ABU-Unterricht (Allgemeinbildung EBA 2030).
 
-Erstelle eine praxisnahe, realistische Challenge für einen Lernenden mit folgender Kompetenz-Kombination:
+Erstelle eine praxisnahe, realistische Herausforderung für einen Lernenden mit folgender Kompetenz-Kombination:
 
-**Schlüsselkompetenz:** ${generatedChallengeData.schluessel.text}
-**Sprachmodus:** ${generatedChallengeData.sprach.text}
-**Gesellschaftlicher Aspekt:** ${generatedChallengeData.aspekt.text}
-**Thema:** ${generatedChallengeData.thema.text}
+**Schlüsselkompetenz:** ${currentSelection.schluessel.text}
+**Sprachmodus:** ${currentSelection.sprach.text}
+**Gesellschaftlicher Aspekt:** ${currentSelection.aspekt.text}
+**Thema:** ${currentSelection.thema.text}
 
 Erstelle eine konkrete, realistische Herausforderung, die:
 1. Eine klare Situation beschreibt (2-3 Sätze)
@@ -866,105 +908,79 @@ Format:
 **Deine Aufgabe:**
 [Konkrete Aufgabenstellung, die alle Kompetenzen integriert]
 
-Schreibe direkt auf Deutsch, ohne Einleitung.`
-                        }]
-                    })
-                });
-                
-                const data = await response.json();
-                const challengeText = data.content[0].text;
-                
-                document.getElementById('challengeText').innerHTML = challengeText.replace(/\n/g, '<br>');
-                
-                // Tags anzeigen
-                const tagsHtml = `
-                    <span class="kompetenz-tag">${generatedChallengeData.schluessel.text.split(' ').slice(0, 3).join(' ')}</span>
-                    <span class="kompetenz-tag">${generatedChallengeData.sprach.text.split(' ').slice(0, 3).join(' ')}</span>
-                    <span class="kompetenz-tag">${generatedChallengeData.aspekt.text.split(' ').slice(0, 2).join(' ')}</span>
-                    <span class="kompetenz-tag">${generatedChallengeData.thema.text}</span>
-                `;
-                document.getElementById('selectedTags').innerHTML = tagsHtml;
-                
-                document.getElementById('generatedChallenge').classList.add('show');
-                document.getElementById('generateBtn').innerHTML = '🎲 Challenge generieren';
-                
-                // Scroll to challenge
-                document.getElementById('generatedChallenge').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                
-                // Solution listener
-                document.getElementById('solutionText').addEventListener('input', updateActionButtons);
-                
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Fehler beim Generieren der Challenge. Bitte versuche es nochmal.');
-                document.getElementById('generateBtn').innerHTML = '🎲 Challenge generieren';
-                document.getElementById('generateBtn').disabled = false;
-            }
+Schreibe direkt auf Deutsch, ohne Einleitung.`;
+            
+            document.getElementById('promptBox').textContent = prompt;
+            document.getElementById('promptSection').classList.add('show');
+            document.getElementById('promptSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        };
+        
+        window.downloadAsText = function() {
+            const text = `HERAUSFORDERUNGSGENERATOR ZUSAMMENSTELLUNG
+=====================================
+
+Schlüsselkompetenz:
+${currentSelection.schluessel.text}
+
+Sprachmodus:
+${currentSelection.sprach.text}
+
+Gesellschaftlicher Aspekt:
+${currentSelection.aspekt.text}
+
+Thema:
+${currentSelection.thema.text}
+
+=====================================
+STANDARDPROMPT FÜR KI
+=====================================
+
+${document.getElementById('promptBox').textContent}
+
+=====================================
+
+Erstellt am: ${new Date().toLocaleDateString('de-CH')}
+ABU EBA 2030 - Kompetenzen lernen
+`;
+            
+            const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Herausforderung_${currentSelection.thema.value.replace(/[^a-zA-Z0-9]/g, '_')}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+        
+        window.copyPrompt = function() {
+            const prompt = document.getElementById('promptBox').textContent;
+            navigator.clipboard.writeText(prompt).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Kopiert!';
+                setTimeout(() => btn.textContent = originalText, 2000);
+            });
         };
         
         window.resetGenerator = function() {
-            document.getElementById('generatedChallenge').classList.remove('show');
+            document.getElementById('promptSection').classList.remove('show');
+            document.getElementById('challengeInput').value = '';
             document.getElementById('solutionText').value = '';
             selectedEmojis = [];
             document.querySelectorAll('.emoji-option').forEach(e => e.classList.remove('selected'));
             updateSelectedEmojis();
-            updateActionButtons();
-            generatedChallengeData = null;
+            currentSelection = null;
             
-            // Scroll back to top
+            // Scroll zurück nach oben
             document.querySelector('.modal-content').scrollTop = 0;
         };
         
-        window.markCompleted = async function() {
-            if (selectedEmojis.length === 0) {
-                alert('Bitte wähle mindestens ein Emoji als Reflexion!');
-                return;
-            }
-            
-            try {
-                const userRef = doc(db, 'users', userId);
-                const userDoc = await getDoc(userRef);
-                
-                if (userDoc.exists()) {
-                    const data = userDoc.data();
-                    const challenges = data.challenges || {};
-                    
-                    challenges['challenge1'] = {
-                        completed: true,
-                        reflexion: selectedEmojis.join(''),
-                        timestamp: new Date().toISOString(),
-                        data: {
-                            ...generatedChallengeData,
-                            challengeText: document.getElementById('challengeText').innerHTML,
-                            solution: document.getElementById('solutionText').value
-                        }
-                    };
-                    
-                    await updateDoc(userRef, {
-                        'challenges': challenges
-                    });
-                    
-                    updateCardStatus('challenge1');
-                    await loadProgress();
-                    closeModal('challenge1');
-                    
-                    alert('✅ Challenge abgeschlossen!\n\nReflexion: ' + selectedEmojis.join(' '));
-                }
-            } catch (error) {
-                console.error('Fehler:', error);
-                alert('Fehler beim Speichern. Versuche es nochmal.');
-            }
-        };
-        
         window.saveToPortfolio = async function() {
-            if (selectedEmojis.length === 0) {
-                alert('Bitte wähle mindestens ein Emoji als Reflexion!');
-                return;
-            }
-            
+            const challengeText = document.getElementById('challengeInput').value.trim();
             const solution = document.getElementById('solutionText').value.trim();
-            if (solution.length < 20) {
-                alert('Bitte schreibe eine ausführlichere Lösung (mindestens 20 Zeichen).');
+            
+            if (!challengeText || !solution || selectedEmojis.length === 0) {
+                alert('Bitte fülle alle Felder aus und wähle mindestens ein Emoji!');
                 return;
             }
             
@@ -978,8 +994,8 @@ Schreibe direkt auf Deutsch, ohne Einleitung.`
                     const portfolio = data.portfolio || [];
                     
                     const challengeData = {
-                        ...generatedChallengeData,
-                        challengeText: document.getElementById('challengeText').innerHTML,
+                        ...currentSelection,
+                        challengeText: challengeText,
                         solution: solution
                     };
                     
@@ -994,8 +1010,8 @@ Schreibe direkt auf Deutsch, ohne Einleitung.`
                         id: 'ch_generator_' + Date.now(),
                         type: 'challenge',
                         challengeId: 'challenge1',
-                        challengeTitle: 'Challenge-Generator',
-                        thema: challengeData.thema.text,
+                        challengeTitle: 'Herausforderungsgenerator',
+                        thema: currentSelection.thema.text,
                         data: challengeData,
                         reflexion: selectedEmojis.join(''),
                         createdAt: new Date().toISOString(),
@@ -1013,7 +1029,14 @@ Schreibe direkt auf Deutsch, ohne Einleitung.`
                     await loadProgress();
                     closeModal('challenge1');
                     
-                    alert('📂 Ins Portfolio gespeichert!\n\n✔ Challenge als abgeschlossen markiert\n✔ Lösung dokumentiert\n✔ Reflexion: ' + selectedEmojis.join(' '));
+                    alert('📂 Ins Portfolio gespeichert!\n\n✔ Herausforderung dokumentiert\n✔ Lösung gespeichert\n✔ Reflexion: ' + selectedEmojis.join(' '));
+                    
+                    // Reset
+                    resetGenerator();
+                    ['schluesselSelect', 'sprachSelect', 'aspektSelect', 'themaSelect'].forEach(id => {
+                        document.getElementById(id).value = '';
+                    });
+                    checkGenerateButton();
                 }
             } catch (error) {
                 console.error('Fehler:', error);
