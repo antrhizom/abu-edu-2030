@@ -234,6 +234,90 @@
             margin-top: 0.25rem;
         }
         
+        /* Returning User Section */
+        .returning-user-section {
+            margin-bottom: 2rem;
+        }
+        
+        .returning-user-card {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(33, 150, 243, 0.15));
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 3px solid rgba(76, 175, 80, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+        
+        .returning-user-icon {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+        
+        .returning-user-content {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .returning-user-greeting {
+            font-size: 0.875rem;
+            color: #6B7280;
+            margin-bottom: 0.25rem;
+        }
+        
+        .returning-user-name {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--ant-primary);
+        }
+        
+        .returning-login-button {
+            background: var(--ant-success);
+            color: white;
+            font-weight: bold;
+            padding: 0.875rem 1.75rem;
+            border-radius: 9999px;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            white-space: nowrap;
+        }
+        
+        .returning-login-button:hover {
+            background: #45a049;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+        
+        .access-reminder {
+            background: rgba(255, 235, 205, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 1rem;
+            border-left: 4px solid var(--ant-accent);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        
+        .reminder-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            margin-top: 0.125rem;
+        }
+        
+        .reminder-text {
+            font-size: 0.8125rem;
+            color: #374151;
+            line-height: 1.6;
+        }
+        
         /* CTA Button */
         .cta-section {
             text-align: center;
@@ -826,6 +910,200 @@
             color: var(--ant-primary);
         }
         
+        /* Login Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 1rem;
+        }
+        
+        .modal-overlay.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6B7280;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            background: #F3F4F6;
+            color: var(--ant-primary);
+        }
+        
+        .modal-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal-title {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: var(--ant-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal-subtitle {
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+        
+        .modal-body {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--ant-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--ant-accent);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+        
+        .form-hint {
+            font-size: 0.75rem;
+            color: #6B7280;
+            margin-top: 0.25rem;
+        }
+        
+        .modal-footer {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .modal-button {
+            flex: 1;
+            padding: 0.875rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-button.primary {
+            background: var(--ant-accent);
+            color: white;
+        }
+        
+        .modal-button.primary:hover {
+            background: var(--ant-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+        
+        .modal-button.primary:disabled {
+            background: #9CA3AF;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .modal-button.secondary {
+            background: #F3F4F6;
+            color: #374151;
+        }
+        
+        .modal-button.secondary:hover {
+            background: #E5E7EB;
+        }
+        
+        .error-message {
+            background: #FEE2E2;
+            border: 1px solid #FCA5A5;
+            color: #DC2626;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        .success-message {
+            background: #D1FAE5;
+            border: 1px solid #6EE7B7;
+            color: #047857;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+        
+        .login-link {
+            display: inline-block;
+            margin-top: 0.75rem;
+            color: var(--ant-primary);
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .login-link:hover {
+            color: var(--ant-accent);
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
@@ -835,6 +1113,19 @@
             .spiral-grid { grid-template-columns: 1fr; }
             .floating-ant { bottom: 20px; right: 20px; width: 50px; height: 50px; }
             .ant-speech-bubble { bottom: 90px; right: 30px; max-width: 250px; }
+            .returning-user-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            .returning-user-content {
+                text-align: center;
+            }
+            .returning-login-button {
+                width: 100%;
+            }
+            .modal-footer {
+                flex-direction: column;
+            }
         }
         
         strong { font-weight: 600; }
@@ -901,11 +1192,33 @@
                 <div class="counter-hint">Live-Anzeige • Aktualisiert automatisch</div>
             </div>
             
-            <div class="cta-section">
+            <!-- Returning User Login Section -->
+            <div class="returning-user-section" id="returningUserSection" style="display: none;">
+                <div class="returning-user-card">
+                    <div class="returning-user-icon">👋</div>
+                    <div class="returning-user-content">
+                        <div class="returning-user-greeting">Willkommen zurück,</div>
+                        <div class="returning-user-name" id="returningUserName"></div>
+                    </div>
+                    <button id="returningLoginBtn" class="returning-login-button">
+                        Zum Dashboard →
+                    </button>
+                </div>
+                <div class="access-reminder">
+                    <span class="reminder-icon">💡</span>
+                    <span class="reminder-text">
+                        <strong>Wichtig:</strong> Speichere diese Seite als Lesezeichen oder notiere dir deinen Benutzernamen <strong id="reminderUserName"></strong>, 
+                        um später wieder Zugang zu deinem Fortschritt zu erhalten!
+                    </span>
+                </div>
+            </div>
+            
+            <div class="cta-section" id="newUserSection">
                 <button id="loginBtn" class="cta-button">
                     Jetzt starten & Struktur verstehen 🚀
                 </button>
                 <p class="cta-hint">Dein Zugang wird automatisch erstellt</p>
+                <a class="login-link" id="showLoginModal">Bereits registriert? Hier einloggen</a>
             </div>
             
             <div class="scroll-hint">
@@ -1358,6 +1671,41 @@
         </div>
     </div>
     
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">×</button>
+            
+            <div class="modal-header">
+                <div class="modal-icon">🔐</div>
+                <h3 class="modal-title">Willkommen zurück!</h3>
+                <p class="modal-subtitle">Gib deinen Benutzernamen ein, um dich anzumelden</p>
+            </div>
+            
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="usernameInput">Benutzername</label>
+                    <input 
+                        type="text" 
+                        id="usernameInput" 
+                        class="form-input" 
+                        placeholder="z.B. Fuchs +"
+                        autocomplete="off"
+                    >
+                    <p class="form-hint">Format: Tiername + Sonderzeichen (z.B. "Ameise %")</p>
+                </div>
+                
+                <div class="error-message" id="loginError"></div>
+                <div class="success-message" id="loginSuccess"></div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="modal-button secondary" id="cancelLogin">Abbrechen</button>
+                <button class="modal-button primary" id="submitLogin">Einloggen</button>
+            </div>
+        </div>
+    </div>
+    
     <!-- Floating Ant -->
     <div class="floating-ant" id="floatingAnt" title="Klick mich!">
         <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
@@ -1477,13 +1825,142 @@
         document.getElementById('loginBtn').addEventListener('click', () => handleLogin('loginBtn'));
         document.getElementById('loginBtn2').addEventListener('click', () => handleLogin('loginBtn2'));
         
+        // Returning Login Button Handler
+        const returningLoginBtn = document.getElementById('returningLoginBtn');
+        if (returningLoginBtn) {
+            returningLoginBtn.addEventListener('click', function() {
+                window.location.href = 'dashboard.html';
+            });
+        }
+        
+        // Login Modal Handling
+        const loginModal = document.getElementById('loginModal');
+        const showLoginModalBtn = document.getElementById('showLoginModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const cancelLoginBtn = document.getElementById('cancelLogin');
+        const submitLoginBtn = document.getElementById('submitLogin');
+        const usernameInput = document.getElementById('usernameInput');
+        const loginError = document.getElementById('loginError');
+        const loginSuccess = document.getElementById('loginSuccess');
+        
+        // Öffne Modal
+        if (showLoginModalBtn) {
+            showLoginModalBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                loginModal.classList.add('show');
+                usernameInput.focus();
+                loginError.classList.remove('show');
+                loginSuccess.classList.remove('show');
+            });
+        }
+        
+        // Schließe Modal
+        function closeModal() {
+            loginModal.classList.remove('show');
+            usernameInput.value = '';
+            loginError.classList.remove('show');
+            loginSuccess.classList.remove('show');
+        }
+        
+        closeModalBtn.addEventListener('click', closeModal);
+        cancelLoginBtn.addEventListener('click', closeModal);
+        
+        // Schließe bei Klick außerhalb
+        loginModal.addEventListener('click', function(e) {
+            if (e.target === loginModal) {
+                closeModal();
+            }
+        });
+        
+        // Enter-Taste im Input
+        usernameInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                submitLoginBtn.click();
+            }
+        });
+        
+        // Login durchführen
+        submitLoginBtn.addEventListener('click', async function() {
+            const username = usernameInput.value.trim();
+            
+            if (!username) {
+                loginError.textContent = 'Bitte gib deinen Benutzernamen ein.';
+                loginError.classList.add('show');
+                return;
+            }
+            
+            // Deaktiviere Button
+            submitLoginBtn.disabled = true;
+            submitLoginBtn.textContent = 'Suche...';
+            loginError.classList.remove('show');
+            loginSuccess.classList.remove('show');
+            
+            try {
+                // Suche in Firestore nach dem Benutzernamen
+                const usersSnapshot = await getDocs(collection(db, 'users'));
+                let foundUser = null;
+                
+                usersSnapshot.forEach(doc => {
+                    const userData = doc.data();
+                    if (userData.profile && userData.profile.displayName === username) {
+                        foundUser = {
+                            id: doc.id,
+                            data: userData
+                        };
+                    }
+                });
+                
+                if (foundUser) {
+                    // Erfolgreich gefunden!
+                    localStorage.setItem('ant_edu_user_id', foundUser.id);
+                    localStorage.setItem('ant_edu_display_name', username);
+                    
+                    loginSuccess.textContent = `✓ Erfolgreich eingeloggt als ${username}!`;
+                    loginSuccess.classList.add('show');
+                    
+                    // Warte kurz und leite dann weiter
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                } else {
+                    // Nicht gefunden
+                    loginError.textContent = `Benutzer "${username}" nicht gefunden. Überprüfe die Schreibweise (inkl. Leerzeichen und Sonderzeichen).`;
+                    loginError.classList.add('show');
+                    submitLoginBtn.disabled = false;
+                    submitLoginBtn.textContent = 'Einloggen';
+                }
+            } catch (error) {
+                console.error('Login-Fehler:', error);
+                loginError.textContent = 'Fehler beim Login: ' + error.message;
+                loginError.classList.add('show');
+                submitLoginBtn.disabled = false;
+                submitLoginBtn.textContent = 'Einloggen';
+            }
+        });
+        
         window.addEventListener('load', function() {
             const userId = localStorage.getItem('ant_edu_user_id');
             const displayName = localStorage.getItem('ant_edu_display_name');
+            
+            const returningUserSection = document.getElementById('returningUserSection');
+            const newUserSection = document.getElementById('newUserSection');
+            const returningUserName = document.getElementById('returningUserName');
+            const reminderUserName = document.getElementById('reminderUserName');
+            
             if (userId && displayName) {
-                document.getElementById('loginBtn').innerHTML = 'Zurück zu meinem Dashboard 🎯';
-                document.getElementById('loginBtn2').innerHTML = 'Zurück zu meinem Dashboard 🎯';
+                // Zeige Returning User Section
+                returningUserSection.style.display = 'block';
+                returningUserName.textContent = displayName;
+                reminderUserName.textContent = `"${displayName}"`;
+                
+                // Verstecke New User Section
+                newUserSection.style.display = 'none';
+            } else {
+                // Zeige New User Section
+                returningUserSection.style.display = 'none';
+                newUserSection.style.display = 'block';
             }
+            
             document.getElementById('currentYear').textContent = new Date().getFullYear();
             updateUserCount();
             setInterval(updateUserCount, 30000);
