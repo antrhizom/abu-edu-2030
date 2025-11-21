@@ -96,9 +96,27 @@
             margin-bottom: 2rem;
         }
         
+        @media (min-width: 640px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
         @media (min-width: 768px) {
             .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .stats-grid {
                 grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media (min-width: 1280px) {
+            .stats-grid {
+                grid-template-columns: repeat(7, 1fr);
             }
         }
         
@@ -241,6 +259,15 @@
             color: #8B4513;
             border-radius: 9999px;
             font-weight: 600;
+        }
+        
+        .card-category {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #8B4513;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
         }
         
         .card-title {
@@ -598,12 +625,27 @@
             <div class="stat-card">
                 <div class="stat-icon">📝</div>
                 <div class="stat-value" id="totalWorks">0</div>
-                <div class="stat-label">Arbeiten</div>
+                <div class="stat-label">Gesamt</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">🔑</div>
                 <div class="stat-value" id="schluesselWorks">0</div>
                 <div class="stat-label">Schlüsselkomp.</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🌍</div>
+                <div class="stat-value" id="aspektWorks">0</div>
+                <div class="stat-label">Aspekte</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💬</div>
+                <div class="stat-value" id="sprachWorks">0</div>
+                <div class="stat-label">Sprachmodi</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-value" id="challengeWorks">0</div>
+                <div class="stat-label">Challenges</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">💭</div>
@@ -626,6 +668,15 @@
                     </button>
                     <button class="filter-btn" data-filter="schluesselkompetenz">
                         🔑 Schlüsselkompetenzen
+                    </button>
+                    <button class="filter-btn" data-filter="aspekt">
+                        🌍 Aspekte/Handlungsfelder
+                    </button>
+                    <button class="filter-btn" data-filter="sprachmodus">
+                        💬 Sprachmodi
+                    </button>
+                    <button class="filter-btn" data-filter="challenge">
+                        🎯 Challenges
                     </button>
                 </div>
                 <select id="sortSelect" class="sort-select">
@@ -758,10 +809,16 @@
         function updateStats() {
             const total = allPortfolioItems.length;
             const schluessel = allPortfolioItems.filter(i => i.type === 'schluesselkompetenz').length;
+            const aspekte = allPortfolioItems.filter(i => i.type === 'aspekt' || i.type === 'handlungsfeld').length;
+            const sprachmodi = allPortfolioItems.filter(i => i.type === 'sprachmodus').length;
+            const challenges = allPortfolioItems.filter(i => i.type === 'challenge').length;
             const withReflexion = allPortfolioItems.filter(i => i.reflexion && i.reflexion.length > 0).length;
             
             document.getElementById('totalWorks').textContent = total;
             document.getElementById('schluesselWorks').textContent = schluessel;
+            document.getElementById('aspektWorks').textContent = aspekte;
+            document.getElementById('sprachWorks').textContent = sprachmodi;
+            document.getElementById('challengeWorks').textContent = challenges;
             document.getElementById('reflexionen').textContent = withReflexion;
             document.getElementById('downloads').textContent = downloadCount;
         }
@@ -773,7 +830,14 @@
             // Filtern
             let filtered = allPortfolioItems;
             if (currentFilter !== 'alle') {
-                filtered = allPortfolioItems.filter(item => item.type === currentFilter);
+                if (currentFilter === 'aspekt') {
+                    // Aspekte und Handlungsfelder zusammen filtern
+                    filtered = allPortfolioItems.filter(item => 
+                        item.type === 'aspekt' || item.type === 'handlungsfeld'
+                    );
+                } else {
+                    filtered = allPortfolioItems.filter(item => item.type === currentFilter);
+                }
             }
             
             // Sortieren
@@ -804,6 +868,20 @@
             const icon = item.type === 'schluesselkompetenz' ? '🔑' : '📝';
             const uebungstyp = item.performanz?.uebungstyp || 'Übung';
             
+            // Bestimme die Kategorie basierend auf dem Type
+            let category = '';
+            if (item.type === 'schluesselkompetenz') {
+                category = '🔑 Schlüsselkompetenz';
+            } else if (item.type === 'aspekt' || item.type === 'handlungsfeld') {
+                category = '🌍 Aspekt/Handlungsfeld';
+            } else if (item.type === 'sprachmodus') {
+                category = '💬 Sprachmodus';
+            } else if (item.type === 'challenge') {
+                category = '🎯 Challenge';
+            } else {
+                category = '📝 Übung';
+            }
+            
             const downloadButton = `
                 <button onclick="event.stopPropagation(); downloadItem('${item.id}')" class="btn btn-download">
                     ⬇️ Download
@@ -824,6 +902,8 @@
                             <span class="card-icon">${icon}</span>
                             <span class="card-date">${date}</span>
                         </div>
+                        
+                        <div class="card-category">${category}</div>
                         
                         <h3 class="card-title">
                             ${item.kompetenzTitle || 'Kompetenz'}
