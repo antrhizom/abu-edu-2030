@@ -726,7 +726,7 @@
                     <button class="btn btn-success" onclick="saveToPortfolio()" id="saveBtn">Ins Portfolio speichern 📂</button>
                 </div>
                 <p style="font-size: 0.875rem; color: #6B7280; margin-top: 0.5rem; text-align: center;">
-                    💡 Der Speicherbutton wird aktiv, sobald du alle Felder ausgefüllt und Emojis gewählt hast.
+                    💡 Du kannst auch Zwischenstände speichern - fehlende Felder werden später ergänzt!
                 </p>
             </div>
         </div>
@@ -812,9 +812,6 @@
             selects.forEach(id => {
                 document.getElementById(id).addEventListener('change', checkGenerateButton);
             });
-            
-            document.getElementById('challengeInput').addEventListener('input', checkSaveButton);
-            document.getElementById('solutionText').addEventListener('input', checkSaveButton);
         }
         
         function checkGenerateButton() {
@@ -841,7 +838,6 @@
                     }
                     
                     updateSelectedEmojis();
-                    checkSaveButton();
                 });
             });
         }
@@ -856,36 +852,12 @@
         }
         
         function checkSaveButton() {
-            const challengeInput = document.getElementById('challengeInput');
-            const solutionText = document.getElementById('solutionText');
-            
-            if (!challengeInput || !solutionText) {
-                console.log('Felder nicht gefunden');
-                return;
-            }
-            
-            const hasChallenge = challengeInput.value.trim().length > 20;
-            const hasSolution = solutionText.value.trim().length > 20;
-            const hasEmojis = selectedEmojis.length > 0;
-            
-            console.log('Check:', { hasChallenge, hasSolution, hasEmojis, 
-                challengeLen: challengeInput.value.trim().length,
-                solutionLen: solutionText.value.trim().length,
-                emojis: selectedEmojis.length
-            });
-            
+            // Button ist immer aktiv, wenn Prompt-Section sichtbar ist
             const saveBtn = document.getElementById('saveBtn');
-            if (!saveBtn) {
-                console.log('Button nicht gefunden');
-                return;
+            if (saveBtn) {
+                saveBtn.disabled = false;
+                saveBtn.style.opacity = '1';
             }
-            
-            const isComplete = hasChallenge && hasSolution && hasEmojis;
-            
-            saveBtn.disabled = !isComplete;
-            saveBtn.style.opacity = isComplete ? '1' : '0.5';
-            
-            console.log('Button Status:', isComplete ? 'AKTIV' : 'INAKTIV');
         }
         
         window.openChallenge = function(challengeId) {
@@ -1024,8 +996,9 @@ ABU EBA 2030 - Kompetenzen lernen
             const challengeText = document.getElementById('challengeInput').value.trim();
             const solution = document.getElementById('solutionText').value.trim();
             
-            if (!challengeText || !solution || selectedEmojis.length === 0) {
-                alert('Bitte fülle alle Felder aus und wähle mindestens ein Emoji!');
+            // Minimale Validierung - nur prüfen ob Kompetenzen gewählt wurden
+            if (!currentSelection) {
+                alert('Bitte wähle zuerst Kompetenzen aus und generiere eine Zusammenstellung!');
                 return;
             }
             
@@ -1040,13 +1013,13 @@ ABU EBA 2030 - Kompetenzen lernen
                     
                     const challengeData = {
                         ...currentSelection,
-                        challengeText: challengeText,
-                        solution: solution
+                        challengeText: challengeText || '(Noch nicht ausgefüllt)',
+                        solution: solution || '(Noch nicht ausgefüllt)'
                     };
                     
                     challenges['challenge1'] = {
                         completed: true,
-                        reflexion: selectedEmojis.join(''),
+                        reflexion: selectedEmojis.join('') || '🤔',
                         timestamp: new Date().toISOString(),
                         data: challengeData
                     };
@@ -1058,9 +1031,9 @@ ABU EBA 2030 - Kompetenzen lernen
                         challengeTitle: 'Herausforderungsgenerator',
                         thema: currentSelection.thema.text,
                         data: challengeData,
-                        reflexion: selectedEmojis.join(''),
+                        reflexion: selectedEmojis.join('') || '🤔',
                         createdAt: new Date().toISOString(),
-                        shareable: true
+                        shareable: challengeText.length > 20 && solution.length > 20 // Nur teilbar wenn vollständig
                     };
                     
                     portfolio.push(portfolioEntry);
@@ -1074,7 +1047,14 @@ ABU EBA 2030 - Kompetenzen lernen
                     await loadProgress();
                     closeModal('challenge1');
                     
-                    alert('📂 Ins Portfolio gespeichert!\n\n✔ Herausforderung dokumentiert\n✔ Lösung gespeichert\n✔ Reflexion: ' + selectedEmojis.join(' '));
+                    let message = '📂 Ins Portfolio gespeichert!\n\n';
+                    if (challengeText && solution && selectedEmojis.length > 0) {
+                        message += '✔ Vollständige Herausforderung\n✔ Lösung dokumentiert\n✔ Reflexion: ' + selectedEmojis.join(' ');
+                    } else {
+                        message += '💾 Zwischenstand gespeichert\n💡 Du kannst die fehlenden Teile später ergänzen!';
+                    }
+                    
+                    alert(message);
                     
                     // Reset
                     resetGenerator();
