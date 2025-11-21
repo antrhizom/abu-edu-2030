@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - SLP ABU 2030</title>
+    <title>Dashboard - Kompetenzen 2030</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -59,16 +59,16 @@
         
         <!-- Schnellzugriff -->
         <div class="grid md:grid-cols-2 gap-6 mb-8">
-            <a href="kompetenzen.html" class="quick-link block bg-gradient-to-br from-ant-accent to-ant-secondary rounded-3xl shadow-xl p-8 text-white">
+            <a href="challenges.html" class="quick-link block bg-gradient-to-br from-ant-accent to-ant-secondary rounded-3xl shadow-xl p-8 text-white">
                 <div class="text-5xl mb-4">🎯</div>
-                <h2 class="text-2xl font-bold mb-2">Kompetenzen üben</h2>
-                <p class="text-white/90">Entdecke die zirkuläre Struktur und starte mit Challenges</p>
+                <h2 class="text-2xl font-bold mb-2">Challenges starten</h2>
+                <p class="text-white/90">Wende deine Kompetenzen in echten Situationen an</p>
             </a>
             
-            <a href="portfolio.html" class="quick-link block bg-gradient-to-br from-ant-success to-ant-network rounded-3xl shadow-xl p-8 text-white">
-                <div class="text-5xl mb-4">📁</div>
-                <h2 class="text-2xl font-bold mb-2">Mein Portfolio</h2>
-                <p class="text-white/90">Verwalte deine Arbeiten und teile sie mit der Community</p>
+            <a href="ABU_Kompetenzen_2030.html" class="quick-link block bg-gradient-to-br from-ant-primary to-ant-primary/80 rounded-3xl shadow-xl p-8 text-white">
+                <div class="text-5xl mb-4">📚</div>
+                <h2 class="text-2xl font-bold mb-2">Kompetenz-Struktur</h2>
+                <p class="text-white/90">Verstehe das Modell und die Vernetzung</p>
             </a>
         </div>
         
@@ -129,7 +129,7 @@
                     </div>
                     <div class="flex justify-between items-baseline">
                         <span class="text-2xl font-bold text-ant-accent" id="sprachCount">0</span>
-                        <span class="text-xs text-gray-500">/8</span>
+                        <span class="text-xs text-gray-500">/9</span>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-1.5 mt-2">
                         <div id="sprachBar" class="bg-ant-accent h-full rounded-full transition-all duration-500" style="width: 0%"></div>
@@ -169,7 +169,7 @@
                 <div class="text-center p-4 bg-ant-bg rounded-xl">
                     <div class="text-3xl mb-2">🎯</div>
                     <div class="text-2xl font-bold text-ant-primary" id="kompetenzCount">0</div>
-                    <div class="text-xs text-gray-600 mt-1">Gesamt</div>
+                    <div class="text-xs text-gray-600 mt-1">Kompetenzen</div>
                 </div>
             </div>
         </div>
@@ -180,6 +180,8 @@
                 <div class="flex items-center gap-2 text-sm text-gray-600">
                     <span class="text-lg">🐜✏️👓</span>
                     <span>|</span>
+                    <span>ant edu</span>
+                    <span>|</span>
                     <span id="currentYear"></span>
                 </div>
             </div>
@@ -187,11 +189,12 @@
     </div>
     
     <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
-        import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js';
+        import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
+        import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';
         
         const firebaseConfig = {
-            apiKey: "AIzaSyDycvEwK6KJZyFEtsGIaHJBhIFTp5L4cdA",
+            apiKey: "",
             authDomain: "abueba2030.firebaseapp.com",
             projectId: "abueba2030",
             storageBucket: "abueba2030.firebasestorage.app",
@@ -201,6 +204,7 @@
         
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const auth = getAuth(app);
         
         window.addEventListener('load', async function() {
             document.getElementById('currentYear').textContent = new Date().getFullYear();
@@ -209,13 +213,16 @@
             if (displayName) {
                 document.getElementById('displayName').textContent = displayName;
             } else {
-                window.location.href = 'index.html';
-                return;
+                // Falls kein Name da ist, zur Startseite
+                // window.location.href = 'ABU_Kompetenzen_2030.html';
             }
             
             const userId = localStorage.getItem('ant_edu_user_id');
+            
             if (userId) {
                 try {
+                    await signInAnonymously(auth); // Wichtig für DB Zugriff
+                    
                     const userDoc = await getDoc(doc(db, 'users', userId));
                     if (userDoc.exists()) {
                         const data = userDoc.data();
@@ -232,6 +239,10 @@
         
         function updateProgress(data) {
             const kompetenzen = data.kompetenzen || { schluessel: {}, aspekte: {}, sprachmodi: {} };
+            const challenges = data.challenges || {};
+            
+            // ZÄHL-LOGIK KORRIGIERT:
+            const challengeCount = Object.values(challenges).filter(c => c.completed).length;
             
             const schluesselCount = Object.keys(kompetenzen.schluessel || {}).length;
             const aspekteCount = Object.keys(kompetenzen.aspekte || {}).length;
@@ -245,20 +256,22 @@
             document.getElementById('aspekteBar').style.width = `${(aspekteCount/8)*100}%`;
             
             document.getElementById('sprachCount').textContent = sprachCount;
-            document.getElementById('sprachBar').style.width = `${(sprachCount/8)*100}%`;
+            document.getElementById('sprachBar').style.width = `${(sprachCount/9)*100}%`;
             
             // Gesamtfortschritt
             const total = schluesselCount + aspekteCount + sprachCount;
-            const maxTotal = 12 + 8 + 8;
+            const maxTotal = 12 + 8 + 9;
             const totalPercent = Math.round((total/maxTotal)*100);
             document.getElementById('totalProgress').textContent = `${totalPercent}%`;
             document.getElementById('totalProgressBar').style.width = `${totalPercent}%`;
             
             // Aktivitäten
             document.getElementById('kompetenzCount').textContent = total;
-            document.getElementById('challengeCount').textContent = data.challenges || 0;
+            document.getElementById('challengeCount').textContent = challengeCount; // Korrigierte Zuweisung
             document.getElementById('portfolioCount').textContent = (data.portfolio || []).length;
-            document.getElementById('verbindungCount').textContent = Math.floor(total * 1.5);
+            
+            // Verbindungen simulieren basierend auf Aktivität
+            document.getElementById('verbindungCount').textContent = Math.floor(total * 1.5 + challengeCount * 3);
         }
     </script>
 </body>
