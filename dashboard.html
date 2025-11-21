@@ -256,7 +256,7 @@
             
             // Aktivitäten
             document.getElementById('kompetenzCount').textContent = total;
-            document.getElementById('challengeCount').textContent = data.challenges || 0;
+            document.getElementById('challengeCount').textContent = Object.keys(data.challenges || {}).filter(k => data.challenges[k]?.completed).length;
             document.getElementById('portfolioCount').textContent = (data.portfolio || []).length;
             document.getElementById('verbindungCount').textContent = Math.floor(total * 1.5);
         }
