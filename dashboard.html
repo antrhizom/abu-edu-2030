@@ -255,10 +255,15 @@
             document.getElementById('totalProgressBar').style.width = `${totalPercent}%`;
             
             // Aktivitäten
-            document.getElementById('kompetenzCount').textContent = total;
-            document.getElementById('challengeCount').textContent = data.challenges || 0;
-            document.getElementById('portfolioCount').textContent = (data.portfolio || []).length;
-            document.getElementById('verbindungCount').textContent = Math.floor(total * 1.5);
+document.getElementById('kompetenzCount').textContent = total;
+
+// Zähle abgeschlossene Challenges
+const challenges = data.challenges || {};
+const completedChallenges = Object.keys(challenges).filter(key => challenges[key]?.completed).length;
+document.getElementById('challengeCount').textContent = completedChallenges;
+
+document.getElementById('umsetzungCount').textContent = data.umsetzungen || 0;
+document.getElementById('verbindungCount').textContent = Math.floor(total * 1.5);
         }
     </script>
 </body>
