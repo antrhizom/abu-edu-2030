@@ -723,8 +723,11 @@
                 
                 <div class="button-group">
                     <button class="btn btn-secondary" onclick="resetGenerator()">Neue Herausforderung</button>
-                    <button class="btn btn-success" onclick="saveToPortfolio()" id="saveBtn" disabled>Ins Portfolio speichern 📂</button>
+                    <button class="btn btn-success" onclick="saveToPortfolio()" id="saveBtn">Ins Portfolio speichern 📂</button>
                 </div>
+                <p style="font-size: 0.875rem; color: #6B7280; margin-top: 0.5rem; text-align: center;">
+                    💡 Der Speicherbutton wird aktiv, sobald du alle Felder ausgefüllt und Emojis gewählt hast.
+                </p>
             </div>
         </div>
     </div>
@@ -759,6 +762,13 @@
             await loadProgress();
             setupSelectionListeners();
             setupEmojiSelectors();
+            
+            // Button initial deaktivieren
+            const saveBtn = document.getElementById('saveBtn');
+            if (saveBtn) {
+                saveBtn.disabled = true;
+                saveBtn.style.opacity = '0.5';
+            }
         });
         
         async function loadProgress() {
@@ -850,7 +860,11 @@
             const hasSolution = document.getElementById('solutionText').value.trim().length > 20;
             const hasEmojis = selectedEmojis.length > 0;
             
-            document.getElementById('saveBtn').disabled = !(hasChallenge && hasSolution && hasEmojis);
+            const saveBtn = document.getElementById('saveBtn');
+            const isComplete = hasChallenge && hasSolution && hasEmojis;
+            
+            saveBtn.disabled = !isComplete;
+            saveBtn.style.opacity = isComplete ? '1' : '0.5';
         }
         
         window.openChallenge = function(challengeId) {
