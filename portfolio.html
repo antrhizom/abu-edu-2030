@@ -912,80 +912,86 @@
             grid.innerHTML = filtered.map(item => createPortfolioCard(item)).join('');
         }
         
-        function createPortfolioCard(item) {
-            const date = new Date(item.createdAt).toLocaleDateString('de-CH', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            });
-            
-            const icon = item.type === 'schluesselkompetenz' ? '🔑' : (item.type === 'challenge' ? '🎯' : '📝');
-            const uebungstyp = item.performanz?.uebungstyp || 'Übung';
-            
-            // Bestimme die Kategorie basierend auf dem Type
-            let category = '';
-            if (item.type === 'schluesselkompetenz') {
-                category = '🔑 Schlüsselkompetenz';
-            } else if (item.type === 'aspekt' || item.type === 'handlungsfeld') {
-                category = '🌍 Aspekt/Handlungsfeld';
-            } else if (item.type === 'sprachmodus') {
-                category = '💬 Sprachmodus';
-            } else if (item.type === 'challenge') {
-                category = '🎯 Challenge';
-            } else {
-                category = '📝 Übung';
-            }
-            
-            const downloadButton = `
-                <button onclick="event.stopPropagation(); downloadItem('${item.id}')" class="btn btn-download">
-                    ⬇️ Download
-                </button>
-            `;
-            
-            const reflexionHTML = item.reflexion ? `
-                <div class="card-reflexion">
-                    <span class="card-reflexion-label">Reflexion:</span>
-                    <span class="card-reflexion-emoji">${item.reflexion}</span>
+       function createPortfolioCard(item) {
+    const date = new Date(item.createdAt).toLocaleDateString('de-CH', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+    
+    // Icon je nach Typ
+    let icon = '🔑';
+    if (item.type === 'schluesselkompetenz') icon = '🔑';
+    else if (item.type === 'aspekt') icon = '🎯';
+    else if (item.type === 'sprachmodus') icon = '💬';
+    
+    // Übungstitel oder Sprachmodus-Titel
+    const uebungstyp = item.modusTitle || item.performanz?.uebungstyp || 'Übung';
+    
+    const downloadButton = `
+        <button onclick="event.stopPropagation(); downloadItem('${item.id}')" class="btn btn-download">
+            ⬇️ Download
+        </button>
+    `;
+    
+    const reflexionHTML = item.reflexion ? `
+        <div class="card-reflexion">
+            <span class="card-reflexion-label">Reflexion:</span>
+            <span class="card-reflexion-emoji">${item.reflexion}</span>
+        </div>
+    ` : '';
+    
+    // Tags für Aspekte und Schlüsselkompetenzen
+    let tagsHTML = '';
+    if (item.aspekte && item.aspekte.length > 0) {
+        tagsHTML += `
+            <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.5rem;">
+                ${item.aspekte.map(a => `<span style="padding: 0.15rem 0.4rem; border-radius: 9999px; font-size: 0.65rem; background: rgba(210, 105, 30, 0.1); color: #D2691E; font-weight: 500;">${a}</span>`).join('')}
+            </div>
+        `;
+    }
+    if (item.schluesselkompetenzen && item.schluesselkompetenzen.length > 0) {
+        tagsHTML += `
+            <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.25rem;">
+                ${item.schluesselkompetenzen.map(s => `<span style="padding: 0.15rem 0.4rem; border-radius: 9999px; font-size: 0.65rem; background: rgba(139, 69, 19, 0.1); color: #8B4513; font-weight: 500;">${s}</span>`).join('')}
+            </div>
+        `;
+    }
+    
+    return `
+        <div class="portfolio-item" onclick="showDetail('${item.id}')">
+            <div class="portfolio-card-content">
+                <div class="card-header">
+                    <span class="card-icon">${icon}</span>
+                    <span class="card-date">${date}</span>
                 </div>
-            ` : '';
-            
-            return `
-                <div class="portfolio-item" onclick="showDetail('${item.id}')">
-                    <div class="portfolio-card-content">
-                        <div class="card-header">
-                            <span class="card-icon">${icon}</span>
-                            <span class="card-date">${date}</span>
-                        </div>
-                        
-                        <div class="card-category">${category}</div>
-                        
-                        <h3 class="card-title">
-                            ${item.kompetenzTitle || item.challengeTitle || 'Eintrag'}
-                        </h3>
-                        
-                        <p class="card-uebung">
-                            ${uebungstyp}
-                        </p>
-                        
-                        <p class="card-thema">
-                            ${item.thema || ''}
-                        </p>
-                        
-                        ${reflexionHTML}
-                        
-                        <div class="card-actions">
-                            <button onclick="event.stopPropagation(); showDetail('${item.id}')" class="btn btn-details">
-                                Details
-                            </button>
-                            ${downloadButton}
-                            <button onclick="event.stopPropagation(); deleteItem('${item.id}')" class="btn btn-delete" title="Löschen">
-                                🗑️
-                            </button>
-                        </div>
-                    </div>
+                
+                <h3 class="card-title">
+                    ${item.kompetenzTitle || 'Kompetenz'}
+                </h3>
+                
+                <p class="card-uebung">
+                    ${uebungstyp}
+                </p>
+                
+                <p class="card-thema">
+                    ${item.thema || ''}
+                </p>
+                
+                ${tagsHTML}
+                
+                ${reflexionHTML}
+                
+                <div class="card-actions">
+                    <button onclick="event.stopPropagation(); showDetail('${item.id}')" class="btn btn-details">
+                        Details
+                    </button>
+                    ${downloadButton}
                 </div>
-            `;
-        }
+            </div>
+        </div>
+    `;
+}
         
         window.deleteItem = async function(itemId) {
             if (!confirm('🗑️ Möchtest du diesen Portfolio-Eintrag wirklich löschen?\n\nDiese Aktion kann nicht rückgängig gemacht werden.')) {
