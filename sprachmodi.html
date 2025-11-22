@@ -763,6 +763,8 @@
                 icon: '👂',
                 title: '4.2.1.1 Rezeption mündlich',
                 description: 'Hörmaterialien aus verschiedenen Medien verstehen / Informalen und formalen Gesprächen aus verschiedenen Kontexten folgen',
+                aspekte: ['⚖️ Recht', '💰 Wirtschaft'],
+                schluesselkompetenzen: ['🧠 Kritisch denken', '📚 Lernen lernen'],
                 uebung: {
                     typ: 'multiple-choice',
                     titel: 'Podcast verstehen',
@@ -806,6 +808,8 @@
                 icon: '📺',
                 title: '4.2.1.2 Rezeption audiovisuell',
                 description: 'Audiovisuelle Materialien verstehen',
+                aspekte: ['💻 Technologie', '👤 Identität'],
+                schluesselkompetenzen: ['🧠 Kritisch denken', '💬 Kommunizieren'],
                 uebung: {
                     typ: 'video-analyse',
                     titel: 'Bewerbungsvideo analysieren',
@@ -825,6 +829,8 @@
                 icon: '📖',
                 title: '4.2.1.3 Rezeption schriftlich und bildlich',
                 description: 'Analoge und digitale lineare Texte verstehen / Analoge und digitale nicht-lineare Texte verstehen',
+                aspekte: ['⚖️ Recht', '💰 Wirtschaft'],
+                schluesselkompetenzen: ['🧠 Kritisch denken', '📚 Lernen lernen'],
                 uebung: {
                     typ: 'lese-verstehen',
                     titel: 'Lehrvertrag verstehen',
@@ -846,6 +852,8 @@
                 icon: '🗣️',
                 title: '4.2.2.1 Produktion mündlich',
                 description: 'In verschiedenen Situationen verständlich, angemessen und adressatengerecht sprechen und präsentieren',
+                aspekte: ['👤 Identität', '💰 Wirtschaft'],
+                schluesselkompetenzen: ['💬 Kommunizieren', '🎯 Ziele setzen'],
                 uebung: {
                     typ: 'praesentation-check',
                     titel: 'Präsentations-Vorbereitung',
@@ -865,6 +873,8 @@
                 icon: '✏️',
                 title: '4.2.2.2 Produktion schriftlich und bildlich',
                 description: 'Verständlich, angemessen und adressatengerecht schreiben / Bilder und Grafiken erstellen',
+                aspekte: ['👤 Identität', '💰 Wirtschaft'],
+                schluesselkompetenzen: ['💬 Kommunizieren', '💪 Selbstständig arbeiten'],
                 uebung: {
                     typ: 'text-schreiben',
                     titel: 'E-Mail schreiben',
@@ -886,6 +896,8 @@
                 icon: '🎬',
                 title: '4.2.2.3 Produktion multimedial',
                 description: 'Multimediale Inhalte erstellen (Videos, Podcasts, digitale Präsentationen)',
+                aspekte: ['💻 Technologie', '🎭 Kultur'],
+                schluesselkompetenzen: ['💻 Digital kompetent sein', '🎨 Kreativ sein'],
                 uebung: {
                     typ: 'multimedia-planung',
                     titel: 'Kurzvideo planen',
@@ -905,6 +917,8 @@
                 icon: '💬',
                 title: '4.2.3.1 Interaktion und Kollaboration mündlich',
                 description: 'In verschiedenen Situationen verständlich, angemessen und adressatengerecht auf mündliche Äusserungen reagieren',
+                aspekte: ['👤 Identität', '⚖️ Ethik'],
+                schluesselkompetenzen: ['🤝 Im Team zusammenarbeiten', '💬 Kommunizieren'],
                 uebung: {
                     typ: 'gespraech-situationen',
                     titel: 'Gespräch führen',
@@ -948,6 +962,8 @@
                 icon: '✉️',
                 title: '4.2.3.2 Interaktion und Kollaboration schriftlich',
                 description: 'In verschiedenen Situationen verständlich, angemessen und adressatengerecht auf schriftliche Äusserungen reagieren',
+                aspekte: ['👤 Identität', '💰 Wirtschaft'],
+                schluesselkompetenzen: ['💬 Kommunizieren', '⚖️ Verantwortung übernehmen'],
                 uebung: {
                     typ: 'schriftliche-reaktion',
                     titel: 'Auf E-Mail reagieren',
@@ -981,6 +997,8 @@
                 icon: '💻',
                 title: '4.2.3.3 Interaktion und Kollaboration digital',
                 description: 'Digital zusammenarbeiten, Tools nutzen, online kollaborieren (Teams, Zoom, kollaborative Dokumente)',
+                aspekte: ['💻 Technologie', '👤 Identität'],
+                schluesselkompetenzen: ['💻 Digital kompetent sein', '🤝 Im Team zusammenarbeiten'],
                 uebung: {
                     typ: 'digital-kommunikation',
                     titel: 'Teams-Chat: Angemessen reagieren',
@@ -1362,6 +1380,7 @@
                     `;
                 });
                 html += `</div>`;
+                html += getTagsHTML(currentModus);
                 html += `
                     <button class="check-btn" id="checkBtn">Antworten prüfen</button>
                     <div class="feedback" id="feedback"></div>
@@ -1379,6 +1398,7 @@
                     `;
                 });
                 html += `</div>`;
+                html += getTagsHTML(currentModus);
                 html += `
                     <button class="check-btn" id="checkBtn">Alle Punkte bestätigen</button>
                     <div class="feedback" id="feedback"></div>
@@ -1395,6 +1415,7 @@
                     `;
                 });
                 html += `</div>`;
+                html += getTagsHTML(currentModus);
                 html += `
                     <button class="check-btn" id="checkBtn">Auswahl prüfen</button>
                     <div class="feedback" id="feedback"></div>
@@ -1416,6 +1437,9 @@
                             <div style="font-size: 0.875rem; color: #374151; margin-bottom: 0.25rem;">• ${el}</div>
                         `).join('')}
                     </div>
+                `;
+                html += getTagsHTML(currentModus);
+                html += `
                     <button class="check-btn" id="checkBtn">E-Mail abschliessen</button>
                     <div class="feedback" id="feedback"></div>
                 `;
@@ -1462,6 +1486,25 @@
                     <button id="abbrechenBtn" class="btn-cancel">
                         Abbrechen
                     </button>
+                </div>
+            `;
+        }
+        
+        function getTagsHTML(modus) {
+            return `
+                <div style="display: grid; gap: 1rem; margin-top: 1.5rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <p style="font-size: 0.75rem; font-weight: 600; color: #6B7280; margin-bottom: 0.5rem;">🎯 Aspekte:</p>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            ${modus.aspekte.map(a => `<span style="padding: 0.25rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; background: rgba(210, 105, 30, 0.1); color: #D2691E;">${a}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div>
+                        <p style="font-size: 0.75rem; font-weight: 600; color: #6B7280; margin-bottom: 0.5rem;">🔑 Schlüsselkompetenzen:</p>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            ${modus.schluesselkompetenzen.map(s => `<span style="padding: 0.25rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; background: rgba(139, 69, 19, 0.1); color: #8B4513;">${s}</span>`).join('')}
+                        </div>
+                    </div>
                 </div>
             `;
         }
@@ -1748,9 +1791,12 @@
                         id: 'spm_' + currentModus.id.replace(/\./g, '_') + '_' + Date.now(),
                         type: 'sprachmodus',
                         modusId: currentModus.id,
+                        modusTitle: currentModus.title,
                         kompetenzTitle: currentModus.title + ': ' + currentModus.uebung.titel,
                         thema: 'Lernbereich Sprache und Kommunikation',
                         beschreibung: currentModus.description,
+                        aspekte: currentModus.aspekte,
+                        schluesselkompetenzen: currentModus.schluesselkompetenzen,
                         performanz: performanzData,
                         reflexion: selectedEmojis.join(''),
                         notizen: notizen,
@@ -1772,7 +1818,7 @@
                     await loadProgress();
                     closeModal();
                     
-                    let successMsg = '📁 Ins Portfolio gespeichert!\n\n✓ Sprachmodus als geübt markiert\n✓ Performanz dokumentiert\n✓ Reflexion: ' + selectedEmojis.join(' ');
+                    let successMsg = '📁 Ins Portfolio gespeichert!\n\n✓ Sprachmodus als geübt markiert\n✓ Aspekte & Schlüsselkompetenzen verknüpft\n✓ Performanz dokumentiert\n✓ Reflexion: ' + selectedEmojis.join(' ');
                     if (notizen) {
                         successMsg += '\n✓ Notizen gespeichert';
                     }
