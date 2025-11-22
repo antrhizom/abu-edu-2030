@@ -1017,115 +1017,154 @@
             }
         };
 
-        window.showDetail = function(itemId) {
-            const item = allPortfolioItems.find(i => i.id === itemId);
-            if (!item) return;
-            
-            const modal = document.getElementById('detailModal');
-            const modalContent = document.getElementById('modalContentDiv');
-            
-            const date = new Date(item.createdAt).toLocaleString('de-CH', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-            
-            // Metadaten für Aspekte und Sprachmodi vorbereiten
-            let metaHTML = '';
-            if (item.aspekte && item.aspekte.length > 0) {
-                metaHTML += `
-                    <div style="margin-bottom: 0.5rem;">
-                        <p class="section-box-title" style="font-size:0.8rem;">🌍 Aspekte:</p>
-                        <div class="tags-container">
-                            ${item.aspekte.map(a => `<span class="tag tag-aspekt">${a}</span>`).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-            if (item.sprachmodi && item.sprachmodi.length > 0) {
-                metaHTML += `
-                    <div style="margin-bottom: 1rem;">
-                        <p class="section-box-title" style="font-size:0.8rem;">💬 Sprachmodi:</p>
-                        <div class="tags-container">
-                            ${item.sprachmodi.map(s => `<span class="tag tag-sprach">${s}</span>`).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-
-            let performanzHTML = '';
-            if (item.performanz) {
-                performanzHTML = `
-                    <div class="section">
-                        <h3 class="section-title">📊 Durchgeführte Übung</h3>
-                        <div class="section-box">
-                            <p class="section-box-title">${item.performanz.uebungstyp || 'Übung'}</p>
-                            ${formatPerformanzData(item.performanz)}
-                        </div>
-                    </div>
-                `;
-            }
-
-            // Notizen-Bereich
-            let notizenHTML = '';
-            if (item.notizen) {
-                notizenHTML = `
-                    <div class="section">
-                        <h3 class="section-title">📝 Persönliche Notizen</h3>
-                        <div class="section-box">
-                            <p class="section-box-text">${item.notizen}</p>
-                        </div>
-                    </div>
-                `;
-            }
-            
-            modalContent.innerHTML = `
-                <div style="margin-bottom: 1rem;">
-                    <div class="modal-icon">${item.type === 'schluesselkompetenz' ? '🔑' : (item.type === 'challenge' ? '🎯' : '📝')}</div>
-                    <h3 class="modal-subtitle">${item.kompetenzTitle || item.challengeTitle || 'Kompetenz'}</h3>
-                    <p class="modal-text">${item.thema || ''}</p>
-                    ${metaHTML}
-                    <p class="modal-date">Erstellt: ${date}</p>
-                </div>
-                
-                ${performanzHTML}
-                ${notizenHTML}
-                
-                <div class="section">
-                    <h3 class="section-title">💭 Reflexion</h3>
-                    <div class="section-box">
-                        ${item.reflexion ? `
-                            <div class="reflexion-emoji">${item.reflexion}</div>
-                            <p class="reflexion-text">Emoji-Reflexion beim Speichern</p>
-                        ` : `
-                            <p class="no-reflexion">Keine Reflexion hinzugefügt</p>
-                        `}
-                        ${item.textReflexion ? `
-                            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E5E7EB;">
-                                <p class="section-box-title">Zusätzliche Reflexion:</p>
-                                <p class="section-box-text">"${item.textReflexion}"</p>
-                            </div>
-                        ` : ''}
-                    </div>
-                </div>
-                
-                <div class="modal-actions">
-                    <button onclick="addReflexion('${item.id}')" class="btn-primary">
-                        💭 Reflexion hinzufügen
-                    </button>
-                    <button onclick="downloadItemModal('${item.id}')" class="btn-secondary">
-                        ⬇️ Download
-                    </button>
-                    <button onclick="sendDocument('${item.id}')" class="btn-tertiary">
-                        📧 Versenden
-                    </button>
+       window.showDetail = function(itemId) {
+    const item = allPortfolioItems.find(i => i.id === itemId);
+    if (!item) return;
+    
+    const modal = document.getElementById('detailModal');
+    const modalContent = document.getElementById('modalContentDiv');
+    
+    const date = new Date(item.createdAt).toLocaleString('de-CH', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    
+    // Icon je nach Typ
+    let icon = '🔑';
+    if (item.type === 'schluesselkompetenz') icon = '🔑';
+    else if (item.type === 'aspekt') icon = '🎯';
+    else if (item.type === 'sprachmodus') icon = '💬';
+    
+    // Sprachmodus-Titel oder Übungstitel
+    let titelHTML = '';
+    if (item.modusTitle) {
+        titelHTML = `
+            <p class="section-box-title" style="margin-bottom: 0.5rem; color: #8B4513;">📝 ${item.modusTitle}</p>
+        `;
+    }
+    
+    // Tags für Aspekte und Schlüsselkompetenzen
+    let verknuepfungenHTML = '';
+    if ((item.aspekte && item.aspekte.length > 0) || (item.schluesselkompetenzen && item.schluesselkompetenzen.length > 0)) {
+        verknuepfungenHTML = `
+            <div class="section">
+                <h3 class="section-title">🔗 Verknüpfte Kompetenzen</h3>
+                <div class="section-box">
+        `;
+        
+        if (item.aspekte && item.aspekte.length > 0) {
+            verknuepfungenHTML += `
+                <p class="section-box-title" style="margin-bottom: 0.5rem;">🎯 Gesellschaftliche Aspekte:</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
+                    ${item.aspekte.map(a => `<span style="padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; background: rgba(210, 105, 30, 0.15); color: #D2691E; font-weight: 600;">${a}</span>`).join('')}
                 </div>
             `;
-            
-            modal.classList.add('show');
-        };
+        }
+        
+        if (item.schluesselkompetenzen && item.schluesselkompetenzen.length > 0) {
+            verknuepfungenHTML += `
+                <p class="section-box-title" style="margin-bottom: 0.5rem;">🔑 Schlüsselkompetenzen:</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    ${item.schluesselkompetenzen.map(s => `<span style="padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; background: rgba(139, 69, 19, 0.15); color: #8B4513; font-weight: 600;">${s}</span>`).join('')}
+                </div>
+            `;
+        }
+        
+        verknuepfungenHTML += `
+                </div>
+            </div>
+        `;
+    }
+    
+    let performanzHTML = '';
+    if (item.performanz) {
+        performanzHTML = `
+            <div class="section">
+                <h3 class="section-title">📊 Durchgeführte Übung</h3>
+                <div class="section-box">
+                    ${titelHTML}
+                    <p class="section-box-title">${item.performanz.uebungstyp || 'Übung'}</p>
+                    ${formatPerformanzData(item.performanz)}
+                </div>
+            </div>
+        `;
+    }
+    
+    // Beschreibung für Sprachmodi
+    let beschreibungHTML = '';
+    if (item.beschreibung && item.type === 'sprachmodus') {
+        beschreibungHTML = `
+            <div class="section">
+                <h3 class="section-title">📖 Beschreibung</h3>
+                <div class="section-box">
+                    <p class="section-box-text">${item.beschreibung}</p>
+                </div>
+            </div>
+        `;
+    }
+    
+    // Notizen anzeigen
+    let notizenHTML = '';
+    if (item.notizen) {
+        notizenHTML = `
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E5E7EB;">
+                <p class="section-box-title">📝 Notizen:</p>
+                <p class="section-box-text">"${item.notizen}"</p>
+            </div>
+        `;
+    }
+    
+    modalContent.innerHTML = `
+        <div style="margin-bottom: 1rem;">
+            <div class="modal-icon">${icon}</div>
+            <h3 class="modal-subtitle">${item.kompetenzTitle || 'Kompetenz'}</h3>
+            <p class="modal-text">${item.thema || ''}</p>
+            <p class="modal-date">Erstellt: ${date}</p>
+        </div>
+        
+        ${verknuepfungenHTML}
+        
+        ${beschreibungHTML}
+        
+        ${performanzHTML}
+        
+        <div class="section">
+            <h3 class="section-title">💭 Reflexion</h3>
+            <div class="section-box">
+                ${item.reflexion ? `
+                    <div class="reflexion-emoji">${item.reflexion}</div>
+                    <p class="reflexion-text">Emoji-Reflexion beim Speichern</p>
+                ` : `
+                    <p class="no-reflexion">Keine Reflexion hinzugefügt</p>
+                `}
+                ${item.textReflexion ? `
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E5E7EB;">
+                        <p class="section-box-title">Zusätzliche Reflexion:</p>
+                        <p class="section-box-text">"${item.textReflexion}"</p>
+                    </div>
+                ` : ''}
+                ${notizenHTML}
+            </div>
+        </div>
+        
+        <div class="modal-actions">
+            <button onclick="addReflexion('${item.id}')" class="btn-primary">
+                💭 Reflexion hinzufügen
+            </button>
+            <button onclick="downloadItemModal('${item.id}')" class="btn-secondary">
+                ⬇️ Download
+            </button>
+            <button onclick="sendDocument('${item.id}')" class="btn-tertiary">
+                📧 Versenden
+            </button>
+        </div>
+    `;
+    
+    modal.classList.add('show');
+};
         
 function formatPerformanzData(performanz) {
     let html = '';
