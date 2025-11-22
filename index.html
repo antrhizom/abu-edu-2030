@@ -45,6 +45,11 @@
             50% { transform: translate(15px, -70px) rotate(-20deg); }
             75% { transform: translate(-15px, -40px) rotate(-12deg); }
         }
+
+        @keyframes ant-bob {
+            0%, 100% { transform: translateY(0) rotate(-8deg); }
+            50% { transform: translateY(-8px) rotate(-4deg); }
+        }
         
         @keyframes antenna-wiggle-left {
             0%, 100% { transform: rotate(0deg); }
@@ -837,15 +842,15 @@
         /* Floating Ant */
         .floating-ant {
             position: fixed;
-            bottom: 40px;
-            right: 40px;
+            bottom: 32px;
+            right: 28px;
             cursor: pointer;
             z-index: 1000;
-            animation: ant-float 8s ease-in-out infinite;
+            animation: ant-bob 7s ease-in-out infinite;
             transition: transform 0.3s ease;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
-            width: 90px;
-            height: 90px;
+            width: 86px;
+            height: 86px;
         }
         
         .floating-ant svg {
@@ -855,7 +860,7 @@
         }
         
         .floating-ant:hover {
-            transform: scale(1.2) rotate(5deg) !important;
+            transform: scale(1.15) rotate(4deg) !important;
             animation-play-state: paused;
         }
         
@@ -873,8 +878,8 @@
         
         .ant-speech-bubble {
             position: fixed;
-            bottom: 150px;
-            right: 50px;
+            bottom: 138px;
+            right: 38px;
             background: white;
             padding: 1rem 1.25rem;
             border-radius: 1.25rem;
@@ -898,7 +903,7 @@
             content: '';
             position: absolute;
             bottom: -15px;
-            right: 30px;
+            right: 28px;
             width: 0;
             height: 0;
             border-left: 15px solid transparent;
@@ -1136,8 +1141,8 @@
             .section-title { font-size: 2rem; }
             .accordion-title { font-size: 1.25rem; }
             .spiral-grid { grid-template-columns: 1fr; }
-            .floating-ant { bottom: 25px; right: 25px; width: 70px; height: 70px; }
-            .ant-speech-bubble { bottom: 120px; right: 35px; max-width: 250px; }
+            .floating-ant { bottom: 24px; right: 22px; width: 70px; height: 70px; }
+            .ant-speech-bubble { bottom: 118px; right: 30px; max-width: 250px; }
             .returning-user-card {
                 flex-direction: column;
                 text-align: center;
