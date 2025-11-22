@@ -89,6 +89,21 @@
             font-size: 4rem;
         }
         
+        .header-right {
+            text-align: right;
+        }
+        
+        .progress-count {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #8B4513;
+        }
+        
+        .progress-label {
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+        
         /* Info Box */
         .info-box {
             background: white;
@@ -109,6 +124,11 @@
             color: #374151;
             line-height: 1.6;
             margin-bottom: 0.75rem;
+        }
+        
+        .info-small {
+            font-size: 0.875rem;
+            color: #6B7280;
         }
         
         /* Modi Grid */
@@ -138,6 +158,16 @@
             transform: translateY(-4px);
             box-shadow: 0 8px 24px rgba(139, 69, 19, 0.2);
             border-color: #FF6B35;
+        }
+        
+        .modus-card.completed {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(76, 175, 80, 0.05));
+            border-color: #4CAF50;
+        }
+        
+        .modus-card.in-progress {
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.1), rgba(33, 150, 243, 0.05));
+            border-color: #2196F3;
         }
         
         .modus-header-flex {
@@ -173,6 +203,44 @@
             display: inline-block;
         }
         
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            background: #F3F4F6;
+            color: #6B7280;
+            margin-left: auto;
+        }
+        
+        .modus-card.completed .status-badge {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            font-weight: 600;
+        }
+        
+        .modus-card.in-progress .status-badge {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196F3;
+            font-weight: 600;
+        }
+        
+        .card-button {
+            width: 100%;
+            background: #8B4513;
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 0.75rem;
+        }
+        
+        .card-button:hover {
+            background: rgba(139, 69, 19, 0.9);
+        }
+        
         /* Modal */
         .modal {
             display: none;
@@ -200,6 +268,12 @@
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .modal-header {
@@ -389,52 +463,50 @@
             color: #374151;
         }
         
-        /* Portfolio Section */
-        .portfolio-section {
-            background: #F9FAFB;
-            border-radius: 12px;
+        /* Emoji Box */
+        .emoji-box {
+            background: linear-gradient(to right, rgba(255, 107, 53, 0.1), rgba(76, 175, 80, 0.1));
+            border-radius: 16px;
             padding: 1.5rem;
-            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid rgba(255, 107, 53, 0.2);
         }
         
-        .portfolio-title {
-            font-size: 1.125rem;
+        .emoji-title {
             font-weight: bold;
             color: #8B4513;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
         }
         
-        .portfolio-prompt {
+        .emoji-subtitle {
             font-size: 0.875rem;
             color: #6B7280;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
         
         .emoji-buttons {
             display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
             flex-wrap: wrap;
+            gap: 0.75rem;
         }
         
         .emoji-btn {
             font-size: 2.5rem;
             background: none;
-            border: 2px solid transparent;
+            border: none;
             cursor: pointer;
-            transition: all 0.2s;
-            padding: 0.5rem;
-            border-radius: 8px;
+            transition: transform 0.2s;
+            opacity: 0.5;
         }
         
         .emoji-btn:hover {
-            transform: scale(1.15);
-            background: rgba(255, 107, 53, 0.1);
+            transform: scale(1.25);
+            opacity: 1;
         }
         
         .emoji-btn.selected {
-            border-color: #FF6B35;
-            background: rgba(255, 107, 53, 0.15);
+            opacity: 1;
+            transform: scale(1.2);
         }
         
         .selected-emojis {
@@ -447,7 +519,6 @@
             flex-wrap: wrap;
             gap: 0.5rem;
             align-items: center;
-            margin-bottom: 1rem;
         }
         
         .emoji-placeholder {
@@ -457,6 +528,17 @@
         
         .selected-emoji {
             font-size: 2rem;
+        }
+        
+        .notizen-field {
+            margin-top: 1rem;
+        }
+        
+        .char-count {
+            text-align: right;
+            font-size: 0.75rem;
+            color: #9CA3AF;
+            margin-top: 0.25rem;
         }
         
         .modal-actions {
@@ -477,13 +559,29 @@
             transition: background 0.2s;
         }
         
-        .btn-save:hover:not(:disabled) {
+        .btn-save:hover {
             background: rgba(76, 175, 80, 0.9);
         }
         
         .btn-save:disabled {
-            background: #9CA3AF;
+            background: #D1D5DB;
             cursor: not-allowed;
+        }
+        
+        .btn-portfolio {
+            flex: 1;
+            background: #2196F3;
+            color: white;
+            font-weight: bold;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .btn-portfolio:hover {
+            background: rgba(33, 150, 243, 0.9);
         }
         
         .btn-cancel {
@@ -499,6 +597,27 @@
         
         .btn-cancel:hover {
             background: #D1D5DB;
+        }
+        
+        /* Auto-save indicator */
+        .auto-save-indicator {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            font-size: 0.875rem;
+            color: #6B7280;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 999;
+        }
+        
+        .auto-save-indicator.show {
+            display: flex;
         }
         
         /* Footer */
@@ -549,6 +668,10 @@
                 </div>
                 <div class="header-icon">💬</div>
             </div>
+            <div class="header-right" style="margin-top: 1rem;">
+                <div class="progress-count" id="progressCount">0/9</div>
+                <div class="progress-label">geübt</div>
+            </div>
         </div>
         
         <!-- Info Box -->
@@ -559,6 +682,9 @@
                 Der Mensch hört und liest Texte in unterschiedlichen, medienabhängigen und oft multimodalen Erscheinungsformen und 
                 unterschiedlichen Kontexten für sich selbst (Rezeption) und formuliert ebenso individuell mündlich und schriftlich (Produktion). 
                 Zudem tritt er über verschiedene Medien und Ausdruckformen in Interaktion mit anderen und tauscht sich aus (Interaktion).
+            </p>
+            <p class="info-small">
+                Deine Eingaben werden automatisch gespeichert und du kannst jederzeit weiterarbeiten!
             </p>
         </div>
         
@@ -581,6 +707,12 @@
         </div>
     </div>
     
+    <!-- Auto-save Indicator -->
+    <div id="autoSaveIndicator" class="auto-save-indicator">
+        <span>✓</span>
+        <span>Gespeichert</span>
+    </div>
+    
     <!-- Modus Modal -->
     <div id="modusModal" class="modal">
         <div class="modal-content">
@@ -593,7 +725,7 @@
                             <p id="modalSubtitle" class="modal-subtitle"></p>
                         </div>
                     </div>
-                    <button onclick="closeModal()" class="close-btn">×</button>
+                    <button id="closeModal" class="close-btn">×</button>
                 </div>
             </div>
             
@@ -605,7 +737,7 @@
     
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
-        import { getFirestore, doc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        import { getFirestore, doc, getDoc, updateDoc, setDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
         
         const firebaseConfig = {
             apiKey: "AIzaSyDycvEwK6KJZyFEtsGIaHJBhIFTp5L4cdA",
@@ -622,7 +754,8 @@
         let userId = null;
         let currentModus = null;
         let selectedEmojis = [];
-        let uebungAbgeschlossen = false;
+        let autoSaveTimeout = null;
+        let currentActivityData = {};
         
         const modi = [
             {
@@ -878,7 +1011,7 @@
             }
         ];
         
-        window.addEventListener('load', function() {
+        window.addEventListener('load', async function() {
             document.getElementById('currentYear').textContent = new Date().getFullYear();
             
             userId = localStorage.getItem('ant_edu_user_id');
@@ -888,34 +1021,120 @@
             }
             
             renderModi();
+            await loadProgress();
+            setupEventListeners();
         });
         
         function renderModi() {
             const grid = document.getElementById('modiGrid');
             grid.innerHTML = modi.map(modus => `
-                <div class="modus-card" onclick="openModus('${modus.id}')">
+                <div class="modus-card" data-modus="${modus.id}">
                     <div class="modus-header-flex">
                         <span class="modus-icon">${modus.icon}</span>
                         <div style="flex: 1;">
                             <h3 class="modus-title">${modus.title}</h3>
                             <p class="modus-description">${modus.description}</p>
                         </div>
+                        <span class="status-badge">Noch nicht geübt</span>
                     </div>
                     <div style="margin-top: 0.75rem;">
                         <span class="uebung-badge">
                             📝 1 Übung
                         </span>
                     </div>
+                    <button class="card-button">Üben →</button>
                 </div>
             `).join('');
         }
         
-        window.openModus = function(modusId) {
+        async function loadProgress() {
+            try {
+                const userRef = doc(db, 'users', userId);
+                const aktivitaetenRef = doc(db, 'aktivitaeten', userId);
+                
+                const [userDoc, aktivitaetenDoc] = await Promise.all([
+                    getDoc(userRef),
+                    getDoc(aktivitaetenRef)
+                ]);
+                
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    const sprachmodiData = data.kompetenzen?.sprachmodi || {};
+                    
+                    const count = Object.keys(sprachmodiData).length;
+                    document.getElementById('progressCount').textContent = `${count}/9`;
+                    
+                    Object.keys(sprachmodiData).forEach(modusId => {
+                        updateCardStatus(modusId, 'completed');
+                    });
+                }
+                
+                // Check for in-progress activities
+                if (aktivitaetenDoc.exists()) {
+                    const aktivitaeten = aktivitaetenDoc.data().sprachmodi || {};
+                    Object.entries(aktivitaeten).forEach(([modusId, data]) => {
+                        if (data.status === 'in-progress' && !isActivityCompleted(modusId)) {
+                            updateCardStatus(modusId, 'in-progress');
+                        }
+                    });
+                }
+            } catch (error) {
+                console.log('Offline oder Fehler:', error);
+            }
+        }
+        
+        function isActivityCompleted(modusId) {
+            const card = document.querySelector(`[data-modus="${modusId}"]`);
+            return card && card.classList.contains('completed');
+        }
+        
+        function updateCardStatus(modusId, status) {
+            const card = document.querySelector(`[data-modus="${modusId}"]`);
+            if (card) {
+                card.classList.remove('completed', 'in-progress');
+                card.classList.add(status);
+                
+                const badge = card.querySelector('.status-badge');
+                const button = card.querySelector('.card-button');
+                
+                if (status === 'completed') {
+                    badge.textContent = '✅ Geübt';
+                    badge.classList.add('completed');
+                    button.textContent = 'Erneut üben →';
+                } else if (status === 'in-progress') {
+                    badge.textContent = '⏳ In Arbeit';
+                    badge.classList.add('in-progress');
+                    button.textContent = 'Weiterarbeiten →';
+                }
+            }
+        }
+        
+        function setupEventListeners() {
+            document.querySelectorAll('.modus-card').forEach(card => {
+                const button = card.querySelector('.card-button');
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const modusId = card.getAttribute('data-modus');
+                    openModus(modusId);
+                });
+            });
+            
+            document.getElementById('closeModal').addEventListener('click', closeModal);
+            document.getElementById('modusModal').addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+        }
+        
+        async function openModus(modusId) {
             currentModus = modi.find(m => m.id === modusId);
             if (!currentModus) return;
             
-            uebungAbgeschlossen = false;
-            selectedEmojis = [];
+            // Load existing activity data
+            await loadActivityData(modusId);
+            
+            // Reset emoji state
+            selectedEmojis = currentActivityData.reflexion?.emojis || [];
             
             const modal = document.getElementById('modusModal');
             document.getElementById('modalIcon').textContent = currentModus.icon;
@@ -927,8 +1146,182 @@
             
             modal.classList.add('show');
             
-            setupUebungListeners(currentModus.uebung.typ);
-        };
+            // Setup listeners
+            setTimeout(() => {
+                restoreActivityData();
+                setupUebungListeners(currentModus.uebung.typ);
+                setupActivityListeners();
+                setupAutoSave();
+            }, 100);
+        }
+        
+        async function loadActivityData(modusId) {
+            try {
+                const aktivitaetenRef = doc(db, 'aktivitaeten', userId);
+                const aktivitaetenDoc = await getDoc(aktivitaetenRef);
+                
+                if (aktivitaetenDoc.exists()) {
+                    const data = aktivitaetenDoc.data();
+                    currentActivityData = data.sprachmodi?.[modusId] || {};
+                    selectedEmojis = currentActivityData.reflexion?.emojis || [];
+                } else {
+                    currentActivityData = {};
+                    selectedEmojis = [];
+                }
+            } catch (error) {
+                console.log('Fehler beim Laden:', error);
+                currentActivityData = {};
+                selectedEmojis = [];
+            }
+        }
+        
+        function restoreActivityData() {
+            if (!currentActivityData.activity) return;
+            
+            const activity = currentActivityData.activity;
+            
+            // Restore selections for multiple choice
+            if (activity.selections) {
+                activity.selections.forEach((selection, qIndex) => {
+                    if (selection !== null && selection !== undefined) {
+                        const choice = document.querySelector(`[data-question="${qIndex}"][data-option="${selection}"]`);
+                        if (choice) choice.classList.add('selected');
+                    }
+                });
+            }
+            
+            // Restore checkboxes
+            if (activity.checkboxes) {
+                const checkboxes = document.querySelectorAll('.check-item');
+                activity.checkboxes.forEach((checked, index) => {
+                    if (checkboxes[index]) checkboxes[index].checked = checked;
+                });
+            }
+            
+            // Restore text inputs
+            if (activity.emailBetreff) {
+                const betreffInput = document.getElementById('emailBetreff');
+                if (betreffInput) betreffInput.value = activity.emailBetreff;
+            }
+            if (activity.emailText) {
+                const textInput = document.getElementById('emailText');
+                if (textInput) textInput.value = activity.emailText;
+            }
+            
+            // Restore emojis
+            updateSelectedEmojis();
+            
+            // Restore notizen
+            const notizenField = document.getElementById('notizenField');
+            if (notizenField && currentActivityData.reflexion?.notizen) {
+                notizenField.value = currentActivityData.reflexion.notizen;
+                const charCount = document.getElementById('charCount');
+                if (charCount) charCount.textContent = notizenField.value.length;
+            }
+        }
+        
+        function setupAutoSave() {
+            const inputs = document.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                input.addEventListener('input', triggerAutoSave);
+                input.addEventListener('change', triggerAutoSave);
+            });
+        }
+        
+        function triggerAutoSave() {
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(async () => {
+                await saveActivityData(false);
+                showAutoSaveIndicator();
+            }, 2000);
+        }
+        
+        async function saveActivityData(markCompleted = false) {
+            try {
+                const aktivitaetenRef = doc(db, 'aktivitaeten', userId);
+                const aktivitaetenDoc = await getDoc(aktivitaetenRef);
+                
+                let aktivitaeten = {};
+                if (aktivitaetenDoc.exists()) {
+                    aktivitaeten = aktivitaetenDoc.data();
+                }
+                
+                if (!aktivitaeten.sprachmodi) {
+                    aktivitaeten.sprachmodi = {};
+                }
+                
+                // Collect current activity data
+                const activity = collectActivityData();
+                
+                aktivitaeten.sprachmodi[currentModus.id] = {
+                    status: markCompleted ? 'completed' : 'in-progress',
+                    activity: activity,
+                    reflexion: {
+                        emojis: selectedEmojis,
+                        notizen: document.getElementById('notizenField')?.value || ''
+                    },
+                    lastUpdated: new Date().toISOString()
+                };
+                
+                await setDoc(aktivitaetenRef, aktivitaeten);
+                
+                if (!markCompleted) {
+                    updateCardStatus(currentModus.id, 'in-progress');
+                }
+            } catch (error) {
+                console.error('Fehler beim Speichern:', error);
+            }
+        }
+        
+        function collectActivityData() {
+            const data = {};
+            const uebungTyp = currentModus.uebung.typ;
+            
+            // Multiple choice types
+            if (uebungTyp === 'multiple-choice' || uebungTyp === 'gespraech-situationen' || 
+                uebungTyp === 'digital-kommunikation' || uebungTyp === 'schriftliche-reaktion') {
+                data.selections = [];
+                const questions = document.querySelectorAll('[data-question]');
+                const maxQ = questions.length > 0 ? Math.max(...Array.from(questions).map(q => parseInt(q.dataset.question))) : -1;
+                for (let i = 0; i <= maxQ; i++) {
+                    const selected = document.querySelector(`[data-question="${i}"].selected`);
+                    data.selections[i] = selected ? parseInt(selected.dataset.option) : null;
+                }
+            }
+            
+            // Checkbox types
+            if (uebungTyp === 'video-analyse' || uebungTyp === 'praesentation-check' || 
+                uebungTyp === 'multimedia-planung' || uebungTyp === 'lese-verstehen') {
+                data.checkboxes = [];
+                document.querySelectorAll('.check-item').forEach(checkbox => {
+                    data.checkboxes.push(checkbox.checked);
+                });
+            }
+            
+            // Text input
+            if (uebungTyp === 'text-schreiben') {
+                const betreff = document.getElementById('emailBetreff');
+                const text = document.getElementById('emailText');
+                if (betreff) data.emailBetreff = betreff.value;
+                if (text) data.emailText = text.value;
+            }
+            
+            return data;
+        }
+        
+        function showAutoSaveIndicator() {
+            const indicator = document.getElementById('autoSaveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 2000);
+        }
+        
+        function closeModal() {
+            document.getElementById('modusModal').classList.remove('show');
+            currentModus = null;
+            currentActivityData = {};
+        }
         
         function generateModalContent(modus) {
             const uebung = modus.uebung;
@@ -939,35 +1332,7 @@
                     <p class="uebung-beschreibung">${uebung.beschreibung}</p>
                     ${generateUebungHTML(uebung)}
                 </div>
-                
-                <div class="portfolio-section" id="portfolioSection" style="display: none;">
-                    <h3 class="portfolio-title">💭 Wie war's für dich?</h3>
-                    <p class="portfolio-prompt">Wähle ein oder mehrere Emojis als Reflexion:</p>
-                    <div class="emoji-buttons" id="emojiButtons">
-                        <button class="emoji-btn" data-emoji="😊" title="Hat Spaß gemacht">😊</button>
-                        <button class="emoji-btn" data-emoji="💪" title="War anstrengend">💪</button>
-                        <button class="emoji-btn" data-emoji="🤔" title="Musste nachdenken">🤔</button>
-                        <button class="emoji-btn" data-emoji="❓" title="War unklar">❓</button>
-                        <button class="emoji-btn" data-emoji="🔥" title="War super">🔥</button>
-                        <button class="emoji-btn" data-emoji="😅" title="War schwierig">😅</button>
-                        <button class="emoji-btn" data-emoji="💡" title="Hatte eine Idee">💡</button>
-                        <button class="emoji-btn" data-emoji="✅" title="Gut gelaufen">✅</button>
-                    </div>
-                    <div id="selectedEmojis" class="selected-emojis">
-                        <span class="emoji-placeholder" id="emojiPlaceholder">Klicke auf Emojis...</span>
-                    </div>
-                    <div class="modal-actions">
-                        <button onclick="markAsCompleted()" class="btn-save" id="markBtn" disabled>
-                            ✅ Als geübt markieren
-                        </button>
-                        <button onclick="speichernPortfolio()" class="btn-save" id="portfolioBtn" disabled style="background: #2196F3;">
-                            📁 Ins Portfolio speichern
-                        </button>
-                        <button onclick="closeModal()" class="btn-cancel">
-                            Abbrechen
-                        </button>
-                    </div>
-                </div>
+                ${getReflexionBox()}
             `;
             
             return html;
@@ -976,14 +1341,15 @@
         function generateUebungHTML(uebung) {
             let html = '';
             
-            if (uebung.typ === 'multiple-choice' || uebung.typ === 'gespraech-situationen' || uebung.typ === 'digital-kommunikation' || uebung.typ === 'texttypen' || uebung.typ === 'schriftliche-reaktion') {
+            if (uebung.typ === 'multiple-choice' || uebung.typ === 'gespraech-situationen' || 
+                uebung.typ === 'digital-kommunikation' || uebung.typ === 'schriftliche-reaktion') {
                 html += `<div id="uebungContent">`;
-                const fragen = uebung.fragen || uebung.situationen || uebung.szenarien || uebung.beispiele;
+                const fragen = uebung.fragen || uebung.situationen || uebung.szenarien;
                 fragen.forEach((item, qIndex) => {
                     html += `
                         <div style="margin-bottom: 1.5rem;">
                             <p style="font-weight: 600; margin-bottom: 0.75rem; color: #374151;">
-                                ${qIndex + 1}. ${item.frage || item.situation || item.nachricht || item.text}
+                                ${qIndex + 1}. ${item.frage || item.situation || item.nachricht}
                             </p>
                             <div class="choice-grid">
                                 ${item.optionen.map((option, oIndex) => `
@@ -1054,37 +1420,58 @@
                     <div class="feedback" id="feedback"></div>
                 `;
             }
-            else if (uebung.typ === 'sprachbewusstheit') {
-                html += `<div id="uebungContent">`;
-                uebung.beispiele.forEach((item, index) => {
-                    html += `
-                        <div style="margin-bottom: 1.5rem; padding: 1rem; background: #F9FAFB; border-radius: 8px; border: 2px solid #E5E7EB;">
-                            <p style="font-weight: 600; margin-bottom: 0.75rem; color: #374151;">"${item.satz}"</p>
-                            <div style="display: flex; gap: 0.75rem;">
-                                ${item.kontext.map((kontext, kIndex) => `
-                                    <button class="choice-item" data-question="${index}" data-option="${kIndex}" style="flex: 1; text-align: center;">
-                                        ${kontext}
-                                    </button>
-                                `).join('')}
-                            </div>
-                        </div>
-                    `;
-                });
-                html += `</div>`;
-                html += `
-                    <button class="check-btn" id="checkBtn">Zuordnung prüfen</button>
-                    <div class="feedback" id="feedback"></div>
-                `;
-            }
             
             return html;
+        }
+        
+        function getReflexionBox() {
+            return `
+                <div class="emoji-box">
+                    <h3 class="emoji-title">💭 Reflexion</h3>
+                    <p class="emoji-subtitle">Wie war's für dich? Wähle Emojis:</p>
+                    <div class="emoji-buttons" id="emojiButtons">
+                        <button class="emoji-btn" data-emoji="😊" title="Hat Spaß gemacht">😊</button>
+                        <button class="emoji-btn" data-emoji="💪" title="War anstrengend">💪</button>
+                        <button class="emoji-btn" data-emoji="🤔" title="Musste nachdenken">🤔</button>
+                        <button class="emoji-btn" data-emoji="❓" title="War unklar">❓</button>
+                        <button class="emoji-btn" data-emoji="🔥" title="War super">🔥</button>
+                        <button class="emoji-btn" data-emoji="😅" title="War schwierig">😅</button>
+                        <button class="emoji-btn" data-emoji="💡" title="Hatte eine Idee">💡</button>
+                        <button class="emoji-btn" data-emoji="✅" title="Gut gelaufen">✅</button>
+                    </div>
+                    <div id="selectedEmojis" class="selected-emojis">
+                        <span class="emoji-placeholder">Klicke auf Emojis...</span>
+                    </div>
+                    
+                    <div class="notizen-field">
+                        <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">📝 Zusätzliche Notizen (optional)</label>
+                        <textarea id="notizenField" class="text-input" placeholder="Was hast du gelernt? Was war herausfordernd?" maxlength="500" style="min-height: 80px;"></textarea>
+                        <div class="char-count">
+                            <span id="charCount">0</span>/500 Zeichen
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button id="speichernBtn" class="btn-save">
+                        ✅ Als geübt markieren
+                    </button>
+                    <button id="portfolioBtn" class="btn-portfolio">
+                        📁 Ins Portfolio speichern
+                    </button>
+                    <button id="abbrechenBtn" class="btn-cancel">
+                        Abbrechen
+                    </button>
+                </div>
+            `;
         }
         
         function setupUebungListeners(typ) {
             const checkBtn = document.getElementById('checkBtn');
             if (!checkBtn) return;
             
-            if (typ === 'multiple-choice' || typ === 'gespraech-situationen' || typ === 'digital-kommunikation' || typ === 'sprachbewusstheit' || typ === 'texttypen' || typ === 'schriftliche-reaktion') {
+            if (typ === 'multiple-choice' || typ === 'gespraech-situationen' || 
+                typ === 'digital-kommunikation' || typ === 'schriftliche-reaktion') {
                 document.querySelectorAll('.choice-item').forEach(item => {
                     item.addEventListener('click', function() {
                         if (this.classList.contains('correct') || this.classList.contains('wrong')) return;
@@ -1093,6 +1480,7 @@
                             i.classList.remove('selected');
                         });
                         this.classList.add('selected');
+                        triggerAutoSave();
                     });
                 });
                 checkBtn.addEventListener('click', () => checkMultipleChoice());
@@ -1110,7 +1498,7 @@
         
         function checkMultipleChoice() {
             const uebung = currentModus.uebung;
-            const fragen = uebung.fragen || uebung.situationen || uebung.szenarien || uebung.beispiele;
+            const fragen = uebung.fragen || uebung.situationen || uebung.szenarien;
             let correctCount = 0;
             let answeredAll = true;
             
@@ -1147,7 +1535,7 @@
             } else {
                 showFeedback(`Du hast ${correctCount} von ${fragen.length} Fragen richtig beantwortet. Die richtigen Antworten sind grün markiert.`, true, 'partial');
             }
-            markUebungComplete();
+            disableCheckBtn();
         }
         
         function checkCheckboxes() {
@@ -1156,7 +1544,7 @@
             
             if (allChecked) {
                 showFeedback('✅ Sehr gut! Alle wichtigen Punkte berücksichtigt.', true);
-                markUebungComplete();
+                disableCheckBtn();
             } else {
                 showFeedback('⚠️ Bitte markiere alle wichtigen Punkte!', false);
             }
@@ -1188,7 +1576,7 @@
             } else {
                 showFeedback(`Du hast ${correct} von ${uebung.items.length} richtig erkannt. Die richtigen sind grün, die falschen rot markiert.`, true, 'partial');
             }
-            markUebungComplete();
+            disableCheckBtn();
         }
         
         function checkTextSchreiben() {
@@ -1206,21 +1594,14 @@
             }
             
             showFeedback('✅ E-Mail abgeschlossen! Denk daran: Anrede, Anliegen, Frage, Gruss und Name sollten enthalten sein.', true);
-            markUebungComplete();
+            disableCheckBtn();
         }
         
-        function markUebungComplete() {
-            uebungAbgeschlossen = true;
+        function disableCheckBtn() {
             const checkBtn = document.getElementById('checkBtn');
             if (checkBtn) {
                 checkBtn.disabled = true;
                 checkBtn.textContent = '✓ Übung abgeschlossen';
-            }
-            
-            const portfolioSection = document.getElementById('portfolioSection');
-            if (portfolioSection) {
-                portfolioSection.style.display = 'block';
-                setTimeout(() => setupEmojiListeners(), 100);
             }
         }
         
@@ -1237,58 +1618,67 @@
             }
         }
         
-        function setupEmojiListeners() {
-            const emojiButtons = document.querySelectorAll('.emoji-btn');
+        function setupActivityListeners() {
+            // Character counter for notizen
+            const notizenField = document.getElementById('notizenField');
+            const charCount = document.getElementById('charCount');
             
-            emojiButtons.forEach(btn => {
+            if (notizenField && charCount) {
+                charCount.textContent = notizenField.value.length;
+                notizenField.addEventListener('input', function() {
+                    charCount.textContent = this.value.length;
+                });
+            }
+            
+            // Update emoji buttons based on saved selection
+            document.querySelectorAll('.emoji-btn').forEach(btn => {
+                const emoji = btn.dataset.emoji;
+                if (selectedEmojis.includes(emoji)) {
+                    btn.classList.add('selected');
+                }
+                
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const emoji = this.dataset.emoji;
-                    const index = selectedEmojis.indexOf(emoji);
-                    
-                    if (index > -1) {
-                        selectedEmojis.splice(index, 1);
-                        this.classList.remove('selected');
-                    } else {
-                        selectedEmojis.push(emoji);
-                        this.classList.add('selected');
-                    }
-                    
-                    updateSelectedEmojisDisplay();
-                    updatePortfolioButton();
+                    toggleEmoji(emoji);
                 });
             });
+            
+            // Action buttons
+            document.getElementById('speichernBtn').addEventListener('click', markAsCompleted);
+            document.getElementById('portfolioBtn').addEventListener('click', saveToPortfolio);
+            document.getElementById('abbrechenBtn').addEventListener('click', closeModal);
+            
+            updateSelectedEmojis();
         }
         
-        function updateSelectedEmojisDisplay() {
-            const container = document.getElementById('selectedEmojis');
-            const placeholder = document.getElementById('emojiPlaceholder');
+        function toggleEmoji(emoji) {
+            const index = selectedEmojis.indexOf(emoji);
+            const btn = document.querySelector(`.emoji-btn[data-emoji="${emoji}"]`);
             
-            container.querySelectorAll('.selected-emoji').forEach(e => e.remove());
+            if (index > -1) {
+                selectedEmojis.splice(index, 1);
+                btn.classList.remove('selected');
+            } else {
+                selectedEmojis.push(emoji);
+                btn.classList.add('selected');
+            }
+            
+            updateSelectedEmojis();
+            triggerAutoSave();
+        }
+        
+        function updateSelectedEmojis() {
+            const container = document.getElementById('selectedEmojis');
+            if (!container) return;
             
             if (selectedEmojis.length === 0) {
-                placeholder.style.display = 'block';
+                container.innerHTML = '<span class="emoji-placeholder">Klicke auf Emojis...</span>';
             } else {
-                placeholder.style.display = 'none';
-                selectedEmojis.forEach(emoji => {
-                    const span = document.createElement('span');
-                    span.className = 'selected-emoji';
-                    span.textContent = emoji;
-                    container.appendChild(span);
-                });
+                container.innerHTML = selectedEmojis.map(e => `<span class="selected-emoji">${e}</span>`).join('');
             }
         }
         
-        function updatePortfolioButton() {
-            const portfolioBtn = document.getElementById('portfolioBtn');
-            const markBtn = document.getElementById('markBtn');
-            const hasEmojis = selectedEmojis.length > 0;
-            
-            if (portfolioBtn) portfolioBtn.disabled = !hasEmojis;
-            if (markBtn) markBtn.disabled = !hasEmojis;
-        }
-        
-        window.markAsCompleted = async function() {
+        async function markAsCompleted() {
             if (selectedEmojis.length === 0) {
                 alert('Bitte wähle mindestens ein Emoji als Reflexion!');
                 return;
@@ -1300,49 +1690,38 @@
                 
                 if (userDoc.exists()) {
                     const data = userDoc.data();
-                    const sprachmodi = data.kompetenzen?.sprachmodi || {};
+                    const sprachmodiData = data.kompetenzen?.sprachmodi || {};
                     
-                    sprachmodi[currentModus.id] = {
+                    sprachmodiData[currentModus.id] = {
                         completed: true,
                         reflexion: selectedEmojis.join(''),
                         timestamp: new Date().toISOString()
                     };
                     
                     await updateDoc(userRef, {
-                        'kompetenzen.sprachmodi': sprachmodi
+                        'kompetenzen.sprachmodi': sprachmodiData
                     });
                     
-                    alert('✅ Als geübt markiert!\n\nReflexion: ' + selectedEmojis.join(' '));
+                    // Save activity data with completed status
+                    await saveActivityData(true);
+                    
+                    updateCardStatus(currentModus.id, 'completed');
+                    await loadProgress();
                     closeModal();
+                    
+                    alert('✅ Als geübt markiert!\n\nReflexion: ' + selectedEmojis.join(' '));
                 }
             } catch (error) {
                 console.error('Fehler:', error);
                 alert('⚠️ Fehler beim Speichern. Bitte überprüfe deine Internetverbindung.');
             }
-        };
+        }
         
-        window.speichernPortfolio = async function() {
+        async function saveToPortfolio() {
             if (selectedEmojis.length === 0) {
                 alert('Bitte wähle mindestens ein Emoji als Reflexion!');
                 return;
             }
-            
-            const portfolioItem = {
-                id: Date.now().toString(),
-                type: 'sprachmodus',
-                modusId: currentModus.id,
-                kompetenzTitle: currentModus.title + ': ' + currentModus.uebung.titel,
-                thema: 'Lernbereich Sprache und Kommunikation',
-                beschreibung: currentModus.description,
-                reflexion: selectedEmojis.join(''),
-                createdAt: new Date().toISOString(),
-                shareable: true,
-                performanz: {
-                    uebungstyp: currentModus.uebung.titel,
-                    modusTyp: currentModus.uebung.typ,
-                    abgeschlossen: true
-                }
-            };
             
             try {
                 const userRef = doc(db, 'users', userId);
@@ -1350,46 +1729,60 @@
                 
                 if (userDoc.exists()) {
                     const data = userDoc.data();
-                    const sprachmodi = data.kompetenzen?.sprachmodi || {};
+                    const sprachmodiData = data.kompetenzen?.sprachmodi || {};
                     const portfolio = data.portfolio || [];
                     
-                    sprachmodi[currentModus.id] = {
+                    // Collect performance data
+                    const performanzData = collectActivityData();
+                    const notizen = document.getElementById('notizenField')?.value.trim() || '';
+                    
+                    // Mark as completed
+                    sprachmodiData[currentModus.id] = {
                         completed: true,
                         reflexion: selectedEmojis.join(''),
                         timestamp: new Date().toISOString()
+                    };
+                    
+                    // Create portfolio entry
+                    const portfolioItem = {
+                        id: 'spm_' + currentModus.id.replace(/\./g, '_') + '_' + Date.now(),
+                        type: 'sprachmodus',
+                        modusId: currentModus.id,
+                        kompetenzTitle: currentModus.title + ': ' + currentModus.uebung.titel,
+                        thema: 'Lernbereich Sprache und Kommunikation',
+                        beschreibung: currentModus.description,
+                        performanz: performanzData,
+                        reflexion: selectedEmojis.join(''),
+                        notizen: notizen,
+                        createdAt: new Date().toISOString(),
+                        shareable: true
                     };
                     
                     portfolio.push(portfolioItem);
                     
                     await updateDoc(userRef, {
-                        'kompetenzen.sprachmodi': sprachmodi,
-                        portfolio: portfolio
+                        'kompetenzen.sprachmodi': sprachmodiData,
+                        'portfolio': portfolio
                     });
                     
-                    alert('📁 Ins Portfolio gespeichert!\n\n✓ Sprachmodus als geübt markiert\n✓ Performanz dokumentiert\n✓ Reflexion: ' + selectedEmojis.join(' '));
+                    // Save activity data with completed status
+                    await saveActivityData(true);
+                    
+                    updateCardStatus(currentModus.id, 'completed');
+                    await loadProgress();
                     closeModal();
-                } else {
-                    alert('⚠️ Fehler beim Speichern.');
+                    
+                    let successMsg = '📁 Ins Portfolio gespeichert!\n\n✓ Sprachmodus als geübt markiert\n✓ Performanz dokumentiert\n✓ Reflexion: ' + selectedEmojis.join(' ');
+                    if (notizen) {
+                        successMsg += '\n✓ Notizen gespeichert';
+                    }
+                    alert(successMsg);
                 }
             } catch (error) {
                 console.error('Fehler:', error);
                 alert('⚠️ Fehler beim Speichern. Bitte überprüfe deine Internetverbindung.');
             }
-        };
-        
-        window.closeModal = function() {
-            const modal = document.getElementById('modusModal');
-            modal.classList.remove('show');
-            currentModus = null;
-            selectedEmojis = [];
-            uebungAbgeschlossen = false;
-        };
-        
-        document.getElementById('modusModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
+        }
     </script>
 </body>
 </html>
