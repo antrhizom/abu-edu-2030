@@ -1142,9 +1142,31 @@ function formatPerformanzData(performanz) {
             return;
         }
         
+        // NEU: Handler für "vorbereitungen" (Challenges) - gleiche Struktur wie Checklist
+        if (key === 'vorbereitungen' && value.items) {
+            html += `<div style="margin-bottom: 1rem;">`;
+            html += `<p class="section-box-title">✅ Vorbereitungen</p>`;
+            value.items.forEach(item => {
+                html += `<p class="section-box-small">${item.checked ? '✅' : '⬜'} ${item.text}</p>`;
+            });
+            html += `</div>`;
+            return;
+        }
+        
         if (key === 'kriterien' && value.items) {
             html += `<div style="margin-bottom: 1rem;">`;
-            html += `<p class="section-box-title">✅ Kriterien (${value.erfuellt}/${value.total})</p>`;
+            html += `<p class="section-box-title">✅ Kriterien</p>`;
+            value.items.forEach(item => {
+                html += `<p class="section-box-small">${item.checked ? '✅' : '⬜'} ${item.text}</p>`;
+            });
+            html += `</div>`;
+            return;
+        }
+
+        // NEU: Handler für "strategien" aus Challenges (oft Items-Array)
+        if (key === 'strategien' && value.items) {
+            html += `<div style="margin-bottom: 1rem;">`;
+            html += `<p class="section-box-title">🧠 Strategien</p>`;
             value.items.forEach(item => {
                 html += `<p class="section-box-small">${item.checked ? '✅' : '⬜'} ${item.text}</p>`;
             });
@@ -1193,26 +1215,43 @@ function formatPerformanzData(performanz) {
             return;
         }
         
-        if (key === 'wochenplan' && Array.isArray(value)) {
-            html += `<div style="margin-bottom: 1rem;">`;
-            html += `<p class="section-box-title">📅 Wochenplan</p>`;
-            value.forEach(day => {
-                if (day.eintrag) {
-                    html += `<p class="section-box-small">• ${day.tag}: ${day.eintrag}</p>`;
-                }
-            });
-            html += `</div>`;
-            return;
+        // Update für Wochenplan: Unterscheidung Array vs Object
+        if (key === 'wochenplan') {
+             html += `<div style="margin-bottom: 1rem;">`;
+             html += `<p class="section-box-title">📅 Wochenplan</p>`;
+             if (Array.isArray(value)) {
+                 // Schlüsselkompetenz Style
+                 value.forEach(day => {
+                    if (day.eintrag) html += `<p class="section-box-small">• ${day.tag}: ${day.eintrag}</p>`;
+                 });
+             } else {
+                 // Challenge Style (Object)
+                 Object.entries(value).forEach(([tag, text]) => {
+                     if(text) html += `<p class="section-box-small">• ${tag.charAt(0).toUpperCase() + tag.slice(1)}: ${text}</p>`;
+                 });
+             }
+             html += `</div>`;
+             return;
         }
         
-        if (key === 'strategien' && value.items) {
-            html += `<div style="margin-bottom: 1rem;">`;
-            html += `<p class="section-box-title">📚 Lernstrategien (${value.ausgewaehlt}/${value.total})</p>`;
-            value.items.forEach(item => {
-                html += `<p class="section-box-small">${item.checked ? '✅' : '⬜'} ${item.text}</p>`;
-            });
-            html += `</div>`;
-            return;
+        // NEU: Handler für E-Mail (Challenges)
+        if (key === 'email') {
+             html += `<div style="margin-bottom: 1rem;">`;
+             html += `<p class="section-box-title">✉️ E-Mail Entwurf</p>`;
+             html += `<p class="section-box-small"><strong>Betreff:</strong> ${value.betreff}</p>`;
+             html += `<p class="section-box-text" style="margin-left: 1rem; border-left: 2px solid #ccc; padding-left: 0.5rem;">${value.text ? value.text.replace(/\n/g, '<br>') : ''}</p>`;
+             html += `</div>`;
+             return;
+        }
+
+        // NEU: Handler für Analyse (Challenges)
+        if (key === 'analyse') {
+             html += `<div style="margin-bottom: 1rem;">`;
+             html += `<p class="section-box-title">🧐 Analyse</p>`;
+             html += `<p class="section-box-small"><strong>Eigene Sicht:</strong> ${value.eigene_sicht}</p>`;
+             html += `<p class="section-box-small"><strong>Andere Sicht:</strong> ${value.andere_sicht}</p>`;
+             html += `</div>`;
+             return;
         }
         
         if (key === 'bewertungen' && Array.isArray(value)) {
@@ -1311,7 +1350,11 @@ function formatFieldLabel(key) {
         'herausfordernd': '⚠️ War herausfordernd',
         'gelernt': '💡 Gelernt',
         'vorsatz': '🎯 Vorsatz',
-        'notizen': '📝 Notizen'
+        'notizen': '📝 Notizen',
+        'vorbereitungen': '✅ Vorbereitungen',
+        'fragen': '❓ Offene Fragen',
+        'nachbereitung': '📞 Nachbereitung',
+        'gespraechseroeffnung': '🗣️ Gesprächseröffnung'
     };
     
     return labels[key] || key.charAt(0).toUpperCase() + key.slice(1);
