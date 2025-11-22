@@ -31,10 +31,27 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
-        
+
         .kompetenz-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 12px 24px rgba(139, 69, 19, 0.2);
+        }
+
+        .card-ant {
+            width: 64px;
+            height: 64px;
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
+            animation: ant-bob 6s ease-in-out infinite;
+        }
+
+        .card-ant svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        @keyframes ant-bob {
+            0%, 100% { transform: translateY(0) rotate(-8deg); }
+            50% { transform: translateY(-8px) rotate(-4deg); }
         }
     </style>
 </head>
@@ -176,7 +193,33 @@
                                 <span id="schluesselCount">0 geübt</span>
                             </div>
                         </div>
-                        <div class="text-2xl text-ant-primary">→</div>
+                        <div class="flex flex-col items-center gap-3">
+                            <div class="card-ant" aria-hidden="true">
+                                <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                                    <ellipse cx="30" cy="35" rx="12" ry="15" fill="#8B4513"/>
+                                    <ellipse cx="30" cy="20" rx="10" ry="12" fill="#A0522D"/>
+                                    <circle cx="30" cy="10" r="8" fill="#8B4513"/>
+                                    <line x1="26" y1="6" x2="22" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="34" y1="6" x2="38" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <circle cx="22" cy="0" r="2" fill="#654321"/>
+                                    <circle cx="38" cy="0" r="2" fill="#654321"/>
+                                    <line x1="20" y1="25" x2="10" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="20" y1="30" x2="8" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="22" y1="38" x2="12" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="40" y1="25" x2="50" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="40" y1="30" x2="52" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="38" y1="38" x2="48" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <ellipse cx="26" cy="10" rx="3" ry="4" fill="white"/>
+                                    <ellipse cx="34" cy="10" rx="3" ry="4" fill="white"/>
+                                    <circle cx="26" cy="11" r="2" fill="#333"/>
+                                    <circle cx="34" cy="11" r="2" fill="#333"/>
+                                    <circle cx="26.5" cy="10" r="0.8" fill="white"/>
+                                    <circle cx="34.5" cy="10" r="0.8" fill="white"/>
+                                    <path d="M 24 14 Q 30 16 36 14" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="text-2xl text-ant-primary">→</div>
+                        </div>
                     </div>
                 </a>
                 
@@ -197,7 +240,33 @@
                                 <span id="aspekteCount">0 geübt</span>
                             </div>
                         </div>
-                        <div class="text-2xl text-ant-secondary">→</div>
+                        <div class="flex flex-col items-center gap-3">
+                            <div class="card-ant" aria-hidden="true">
+                                <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                                    <ellipse cx="30" cy="35" rx="12" ry="15" fill="#8B4513"/>
+                                    <ellipse cx="30" cy="20" rx="10" ry="12" fill="#A0522D"/>
+                                    <circle cx="30" cy="10" r="8" fill="#8B4513"/>
+                                    <line x1="26" y1="6" x2="22" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="34" y1="6" x2="38" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <circle cx="22" cy="0" r="2" fill="#654321"/>
+                                    <circle cx="38" cy="0" r="2" fill="#654321"/>
+                                    <line x1="20" y1="25" x2="10" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="20" y1="30" x2="8" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="22" y1="38" x2="12" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="40" y1="25" x2="50" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="40" y1="30" x2="52" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="38" y1="38" x2="48" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <ellipse cx="26" cy="10" rx="3" ry="4" fill="white"/>
+                                    <ellipse cx="34" cy="10" rx="3" ry="4" fill="white"/>
+                                    <circle cx="26" cy="11" r="2" fill="#333"/>
+                                    <circle cx="34" cy="11" r="2" fill="#333"/>
+                                    <circle cx="26.5" cy="10" r="0.8" fill="white"/>
+                                    <circle cx="34.5" cy="10" r="0.8" fill="white"/>
+                                    <path d="M 24 14 Q 30 16 36 14" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="text-2xl text-ant-secondary">→</div>
+                        </div>
                     </div>
                 </a>
                 
@@ -218,7 +287,33 @@
                                 <span id="sprachCount">0 geübt</span>
                             </div>
                         </div>
-                        <div class="text-2xl text-ant-accent">→</div>
+                        <div class="flex flex-col items-center gap-3">
+                            <div class="card-ant" aria-hidden="true">
+                                <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                                    <ellipse cx="30" cy="35" rx="12" ry="15" fill="#8B4513"/>
+                                    <ellipse cx="30" cy="20" rx="10" ry="12" fill="#A0522D"/>
+                                    <circle cx="30" cy="10" r="8" fill="#8B4513"/>
+                                    <line x1="26" y1="6" x2="22" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="34" y1="6" x2="38" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <circle cx="22" cy="0" r="2" fill="#654321"/>
+                                    <circle cx="38" cy="0" r="2" fill="#654321"/>
+                                    <line x1="20" y1="25" x2="10" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="20" y1="30" x2="8" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="22" y1="38" x2="12" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="40" y1="25" x2="50" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="40" y1="30" x2="52" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="38" y1="38" x2="48" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <ellipse cx="26" cy="10" rx="3" ry="4" fill="white"/>
+                                    <ellipse cx="34" cy="10" rx="3" ry="4" fill="white"/>
+                                    <circle cx="26" cy="11" r="2" fill="#333"/>
+                                    <circle cx="34" cy="11" r="2" fill="#333"/>
+                                    <circle cx="26.5" cy="10" r="0.8" fill="white"/>
+                                    <circle cx="34.5" cy="10" r="0.8" fill="white"/>
+                                    <path d="M 24 14 Q 30 16 36 14" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="text-2xl text-ant-accent">→</div>
+                        </div>
                     </div>
                 </a>
             </div>
