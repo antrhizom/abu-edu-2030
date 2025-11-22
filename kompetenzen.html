@@ -522,7 +522,8 @@
         ];
 
         let antMessageIndex = 0;
-        
+        let antHideTimeout = null;
+
         function showAntMessage() {
             const messageEl = document.getElementById('antMessage');
             const bubble = document.getElementById('antBubble');
@@ -532,7 +533,30 @@
             bubble.classList.add('visible');
             bubble.setAttribute('aria-hidden', 'false');
 
+            if (antHideTimeout) {
+                clearTimeout(antHideTimeout);
+            }
+            antHideTimeout = setTimeout(() => {
+                bubble.classList.remove('visible');
+                bubble.setAttribute('aria-hidden', 'true');
+            }, 7000);
+
             antMessageIndex = (antMessageIndex + 1) % antMessages.length;
+        }
+
+        function toggleBubbleVisibility() {
+            const bubble = document.getElementById('antBubble');
+            if (!bubble) return;
+
+            if (bubble.classList.contains('visible')) {
+                bubble.classList.remove('visible');
+                bubble.setAttribute('aria-hidden', 'true');
+                if (antHideTimeout) {
+                    clearTimeout(antHideTimeout);
+                }
+            } else {
+                showAntMessage();
+            }
         }
 
         function startAntMessages() {
@@ -543,7 +567,7 @@
             if (!bubble || !trigger || !messageEl) return;
 
             const handleInteraction = () => {
-                showAntMessage();
+                toggleBubbleVisibility();
             };
 
             trigger.addEventListener('click', handleInteraction);
@@ -553,7 +577,8 @@
                     handleInteraction();
                 }
             });
-            bubble.addEventListener('click', handleInteraction);
+
+            bubble.addEventListener('click', showAntMessage);
         }
     </script>
 </body>
