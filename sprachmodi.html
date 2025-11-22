@@ -1788,21 +1788,22 @@
                     
                     // Create portfolio entry
                     const portfolioItem = {
-                        id: 'spm_' + currentModus.id.replace(/\./g, '_') + '_' + Date.now(),
-                        type: 'sprachmodus',
-                        modusId: currentModus.id,
-                        modusTitle: currentModus.title,
-                        kompetenzTitle: currentModus.title + ': ' + currentModus.uebung.titel,
-                        thema: 'Lernbereich Sprache und Kommunikation',
-                        beschreibung: currentModus.description,
-                        aspekte: currentModus.aspekte,
-                        schluesselkompetenzen: currentModus.schluesselkompetenzen,
-                        performanz: performanzData,
-                        reflexion: selectedEmojis.join(''),
-                        notizen: notizen,
-                        createdAt: new Date().toISOString(),
-                        shareable: true
-                    };
+    id: 'spm_' + currentModus.id.replace(/\./g, '_') + '_' + Date.now(),
+    type: 'sprachmodus',
+    modusId: currentModus.id,
+    modusTitle: currentModus.title,
+    kompetenzTitle: currentModus.title + ': ' + currentModus.uebung.titel,
+    thema: 'Lernbereich Sprache und Kommunikation',
+    beschreibung: currentModus.description,
+    aspekte: currentModus.aspekte,
+    schluesselkompetenzen: currentModus.schluesselkompetenzen,
+    uebung: currentModus.uebung, // ← NEU: Speichere die komplette Übung!
+    performanz: performanzData,
+    reflexion: selectedEmojis.join(''),
+    notizen: notizen,
+    createdAt: new Date().toISOString(),
+    shareable: true
+};
                     
                     portfolio.push(portfolioItem);
                     
