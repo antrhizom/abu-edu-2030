@@ -427,7 +427,16 @@
             document.getElementById('totalProgressBar').style.width = `${totalPercent}%`;
             
             document.getElementById('kompetenzCount').textContent = total;
-            document.getElementById('challengeCount').textContent = data.challenges || 0;
+            
+            // Challenges korrekt zählen (kann Objekt oder Zahl sein)
+            let challengeCount = 0;
+            if (typeof data.challenges === 'number') {
+                challengeCount = data.challenges;
+            } else if (data.challenges && typeof data.challenges === 'object') {
+                challengeCount = Object.keys(data.challenges).length;
+            }
+            document.getElementById('challengeCount').textContent = challengeCount;
+            
             document.getElementById('verbindungCount').textContent = Math.floor(total * 1.5);
             
             updateCircleStatus(schluesselCount, aspekteCount, sprachCount);
