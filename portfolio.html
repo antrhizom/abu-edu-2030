@@ -96,15 +96,27 @@
             margin-bottom: 2rem;
         }
         
-        @media (min-width: 768px) {
+        @media (min-width: 640px) {
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
         }
         
         @media (min-width: 1024px) {
             .stats-grid {
                 grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media (min-width: 1280px) {
+            .stats-grid {
+                grid-template-columns: repeat(7, 1fr);
             }
         }
         
@@ -125,7 +137,6 @@
             font-size: 2rem;
             font-weight: bold;
             color: #8B4513;
-            margin-bottom: 0.25rem;
         }
         
         .stat-label {
@@ -133,60 +144,64 @@
             color: #6B7280;
         }
         
-        /* Filter Section */
-        .filter-section {
+        /* Filter Bar */
+        .filter-bar {
             background: white;
             border-radius: 16px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            padding: 1.5rem;
+            padding: 1rem;
             margin-bottom: 2rem;
         }
         
-        .filter-title {
-            font-size: 1.125rem;
-            font-weight: bold;
-            color: #8B4513;
-            margin-bottom: 1rem;
-        }
-        
-        .filter-grid {
-            display: grid;
+        .filter-content {
+            display: flex;
+            flex-wrap: wrap;
             gap: 0.75rem;
+            align-items: center;
+            justify-content: space-between;
         }
         
-        @media (min-width: 768px) {
-            .filter-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        
-        @media (min-width: 1024px) {
-            .filter-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
         
         .filter-btn {
-            padding: 0.75rem 1rem;
+            padding: 0.5rem 1rem;
             border-radius: 9999px;
-            border: 2px solid #E5E7EB;
-            background: white;
+            background: #E5E7EB;
+            color: #374151;
+            font-size: 0.875rem;
             font-weight: 600;
-            color: #6B7280;
+            border: none;
             cursor: pointer;
             transition: all 0.2s;
-            text-align: center;
         }
         
         .filter-btn:hover {
-            border-color: #FF6B35;
-            color: #FF6B35;
+            background: #D1D5DB;
         }
         
         .filter-btn.active {
-            background: #FF6B35;
-            border-color: #FF6B35;
+            background: #8B4513;
             color: white;
+        }
+        
+        .sort-select {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            background: #E5E7EB;
+            color: #374151;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+        
+        .sort-select:focus {
+            border-color: #8B4513;
+            outline: none;
         }
         
         /* Portfolio Grid */
@@ -244,6 +259,15 @@
             color: #8B4513;
             border-radius: 9999px;
             font-weight: 600;
+        }
+        
+        .card-category {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #8B4513;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
         }
         
         .card-title {
@@ -318,19 +342,6 @@
             background: rgba(76, 175, 80, 0.2);
         }
         
-        .btn-delete-small {
-            background: rgba(239, 68, 68, 0.1);
-            color: #EF4444;
-            flex: 0;
-            white-space: nowrap;
-            font-size: 1rem;
-            padding: 0.5rem 0.75rem;
-        }
-        
-        .btn-delete-small:hover {
-            background: rgba(239, 68, 68, 0.2);
-        }
-        
         /* Empty State */
         .empty-state {
             background: white;
@@ -373,74 +384,62 @@
             background: #D2691E;
         }
         
-        /* Modal Styles */
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
-            top: 0;
+            z-index: 1000;
             left: 0;
+            top: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
             padding: 1rem;
-            overflow-y: auto;
         }
         
         .modal.show {
             display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            padding-top: 2rem;
-            padding-bottom: 2rem;
         }
         
         .modal-content {
             background: white;
             border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             max-width: 800px;
             width: 100%;
-            position: relative;
-            animation: modalSlideIn 0.3s ease;
-        }
-        
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
         }
         
         .modal-header {
-            padding: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
         }
         
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #8B4513;
+        }
+        
+        .close-btn {
             font-size: 2rem;
+            color: #9CA3AF;
             background: none;
             border: none;
             cursor: pointer;
-            color: #6B7280;
+            line-height: 1;
             transition: all 0.2s;
         }
         
-        .modal-close:hover {
-            color: #374151;
+        .close-btn:hover {
+            color: #6B7280;
             transform: scale(1.1);
-        }
-        
-        .modal-body {
-            padding: 2rem;
         }
         
         .modal-icon {
@@ -449,24 +448,26 @@
         }
         
         .modal-subtitle {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: bold;
             color: #8B4513;
             margin-bottom: 0.5rem;
         }
         
         .modal-text {
+            font-size: 0.875rem;
             color: #6B7280;
             margin-bottom: 0.5rem;
         }
         
         .modal-date {
-            font-size: 0.875rem;
+            font-size: 0.75rem;
             color: #9CA3AF;
+            margin-bottom: 1.5rem;
         }
         
         .section {
-            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
         }
         
         .section-title {
@@ -491,36 +492,13 @@
         .section-box-text {
             font-size: 0.875rem;
             color: #374151;
-            margin-bottom: 0.5rem;
-            line-height: 1.5;
+            margin-bottom: 0.25rem;
         }
         
         .section-box-small {
             font-size: 0.75rem;
             color: #6B7280;
             margin-left: 1rem;
-            margin-bottom: 0.25rem;
-        }
-        
-        .performanz-detail {
-            background: white;
-            border-left: 3px solid #FF6B35;
-            padding: 0.75rem;
-            margin-bottom: 0.75rem;
-            border-radius: 8px;
-        }
-        
-        .performanz-label {
-            font-weight: 600;
-            color: #8B4513;
-            font-size: 0.875rem;
-            margin-bottom: 0.25rem;
-        }
-        
-        .performanz-value {
-            color: #374151;
-            font-size: 0.875rem;
-            padding: 0.25rem 0;
         }
         
         .reflexion-emoji {
@@ -542,7 +520,6 @@
             display: flex;
             gap: 0.75rem;
             flex-wrap: wrap;
-            padding-top: 1rem;
         }
         
         .btn-primary {
@@ -594,22 +571,6 @@
             background: #1976D2;
         }
         
-        .btn-delete {
-            background: rgba(239, 68, 68, 0.9);
-            color: white;
-            font-weight: bold;
-            padding: 0.75rem 1.5rem;
-            border-radius: 9999px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            min-width: 150px;
-        }
-        
-        .btn-delete:hover {
-            background: rgba(220, 38, 38, 1);
-        }
-        
         /* Footer */
         .footer {
             margin-top: 2rem;
@@ -655,7 +616,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="header-icon">📚</div>
+                <div class="header-icon">📁</div>
             </div>
         </div>
         
@@ -664,165 +625,237 @@
             <div class="stat-card">
                 <div class="stat-icon">📝</div>
                 <div class="stat-value" id="totalWorks">0</div>
-                <div class="stat-label">Gespeicherte Arbeiten</div>
+                <div class="stat-label">Gesamt</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">🔑</div>
-                <div class="stat-value" id="schluesselCount">0</div>
-                <div class="stat-label">Schlüsselkompetenzen</div>
+                <div class="stat-value" id="schluesselWorks">0</div>
+                <div class="stat-label">Schlüsselkomp.</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">🌍</div>
-                <div class="stat-value" id="aspekteCount">0</div>
-                <div class="stat-label">Gesellschaftliche Aspekte</div>
+                <div class="stat-value" id="aspektWorks">0</div>
+                <div class="stat-label">Aspekte</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">💬</div>
-                <div class="stat-value" id="sprachmodiCount">0</div>
+                <div class="stat-value" id="sprachWorks">0</div>
                 <div class="stat-label">Sprachmodi</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-value" id="challengeWorks">0</div>
+                <div class="stat-label">Challenges</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💭</div>
+                <div class="stat-value" id="reflexionen">0</div>
+                <div class="stat-label">Reflexionen</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⬇️</div>
+                <div class="stat-value" id="downloads">0</div>
+                <div class="stat-label">Downloads</div>
             </div>
         </div>
         
-        <!-- Filter Section -->
-        <div class="filter-section">
-            <div class="filter-title">🔍 Filter</div>
-            <div class="filter-grid">
-                <button class="filter-btn active" onclick="filterPortfolio('all')">Alle anzeigen</button>
-                <button class="filter-btn" onclick="filterPortfolio('schluesselkompetenz')">🔑 Schlüsselkompetenzen</button>
-                <button class="filter-btn" onclick="filterPortfolio('aspekt')">🌍 Gesellschaftliche Aspekte</button>
-                <button class="filter-btn" onclick="filterPortfolio('sprachmodus')">💬 Sprachmodi</button>
+        <!-- Filter -->
+        <div class="filter-bar">
+            <div class="filter-content">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="alle">
+                        Alle
+                    </button>
+                    <button class="filter-btn" data-filter="schluesselkompetenz">
+                        🔑 Schlüsselkompetenzen
+                    </button>
+                    <button class="filter-btn" data-filter="aspekt">
+                        🌍 Aspekte/Handlungsfelder
+                    </button>
+                    <button class="filter-btn" data-filter="sprachmodus">
+                        💬 Sprachmodi
+                    </button>
+                    <button class="filter-btn" data-filter="challenge">
+                        🎯 Challenges
+                    </button>
+                </div>
+                <select id="sortSelect" class="sort-select">
+                    <option value="newest">Neueste zuerst</option>
+                    <option value="oldest">Älteste zuerst</option>
+                </select>
             </div>
         </div>
         
         <!-- Portfolio Grid -->
-        <div class="portfolio-grid" id="portfolioGrid"></div>
-        
-        <!-- Empty State -->
-        <div class="empty-state" id="emptyState">
-            <div class="empty-icon">📦</div>
-            <h2 class="empty-title">Noch keine Arbeiten gespeichert</h2>
-            <p class="empty-text">
-                Beginne mit den Übungen in den Schlüsselkompetenzen, Gesellschaftlichen Aspekten oder Sprachmodi, 
-                um dein Portfolio aufzubauen.
-            </p>
-            <a href="dashboard.html" class="empty-link">Zurück zum Dashboard</a>
+        <div id="portfolioGrid" class="portfolio-grid">
+            <!-- Wird dynamisch gefüllt -->
         </div>
         
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state">
+            <div class="empty-icon">📂</div>
+            <h3 class="empty-title">Noch keine Einträge</h3>
+            <p class="empty-text">
+                Beginne mit einer Übung und speichere sie ins Portfolio!
+            </p>
+            <a href="kompetenzen.html" class="empty-link">
+                Zu den Übungen →
+            </a>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-content">
+                <div class="footer-text">
+                    <span class="footer-icon">🐜✏️👓</span>
+                    <span>|</span>
+                    <span>ant edu</span>
+                    <span>|</span>
+                    <span id="currentYear"></span>
+                </div>
+            </div>
+        </div>
     </div>
     
     <!-- Detail Modal -->
-    <div class="modal" id="detailModal" onclick="closeModalOnOutsideClick(event)">
-        <div class="modal-content" onclick="event.stopPropagation()">
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
             <div class="modal-header">
-                <button class="modal-close" onclick="closeDetailModal()">×</button>
+                <h2 class="modal-title">Portfolio-Eintrag</h2>
+                <button onclick="closeModal()" class="close-btn">×</button>
             </div>
-            <div class="modal-body" id="modalContentDiv"></div>
-        </div>
-    </div>
-    
-    <!-- Footer -->
-    <div class="footer">
-        <div class="footer-content">
-            <div class="footer-text">
-                <span class="footer-icon">🐜</span>
-                <span>SLP ABU 2030 | ant edu</span>
+            <div id="modalContentDiv">
+                <!-- Wird dynamisch gefüllt -->
             </div>
         </div>
     </div>
     
-    <!-- Firebase -->
     <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
-        import { getDatabase, ref, onValue, remove } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js';
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getFirestore, doc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
         
         const firebaseConfig = {
-            apiKey: "AIzaSyDQpXT6TqmysVH70ip-kIKlaKh2c2I6RqY",
-            authDomain: "ant-edu.firebaseapp.com",
-            databaseURL: "https://ant-edu-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "ant-edu",
-            storageBucket: "ant-edu.firebasestorage.app",
-            messagingSenderId: "581632925128",
-            appId: "1:581632925128:web:55421470906142418bfe75"
+            apiKey: "AIzaSyDycvEwK6KJZyFEtsGIaHJBhIFTp5L4cdA",
+            authDomain: "abueba2030.firebaseapp.com",
+            projectId: "abueba2030",
+            storageBucket: "abueba2030.firebasestorage.app",
+            messagingSenderId: "592718816412",
+            appId: "1:592718816412:web:366e44efabba256d48b959"
         };
         
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getDatabase(app);
+        const db = getFirestore(app);
         
-        let currentUser = null;
+        let userId = null;
         let allPortfolioItems = [];
-        let currentFilter = 'all';
+        let currentFilter = 'alle';
+        let downloadCount = 0;
         
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUser = user;
-                loadPortfolio();
-            } else {
+        window.addEventListener('load', async function() {
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            userId = localStorage.getItem('ant_edu_user_id');
+            if (!userId) {
                 window.location.href = 'index.html';
+                return;
             }
+            
+            const displayName = localStorage.getItem('ant_edu_display_name');
+            if (displayName) {
+                document.getElementById('portfolioSubtitle').textContent = `${displayName}s Portfolio`;
+            }
+            
+            await loadPortfolio();
+            setupEventListeners();
         });
         
-        function loadPortfolio() {
-            const portfolioRef = ref(db, `users/${currentUser.uid}/portfolio`);
-            
-            onValue(portfolioRef, (snapshot) => {
-                allPortfolioItems = [];
-                
-                if (snapshot.exists()) {
-                    snapshot.forEach((childSnapshot) => {
-                        const item = childSnapshot.val();
-                        item.id = childSnapshot.key;
-                        allPortfolioItems.push(item);
+        function setupEventListeners() {
+            // Filter Buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => {
+                        b.classList.remove('active');
                     });
+                    this.classList.add('active');
                     
-                    allPortfolioItems.sort((a, b) => b.createdAt - a.createdAt);
-                    
-                    updateStatistics();
-                    displayPortfolio();
-                } else {
-                    showEmptyState();
-                }
+                    currentFilter = this.getAttribute('data-filter');
+                    renderPortfolio();
+                });
+            });
+            
+            // Sort
+            document.getElementById('sortSelect').addEventListener('change', function() {
+                renderPortfolio();
             });
         }
         
-        function updateStatistics() {
-            const totalWorks = allPortfolioItems.length;
-            const schluessel = allPortfolioItems.filter(item => item.type === 'schluesselkompetenz').length;
-            const aspekte = allPortfolioItems.filter(item => item.type === 'aspekt').length;
-            const sprachmodi = allPortfolioItems.filter(item => item.type === 'sprachmodus').length;
-            
-            document.getElementById('totalWorks').textContent = totalWorks;
-            document.getElementById('schluesselCount').textContent = schluessel;
-            document.getElementById('aspekteCount').textContent = aspekte;
-            document.getElementById('sprachmodiCount').textContent = sprachmodi;
+        async function loadPortfolio() {
+            try {
+                const userDoc = await getDoc(doc(db, 'users', userId));
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    allPortfolioItems = data.portfolio || [];
+                    downloadCount = data.downloadCount || 0;
+                    
+                    updateStats();
+                    renderPortfolio();
+                }
+            } catch (error) {
+                console.log('Offline oder Fehler:', error);
+                document.getElementById('emptyState').style.display = 'block';
+            }
         }
         
-        function displayPortfolio() {
+        function updateStats() {
+            const total = allPortfolioItems.length;
+            const schluessel = allPortfolioItems.filter(i => i.type === 'schluesselkompetenz').length;
+            const aspekte = allPortfolioItems.filter(i => i.type === 'aspekt' || i.type === 'handlungsfeld').length;
+            const sprachmodi = allPortfolioItems.filter(i => i.type === 'sprachmodus').length;
+            const challenges = allPortfolioItems.filter(i => i.type === 'challenge').length;
+            const withReflexion = allPortfolioItems.filter(i => i.reflexion && i.reflexion.length > 0).length;
+            
+            document.getElementById('totalWorks').textContent = total;
+            document.getElementById('schluesselWorks').textContent = schluessel;
+            document.getElementById('aspektWorks').textContent = aspekte;
+            document.getElementById('sprachWorks').textContent = sprachmodi;
+            document.getElementById('challengeWorks').textContent = challenges;
+            document.getElementById('reflexionen').textContent = withReflexion;
+            document.getElementById('downloads').textContent = downloadCount;
+        }
+        
+        function renderPortfolio() {
             const grid = document.getElementById('portfolioGrid');
             const emptyState = document.getElementById('emptyState');
             
-            let filteredItems = allPortfolioItems;
-            if (currentFilter !== 'all') {
-                filteredItems = allPortfolioItems.filter(item => item.type === currentFilter);
+            // Filtern
+            let filtered = allPortfolioItems;
+            if (currentFilter !== 'alle') {
+                if (currentFilter === 'aspekt') {
+                    // Aspekte und Handlungsfelder zusammen filtern
+                    filtered = allPortfolioItems.filter(item => 
+                        item.type === 'aspekt' || item.type === 'handlungsfeld'
+                    );
+                } else {
+                    filtered = allPortfolioItems.filter(item => item.type === currentFilter);
+                }
             }
             
-            if (filteredItems.length === 0) {
-                grid.style.display = 'none';
+            // Sortieren
+            const sortOrder = document.getElementById('sortSelect').value;
+            filtered.sort((a, b) => {
+                const dateA = new Date(a.createdAt);
+                const dateB = new Date(b.createdAt);
+                return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+            });
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
                 emptyState.style.display = 'block';
                 return;
             }
             
-            grid.style.display = 'grid';
             emptyState.style.display = 'none';
-            
-            grid.innerHTML = filteredItems.map(item => createPortfolioCard(item)).join('');
-        }
-        
-        function showEmptyState() {
-            document.getElementById('portfolioGrid').style.display = 'none';
-            document.getElementById('emptyState').style.display = 'block';
-            updateStatistics();
+            grid.innerHTML = filtered.map(item => createPortfolioCard(item)).join('');
         }
         
         function createPortfolioCard(item) {
@@ -832,54 +865,70 @@
                 year: 'numeric'
             });
             
-            const icon = item.type === 'schluesselkompetenz' ? '🔑' : 
-                        item.type === 'aspekt' ? '🌍' : '💬';
-            
+            const icon = item.type === 'schluesselkompetenz' ? '🔑' : '📝';
             const uebungstyp = item.performanz?.uebungstyp || 'Übung';
             
+            // Bestimme die Kategorie basierend auf dem Type
+            let category = '';
+            if (item.type === 'schluesselkompetenz') {
+                category = '🔑 Schlüsselkompetenz';
+            } else if (item.type === 'aspekt' || item.type === 'handlungsfeld') {
+                category = '🌍 Aspekt/Handlungsfeld';
+            } else if (item.type === 'sprachmodus') {
+                category = '💬 Sprachmodus';
+            } else if (item.type === 'challenge') {
+                category = '🎯 Challenge';
+            } else {
+                category = '📝 Übung';
+            }
+            
+            const downloadButton = `
+                <button onclick="event.stopPropagation(); downloadItem('${item.id}')" class="btn btn-download">
+                    ⬇️ Download
+                </button>
+            `;
+            
+            const reflexionHTML = item.reflexion ? `
+                <div class="card-reflexion">
+                    <span class="card-reflexion-label">Reflexion:</span>
+                    <span class="card-reflexion-emoji">${item.reflexion}</span>
+                </div>
+            ` : '';
+            
             return `
-                <div class="portfolio-item">
+                <div class="portfolio-item" onclick="showDetail('${item.id}')">
                     <div class="portfolio-card-content">
                         <div class="card-header">
-                            <div class="card-icon">${icon}</div>
-                            <div class="card-date">${date}</div>
+                            <span class="card-icon">${icon}</span>
+                            <span class="card-date">${date}</span>
                         </div>
-                        <h3 class="card-title">${item.kompetenzTitle || 'Kompetenz'}</h3>
-                        <p class="card-uebung">${uebungstyp}</p>
-                        ${item.thema ? `<p class="card-thema">Thema: ${item.thema}</p>` : ''}
-                        ${item.reflexion ? `
-                            <div class="card-reflexion">
-                                <span class="card-reflexion-label">Reflexion:</span>
-                                <span class="card-reflexion-emoji">${item.reflexion}</span>
-                            </div>
-                        ` : ''}
+                        
+                        <div class="card-category">${category}</div>
+                        
+                        <h3 class="card-title">
+                            ${item.kompetenzTitle || 'Kompetenz'}
+                        </h3>
+                        
+                        <p class="card-uebung">
+                            ${uebungstyp}
+                        </p>
+                        
+                        <p class="card-thema">
+                            ${item.thema || ''}
+                        </p>
+                        
+                        ${reflexionHTML}
+                        
                         <div class="card-actions">
-                            <button class="btn btn-details" onclick="showDetail('${item.id}')">
-                                📖 Details
+                            <button onclick="event.stopPropagation(); showDetail('${item.id}')" class="btn btn-details">
+                                Details
                             </button>
-                            <button class="btn btn-download" onclick="downloadItem('${item.id}')">
-                                ⬇️
-                            </button>
-                            <button class="btn btn-delete-small" onclick="deleteItem('${item.id}')">
-                                🗑️
-                            </button>
+                            ${downloadButton}
                         </div>
                     </div>
                 </div>
             `;
         }
-        
-        window.filterPortfolio = function(filter) {
-            currentFilter = filter;
-            
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            event.target.classList.add('active');
-            
-            displayPortfolio();
-        };
         
         window.showDetail = function(itemId) {
             const item = allPortfolioItems.find(i => i.id === itemId);
@@ -909,12 +958,9 @@
                 `;
             }
             
-            const icon = item.type === 'schluesselkompetenz' ? '🔑' : 
-                        item.type === 'aspekt' ? '🌍' : '💬';
-            
             modalContent.innerHTML = `
                 <div style="margin-bottom: 1rem;">
-                    <div class="modal-icon">${icon}</div>
+                    <div class="modal-icon">${item.type === 'schluesselkompetenz' ? '🔑' : '📝'}</div>
                     <h3 class="modal-subtitle">${item.kompetenzTitle || 'Kompetenz'}</h3>
                     <p class="modal-text">${item.thema || ''}</p>
                     <p class="modal-date">Erstellt: ${date}</p>
@@ -950,268 +996,476 @@
                     <button onclick="sendDocument('${item.id}')" class="btn-tertiary">
                         📧 Versenden
                     </button>
-                    <button onclick="deleteItemFromModal('${item.id}')" class="btn-delete">
-                        🗑️ Löschen
-                    </button>
                 </div>
             `;
             
             modal.classList.add('show');
         };
         
-        function formatPerformanzData(performanz) {
-            let html = '';
-            
-            // Alle Felder außer 'uebungstyp' durchgehen
-            Object.keys(performanz).forEach(key => {
-                if (key === 'uebungstyp') return;
-                
-                const value = performanz[key];
-                const label = formatFieldLabel(key);
-                
-                // Verschiedene Datentypen formatieren
-                if (typeof value === 'object' && value !== null) {
-                    // Objekte (z.B. checklist, kriterien)
-                    if (value.completed !== undefined && value.total !== undefined) {
-                        html += `
-                            <div class="performanz-detail">
-                                <div class="performanz-label">${label}</div>
-                                <div class="performanz-value">✅ ${value.completed} von ${value.total} erledigt</div>
-                            </div>
-                        `;
-                    } else if (value.erfuellt !== undefined && value.total !== undefined) {
-                        html += `
-                            <div class="performanz-detail">
-                                <div class="performanz-label">${label}</div>
-                                <div class="performanz-value">✅ ${value.erfuellt} von ${value.total} erfüllt</div>
-                                ${value.liste ? `<div class="performanz-value" style="font-size: 0.75rem; color: #6B7280; margin-top: 0.25rem;">→ ${value.liste.join(', ')}</div>` : ''}
-                            </div>
-                        `;
-                    } else if (value.person1 || value.person2 || value.person3) {
-                        // Rollen
-                        html += `
-                            <div class="performanz-detail">
-                                <div class="performanz-label">${label}</div>
-                                ${value.person1 ? `<div class="performanz-value">• Person 1: ${getRoleName(value.person1)}</div>` : ''}
-                                ${value.person2 ? `<div class="performanz-value">• Person 2: ${getRoleName(value.person2)}</div>` : ''}
-                                ${value.person3 ? `<div class="performanz-value">• Person 3: ${getRoleName(value.person3)}</div>` : ''}
-                            </div>
-                        `;
-                    } else {
-                        // Andere Objekte
-                        Object.keys(value).forEach(subKey => {
-                            const subLabel = formatFieldLabel(subKey);
-                            html += `
-                                <div class="performanz-detail">
-                                    <div class="performanz-label">${subLabel}</div>
-                                    <div class="performanz-value">${value[subKey]}</div>
-                                </div>
-                            `;
-                        });
-                    }
-                } else if (Array.isArray(value)) {
-                    // Arrays
-                    html += `
-                        <div class="performanz-detail">
-                            <div class="performanz-label">${label}</div>
-                            <div class="performanz-value">${value.join(', ')}</div>
-                        </div>
-                    `;
-                } else {
-                    // Einfache Werte
-                    html += `
-                        <div class="performanz-detail">
-                            <div class="performanz-label">${label}</div>
-                            <div class="performanz-value">${value}</div>
-                        </div>
-                    `;
+function formatPerformanzData(performanz) {
+    let html = '';
+    
+    // Alle gespeicherten Felder durchgehen und anzeigen
+    const excludeKeys = ['uebungstyp', 'kompetenzId'];
+    
+    Object.entries(performanz).forEach(([key, value]) => {
+        if (excludeKeys.includes(key)) return;
+        if (!value) return;
+        
+        // Spezielle Formatierung für bekannte Felder
+        if (key === 'checklist' && value.items) {
+            html += `<div style="margin-bottom: 1rem;">`;
+            html += `<p class="section-box-title">✅ Checklist (${value.completed}/${value.total})</p>`;
+            value.items.forEach(item => {
+                html += `<p class="section-box-small">${item.checked ? '✅' : '⬜'} ${item.text}</p>`;
+            });
+            html += `</div>`;
+            return;
+        }
+        
+        if (key === 'kriterien' && value.items) {
+            html += `<div style="margin-bottom: 1rem;">`;
+            html += `<p class="section-box-title">✅ Kriterien (${value.erfuellt}/${value.total})</p>`;
+            value.items.forEach(item => {
+                html += `<p class="section-box-small">${item.checked ? '✅' : '⬜'} ${item.text}</p>`;
+            });
+            html += `</div>`;
+            return;
+        }
+        
+        if (key === 'rollen' && Array.isArray(value)) {
+            html += `<div style="margin-bottom: 1rem;">`;
+            html += `<p class="section-box-title">👥 Rollenverteilung</p>`;
+            value.forEach(role => {
+                html += `<p class="section-box-small">• ${role.person}: ${role.rolleText || role.rolleValue}</p>`;
+            });
+            html += `</div>`;
+            return;
+        }
+        
+        if (key === 'pruefpunkte' && value.items) {
+            html += `<div style="margin-bottom: 1rem;">`;
+            html += `<p class="section-box-title">🔍 Prüfpunkte (${value.markiert}/${value.total})</p>`;
+            value.items.forEach(item => {
+                html += `<p class="section-box-small">${item.checked ? '✅' : '⬜'} ${item.text}</p>`;
+            });
+            html += `</div>`;
+            return;
+        }
+        
+        if (key === 'reihenfolge' && Array.isArray(value)) {
+            html += `<div style="margin-bottom: 1rem;">`;
+            html += `<p class="section-box-title">🔢 Reihenfolge der Schritte</p>`;
+            value.forEach((step, index) => {
+                const isCorrect = step.eingabe === step.korrekt;
+                html += `<p class="section-box-small">${isCorrect ? '✅' : '❌'} ${index + 1}. ${step.step}</p>`;
+            });
+            html += `</div>`;
+            return;
+        }
+        
+        if (key === 'elemente' && value.items) {
+            html += `<div style="margin-bottom: 1rem;">`;
+            html += `<p class="section-box-title">📝 Ausgewählte Elemente (${value.ausgewaehlt}/${value.total})</p>`;
+            value.items.forEach(item => {
+                html += `<p class="section-box-small">${item.checked ? '✅' : '⬜'} ${item.text}</p>`;
+            });
+            html += `</div>`;
+            return;
+        }
+        
+        if (key === 'wochenplan' && Array.isArray(value)) {
+            html += `<div style="margin-bottom: 1rem;">`;
+            html += `<p class="section-box-title">📅 Wochenplan</p>`;
+            value.forEach(day => {
+                if (day.eintrag) {
+                    html += `<p class="section-box-small">• ${day.tag}: ${day.eintrag}</p>`;
                 }
             });
-            
-            return html;
+            html += `</div>`;
+            return;
         }
         
-        function formatFieldLabel(key) {
-            const labels = {
-                'betreff': '📧 Betreff',
-                'anrede': '👋 Anrede',
-                'nachricht': '✉️ Nachricht',
-                'grussformel': '👋 Grussformel',
-                'signatur': '✍️ Signatur',
-                'name': '👤 Name',
-                'strasse': '🏠 Strasse',
-                'plz': '📮 PLZ',
-                'ort': '🏙️ Ort',
-                'telefon': '📞 Telefon',
-                'email': '📧 E-Mail',
-                'checklist': '✅ Checkliste',
-                'kriterien': '📋 Kriterien',
-                'rollen': '👥 Rollenverteilung',
-                'pruefpunkte': '🔍 Prüfpunkte',
-                'reihenfolge': '🔢 Reihenfolge',
-                'zuordnung': '🔗 Zuordnung',
-                'auswahl': '☑️ Auswahl',
-                'bewertung': '⭐ Bewertung'
-            };
-            
-            return labels[key] || key.charAt(0).toUpperCase() + key.slice(1);
+        if (key === 'strategien' && value.items) {
+            html += `<div style="margin-bottom: 1rem;">`;
+            html += `<p class="section-box-title">📚 Lernstrategien (${value.ausgewaehlt}/${value.total})</p>`;
+            value.items.forEach(item => {
+                html += `<p class="section-box-small">${item.checked ? '✅' : '⬜'} ${item.text}</p>`;
+            });
+            html += `</div>`;
+            return;
         }
         
-        function getRoleName(role) {
-            const roles = {
-                'moderator': '🎯 Moderator/in',
-                'zeitwaechter': '⏰ Zeitwächter/in',
-                'protokollant': '📝 Protokollant/in',
-                'teamleader': '👑 Teamleader',
-                'researcher': '🔍 Researcher',
-                'presenter': '🎤 Presenter'
-            };
-            return roles[role] || role;
+        if (key === 'bewertungen' && Array.isArray(value)) {
+            html += `<div style="margin-bottom: 1rem;">`;
+            html += `<p class="section-box-title">⭐ Bewertungen</p>`;
+            value.forEach(bewertung => {
+                html += `<p class="section-box-small">• ${bewertung.kriterium}: ${'⭐'.repeat(bewertung.wert)} (${bewertung.wert}/${bewertung.max})</p>`;
+            });
+            html += `</div>`;
+            return;
         }
         
-        window.closeDetailModal = function() {
-            document.getElementById('detailModal').classList.remove('show');
-        };
+        if (key === 'quiz' && value.antworten) {
+            html += `<div style="margin-bottom: 1rem;">`;
+            html += `<p class="section-box-title">❓ Quiz</p>`;
+            value.antworten.forEach((antwort) => {
+                const isCorrect = antwort.checked === antwort.isCorrect;
+                html += `<p class="section-box-small">${isCorrect ? '✅' : '❌'} ${antwort.frage}</p>`;
+            });
+            html += `</div>`;
+            return;
+        }
         
-        window.closeModalOnOutsideClick = function(event) {
-            if (event.target === document.getElementById('detailModal')) {
-                closeDetailModal();
+        if (key === 'reflexion' && typeof value === 'object') {
+            html += `<div style="margin-bottom: 1rem;">`;
+            html += `<p class="section-box-title">🪞 Selbstreflexion</p>`;
+            if (value.bewertungen) {
+                value.bewertungen.forEach(b => {
+                    html += `<p class="section-box-small">• ${b.kriterium}: ${'⭐'.repeat(b.wert)} (${b.wert}/${b.max})</p>`;
+                });
             }
-        };
+            if (value.verbesserung) {
+                html += `<p class="section-box-small">🎯 Verbesserungsziel: ${value.verbesserung}</p>`;
+            }
+            html += `</div>`;
+            return;
+        }
         
-        window.addReflexion = function(itemId) {
-            const newReflexion = prompt('Füge eine zusätzliche Reflexion hinzu:');
-            if (newReflexion && newReflexion.trim()) {
-                const item = allPortfolioItems.find(i => i.id === itemId);
-                if (item) {
-                    const itemRef = ref(db, `users/${currentUser.uid}/portfolio/${itemId}`);
-                    const updates = {
-                        ...item,
-                        textReflexion: newReflexion.trim()
-                    };
+        // Generische Textfelder (alle anderen Felder)
+        if (typeof value === 'string' && value.trim()) {
+            const fieldLabel = formatFieldLabel(key);
+            html += `<div style="margin-bottom: 1rem;">`;
+            html += `<p class="section-box-title">${fieldLabel}</p>`;
+            html += `<p class="section-box-text">"${value}"</p>`;
+            html += `</div>`;
+        }
+    });
+    
+    return html || '<p class="section-box-text" style="color: #9CA3AF; font-style: italic;">Keine Details verfügbar</p>';
+}
+
+function formatFieldLabel(key) {
+    const labels = {
+        // E-Mail Formular (3.2.1)
+        'betreff': '📧 Betreff',
+        'anrede': '👋 Anrede',
+        'nachricht': '✉️ Nachricht',
+        'gruss': '👋 Grussformel',
+        
+        // Ziele (3.2.2)
+        'ziel': '🎯 Mein Ziel',
+        'schritt1': '1️⃣ Monat 1',
+        'schritt2': '2️⃣ Monat 2',
+        'schritt3': '3️⃣ Monat 3',
+        
+        // Team (3.2.3)
+        'reaktion': '🤝 Gewählte Reaktion',
+        'begruendung': '💭 Begründung',
+        
+        // Kritisches Denken (3.2.4)
+        'glaubwuerdigkeit': '⭐ Glaubwürdigkeit',
+        'aktualitaet': '⭐ Aktualität',
+        'objektivitaet': '⭐ Objektivität',
+        'bewertung': '💭 Einschätzung',
+        
+        // Problemlösung (3.2.5)
+        'problem': '❓ Erkanntes Problem',
+        'loesung': '💡 Lösungsansatz',
+        'praevention': '🛡️ Prävention',
+        
+        // Kommunikation (3.2.6)
+        'situation': '📍 Situation',
+        'wirkung': '💭 Wirkung',
+        'wunsch': '✨ Wunsch',
+        
+        // Digital (3.2.7)
+        'termine': '📅 Termine-Tool',
+        'notizen_tool': '📝 Notizen-Tool',
+        'kommunikation': '💬 Kommunikations-Tool',
+        'dateien': '📁 Dateien-Tool',
+        'passwoerter': '🔐 Passwort-Tool',
+        
+        // Lernen (3.2.8)
+        'lernzeit': '⏰ Beste Lernzeit',
+        'methoden': '📚 Lernmethoden',
+        'lernzeit_woche': '⏱️ Zeit pro Woche',
+        'ablenkungen': '🚫 Ablenkungen vermeiden',
+        
+        // Anpassung (3.2.9)
+        'veraenderung_zeitplan': '📅 Zeitplan/Tagesablauf',
+        'veraenderung_verantwortung': '💪 Verantwortung',
+        'veraenderung_sozial': '👥 Soziales Leben',
+        'anpassung_strategie': '🔄 Anpassungsstrategie',
+        
+        // Verantwortung (3.2.10)
+        'verantwortung_betrieb': '🏢 Im Betrieb',
+        'verantwortung_schule': '🏫 In der Schule',
+        'verantwortung_privat': '🏠 Im Privatleben',
+        'konsequenzen': '⚠️ Konsequenzen',
+        
+        // Kreativ (3.2.11)
+        'kreativ_typ': '🎨 Art des Elements',
+        'kreativ_inhalt': '📝 Inhalt',
+        'kreativ_tools': '🛠️ Tools/Programme',
+        'kreativ_deadline': '📅 Deadline',
+        
+        // Reflexion (3.2.12)
+        'gut': '✅ Lief gut',
+        'herausfordernd': '⚠️ War herausfordernd',
+        'gelernt': '💡 Gelernt',
+        'vorsatz': '🎯 Vorsatz',
+        
+        // Notizen
+        'notizen': '📝 Notizen'
+    };
+    
+    return labels[key] || key.charAt(0).toUpperCase() + key.slice(1);
+}
+
+        window.deleteItem = async function(itemId) {
+    if (!confirm('🗑️ Möchtest du diesen Portfolio-Eintrag wirklich löschen?\n\nDiese Aktion kann nicht rückgängig gemacht werden.')) {
+        return;
+    }
+    
+    try {
+        const userRef = doc(db, 'users', userId);
+        const userDoc = await getDoc(userRef);
+        
+        if (userDoc.exists()) {
+            const portfolio = userDoc.data().portfolio || [];
+            const filtered = portfolio.filter(i => i.id !== itemId);
+            
+            await updateDoc(userRef, { portfolio: filtered });
+            
+            alert('✅ Eintrag wurde gelöscht!');
+            await loadPortfolio();
+        }
+    } catch (error) {
+        console.error('Fehler:', error);
+        alert('❌ Fehler beim Löschen. Versuche es nochmal.');
+    }
+};
+        function getRoleName(role) {
+            const names = {
+                'recherche': '📚 Recherche & Inhalte',
+                'design': '🎨 Folien gestalten',
+                'praesentation': '🗣️ Präsentation halten'
+            };
+            return names[role] || role;
+        }
+        
+        function getVerbesserungName(value) {
+            const names = {
+                'punctuality': '⏰ Pünktlichkeit',
+                'questions': '❓ Mehr Fragen',
+                'organization': '📋 Organisation',
+                'communication': '💬 Kommunikation',
+                'focus': '🎯 Konzentration'
+            };
+            return names[value] || value;
+        }
+        
+        window.addReflexion = async function(itemId) {
+            const reflexion = prompt('💭 Füge eine Textreflexion hinzu:\n\n(Deine bisherige Emoji-Reflexion bleibt erhalten)');
+            
+            if (reflexion && reflexion.trim()) {
+                try {
+                    const userRef = doc(db, 'users', userId);
+                    const userDoc = await getDoc(userRef);
                     
-                    import('https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js')
-                        .then(({ update }) => {
-                            update(itemRef, updates).then(() => {
-                                alert('✅ Reflexion hinzugefügt!');
-                                showDetail(itemId);
-                            });
-                        });
+                    if (userDoc.exists()) {
+                        const portfolio = userDoc.data().portfolio || [];
+                        const itemIndex = portfolio.findIndex(i => i.id === itemId);
+                        
+                        if (itemIndex !== -1) {
+                            portfolio[itemIndex].textReflexion = reflexion.trim();
+                            portfolio[itemIndex].reflexionUpdatedAt = new Date().toISOString();
+                            
+                            await updateDoc(userRef, { portfolio });
+                            
+                            alert('✅ Reflexion hinzugefügt!');
+                            await loadPortfolio();
+                            closeModal();
+                        }
+                    }
+                } catch (error) {
+                    console.error('Fehler:', error);
+                    alert('Fehler beim Speichern der Reflexion.');
                 }
             }
         };
         
-        window.downloadItem = function(itemId) {
-            downloadItemCommon(itemId);
-        };
-        
-        window.downloadItemModal = function(itemId) {
-            downloadItemCommon(itemId);
-        };
-        
-        function downloadItemCommon(itemId) {
+        window.downloadItem = async function(itemId) {
             const item = allPortfolioItems.find(i => i.id === itemId);
             if (!item) return;
             
-            const date = new Date(item.createdAt).toLocaleDateString('de-CH');
-            let content = `Portfolio-Eintrag
-================
-
-Kompetenz: ${item.kompetenzTitle || 'Kompetenz'}
-Typ: ${item.type === 'schluesselkompetenz' ? 'Schlüsselkompetenz' : item.type === 'aspekt' ? 'Gesellschaftlicher Aspekt' : 'Sprachmodus'}
-Datum: ${date}
-${item.thema ? `Thema: ${item.thema}` : ''}
-
-`;
-            
-            if (item.performanz) {
-                content += `Durchgeführte Übung
-------------------
-${item.performanz.uebungstyp || 'Übung'}
-
-`;
-                
-                Object.keys(item.performanz).forEach(key => {
-                    if (key === 'uebungstyp') return;
-                    const value = item.performanz[key];
-                    const label = formatFieldLabel(key).replace(/[📧👋✉️✍️👤🏠📮🏙️📞✅📋👥🔍🔢🔗☑️⭐]/g, '').trim();
-                    
-                    if (typeof value === 'object' && value !== null) {
-                        if (value.completed !== undefined) {
-                            content += `${label}: ${value.completed} von ${value.total}\n`;
-                        } else if (value.erfuellt !== undefined) {
-                            content += `${label}: ${value.erfuellt} von ${value.total}\n`;
-                            if (value.liste) content += `  → ${value.liste.join(', ')}\n`;
-                        } else if (value.person1) {
-                            content += `${label}:\n`;
-                            if (value.person1) content += `  • Person 1: ${getRoleName(value.person1)}\n`;
-                            if (value.person2) content += `  • Person 2: ${getRoleName(value.person2)}\n`;
-                            if (value.person3) content += `  • Person 3: ${getRoleName(value.person3)}\n`;
-                        } else {
-                            Object.keys(value).forEach(subKey => {
-                                content += `${formatFieldLabel(subKey).replace(/[📧👋✉️✍️👤🏠📮🏙️📞]/g, '').trim()}: ${value[subKey]}\n`;
-                            });
-                        }
-                    } else if (Array.isArray(value)) {
-                        content += `${label}: ${value.join(', ')}\n`;
-                    } else {
-                        content += `${label}: ${value}\n`;
-                    }
+            // Download-Counter erhöhen
+            try {
+                const userRef = doc(db, 'users', userId);
+                await updateDoc(userRef, {
+                    downloadCount: (downloadCount || 0) + 1
                 });
-                
-                content += '\n';
+                downloadCount++;
+                document.getElementById('downloads').textContent = downloadCount;
+            } catch (error) {
+                console.log('Download-Counter-Update fehlgeschlagen:', error);
             }
             
-            if (item.reflexion || item.textReflexion) {
-                content += `Reflexion
----------
-${item.reflexion ? `Emoji: ${item.reflexion}\n` : ''}${item.textReflexion ? item.textReflexion : ''}
-
-`;
-            }
-            
+            // Erstelle Download-Datei
+            const content = generateDownloadContent(item);
             const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `portfolio_${item.kompetenzTitle?.replace(/\s+/g, '_') || 'eintrag'}_${date.replace(/\./g, '-')}.txt`;
+            a.download = `Portfolio_${item.kompetenzTitle || 'Arbeit'}_${new Date(item.createdAt).toLocaleDateString('de-CH')}.txt`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            alert('✅ Download gestartet!');
-        }
+            alert('✅ Dokument wurde heruntergeladen!');
+        };
+        
+        window.downloadItemModal = function(itemId) {
+            downloadItem(itemId);
+        };
         
         window.sendDocument = function(itemId) {
-            alert('📧 Die Versenden-Funktion wird in einer zukünftigen Version implementiert.\n\nVorerst kannst du die Datei herunterladen und per E-Mail versenden.');
-        };
-        
-        window.deleteItem = function(itemId) {
-            if (confirm('🗑️ Möchtest du diesen Eintrag wirklich löschen?\n\nDieser Vorgang kann nicht rückgängig gemacht werden.')) {
-                const itemRef = ref(db, `users/${currentUser.uid}/portfolio/${itemId}`);
-                remove(itemRef).then(() => {
-                    alert('✅ Eintrag wurde gelöscht!');
-                }).catch((error) => {
-                    console.error('Fehler beim Löschen:', error);
-                    alert('❌ Fehler beim Löschen. Bitte versuche es erneut.');
-                });
+            const item = allPortfolioItems.find(i => i.id === itemId);
+            if (!item) return;
+            
+            const content = generateDownloadContent(item);
+            const encodedContent = encodeURIComponent(content);
+            
+            const choice = confirm(
+                '📧 Wie möchtest du das Dokument versenden?\n\n' +
+                'OK = Per E-Mail\n' +
+                'Abbrechen = Per Teams/Chat kopieren'
+            );
+            
+            if (choice) {
+                // E-Mail
+                const subject = encodeURIComponent(`Portfolio: ${item.kompetenzTitle || 'Arbeit'}`);
+                const body = encodedContent;
+                window.location.href = `mailto:?subject=${subject}&body=${body}`;
+            } else {
+                // Teams/Chat - Kopiere in Zwischenablage
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(content).then(() => {
+                        alert('✅ Dokument wurde in die Zwischenablage kopiert!\n\nDu kannst es jetzt in Teams, WhatsApp oder einem anderen Chat einfügen.');
+                    }).catch(() => {
+                        alert('⚠️ Automatisches Kopieren fehlgeschlagen.\n\nBitte lade das Dokument herunter und kopiere den Inhalt manuell.');
+                    });
+                } else {
+                    alert('⚠️ Automatisches Kopieren wird nicht unterstützt.\n\nBitte lade das Dokument herunter und kopiere den Inhalt manuell.');
+                }
             }
         };
         
-        window.deleteItemFromModal = function(itemId) {
-            if (confirm('🗑️ Möchtest du diesen Eintrag wirklich löschen?\n\nDieser Vorgang kann nicht rückgängig gemacht werden.')) {
-                const itemRef = ref(db, `users/${currentUser.uid}/portfolio/${itemId}`);
-                remove(itemRef).then(() => {
-                    closeDetailModal();
-                    alert('✅ Eintrag wurde gelöscht!');
-                }).catch((error) => {
-                    console.error('Fehler beim Löschen:', error);
-                    alert('❌ Fehler beim Löschen. Bitte versuche es erneut.');
-                });
+        function generateDownloadContent(item) {
+            const displayName = localStorage.getItem('ant_edu_display_name') || 'Lernende/r';
+            const date = new Date(item.createdAt).toLocaleString('de-CH', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            let content = `
+═══════════════════════════════════════════════════════
+   PORTFOLIO-EINTRAG - SLP ABU 2030
+═══════════════════════════════════════════════════════
+
+Lernende/r: ${displayName}
+Erstellt: ${date}
+
+───────────────────────────────────────────────────────
+KOMPETENZ
+───────────────────────────────────────────────────────
+
+${item.kompetenzTitle || 'Kompetenz'}
+${item.thema ? `Thema: ${item.thema}` : ''}
+Typ: ${item.type === 'schluesselkompetenz' ? 'Schlüsselkompetenz' : 'Übung'}
+
+`;
+            
+            if (item.performanz) {
+                content += `
+───────────────────────────────────────────────────────
+DURCHGEFÜHRTE ÜBUNG
+───────────────────────────────────────────────────────
+
+Übungstyp: ${item.performanz.uebungstyp || 'Übung'}
+
+`;
+                
+                if (item.performanz.checklist) {
+                    content += `✅ ${item.performanz.checklist.completed} von ${item.performanz.checklist.total} Schritten erledigt\n`;
+                }
+                
+                if (item.performanz.kriterien) {
+                    content += `✅ ${item.performanz.kriterien.erfuellt} von ${item.performanz.kriterien.total} Kriterien erfüllt\n`;
+                    if (item.performanz.kriterien.liste) {
+                        content += `   Kriterien: ${item.performanz.kriterien.liste.join(', ')}\n`;
+                    }
+                }
+                
+                if (item.performanz.rollen) {
+                    content += `\n👥 Rollen:\n`;
+                    content += `   • Person 1: ${getRoleName(item.performanz.rollen.person1)}\n`;
+                    content += `   • Person 2: ${getRoleName(item.performanz.rollen.person2)}\n`;
+                    content += `   • Person 3: ${getRoleName(item.performanz.rollen.person3)}\n`;
+                }
+                
+                if (item.performanz.wochenplan) {
+                    content += `\n📅 Wochenplan:\n`;
+                    if (item.performanz.wochenplan.montag) content += `   Mo: ${item.performanz.wochenplan.montag}\n`;
+                    if (item.performanz.wochenplan.dienstag) content += `   Di: ${item.performanz.wochenplan.dienstag}\n`;
+                    if (item.performanz.wochenplan.mittwoch) content += `   Mi: ${item.performanz.wochenplan.mittwoch}\n`;
+                }
             }
+            
+            content += `
+───────────────────────────────────────────────────────
+REFLEXION
+───────────────────────────────────────────────────────
+
+`;
+            
+            if (item.reflexion) {
+                content += `Emoji-Reflexion: ${item.reflexion}\n`;
+            }
+            
+            if (item.textReflexion) {
+                content += `\nZusätzliche Reflexion:\n"${item.textReflexion}"\n`;
+            }
+            
+            if (!item.reflexion && !item.textReflexion) {
+                content += `Keine Reflexion hinzugefügt\n`;
+            }
+            
+            content += `
+═══════════════════════════════════════════════════════
+   Erstellt mit ant edu 🐜✏️👓
+   SLP ABU 2030 - Digitale Lernplattform
+═══════════════════════════════════════════════════════
+`;
+            
+            return content;
+        }
+        
+        window.closeModal = function() {
+            document.getElementById('detailModal').classList.remove('show');
         };
+        
+        // Close modal when clicking outside
+        document.getElementById('detailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
     </script>
-    
 </body>
 </html>
