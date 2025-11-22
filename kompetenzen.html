@@ -70,9 +70,18 @@
             box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
             border-radius: 14px;
             padding: 12px 14px;
-            max-width: 280px;
+            max-width: 320px;
             backdrop-filter: blur(6px);
             animation: bubble-pop 0.6s ease forwards;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .helper-bubble.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .helper-bubble h3 {
@@ -102,11 +111,18 @@
 
         .helper-ant {
             position: relative;
-            width: 70px;
-            height: 70px;
+            width: 110px;
+            height: 110px;
             display: grid;
             place-items: center;
             animation: helper-float 5s ease-in-out infinite;
+            cursor: pointer;
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
+            transition: transform 0.3s ease;
+        }
+
+        .helper-ant:hover {
+            transform: scale(1.1) rotate(3deg);
         }
 
         .helper-ant::after {
@@ -431,12 +447,10 @@
 
     <!-- Schwebende Ameise mit Aussagen -->
     <div class="floating-helper" role="complementary" aria-live="polite">
-        <div class="helper-bubble" aria-label="Ameisen-Tipp">
-            <h3>🐜 Ameise sagt:</h3>
-            <p id="antMessage">Kompetenzen werden stärker, wenn du sie in echten Situationen ausprobierst.</p>
-            <button id="antNext" type="button" aria-label="Nächsten Tipp anzeigen">Nächster Tipp ↻</button>
+        <div class="helper-bubble" id="antSpeech" aria-label="Ameisen-Tipp">
+            <p id="antMessage"></p>
         </div>
-        <div class="helper-ant" aria-hidden="true">
+        <div class="helper-ant" id="helperAnt" aria-hidden="true" title="Klick mich!">
             <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
                 <ellipse cx="30" cy="35" rx="12" ry="15" fill="#8B4513"/>
                 <ellipse cx="30" cy="20" rx="10" ry="12" fill="#A0522D"/>
@@ -520,47 +534,45 @@
             }
         }
 
-        // Rotierende Ameisen-Botschaften
-        const antMessages = [
-            'Kompetenzen werden stärker, wenn du sie in echten Situationen ausprobierst.',
-            'Bezug + Output + Ressource = Performanz – immer mitdenken!',
-            'Übe abwechslungsreich: Gesellschaftliche Aspekte schärfen deinen Blick.',
-            'Sprich darüber, schreibe darüber, handle danach – so vernetzt sich Wissen.',
-            'Setze dir Mini-Ziele und feiere jeden Fortschritt auf dem Weg.',
+        // Ameise spricht bei Klick – inspiriert von der Startseite
+        const antQuotes = [
+            'Kompetenzen sind wie Ameisenpfade – je öfter du sie nutzt, desto stärker werden sie.',
+            'Performanz = Output + Bezug + Ressource. Alles gehört zusammen!',
+            'Vernetze Themen mit Aspekten und Sprachmodi – so bleibt Wissen lebendig.',
+            'Übe im Kreis: Wiederholung auf höherem Niveau macht dich sicher.',
         ];
 
-        let antMessageIndex = 0;
-        let antInterval = null;
-
-        function renderAntMessage() {
-            const messageEl = document.getElementById('antMessage');
-            if (messageEl) {
-                messageEl.textContent = antMessages[antMessageIndex];
-            }
-        }
-
-        function nextAntMessage() {
-            antMessageIndex = (antMessageIndex + 1) % antMessages.length;
-            renderAntMessage();
-        }
+        let lastQuoteIndex = -1;
+        let hideBubbleTimeout = null;
 
         function startAntMessages() {
-            renderAntMessage();
-            const nextBtn = document.getElementById('antNext');
-            if (nextBtn) {
-                nextBtn.addEventListener('click', () => {
-                    nextAntMessage();
-                    resetAntInterval();
-                });
-            }
-            resetAntInterval();
-        }
+            const bubble = document.getElementById('antSpeech');
+            const messageEl = document.getElementById('antMessage');
+            const ant = document.getElementById('helperAnt');
 
-        function resetAntInterval() {
-            if (antInterval) {
-                clearInterval(antInterval);
-            }
-            antInterval = setInterval(nextAntMessage, 7000);
+            if (!bubble || !messageEl || !ant) return;
+
+            const showRandomQuote = () => {
+                let randomIndex;
+                do {
+                    randomIndex = Math.floor(Math.random() * antQuotes.length);
+                } while (randomIndex === lastQuoteIndex && antQuotes.length > 1);
+
+                lastQuoteIndex = randomIndex;
+                messageEl.textContent = antQuotes[randomIndex];
+                bubble.classList.add('show');
+
+                if (hideBubbleTimeout) {
+                    clearTimeout(hideBubbleTimeout);
+                }
+
+                hideBubbleTimeout = setTimeout(() => bubble.classList.remove('show'), 6000);
+            };
+
+            ant.addEventListener('click', (event) => {
+                event.stopPropagation();
+                showRandomQuote();
+            });
         }
     </script>
 </body>
