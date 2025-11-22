@@ -89,6 +89,21 @@
             font-size: 4rem;
         }
         
+        .header-right {
+            text-align: right;
+        }
+        
+        .progress-count {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #8B4513;
+        }
+        
+        .progress-label {
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+        
         /* Info Box */
         .info-box {
             background: white;
@@ -109,6 +124,11 @@
             color: #374151;
             line-height: 1.6;
             margin-bottom: 0.75rem;
+        }
+        
+        .info-small {
+            font-size: 0.875rem;
+            color: #6B7280;
         }
         
         /* Aspekte Grid */
@@ -143,6 +163,11 @@
         .aspekt-card.completed {
             background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(76, 175, 80, 0.05));
             border-color: #4CAF50;
+        }
+        
+        .aspekt-card.in-progress {
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.1), rgba(33, 150, 243, 0.05));
+            border-color: #2196F3;
         }
         
         .aspekt-header-flex {
@@ -196,14 +221,35 @@
             background: #F3F4F6;
             color: #6B7280;
             margin-left: auto;
-            display: none;
         }
         
         .aspekt-card.completed .status-badge {
-            display: inline-block;
             background: rgba(76, 175, 80, 0.2);
             color: #4CAF50;
             font-weight: 600;
+        }
+        
+        .aspekt-card.in-progress .status-badge {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196F3;
+            font-weight: 600;
+        }
+        
+        .card-button {
+            width: 100%;
+            background: #8B4513;
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 0.75rem;
+        }
+        
+        .card-button:hover {
+            background: rgba(139, 69, 19, 0.9);
         }
         
         /* Modal */
@@ -546,7 +592,7 @@
             color: #374151;
         }
         
-        /* Emoji Box - Style übernommen von Schlüsselkompetenzen */
+        /* Emoji Box */
         .emoji-box {
             background: linear-gradient(to right, rgba(255, 107, 53, 0.1), rgba(76, 175, 80, 0.1));
             border-radius: 16px;
@@ -579,10 +625,17 @@
             border: none;
             cursor: pointer;
             transition: transform 0.2s;
+            opacity: 0.5;
         }
         
         .emoji-btn:hover {
             transform: scale(1.25);
+            opacity: 1;
+        }
+        
+        .emoji-btn.selected {
+            opacity: 1;
+            transform: scale(1.2);
         }
         
         .selected-emojis {
@@ -605,8 +658,19 @@
         .selected-emoji {
             font-size: 2rem;
         }
+        
+        .notizen-field {
+            margin-top: 1rem;
+        }
+        
+        .char-count {
+            text-align: right;
+            font-size: 0.75rem;
+            color: #9CA3AF;
+            margin-top: 0.25rem;
+        }
 
-        /* Actions - Style übernommen von Schlüsselkompetenzen */
+        /* Actions */
         .modal-actions {
             display: flex;
             gap: 0.75rem;
@@ -629,6 +693,27 @@
             background: rgba(76, 175, 80, 0.9);
         }
         
+        .btn-save:disabled {
+            background: #D1D5DB;
+            cursor: not-allowed;
+        }
+        
+        .btn-portfolio {
+            flex: 1;
+            background: #2196F3;
+            color: white;
+            font-weight: bold;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .btn-portfolio:hover {
+            background: rgba(33, 150, 243, 0.9);
+        }
+        
         .btn-cancel {
             background: #E5E7EB;
             color: #374151;
@@ -642,6 +727,27 @@
         
         .btn-cancel:hover {
             background: #D1D5DB;
+        }
+        
+        /* Auto-save indicator */
+        .auto-save-indicator {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            font-size: 0.875rem;
+            color: #6B7280;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 999;
+        }
+        
+        .auto-save-indicator.show {
+            display: flex;
         }
         
         /* Footer */
@@ -692,6 +798,10 @@
                 </div>
                 <div class="header-icon">🎯</div>
             </div>
+            <div class="header-right" style="margin-top: 1rem;">
+                <div class="progress-count" id="progressCount">0/8</div>
+                <div class="progress-label">geübt</div>
+            </div>
         </div>
         
         <!-- Info Box -->
@@ -700,6 +810,9 @@
             <p class="info-text">
                 Jeder Aspekt bietet einen <strong>disziplinären Blickwinkel</strong> auf Alltagsherausforderungen. 
                 Die Handlungsfelder zeigen, welche Kompetenzen entwickelt werden.
+            </p>
+            <p class="info-small">
+                Deine Eingaben werden automatisch gespeichert und du kannst jederzeit weiterarbeiten!
             </p>
         </div>
         
@@ -722,6 +835,12 @@
         </div>
     </div>
     
+    <!-- Auto-save Indicator -->
+    <div id="autoSaveIndicator" class="auto-save-indicator">
+        <span>✓</span>
+        <span>Gespeichert</span>
+    </div>
+    
     <!-- Aspekt Modal -->
     <div id="aspektModal" class="modal">
         <div class="modal-content">
@@ -734,53 +853,19 @@
                             <p id="modalSubtitle" class="modal-subtitle"></p>
                         </div>
                     </div>
-                    <button onclick="closeModal()" class="close-btn">×</button>
+                    <button id="closeModal" class="close-btn">×</button>
                 </div>
             </div>
             
-            <div class="modal-body">
-                <div id="modalContent">
-                    <!-- Übungsinhalt hier -->
-                </div>
-
-                <!-- Reflexion mit Emojis - Genau wie bei Schlüsselkompetenzen -->
-                <div class="emoji-box">
-                    <h3 class="emoji-title">💭 Wie war's für dich?</h3>
-                    <p class="emoji-subtitle">Wähle ein oder mehrere Emojis als Reflexion:</p>
-                    <div class="emoji-buttons" id="emojiButtons">
-                        <button class="emoji-btn" data-emoji="😊" title="Hat Spaß gemacht">😊</button>
-                        <button class="emoji-btn" data-emoji="💪" title="War anstrengend">💪</button>
-                        <button class="emoji-btn" data-emoji="🤔" title="Musste nachdenken">🤔</button>
-                        <button class="emoji-btn" data-emoji="❓" title="War unklar">❓</button>
-                        <button class="emoji-btn" data-emoji="🔥" title="War super">🔥</button>
-                        <button class="emoji-btn" data-emoji="😅" title="War schwierig">😅</button>
-                        <button class="emoji-btn" data-emoji="💡" title="Hatte eine Idee">💡</button>
-                        <button class="emoji-btn" data-emoji="✅" title="Gut gelaufen">✅</button>
-                    </div>
-                    <div id="selectedEmojis" class="selected-emojis">
-                        <span class="emoji-placeholder" id="emojiPlaceholder">Klicke auf Emojis...</span>
-                    </div>
-                </div>
-
-                <!-- Aktionen - Genau wie bei Schlüsselkompetenzen -->
-                <div class="modal-actions">
-                    <button id="speichernBtn" class="btn-save">
-                        ✅ Als geübt markieren
-                    </button>
-                    <button id="portfolioBtn" class="btn-save" style="background: #2196F3;">
-                        📁 Ins Portfolio speichern
-                    </button>
-                    <button id="abbrechenBtn" class="btn-cancel">
-                        Abbrechen
-                    </button>
-                </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Wird dynamisch gefüllt -->
             </div>
         </div>
     </div>
     
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
-        import { getFirestore, doc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        import { getFirestore, doc, getDoc, updateDoc, setDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
         
         const firebaseConfig = {
             apiKey: "AIzaSyDycvEwK6KJZyFEtsGIaHJBhIFTp5L4cdA",
@@ -797,6 +882,8 @@
         let userId = null;
         let currentAspekt = null;
         let selectedEmojis = [];
+        let autoSaveTimeout = null;
+        let currentActivityData = {};
         
         const aspekte = [
             {
@@ -1043,6 +1130,7 @@
             }
         ];
         
+        // Initialisierung
         window.addEventListener('load', async function() {
             document.getElementById('currentYear').textContent = new Date().getFullYear();
             
@@ -1067,7 +1155,7 @@
                             <h3 class="aspekt-title">${aspekt.title}</h3>
                             <p class="aspekt-description">${aspekt.description}</p>
                         </div>
-                        <span class="status-badge">✓ Geübt</span>
+                        <span class="status-badge">Noch nicht geübt</span>
                     </div>
                     <div style="margin-top: 0.75rem;">
                         <span class="handlungsfelder-count">
@@ -1077,99 +1165,327 @@
                             📝 1 Übung
                         </span>
                     </div>
+                    <button class="card-button">Üben →</button>
                 </div>
             `).join('');
         }
 
         async function loadProgress() {
             try {
-                const userDoc = await getDoc(doc(db, 'users', userId));
+                const userRef = doc(db, 'users', userId);
+                const aktivitaetenRef = doc(db, 'aktivitaeten', userId);
+                
+                const [userDoc, aktivitaetenDoc] = await Promise.all([
+                    getDoc(userRef),
+                    getDoc(aktivitaetenRef)
+                ]);
+                
                 if (userDoc.exists()) {
                     const data = userDoc.data();
-                    const completedAspekte = data.kompetenzen?.aspekte || {};
+                    const aspekteData = data.kompetenzen?.aspekte || {};
                     
-                    Object.keys(completedAspekte).forEach(aspektId => {
-                        updateCardStatus(aspektId);
+                    const count = Object.keys(aspekteData).length;
+                    document.getElementById('progressCount').textContent = `${count}/8`;
+                    
+                    Object.keys(aspekteData).forEach(aspektId => {
+                        updateCardStatus(aspektId, 'completed');
+                    });
+                }
+                
+                // Check for in-progress activities
+                if (aktivitaetenDoc.exists()) {
+                    const aktivitaeten = aktivitaetenDoc.data().aspekte || {};
+                    Object.entries(aktivitaeten).forEach(([aspektId, data]) => {
+                        if (data.status === 'in-progress' && !isActivityCompleted(aspektId)) {
+                            updateCardStatus(aspektId, 'in-progress');
+                        }
                     });
                 }
             } catch (error) {
-                console.log('Error loading progress:', error);
+                console.log('Offline oder Fehler:', error);
             }
         }
+        
+        function isActivityCompleted(aspektId) {
+            const card = document.querySelector(`[data-aspekt="${aspektId}"]`);
+            return card && card.classList.contains('completed');
+        }
 
-        function updateCardStatus(aspektId) {
+        function updateCardStatus(aspektId, status) {
             const card = document.querySelector(`[data-aspekt="${aspektId}"]`);
             if (card) {
-                card.classList.add('completed');
+                card.classList.remove('completed', 'in-progress');
+                card.classList.add(status);
+                
+                const badge = card.querySelector('.status-badge');
+                const button = card.querySelector('.card-button');
+                
+                if (status === 'completed') {
+                    badge.textContent = '✅ Geübt';
+                    badge.classList.add('completed');
+                    button.textContent = 'Erneut üben →';
+                } else if (status === 'in-progress') {
+                    badge.textContent = '⏳ In Arbeit';
+                    badge.classList.add('in-progress');
+                    button.textContent = 'Weiterarbeiten →';
+                }
             }
         }
         
         function setupEventListeners() {
             document.querySelectorAll('.aspekt-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const aspektId = this.getAttribute('data-aspekt');
+                const button = card.querySelector('.card-button');
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const aspektId = card.getAttribute('data-aspekt');
                     openAspekt(aspektId);
                 });
             });
-
-            // Modal schließen Listener
+            
+            document.getElementById('closeModal').addEventListener('click', closeModal);
             document.getElementById('aspektModal').addEventListener('click', function(e) {
                 if (e.target === this) closeModal();
             });
-
-            document.getElementById('speichernBtn').addEventListener('click', markAsCompleted);
-            document.getElementById('portfolioBtn').addEventListener('click', saveToPortfolio);
-            document.getElementById('abbrechenBtn').addEventListener('click', closeModal);
-
-            // Emoji Listeners direkt hier binden
-            document.querySelectorAll('.emoji-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const emoji = this.getAttribute('data-emoji');
-                    toggleEmoji(emoji);
-                });
-            });
         }
-
-        window.openAspekt = function(aspektId) {
+        
+        async function openAspekt(aspektId) {
             currentAspekt = aspekte.find(a => a.id === aspektId);
             if (!currentAspekt) return;
             
-            // Reset Zustand
-            selectedEmojis = [];
-            updateSelectedEmojis();
+            // Load existing activity data
+            await loadActivityData(aspektId);
+            
+            // Reset emoji state
+            selectedEmojis = currentActivityData.reflexion?.emojis || [];
             
             const modal = document.getElementById('aspektModal');
             document.getElementById('modalIcon').textContent = currentAspekt.icon;
             document.getElementById('modalTitle').textContent = currentAspekt.title;
             document.getElementById('modalSubtitle').textContent = currentAspekt.description;
             
-            // Übungsinhalt generieren
-            const content = document.getElementById('modalContent');
-            content.innerHTML = generateModalContent(currentAspekt);
+            // Generate modal content
+            const content = generateModalContent(currentAspekt);
+            document.getElementById('modalBody').innerHTML = content;
             
             modal.classList.add('show');
             
-            // Event Listeners für die spezifische Übung hinzufügen
-            setupUebungListeners(currentAspekt.uebung.typ);
-        };
-
-        function toggleEmoji(emoji) {
-            if (selectedEmojis.includes(emoji)) {
-                selectedEmojis = selectedEmojis.filter(e => e !== emoji);
-            } else {
-                selectedEmojis.push(emoji);
-            }
-            updateSelectedEmojis();
+            // Setup listeners
+            setTimeout(() => {
+                restoreActivityData();
+                setupUebungListeners(currentAspekt.uebung.typ);
+                setupActivityListeners();
+                setupAutoSave();
+            }, 100);
         }
-
-        function updateSelectedEmojis() {
-            const container = document.getElementById('selectedEmojis');
-            if (selectedEmojis.length === 0) {
-                container.innerHTML = '<span class="emoji-placeholder" id="emojiPlaceholder">Klicke auf Emojis...</span>';
-            } else {
-                container.innerHTML = selectedEmojis.map(e => `<span class="selected-emoji">${e}</span>`).join('');
+        
+        async function loadActivityData(aspektId) {
+            try {
+                const aktivitaetenRef = doc(db, 'aktivitaeten', userId);
+                const aktivitaetenDoc = await getDoc(aktivitaetenRef);
+                
+                if (aktivitaetenDoc.exists()) {
+                    const data = aktivitaetenDoc.data();
+                    currentActivityData = data.aspekte?.[aspektId] || {};
+                    selectedEmojis = currentActivityData.reflexion?.emojis || [];
+                } else {
+                    currentActivityData = {};
+                    selectedEmojis = [];
+                }
+            } catch (error) {
+                console.log('Fehler beim Laden:', error);
+                currentActivityData = {};
+                selectedEmojis = [];
             }
+        }
+        
+        function restoreActivityData() {
+            if (!currentActivityData.activity) return;
+            
+            const activity = currentActivityData.activity;
+            
+            // Restore selections for multiple choice
+            if (activity.selections) {
+                activity.selections.forEach((selection, qIndex) => {
+                    if (selection !== null && selection !== undefined) {
+                        const choice = document.querySelector(`[data-question="${qIndex}"][data-option="${selection}"]`);
+                        if (choice) choice.classList.add('selected');
+                    }
+                });
+            }
+            
+            // Restore drag and drop items
+            if (activity.placements) {
+                Object.entries(activity.placements).forEach(([itemIndex, kategorieIndex]) => {
+                    const draggable = document.querySelector(`[data-index="${itemIndex}"]`);
+                    const dropZone = document.querySelector(`.drop-zone[data-kategorie="${kategorieIndex}"]`);
+                    if (draggable && dropZone) {
+                        dropZone.appendChild(draggable);
+                    }
+                });
+            }
+            
+            // Restore sliders
+            if (activity.sliders) {
+                Object.entries(activity.sliders).forEach(([index, value]) => {
+                    const slider = document.querySelector(`input[type="range"][data-index="${index}"]`);
+                    if (slider) slider.value = value;
+                });
+            }
+            
+            // Restore checkboxes
+            if (activity.checkboxes) {
+                Object.entries(activity.checkboxes).forEach(([index, checked]) => {
+                    const checkbox = document.getElementById(`check_${index}`);
+                    if (checkbox) checkbox.checked = checked;
+                });
+            }
+            
+            // Restore ranking order
+            if (activity.rankingOrder) {
+                const container = document.getElementById('rankingContainer');
+                if (container) {
+                    const items = Array.from(container.querySelectorAll('.draggable-item'));
+                    activity.rankingOrder.forEach((itemIndex, position) => {
+                        const item = items.find(i => parseInt(i.dataset.index) === itemIndex);
+                        if (item) container.appendChild(item);
+                    });
+                }
+            }
+            
+            // Restore emojis
+            updateSelectedEmojis();
+            
+            // Restore notizen
+            const notizenField = document.getElementById('notizenField');
+            if (notizenField && currentActivityData.reflexion?.notizen) {
+                notizenField.value = currentActivityData.reflexion.notizen;
+                const charCount = document.getElementById('charCount');
+                if (charCount) charCount.textContent = notizenField.value.length;
+            }
+        }
+        
+        function setupAutoSave() {
+            const inputs = document.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                input.addEventListener('input', triggerAutoSave);
+                input.addEventListener('change', triggerAutoSave);
+            });
+        }
+        
+        function triggerAutoSave() {
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(async () => {
+                await saveActivityData(false);
+                showAutoSaveIndicator();
+            }, 2000);
+        }
+        
+        async function saveActivityData(markCompleted = false) {
+            try {
+                const aktivitaetenRef = doc(db, 'aktivitaeten', userId);
+                const aktivitaetenDoc = await getDoc(aktivitaetenRef);
+                
+                let aktivitaeten = {};
+                if (aktivitaetenDoc.exists()) {
+                    aktivitaeten = aktivitaetenDoc.data();
+                }
+                
+                if (!aktivitaeten.aspekte) {
+                    aktivitaeten.aspekte = {};
+                }
+                
+                // Collect current activity data
+                const activity = collectActivityData();
+                
+                aktivitaeten.aspekte[currentAspekt.id] = {
+                    status: markCompleted ? 'completed' : 'in-progress',
+                    activity: activity,
+                    reflexion: {
+                        emojis: selectedEmojis,
+                        notizen: document.getElementById('notizenField')?.value || ''
+                    },
+                    lastUpdated: new Date().toISOString()
+                };
+                
+                await setDoc(aktivitaetenRef, aktivitaeten);
+                
+                if (!markCompleted) {
+                    updateCardStatus(currentAspekt.id, 'in-progress');
+                }
+            } catch (error) {
+                console.error('Fehler beim Speichern:', error);
+            }
+        }
+        
+        function collectActivityData() {
+            const data = {};
+            const uebungTyp = currentAspekt.uebung.typ;
+            
+            // Multiple choice
+            if (uebungTyp === 'multiple-choice') {
+                data.selections = [];
+                const questions = document.querySelectorAll('[data-question]');
+                const maxQ = Math.max(...Array.from(questions).map(q => parseInt(q.dataset.question)));
+                for (let i = 0; i <= maxQ; i++) {
+                    const selected = document.querySelector(`[data-question="${i}"].selected`);
+                    data.selections[i] = selected ? parseInt(selected.dataset.option) : null;
+                }
+            }
+            
+            // Drag and drop
+            if (uebungTyp === 'zuordnung' || uebungTyp === 'zuordnung-ebenen' || uebungTyp === 'budget-kategorien') {
+                data.placements = {};
+                document.querySelectorAll('.draggable-item').forEach(item => {
+                    const dropZone = item.parentElement;
+                    if (dropZone && dropZone.classList.contains('drop-zone')) {
+                        const itemIndex = item.dataset.index;
+                        const kategorieIndex = dropZone.dataset.kategorie;
+                        data.placements[itemIndex] = parseInt(kategorieIndex);
+                    }
+                });
+            }
+            
+            // Sliders
+            if (uebungTyp === 'bewertung' || uebungTyp === 'ki-bewertung') {
+                data.sliders = {};
+                document.querySelectorAll('input[type="range"]').forEach(slider => {
+                    data.sliders[slider.dataset.index] = slider.value;
+                });
+            }
+            
+            // Checkboxes
+            if (uebungTyp === 'vertrag-check') {
+                data.checkboxes = {};
+                document.querySelectorAll('input[type="checkbox"]').forEach((checkbox, index) => {
+                    data.checkboxes[index] = checkbox.checked;
+                });
+            }
+            
+            // Ranking
+            if (uebungTyp === 'ranking') {
+                const container = document.getElementById('rankingContainer');
+                if (container) {
+                    data.rankingOrder = Array.from(container.querySelectorAll('.draggable-item'))
+                        .map(item => parseInt(item.dataset.index));
+                }
+            }
+            
+            return data;
+        }
+        
+        function showAutoSaveIndicator() {
+            const indicator = document.getElementById('autoSaveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 2000);
+        }
+        
+        function closeModal() {
+            document.getElementById('aspektModal').classList.remove('show');
+            currentAspekt = null;
+            currentActivityData = {};
         }
         
         function generateModalContent(aspekt) {
@@ -1187,6 +1503,7 @@
                 </div>
                 
                 ${generateUebungHTML(aspekt.uebung)}
+                ${getReflexionBox()}
             `;
             return html;
         }
@@ -1309,6 +1626,48 @@
             return html;
         }
         
+        function getReflexionBox() {
+            return `
+                <div class="emoji-box">
+                    <h3 class="emoji-title">💭 Reflexion</h3>
+                    <p class="emoji-subtitle">Wie war's für dich? Wähle Emojis:</p>
+                    <div class="emoji-buttons" id="emojiButtons">
+                        <button class="emoji-btn" data-emoji="😊" title="Hat Spaß gemacht">😊</button>
+                        <button class="emoji-btn" data-emoji="💪" title="War anstrengend">💪</button>
+                        <button class="emoji-btn" data-emoji="🤔" title="Musste nachdenken">🤔</button>
+                        <button class="emoji-btn" data-emoji="❓" title="War unklar">❓</button>
+                        <button class="emoji-btn" data-emoji="🔥" title="War super">🔥</button>
+                        <button class="emoji-btn" data-emoji="😅" title="War schwierig">😅</button>
+                        <button class="emoji-btn" data-emoji="💡" title="Hatte eine Idee">💡</button>
+                        <button class="emoji-btn" data-emoji="✅" title="Gut gelaufen">✅</button>
+                    </div>
+                    <div id="selectedEmojis" class="selected-emojis">
+                        <span class="emoji-placeholder">Klicke auf Emojis...</span>
+                    </div>
+                    
+                    <div class="notizen-field">
+                        <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">📝 Zusätzliche Notizen (optional)</label>
+                        <textarea id="notizenField" class="textarea-field" placeholder="Was hast du gelernt? Was war herausfordernd?" maxlength="500" style="min-height: 80px;"></textarea>
+                        <div class="char-count">
+                            <span id="charCount">0</span>/500 Zeichen
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button id="speichernBtn" class="btn-save">
+                        ✅ Als geübt markieren
+                    </button>
+                    <button id="portfolioBtn" class="btn-portfolio">
+                        📁 Ins Portfolio speichern
+                    </button>
+                    <button id="abbrechenBtn" class="btn-cancel">
+                        Abbrechen
+                    </button>
+                </div>
+            `;
+        }
+        
         function setupUebungListeners(typ) {
             const checkBtn = document.getElementById('checkBtn');
             if (!checkBtn) return;
@@ -1322,6 +1681,7 @@
                             i.classList.remove('selected');
                         });
                         this.classList.add('selected');
+                        triggerAutoSave();
                     });
                 });
                 checkBtn.addEventListener('click', () => checkMultipleChoice());
@@ -1342,13 +1702,13 @@
                     item.addEventListener('click', function() {
                         const checkbox = this.querySelector('input[type="checkbox"]');
                         checkbox.checked = !checkbox.checked;
+                        triggerAutoSave();
                     });
                 });
                 checkBtn.addEventListener('click', () => checkVertragCheck());
             }
         }
 
-        // --- CHECK FUNKTIONEN (Logik übernommen) ---
         function checkMultipleChoice() {
             const uebung = currentAspekt.uebung;
             let correctCount = 0;
@@ -1495,7 +1855,6 @@
             disableCheckBtn();
         }
         
-        // --- HELPER ---
         function disableCheckBtn() {
             const checkBtn = document.getElementById('checkBtn');
             if (checkBtn) {
@@ -1513,6 +1872,7 @@
                 });
                 draggable.addEventListener('dragend', (e) => {
                     e.target.classList.remove('dragging');
+                    triggerAutoSave();
                 });
             });
         }
@@ -1530,6 +1890,7 @@
             if (dropTarget) {
                 const dropZone = dropTarget.querySelector('.drop-zone');
                 dropZone.appendChild(draggable);
+                triggerAutoSave();
             }
         };
         
@@ -1552,7 +1913,10 @@
                         container.insertBefore(dragging, next ? e.target.nextSibling : e.target);
                     }
                 });
-                item.addEventListener('dragend', (e) => { e.target.classList.remove('dragging'); });
+                item.addEventListener('dragend', (e) => { 
+                    e.target.classList.remove('dragging');
+                    triggerAutoSave();
+                });
             });
         }
         
@@ -1565,7 +1929,65 @@
             if (type === 'partial') feedback.classList.add('partial');
         }
 
-        // --- SPEICHERN FUNKTIONEN (identisch zu schluessel.html) ---
+        function setupActivityListeners() {
+            // Character counter for notizen
+            const notizenField = document.getElementById('notizenField');
+            const charCount = document.getElementById('charCount');
+            
+            if (notizenField && charCount) {
+                charCount.textContent = notizenField.value.length;
+                notizenField.addEventListener('input', function() {
+                    charCount.textContent = this.value.length;
+                });
+            }
+            
+            // Update emoji buttons based on saved selection
+            document.querySelectorAll('.emoji-btn').forEach(btn => {
+                const emoji = btn.dataset.emoji;
+                if (selectedEmojis.includes(emoji)) {
+                    btn.classList.add('selected');
+                }
+                
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    toggleEmoji(emoji);
+                });
+            });
+            
+            // Action buttons
+            document.getElementById('speichernBtn').addEventListener('click', markAsCompleted);
+            document.getElementById('portfolioBtn').addEventListener('click', saveToPortfolio);
+            document.getElementById('abbrechenBtn').addEventListener('click', closeModal);
+            
+            updateSelectedEmojis();
+        }
+        
+        function toggleEmoji(emoji) {
+            const index = selectedEmojis.indexOf(emoji);
+            const btn = document.querySelector(`.emoji-btn[data-emoji="${emoji}"]`);
+            
+            if (index > -1) {
+                selectedEmojis.splice(index, 1);
+                btn.classList.remove('selected');
+            } else {
+                selectedEmojis.push(emoji);
+                btn.classList.add('selected');
+            }
+            
+            updateSelectedEmojis();
+            triggerAutoSave();
+        }
+        
+        function updateSelectedEmojis() {
+            const container = document.getElementById('selectedEmojis');
+            if (!container) return;
+            
+            if (selectedEmojis.length === 0) {
+                container.innerHTML = '<span class="emoji-placeholder">Klicke auf Emojis...</span>';
+            } else {
+                container.innerHTML = selectedEmojis.map(e => `<span class="selected-emoji">${e}</span>`).join('');
+            }
+        }
         
         async function markAsCompleted() {
             if (selectedEmojis.length === 0) {
@@ -1591,13 +2013,18 @@
                         'kompetenzen.aspekte': aspekteData
                     });
                     
-                    updateCardStatus(currentAspekt.id);
-                    alert('✅ Als geübt markiert!\n\nReflexion: ' + selectedEmojis.join(' '));
+                    // Save activity data with completed status
+                    await saveActivityData(true);
+                    
+                    updateCardStatus(currentAspekt.id, 'completed');
+                    await loadProgress();
                     closeModal();
+                    
+                    alert('✅ Als geübt markiert!\n\nReflexion: ' + selectedEmojis.join(' '));
                 }
             } catch (error) {
                 console.error('Fehler:', error);
-                alert('Fehler beim Speichern.');
+                alert('Fehler beim Speichern. Versuche es nochmal.');
             }
         }
 
@@ -1616,14 +2043,18 @@
                     const aspekteData = data.kompetenzen?.aspekte || {};
                     const portfolio = data.portfolio || [];
                     
-                    // Auch als geübt markieren
+                    // Collect performance data
+                    const performanzData = collectActivityData();
+                    const notizen = document.getElementById('notizenField')?.value.trim() || '';
+                    
+                    // Mark as completed
                     aspekteData[currentAspekt.id] = {
                         completed: true,
                         reflexion: selectedEmojis.join(''),
                         timestamp: new Date().toISOString()
                     };
                     
-                    // Portfolio Eintrag
+                    // Create portfolio entry
                     const portfolioItem = {
                         id: 'asp_' + currentAspekt.id + '_' + Date.now(),
                         type: 'aspekt',
@@ -1631,14 +2062,11 @@
                         kompetenzTitle: currentAspekt.title + ': ' + currentAspekt.uebung.titel,
                         thema: 'Gesellschaftliche Aspekte',
                         handlungsfeld: currentAspekt.handlungsfelder[currentAspekt.uebungIndex],
+                        performanz: performanzData,
                         reflexion: selectedEmojis.join(''),
+                        notizen: notizen,
                         createdAt: new Date().toISOString(),
-                        shareable: true,
-                        performanz: {
-                            uebungstyp: currentAspekt.uebung.titel,
-                            aspektTyp: currentAspekt.uebung.typ,
-                            abgeschlossen: true
-                        }
+                        shareable: true
                     };
                     
                     portfolio.push(portfolioItem);
@@ -1648,22 +2076,24 @@
                         'portfolio': portfolio
                     });
                     
-                    updateCardStatus(currentAspekt.id);
-                    alert('📁 Ins Portfolio gespeichert!\n\n✓ Aspekt als geübt markiert\n✓ Performanz dokumentiert\n✓ Reflexion: ' + selectedEmojis.join(' '));
+                    // Save activity data with completed status
+                    await saveActivityData(true);
+                    
+                    updateCardStatus(currentAspekt.id, 'completed');
+                    await loadProgress();
                     closeModal();
+                    
+                    let successMsg = '📁 Ins Portfolio gespeichert!\n\n✓ Aspekt als geübt markiert\n✓ Performanz dokumentiert\n✓ Reflexion: ' + selectedEmojis.join(' ');
+                    if (notizen) {
+                        successMsg += '\n✓ Notizen gespeichert';
+                    }
+                    alert(successMsg);
                 }
             } catch (error) {
                 console.error('Fehler:', error);
-                alert('Fehler beim Speichern.');
+                alert('Fehler beim Speichern. Versuche es nochmal.');
             }
         }
-        
-        window.closeModal = function() {
-            const modal = document.getElementById('aspektModal');
-            modal.classList.remove('show');
-            currentAspekt = null;
-            selectedEmojis = [];
-        };
     </script>
 </body>
 </html>
