@@ -53,6 +53,78 @@
             0%, 100% { transform: translateY(0) rotate(-8deg); }
             50% { transform: translateY(-8px) rotate(-4deg); }
         }
+
+        .floating-helper {
+            position: fixed;
+            right: 1.5rem;
+            bottom: 1.5rem;
+            display: flex;
+            align-items: flex-end;
+            gap: 0.75rem;
+            z-index: 50;
+        }
+
+        .helper-bubble {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #8B4513;
+            box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
+            border-radius: 14px;
+            padding: 12px 14px;
+            max-width: 280px;
+            backdrop-filter: blur(6px);
+            transform: translateY(8px) scale(0.96);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: all 0.25s ease;
+        }
+
+        .helper-bubble.visible {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            animation: bubble-pop 0.6s ease forwards;
+        }
+
+        .helper-bubble p {
+            margin: 0;
+            color: #4a3b31;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .helper-ant {
+            position: relative;
+            width: 86px;
+            height: 86px;
+            display: grid;
+            place-items: center;
+            animation: helper-float 5s ease-in-out infinite;
+        }
+
+        .helper-ant::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            width: 50px;
+            height: 12px;
+            background: radial-gradient(ellipse at center, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 70%);
+            filter: blur(6px);
+            transform: translateY(8px);
+            opacity: 0.6;
+        }
+
+        @keyframes helper-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes bubble-pop {
+            0% { transform: translateY(6px) scale(0.95); opacity: 0; }
+            60% { transform: translateY(-2px) scale(1.02); opacity: 1; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8">
@@ -350,7 +422,38 @@
             </div>
         </div>
     </div>
-    
+
+    <!-- Schwebende Ameise mit Aussagen -->
+    <div class="floating-helper" role="complementary" aria-live="polite">
+        <div class="helper-bubble" id="antBubble" aria-live="polite" aria-hidden="true">
+            <p id="antMessage"></p>
+        </div>
+        <div class="helper-ant" id="antTrigger" role="button" tabindex="0" aria-label="Neuen Tipp der Ameise anzeigen">
+            <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                <ellipse cx="30" cy="35" rx="12" ry="15" fill="#8B4513"/>
+                <ellipse cx="30" cy="20" rx="10" ry="12" fill="#A0522D"/>
+                <circle cx="30" cy="10" r="8" fill="#8B4513"/>
+                <line x1="26" y1="6" x2="22" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                <line x1="34" y1="6" x2="38" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="22" cy="0" r="2" fill="#654321"/>
+                <circle cx="38" cy="0" r="2" fill="#654321"/>
+                <line x1="20" y1="25" x2="10" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                <line x1="20" y1="30" x2="8" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                <line x1="22" y1="38" x2="12" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                <line x1="40" y1="25" x2="50" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                <line x1="40" y1="30" x2="52" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                <line x1="38" y1="38" x2="48" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                <ellipse cx="26" cy="10" rx="3" ry="4" fill="white"/>
+                <ellipse cx="34" cy="10" rx="3" ry="4" fill="white"/>
+                <circle cx="26" cy="11" r="2" fill="#333"/>
+                <circle cx="34" cy="11" r="2" fill="#333"/>
+                <circle cx="26.5" cy="10" r="0.8" fill="white"/>
+                <circle cx="34.5" cy="10" r="0.8" fill="white"/>
+                <path d="M 24 14 Q 30 16 36 14" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
         import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
@@ -371,17 +474,24 @@
         
         window.addEventListener('load', async function() {
             document.getElementById('currentYear').textContent = new Date().getFullYear();
-            
+
             userId = localStorage.getItem('ant_edu_user_id');
+
+            // Wenn kein Konto gespeichert ist, Seite trotzdem anzeigen
             if (!userId) {
-                window.location.href = 'index.html';
-                return;
+                console.info('Gastmodus: Keine Nutzer-ID gefunden, Fortschritt wird nicht geladen.');
+                document.querySelectorAll('#schluesselCount, #aspekteCount, #sprachCount').forEach((el) => {
+                    el.textContent = 'Gastmodus';
+                });
+            } else {
+                // Lade Fortschrittsdaten
+                loadProgress();
             }
-            
-            // Lade Fortschrittsdaten
-            loadProgress();
+
+            // Starte Ameisen-Hinweise
+            startAntMessages();
         });
-        
+
         async function loadProgress() {
             try {
                 const userDoc = await getDoc(doc(db, 'users', userId));
@@ -400,6 +510,50 @@
             } catch (error) {
                 console.log('Offline oder Fehler:', error);
             }
+        }
+
+        // Rotierende Ameisen-Botschaften
+        const antMessages = [
+            'Kompetenzen werden stärker, wenn du sie in echten Situationen ausprobierst.',
+            'Bezug + Output + Ressource = Performanz – immer mitdenken!',
+            'Übe abwechslungsreich: Gesellschaftliche Aspekte schärfen deinen Blick.',
+            'Sprich darüber, schreibe darüber, handle danach – so vernetzt sich Wissen.',
+            'Setze dir Mini-Ziele und feiere jeden Fortschritt auf dem Weg.',
+        ];
+
+        let antMessageIndex = 0;
+        
+        function showAntMessage() {
+            const messageEl = document.getElementById('antMessage');
+            const bubble = document.getElementById('antBubble');
+            if (!messageEl || !bubble) return;
+
+            messageEl.textContent = antMessages[antMessageIndex];
+            bubble.classList.add('visible');
+            bubble.setAttribute('aria-hidden', 'false');
+
+            antMessageIndex = (antMessageIndex + 1) % antMessages.length;
+        }
+
+        function startAntMessages() {
+            const bubble = document.getElementById('antBubble');
+            const trigger = document.getElementById('antTrigger');
+            const messageEl = document.getElementById('antMessage');
+
+            if (!bubble || !trigger || !messageEl) return;
+
+            const handleInteraction = () => {
+                showAntMessage();
+            };
+
+            trigger.addEventListener('click', handleInteraction);
+            trigger.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    handleInteraction();
+                }
+            });
+            bubble.addEventListener('click', handleInteraction);
         }
     </script>
 </body>
