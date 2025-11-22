@@ -1395,10 +1395,12 @@ function getUebungData(item) {
     // Dies ist ein Best-Effort Ansatz, funktioniert am besten wenn die Übungsstruktur gespeichert wird
     
     // Für Sprachmodi
-    function getUebungData(item) {
-    if (item.uebung) {
-        return item.uebung;
+    if (item.type === 'sprachmodus' && item.modusId) {
+        // Hier würden wir die Übungsdaten aus den modi-Definitionen holen
+        // Dies erfordert, dass die modi-Daten global verfügbar sind
+        return null; // Fallback auf Zusammenfassung
     }
+    
     return null;
 }
 
