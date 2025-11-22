@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zirkularität - ABU EBA 2030</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        
+        @media (min-width: 768px) {
+            body {
+                padding: 2rem;
+            }
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .header {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+            .header {
+                padding: 2rem;
+            }
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .back-btn {
+            font-size: 2rem;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+        
+        .back-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .header-title {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #0EA5E9 0%, #8B5CF6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (min-width: 768px) {
+            .header-title {
+                font-size: 2.5rem;
+            }
+        }
+        
+        .header-subtitle {
+            color: #6B7280;
+        }
+        
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(to right, rgba(14, 165, 233, 0.1), rgba(139, 92, 246, 0.1));
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 2px solid rgba(14, 165, 233, 0.2);
+        }
+        
+        .info-box p {
+            color: #374151;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .info-box strong {
+            color: #0EA5E9;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid #E5E7EB;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #0EA5E9;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+        
+        /* Section */
+        .section {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1F2937;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Kompetenz Grid */
+        .kompetenz-grid {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        @media (min-width: 768px) {
+            .kompetenz-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .kompetenz-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        .kompetenz-item {
+            background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
+            border-radius: 12px;
+            padding: 1rem;
+            border: 2px solid #E5E7EB;
+            transition: all 0.3s;
+        }
+        
+        .kompetenz-item:hover {
+            border-color: #0EA5E9;
+            transform: translateY(-2px);
+        }
+        
+        .kompetenz-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+        
+        .kompetenz-icon {
+            font-size: 1.5rem;
+        }
+        
+        .kompetenz-count {
+            background: #0EA5E9;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: bold;
+        }
+        
+        .kompetenz-title {
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .kompetenz-connections {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+        }
+        
+        .connection-tag {
+            font-size: 0.75rem;
+            padding: 0.125rem 0.375rem;
+            border-radius: 4px;
+            background: rgba(14, 165, 233, 0.1);
+            color: #0EA5E9;
+        }
+        
+        /* Network Viz */
+        .network-container {
+            background: #F9FAFB;
+            border-radius: 16px;
+            padding: 2rem;
+            min-height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .network-node {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            background: white;
+            border: 3px solid #E5E7EB;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .network-node:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 16px rgba(14, 165, 233, 0.3);
+            border-color: #0EA5E9;
+        }
+        
+        .network-node.active {
+            border-color: #0EA5E9;
+            background: linear-gradient(135deg, #E0F2FE 0%, #DBEAFE 100%);
+        }
+        
+        .network-label {
+            position: absolute;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6B7280;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(to right, #0EA5E9, #8B5CF6);
+            transform-origin: left center;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #0EA5E9, #8B5CF6);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+            padding-left: 1rem;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: -2.5rem;
+            top: 0.25rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #0EA5E9;
+        }
+        
+        .timeline-content {
+            background: #F9FAFB;
+            border-radius: 12px;
+            padding: 1rem;
+            border: 2px solid #E5E7EB;
+        }
+        
+        .timeline-date {
+            font-size: 0.75rem;
+            color: #6B7280;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-title {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+        }
+        
+        .timeline-tag {
+            font-size: 0.75rem;
+            padding: 0.125rem 0.5rem;
+            border-radius: 9999px;
+            background: rgba(14, 165, 233, 0.1);
+            color: #0EA5E9;
+        }
+        
+        /* Filter Buttons */
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            border: 2px solid #E5E7EB;
+            background: white;
+            color: #6B7280;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .filter-btn:hover {
+            border-color: #0EA5E9;
+            color: #0EA5E9;
+        }
+        
+        .filter-btn.active {
+            background: #0EA5E9;
+            color: white;
+            border-color: #0EA5E9;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .empty-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #6B7280;
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-text {
+            color: #9CA3AF;
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-primary {
+            background: #0EA5E9;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary:hover {
+            background: rgba(14, 165, 233, 0.9);
+            transform: translateY(-2px);
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .footer-content {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 9999px;
+            padding: 0.75rem 1.5rem;
+            display: inline-block;
+        }
+        
+        .footer-text {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <a href="dashboard.html" class="back-btn">←</a>
+                <div>
+                    <h1 class="header-title">
+                        🔄 Zirkularität
+                    </h1>
+                    <p class="header-subtitle">
+                        Vernetzte Kompetenzentwicklung
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Info Box -->
+        <div class="info-box">
+            <p>
+                <strong>💡 So funktioniert zirkuläres Lernen im ABU EBA 2030</strong>
+            </p>
+            <p style="font-size: 0.875rem;">
+                Jede Übung verbindet <strong>Schlüsselkompetenzen</strong> mit <strong>gesellschaftlichen Aspekten</strong> und <strong>Sprachmodi</strong>. 
+                Hier siehst du, wie oft du welche Kompetenzen in verschiedenen Kombinationen geübt hast.
+            </p>
+        </div>
+        
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">🔑</div>
+                <div class="stat-value" id="statSchluessel">0</div>
+                <div class="stat-label">Schlüsselkompetenzen</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-value" id="statAspekte">0</div>
+                <div class="stat-label">Aspekte geübt</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💬</div>
+                <div class="stat-value" id="statSprachmodi">0</div>
+                <div class="stat-label">Sprachmodi geübt</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔗</div>
+                <div class="stat-value" id="statVerbindungen">0</div>
+                <div class="stat-label">Verbindungen</div>
+            </div>
+        </div>
+        
+        <!-- Übungshistorie -->
+        <div class="section" id="historieSectionContainer">
+            <h2 class="section-title">📚 Deine Übungshistorie</h2>
+            
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Alle</button>
+                <button class="filter-btn" data-filter="schluessel">🔑 Schlüsselkompetenzen</button>
+                <button class="filter-btn" data-filter="aspekte">🎯 Aspekte</button>
+                <button class="filter-btn" data-filter="sprachmodi">💬 Sprachmodi</button>
+            </div>
+            
+            <div class="timeline" id="timeline">
+                <!-- Wird mit JS gefüllt -->
+            </div>
+            
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-icon">🌱</div>
+                <h3 class="empty-title">Noch keine Übungen</h3>
+                <p class="empty-text">Beginne mit deiner ersten Übung und beobachte, wie sich dein Kompetenznetzwerk entwickelt!</p>
+                <a href="schluessel.html" class="btn-primary">Jetzt starten →</a>
+            </div>
+        </div>
+        
+        <!-- Schlüsselkompetenzen Übersicht -->
+        <div class="section">
+            <h2 class="section-title">🔑 Schlüsselkompetenzen im Detail</h2>
+            <div class="kompetenz-grid" id="schluesselGrid">
+                <!-- Wird mit JS gefüllt -->
+            </div>
+        </div>
+        
+        <!-- Aspekte Übersicht -->
+        <div class="section">
+            <h2 class="section-title">🎯 Gesellschaftliche Aspekte</h2>
+            <div class="kompetenz-grid" id="aspekteGrid">
+                <!-- Wird mit JS gefüllt -->
+            </div>
+        </div>
+        
+        <!-- Sprachmodi Übersicht -->
+        <div class="section">
+            <h2 class="section-title">💬 Sprachmodi</h2>
+            <div class="kompetenz-grid" id="sprachmodiGrid">
+                <!-- Wird mit JS gefüllt -->
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-content">
+                <div class="footer-text">
+                    <span>🔄</span>
+                    <span>|</span>
+                    <span>ant edu</span>
+                    <span>|</span>
+                    <span id="currentYear"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyDycvEwK6KJZyFEtsGIaHJBhIFTp5L4cdA",
+            authDomain: "abueba2030.firebaseapp.com",
+            projectId: "abueba2030",
+            storageBucket: "abueba2030.firebasestorage.app",
+            messagingSenderId: "592718816412",
+            appId: "1:592718816412:web:366e44efabba256d48b959"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        let userId = null;
+        let allHistory = [];
+        let currentFilter = 'all';
+        
+        // Kompetenz-Definitionen
+        const schluesselkompetenzen = {
+            '3.2.1': { icon: '💪', title: 'Selbstständig arbeiten' },
+            '3.2.2': { icon: '🎯', title: 'Ziele setzen' },
+            '3.2.3': { icon: '🤝', title: 'Im Team zusammenarbeiten' },
+            '3.2.4': { icon: '🧠', title: 'Kritisch denken' },
+            '3.2.5': { icon: '🔧', title: 'Probleme lösen' },
+            '3.2.6': { icon: '💬', title: 'Kommunizieren' },
+            '3.2.7': { icon: '💻', title: 'Digital kompetent sein' },
+            '3.2.8': { icon: '📚', title: 'Lernen lernen' },
+            '3.2.9': { icon: '🔄', title: 'Anpassungsfähig sein' },
+            '3.2.10': { icon: '⚖️', title: 'Verantwortung übernehmen' },
+            '3.2.11': { icon: '🎨', title: 'Kreativ sein' },
+            '3.2.12': { icon: '🪞', title: 'Selbstreflexion' }
+        };
+        
+        const aspekteMapping = {
+            '💻 Technologie': '💻',
+            '👤 Identität': '👤',
+            '⚖️ Recht': '⚖️',
+            '💰 Wirtschaft': '💰',
+            '🎭 Kultur': '🎭',
+            '🌍 Ökologie': '🌍',
+            '🏛️ Politik': '🏛️',
+            '💡 Ethik': '💡'
+        };
+        
+        const sprachmodiMapping = {
+            '✏️ Schreiben': '✏️',
+            '💻 Digital kommunizieren': '💻',
+            '📖 Lesen': '📖',
+            '💬 Diskutieren': '💬',
+            '💻 Digital erstellen': '🎨',
+            '🎨 Visuell gestalten': '🖼️',
+            '💭 Reflektieren': '💭'
+        };
+        
+        // Initialisierung
+        window.addEventListener('load', async function() {
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            userId = localStorage.getItem('ant_edu_user_id');
+            if (!userId) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            await loadData();
+            setupEventListeners();
+        });
+        
+        async function loadData() {
+            try {
+                const userDoc = await getDoc(doc(db, 'users', userId));
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    
+                    // Sammle alle Übungen aus allen Bereichen
+                    allHistory = [];
+                    
+                    // Schlüsselkompetenzen
+                    const schluessel = data.kompetenzen?.schluessel || {};
+                    Object.entries(schluessel).forEach(([id, info]) => {
+                        const komp = getKompetenzData(id);
+                        if (komp) {
+                            allHistory.push({
+                                type: 'schluessel',
+                                id: id,
+                                icon: komp.icon,
+                                title: komp.title,
+                                aspekte: komp.aspekte || [],
+                                sprachmodi: komp.sprachmodi || [],
+                                timestamp: info.timestamp,
+                                reflexion: info.reflexion || ''
+                            });
+                        }
+                    });
+                    
+                    // Sortiere nach Datum (neueste zuerst)
+                    allHistory.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    
+                    updateStats();
+                    renderTimeline();
+                    renderKompetenzGrids();
+                }
+            } catch (error) {
+                console.log('Offline oder Fehler:', error);
+            }
+        }
+        
+        function getKompetenzData(id) {
+            // Hier müsstest du die Aspekte und Sprachmodi aus deiner ursprünglichen Definition holen
+            // Vereinfachte Version:
+            const mapping = {
+                '3.2.1': { 
+                    icon: '💪', 
+                    title: '3.2.1 Selbstständig arbeiten',
+                    aspekte: ['💻 Technologie', '👤 Identität'],
+                    sprachmodi: ['✏️ Schreiben', '💻 Digital kommunizieren']
+                },
+                '3.2.2': { 
+                    icon: '🎯', 
+                    title: '3.2.2 Ziele setzen',
+                    aspekte: ['⚖️ Recht', '👤 Identität'],
+                    sprachmodi: ['📖 Lesen', '✏️ Schreiben']
+                },
+                '3.2.3': {
+                    icon: '🤝',
+                    title: '3.2.3 Im Team zusammenarbeiten',
+                    aspekte: ['⚖️ Recht', '👤 Identität'],
+                    sprachmodi: ['💬 Diskutieren', '✏️ Schreiben']
+                },
+                '3.2.4': {
+                    icon: '🧠',
+                    title: '3.2.4 Kritisch denken',
+                    aspekte: ['⚖️ Recht', '💰 Wirtschaft'],
+                    sprachmodi: ['📖 Lesen', '💬 Diskutieren']
+                },
+                '3.2.5': {
+                    icon: '🔧',
+                    title: '3.2.5 Probleme lösen',
+                    aspekte: ['👤 Identität', '💰 Wirtschaft'],
+                    sprachmodi: ['✏️ Schreiben', '💬 Diskutieren']
+                },
+                '3.2.6': {
+                    icon: '💬',
+                    title: '3.2.6 Kommunizieren',
+                    aspekte: ['👤 Identität', '💰 Wirtschaft'],
+                    sprachmodi: ['✏️ Schreiben', '💻 Digital kommunizieren']
+                },
+                '3.2.7': {
+                    icon: '💻',
+                    title: '3.2.7 Digital kompetent sein',
+                    aspekte: ['💻 Technologie', '👤 Identität'],
+                    sprachmodi: ['💻 Digital erstellen', '📖 Lesen']
+                },
+                '3.2.8': {
+                    icon: '📚',
+                    title: '3.2.8 Lernen lernen',
+                    aspekte: ['👤 Identität', '💰 Wirtschaft'],
+                    sprachmodi: ['✏️ Schreiben', '📖 Lesen']
+                },
+                '3.2.9': {
+                    icon: '🔄',
+                    title: '3.2.9 Anpassungsfähig sein',
+                    aspekte: ['👤 Identität', '💰 Wirtschaft'],
+                    sprachmodi: ['✏️ Schreiben', '💬 Diskutieren']
+                },
+                '3.2.10': {
+                    icon: '⚖️',
+                    title: '3.2.10 Verantwortung übernehmen',
+                    aspekte: ['⚖️ Recht', '👤 Identität'],
+                    sprachmodi: ['✏️ Schreiben', '📖 Lesen']
+                },
+                '3.2.11': {
+                    icon: '🎨',
+                    title: '3.2.11 Kreativ sein',
+                    aspekte: ['👤 Identität', '🎭 Kultur'],
+                    sprachmodi: ['💻 Digital erstellen', '🎨 Visuell gestalten']
+                },
+                '3.2.12': {
+                    icon: '🪞',
+                    title: '3.2.12 Selbstreflexion',
+                    aspekte: ['👤 Identität'],
+                    sprachmodi: ['✏️ Schreiben', '💭 Reflektieren']
+                }
+            };
+            return mapping[id];
+        }
+        
+        function updateStats() {
+            // Zähle eindeutige Kompetenzen
+            const uniqueSchluessel = new Set();
+            const uniqueAspekte = new Set();
+            const uniqueSprachmodi = new Set();
+            let totalConnections = 0;
+            
+            allHistory.forEach(item => {
+                uniqueSchluessel.add(item.id);
+                
+                item.aspekte?.forEach(a => uniqueAspekte.add(a));
+                item.sprachmodi?.forEach(s => uniqueSprachmodi.add(s));
+                
+                totalConnections += (item.aspekte?.length || 0) + (item.sprachmodi?.length || 0);
+            });
+            
+            document.getElementById('statSchluessel').textContent = uniqueSchluessel.size;
+            document.getElementById('statAspekte').textContent = uniqueAspekte.size;
+            document.getElementById('statSprachmodi').textContent = uniqueSprachmodi.size;
+            document.getElementById('statVerbindungen').textContent = totalConnections;
+        }
+        
+        function renderTimeline() {
+            const timeline = document.getElementById('timeline');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (allHistory.length === 0) {
+                timeline.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            timeline.style.display = 'block';
+            emptyState.style.display = 'none';
+            
+            const filteredHistory = filterHistory();
+            
+            timeline.innerHTML = filteredHistory.map(item => {
+                const date = new Date(item.timestamp);
+                const dateStr = date.toLocaleDateString('de-CH', { 
+                    day: '2-digit', 
+                    month: '2-digit', 
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                const allTags = [
+                    ...(item.aspekte || []),
+                    ...(item.sprachmodi || [])
+                ];
+                
+                return `
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">${dateStr}</div>
+                            <div class="timeline-title">
+                                ${item.icon} ${item.title}
+                            </div>
+                            ${item.reflexion ? `<div style="margin: 0.5rem 0; font-size: 1.25rem;">${item.reflexion}</div>` : ''}
+                            <div class="timeline-tags">
+                                ${allTags.map(tag => `<span class="timeline-tag">${tag}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function renderKompetenzGrids() {
+            // Schlüsselkompetenzen
+            renderSchluesselGrid();
+            renderAspekteGrid();
+            renderSprachmodiGrid();
+        }
+        
+        function renderSchluesselGrid() {
+            const grid = document.getElementById('schluesselGrid');
+            
+            // Zähle Übungen pro Kompetenz
+            const counts = {};
+            allHistory.forEach(item => {
+                if (item.type === 'schluessel') {
+                    counts[item.id] = (counts[item.id] || 0) + 1;
+                }
+            });
+            
+            grid.innerHTML = Object.entries(schluesselkompetenzen).map(([id, data]) => {
+                const count = counts[id] || 0;
+                const item = allHistory.find(h => h.id === id);
+                const connections = item ? [...(item.aspekte || []), ...(item.sprachmodi || [])] : [];
+                
+                return `
+                    <div class="kompetenz-item">
+                        <div class="kompetenz-header">
+                            <span class="kompetenz-icon">${data.icon}</span>
+                            <span class="kompetenz-count">${count}x</span>
+                        </div>
+                        <div class="kompetenz-title">${data.title}</div>
+                        ${connections.length > 0 ? `
+                            <div class="kompetenz-connections">
+                                ${connections.map(c => `<span class="connection-tag">${c}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function renderAspekteGrid() {
+            const grid = document.getElementById('aspekteGrid');
+            
+            // Zähle wie oft jeder Aspekt geübt wurde
+            const counts = {};
+            allHistory.forEach(item => {
+                item.aspekte?.forEach(aspekt => {
+                    counts[aspekt] = (counts[aspekt] || 0) + 1;
+                });
+            });
+            
+            grid.innerHTML = Object.entries(counts).map(([aspekt, count]) => {
+                const icon = aspekteMapping[aspekt] || '🎯';
+                return `
+                    <div class="kompetenz-item">
+                        <div class="kompetenz-header">
+                            <span class="kompetenz-icon">${icon}</span>
+                            <span class="kompetenz-count">${count}x</span>
+                        </div>
+                        <div class="kompetenz-title">${aspekt}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            if (Object.keys(counts).length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #9CA3AF;">Noch keine Aspekte geübt</p>';
+            }
+        }
+        
+        function renderSprachmodiGrid() {
+            const grid = document.getElementById('sprachmodiGrid');
+            
+            // Zähle wie oft jeder Sprachmodus geübt wurde
+            const counts = {};
+            allHistory.forEach(item => {
+                item.sprachmodi?.forEach(modus => {
+                    counts[modus] = (counts[modus] || 0) + 1;
+                });
+            });
+            
+            grid.innerHTML = Object.entries(counts).map(([modus, count]) => {
+                const icon = sprachmodiMapping[modus] || '💬';
+                return `
+                    <div class="kompetenz-item">
+                        <div class="kompetenz-header">
+                            <span class="kompetenz-icon">${icon}</span>
+                            <span class="kompetenz-count">${count}x</span>
+                        </div>
+                        <div class="kompetenz-title">${modus}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            if (Object.keys(counts).length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #9CA3AF;">Noch keine Sprachmodi geübt</p>';
+            }
+        }
+        
+        function filterHistory() {
+            if (currentFilter === 'all') return allHistory;
+            
+            return allHistory.filter(item => {
+                if (currentFilter === 'schluessel') return item.type === 'schluessel';
+                if (currentFilter === 'aspekte') return item.aspekte && item.aspekte.length > 0;
+                if (currentFilter === 'sprachmodi') return item.sprachmodi && item.sprachmodi.length > 0;
+                return true;
+            });
+        }
+        
+        function setupEventListeners() {
+            // Filter Buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.getAttribute('data-filter');
+                    renderTimeline();
+                });
+            });
+        }
+    </script>
+</body>
+</html>
