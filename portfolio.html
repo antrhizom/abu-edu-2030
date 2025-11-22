@@ -305,9 +305,30 @@
             font-size: 0.75rem;
             color: #9CA3AF;
         }
-        
+
         .card-reflexion-emoji {
             font-size: 1.25rem;
+        }
+
+        .card-details {
+            background: #FFF8F0;
+            border-radius: 12px;
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+            display: grid;
+            gap: 0.35rem;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.85rem;
+            color: #374151;
+        }
+
+        .detail-icon {
+            font-size: 1rem;
         }
         
         .card-actions {
@@ -979,7 +1000,9 @@
                 </p>
                 
                 ${tagsHTML}
-                
+
+                ${getDetailPreview(item)}
+
                 ${reflexionHTML}
                 
                 <div class="card-actions">
@@ -992,7 +1015,118 @@
         </div>
     `;
 }
-        
+
+        function getDetailPreview(item) {
+            const detailRows = [];
+
+            if (item.performanz?.uebungstyp || item.modusTitle) {
+                detailRows.push(`
+                    <div class="detail-item">
+                        <span class="detail-icon">📝</span>
+                        <span>${item.modusTitle || item.performanz?.uebungstyp}</span>
+                    </div>
+                `);
+            }
+
+            if (item.performanz) {
+                const { selections, checkboxes, placements, sliders, checklist, kriterien } = item.performanz;
+
+                if (Array.isArray(selections)) {
+                    const answered = selections.filter(s => s !== null && s !== undefined).length;
+                    detailRows.push(`
+                        <div class="detail-item">
+                            <span class="detail-icon">✅</span>
+                            <span>${answered} von ${selections.length} Fragen beantwortet</span>
+                        </div>
+                    `);
+                }
+
+                if (Array.isArray(checkboxes)) {
+                    const checked = checkboxes.filter(c => c === true).length;
+                    detailRows.push(`
+                        <div class="detail-item">
+                            <span class="detail-icon">☑️</span>
+                            <span>${checked} Punkte markiert</span>
+                        </div>
+                    `);
+                }
+
+                if (placements && Object.keys(placements).length > 0) {
+                    detailRows.push(`
+                        <div class="detail-item">
+                            <span class="detail-icon">🎯</span>
+                            <span>${Object.keys(placements).length} Zuordnungen</span>
+                        </div>
+                    `);
+                }
+
+                if (sliders && Object.keys(sliders).length > 0) {
+                    detailRows.push(`
+                        <div class="detail-item">
+                            <span class="detail-icon">⭐</span>
+                            <span>${Object.keys(sliders).length} Bewertungen abgegeben</span>
+                        </div>
+                    `);
+                }
+
+                if (checklist) {
+                    detailRows.push(`
+                        <div class="detail-item">
+                            <span class="detail-icon">📋</span>
+                            <span>${checklist.completed} / ${checklist.total} Schritte erledigt</span>
+                        </div>
+                    `);
+                }
+
+                if (kriterien) {
+                    detailRows.push(`
+                        <div class="detail-item">
+                            <span class="detail-icon">📑</span>
+                            <span>${kriterien.erfuellt} / ${kriterien.total} Kriterien erfüllt</span>
+                        </div>
+                    `);
+                }
+            }
+
+            if (item.beschreibung && item.type === 'sprachmodus') {
+                detailRows.push(`
+                    <div class="detail-item">
+                        <span class="detail-icon">📖</span>
+                        <span>${formatPreviewText(item.beschreibung)}</span>
+                    </div>
+                `);
+            }
+
+            if (item.textReflexion) {
+                detailRows.push(`
+                    <div class="detail-item">
+                        <span class="detail-icon">💭</span>
+                        <span>${formatPreviewText(item.textReflexion)}</span>
+                    </div>
+                `);
+            }
+
+            if (item.notizen) {
+                detailRows.push(`
+                    <div class="detail-item">
+                        <span class="detail-icon">📝</span>
+                        <span>${formatPreviewText(item.notizen)}</span>
+                    </div>
+                `);
+            }
+
+            return detailRows.length > 0
+                ? `<div class="card-details">${detailRows.join('')}</div>`
+                : '';
+        }
+
+        function formatPreviewText(text) {
+            const maxLength = 110;
+            if (!text) return '';
+            if (text.length <= maxLength) return text;
+            return text.substring(0, maxLength).trim() + '…';
+        }
+
         window.deleteItem = async function(itemId) {
             if (!confirm('🗑️ Möchtest du diesen Portfolio-Eintrag wirklich löschen?\n\nDiese Aktion kann nicht rückgängig gemacht werden.')) {
                 return;
