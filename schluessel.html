@@ -181,6 +181,11 @@
             border-color: #4CAF50;
         }
         
+        .kompetenz-card.in-progress {
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.1), rgba(33, 150, 243, 0.05));
+            border-color: #2196F3;
+        }
+        
         .card-header {
             display: flex;
             align-items: flex-start;
@@ -203,6 +208,12 @@
         .status-badge.completed {
             background: rgba(76, 175, 80, 0.2);
             color: #4CAF50;
+            font-weight: 600;
+        }
+        
+        .status-badge.in-progress {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196F3;
             font-weight: 600;
         }
         
@@ -257,7 +268,7 @@
         .modal-content {
             background: white;
             border-radius: 24px;
-            max-width: 800px;
+            max-width: 900px;
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
@@ -281,6 +292,7 @@
             justify-content: space-between;
             padding: 2rem;
             padding-bottom: 1.5rem;
+            border-bottom: 2px solid #F3F4F6;
         }
         
         .modal-title {
@@ -303,13 +315,13 @@
         }
         
         .modal-body {
-            padding: 0 2rem 2rem 2rem;
+            padding: 2rem;
         }
         
         .exercise-box {
             background: #FFF8F0;
             border-radius: 16px;
-            padding: 1rem;
+            padding: 1.5rem;
             margin-bottom: 1.5rem;
         }
         
@@ -332,9 +344,161 @@
             font-size: 0.875rem;
         }
         
+        /* Interactive Elements */
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.2s;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #8B4513;
+        }
+        
+        .textarea-field {
+            width: 100%;
+            min-height: 120px;
+            padding: 0.75rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.875rem;
+            resize: vertical;
+            margin-bottom: 1rem;
+        }
+        
+        .textarea-field:focus {
+            outline: none;
+            border-color: #8B4513;
+        }
+        
+        .rating-container {
+            margin-bottom: 1.5rem;
+        }
+        
+        .rating-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .rating-scale {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: space-between;
+        }
+        
+        .rating-option {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+        
+        .rating-option:hover {
+            border-color: #8B4513;
+        }
+        
+        .rating-option.selected {
+            background: #8B4513;
+            border-color: #8B4513;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .timeline-container {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+        
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #E5E7EB;
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px #E5E7EB;
+        }
+        
+        .timeline-item.filled:before {
+            background: #4CAF50;
+            box-shadow: 0 0 0 2px #4CAF50;
+        }
+        
+        .timeline-item:not(:last-child):after {
+            content: '';
+            position: absolute;
+            left: -1.55rem;
+            top: 12px;
+            width: 2px;
+            height: calc(100% - 12px);
+            background: #E5E7EB;
+        }
+        
+        .scenario-box {
+            background: white;
+            border: 2px solid #8B4513;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+            color: #374151;
+        }
+        
+        .choice-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .choice-btn {
+            width: 100%;
+            padding: 1rem;
+            background: white;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+        
+        .choice-btn:hover {
+            border-color: #8B4513;
+            background: #FFF8F0;
+        }
+        
+        .choice-btn.selected {
+            border-color: #2196F3;
+            background: rgba(33, 150, 243, 0.1);
+        }
+        
         .tags-grid {
             display: grid;
             gap: 1rem;
+            margin-top: 1.5rem;
         }
         
         @media (min-width: 768px) {
@@ -372,11 +536,12 @@
             color: #FF6B35;
         }
         
+        /* Reflexion Box */
         .emoji-box {
             background: linear-gradient(to right, rgba(255, 107, 53, 0.1), rgba(76, 175, 80, 0.1));
             border-radius: 16px;
             padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            margin-top: 2rem;
             border: 2px solid rgba(255, 107, 53, 0.2);
         }
         
@@ -404,10 +569,17 @@
             border: none;
             cursor: pointer;
             transition: transform 0.2s;
+            opacity: 0.5;
         }
         
         .emoji-btn:hover {
             transform: scale(1.25);
+            opacity: 1;
+        }
+        
+        .emoji-btn.selected {
+            opacity: 1;
+            transform: scale(1.2);
         }
         
         .selected-emojis {
@@ -431,10 +603,23 @@
             font-size: 2rem;
         }
         
+        .notizen-field {
+            margin-top: 1rem;
+        }
+        
+        .char-count {
+            text-align: right;
+            font-size: 0.75rem;
+            color: #9CA3AF;
+            margin-top: 0.25rem;
+        }
+        
+        /* Modal Actions */
         .modal-actions {
             display: flex;
             gap: 0.75rem;
             flex-wrap: wrap;
+            margin-top: 2rem;
         }
         
         .btn-save {
@@ -453,6 +638,27 @@
             background: rgba(76, 175, 80, 0.9);
         }
         
+        .btn-save:disabled {
+            background: #D1D5DB;
+            cursor: not-allowed;
+        }
+        
+        .btn-portfolio {
+            flex: 1;
+            background: #2196F3;
+            color: white;
+            font-weight: bold;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .btn-portfolio:hover {
+            background: rgba(33, 150, 243, 0.9);
+        }
+        
         .btn-cancel {
             background: #E5E7EB;
             color: #374151;
@@ -466,6 +672,27 @@
         
         .btn-cancel:hover {
             background: #D1D5DB;
+        }
+        
+        /* Auto-save indicator */
+        .auto-save-indicator {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            font-size: 0.875rem;
+            color: #6B7280;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 999;
+        }
+        
+        .auto-save-indicator.show {
+            display: flex;
         }
         
         /* Footer */
@@ -530,7 +757,7 @@
                 <strong>💡 Interaktive Übungen aus Thema 1: "Ins Berufsleben einsteigen"</strong>
             </p>
             <p class="info-small">
-                Klick auf eine Kompetenz, führe die interaktive Aufgabe aus und speichere mit Emoji-Reflexion!
+                Deine Eingaben werden automatisch gespeichert und du kannst jederzeit weiterarbeiten!
             </p>
         </div>
         
@@ -553,6 +780,12 @@
         </div>
     </div>
     
+    <!-- Auto-save Indicator -->
+    <div id="autoSaveIndicator" class="auto-save-indicator">
+        <span>✓</span>
+        <span>Gespeichert</span>
+    </div>
+    
     <!-- Modal für Übungen -->
     <div id="uebungModal" class="modal">
         <div class="modal-content">
@@ -561,55 +794,8 @@
                 <button id="closeModal" class="close-btn">×</button>
             </div>
             
-            <div class="modal-body">
-                <div id="modalContent">
-                    <!-- Wird dynamisch gefüllt -->
-                </div>
-                
-                <!-- Reflexion mit Emojis -->
-                <div class="emoji-box">
-                    <h3 class="emoji-title">💭 Wie war's für dich?</h3>
-                    <p class="emoji-subtitle">Wähle ein oder mehrere Emojis als Reflexion:</p>
-                    <div class="emoji-buttons" id="emojiButtons">
-                        <button class="emoji-btn" data-emoji="😊" title="Hat Spaß gemacht">😊</button>
-                        <button class="emoji-btn" data-emoji="💪" title="War anstrengend">💪</button>
-                        <button class="emoji-btn" data-emoji="🤔" title="Musste nachdenken">🤔</button>
-                        <button class="emoji-btn" data-emoji="❓" title="War unklar">❓</button>
-                        <button class="emoji-btn" data-emoji="🔥" title="War super">🔥</button>
-                        <button class="emoji-btn" data-emoji="😅" title="War schwierig">😅</button>
-                        <button class="emoji-btn" data-emoji="💡" title="Hatte eine Idee">💡</button>
-                        <button class="emoji-btn" data-emoji="✅" title="Gut gelaufen">✅</button>
-                    </div>
-                    <div id="selectedEmojis" class="selected-emojis">
-                        <span class="emoji-placeholder" id="emojiPlaceholder">Klicke auf Emojis...</span>
-                    </div>
-
-                    <!-- NEU: Notizen-Feld -->
-                    <div class="emoji-box" style="margin-top: 1rem; border: 0; padding: 0; background: transparent;">
-                        <h3 class="emoji-title">📝 Zusätzliche Notizen (optional)</h3>
-                        <p class="emoji-subtitle">Was hast du gelernt? Was war herausfordernd?</p>
-                        <textarea id="notizenField" 
-                                placeholder="z.B. 'Ich habe gelernt, dass eine klare Betreffzeile wichtig ist...'" 
-                                maxlength="500"
-                                style="width: 100%; min-height: 100px; padding: 0.75rem; border: 2px solid #E5E7EB; border-radius: 12px; font-family: inherit; font-size: 0.875rem; resize: vertical; margin-top: 0.5rem;"></textarea>
-                        <div style="text-align: right; font-size: 0.75rem; color: #9CA3AF; margin-top: 0.25rem;">
-                            <span id="charCount">0</span>/500 Zeichen
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Aktionen -->
-                <div class="modal-actions">
-                    <button id="speichernBtn" class="btn-save">
-                        ✅ Als geübt markieren
-                    </button>
-                    <button id="portfolioBtn" class="btn-save" style="background: #2196F3;">
-                        📁 Ins Portfolio speichern
-                    </button>
-                    <button id="abbrechenBtn" class="btn-cancel">
-                        Abbrechen
-                    </button>
-                </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Wird dynamisch gefüllt -->
             </div>
         </div>
     </div>
@@ -617,7 +803,7 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
-        import { getFirestore, doc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        import { getFirestore, doc, getDoc, updateDoc, setDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
         
         const firebaseConfig = {
             apiKey: "AIzaSyDycvEwK6KJZyFEtsGIaHJBhIFTp5L4cdA",
@@ -634,6 +820,8 @@
         let userId = null;
         let currentKompetenz = null;
         let selectedEmojis = [];
+        let autoSaveTimeout = null;
+        let currentActivityData = {};
         
         // Kompetenz-Daten
         const kompetenzen = [
@@ -789,41 +977,21 @@
             });
             
             document.getElementById('closeModal').addEventListener('click', closeModal);
-            document.getElementById('abbrechenBtn').addEventListener('click', closeModal);
             document.getElementById('uebungModal').addEventListener('click', function(e) {
                 if (e.target === this) closeModal();
             });
-            
-            document.getElementById('speichernBtn').addEventListener('click', markAsCompleted);
-            document.getElementById('portfolioBtn').addEventListener('click', saveToPortfolio);
-            
-            document.querySelectorAll('.emoji-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const emoji = this.getAttribute('data-emoji');
-                    toggleEmoji(emoji);
-                });
-            });
-        }
-
-        // NEU: Zeichenzähler Funktion
-        function setupCharCounter() {
-            const notizenField = document.getElementById('notizenField');
-            const charCount = document.getElementById('charCount');
-            
-            if (notizenField && charCount) {
-                // Reset counter beim Öffnen
-                charCount.textContent = notizenField.value.length;
-
-                notizenField.addEventListener('input', function() {
-                    charCount.textContent = this.value.length;
-                });
-            }
         }
         
         async function loadProgress() {
             try {
-                const userDoc = await getDoc(doc(db, 'users', userId));
+                const userRef = doc(db, 'users', userId);
+                const aktivitaetenRef = doc(db, 'aktivitaeten', userId);
+                
+                const [userDoc, aktivitaetenDoc] = await Promise.all([
+                    getDoc(userRef),
+                    getDoc(aktivitaetenRef)
+                ]);
+                
                 if (userDoc.exists()) {
                     const data = userDoc.data();
                     const schluessel = data.kompetenzen?.schluessel || {};
@@ -833,7 +1001,17 @@
                     document.getElementById('progressBar').style.width = `${(count/12)*100}%`;
                     
                     Object.keys(schluessel).forEach(kompetenzId => {
-                        updateCardStatus(kompetenzId);
+                        updateCardStatus(kompetenzId, 'completed');
+                    });
+                }
+                
+                // Check for in-progress activities
+                if (aktivitaetenDoc.exists()) {
+                    const aktivitaeten = aktivitaetenDoc.data().schluesselkompetenzen || {};
+                    Object.entries(aktivitaeten).forEach(([kompetenzId, data]) => {
+                        if (data.status === 'in-progress' && !isActivityCompleted(kompetenzId)) {
+                            updateCardStatus(kompetenzId, 'in-progress');
+                        }
                     });
                 }
             } catch (error) {
@@ -841,547 +1019,701 @@
             }
         }
         
-        function updateCardStatus(kompetenzId) {
+        function isActivityCompleted(kompetenzId) {
+            const card = document.querySelector(`[data-kompetenz="${kompetenzId}"]`);
+            return card && card.classList.contains('completed');
+        }
+        
+        function updateCardStatus(kompetenzId, status) {
             const card = document.querySelector(`[data-kompetenz="${kompetenzId}"]`);
             if (card) {
-                card.classList.add('completed');
+                card.classList.remove('completed', 'in-progress');
+                card.classList.add(status);
+                
                 const badge = card.querySelector('.status-badge');
-                badge.textContent = '✅ Geübt';
-                badge.classList.add('completed');
+                const button = card.querySelector('.card-button');
+                
+                if (status === 'completed') {
+                    badge.textContent = '✅ Geübt';
+                    badge.classList.add('completed');
+                    button.textContent = 'Erneut üben →';
+                } else if (status === 'in-progress') {
+                    badge.textContent = '⏳ In Arbeit';
+                    badge.classList.add('in-progress');
+                    button.textContent = 'Weiterarbeiten →';
+                }
             }
         }
         
-        function openUebung(kompetenzId) {
+        async function openUebung(kompetenzId) {
             currentKompetenz = kompetenzId;
             const komp = kompetenzen.find(k => k.id === kompetenzId);
             
             document.getElementById('modalTitle').textContent = komp.title;
             
-            // Generiere interaktive Inhalte basierend auf Kompetenz
-            const exercises = {
-                '3.2.1': generate321,
-                '3.2.2': generate322,
-                '3.2.3': generate323,
-                '3.2.4': generate324,
-                '3.2.5': generate325,
-                '3.2.6': generate326,
-                '3.2.7': generate327,
-                '3.2.8': generate328,
-                '3.2.9': generate329,
-                '3.2.10': generate3210,
-                '3.2.11': generate3211,
-                '3.2.12': generate3212
-            };
+            // Load existing activity data
+            await loadActivityData(kompetenzId);
             
-            const content = exercises[kompetenzId] ? exercises[kompetenzId](komp) : getDefaultContent(komp);
-            document.getElementById('modalContent').innerHTML = content;
+            // Generate exercise content
+            const content = generateExercise(komp);
+            document.getElementById('modalBody').innerHTML = content;
             
-            selectedEmojis = [];
-            updateSelectedEmojis();
+            // Restore saved data
+            restoreActivityData();
             
-            // Reset Notizen-Feld
-            const notizenField = document.getElementById('notizenField');
-            if(notizenField) notizenField.value = '';
-            
+            // Setup listeners
             setTimeout(() => {
                 setupActivityListeners();
-                setupCharCounter(); // NEU: Counter aktivieren
+                setupAutoSave();
             }, 100);
             
             document.getElementById('uebungModal').classList.add('show');
         }
         
-        // ==================== INTERAKTIVE ÜBUNGEN ====================
-        // ... (Generierungsfunktionen bleiben gleich, werden nur für Platzersparnis hier gekürzt dargestellt, sind aber im vollständigen Code enthalten) ...
-
-        // 3.2.1: Schulmail-Checklist
-        function generate321(komp) {
-            return `
-                <div class="exercise-box">
-                    <p class="exercise-thema">${komp.thema}</p>
-                    <h3 class="exercise-title">📧 Aufgabe: Schulmail einrichten</h3>
-                    <p class="exercise-description">Gehe Schritt für Schritt vor und hake ab:</p>
-                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
-                        <h4 style="color: #8B4513; font-weight: bold; margin-bottom: 1rem;">✅ Setup-Checklist:</h4>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;"><strong>1.</strong> Schulmail-Adresse erhalten/aktiviert</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;"><strong>2.</strong> Erstes Login durchgeführt</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;"><strong>3.</strong> Profil ausgefüllt (Name, Klasse)</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;"><strong>4.</strong> Test-E-Mail an Lehrperson gesendet</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;"><strong>5.</strong> E-Mail-Signatur erstellt</span>
-                        </label>
-                        <div id="activityFeedback" style="margin-top: 1rem; padding: 0.75rem; background: #E8F5E9; border-radius: 8px; display: none; border: 2px solid #4CAF50;">
-                            <p style="font-size: 0.875rem; color: #2E7D32; font-weight: 600;">🎉 Alle Schritte erledigt!</p>
-                        </div>
-                    </div>
-                    ${getTagsHTML(komp)}
-                </div>
-            `;
+        async function loadActivityData(kompetenzId) {
+            try {
+                const aktivitaetenRef = doc(db, 'aktivitaeten', userId);
+                const aktivitaetenDoc = await getDoc(aktivitaetenRef);
+                
+                if (aktivitaetenDoc.exists()) {
+                    const data = aktivitaetenDoc.data();
+                    currentActivityData = data.schluesselkompetenzen?.[kompetenzId] || {};
+                    selectedEmojis = currentActivityData.reflexion?.emojis || [];
+                } else {
+                    currentActivityData = {};
+                    selectedEmojis = [];
+                }
+            } catch (error) {
+                console.log('Fehler beim Laden:', error);
+                currentActivityData = {};
+                selectedEmojis = [];
+            }
         }
         
-        // 3.2.2
-        function generate322(komp) {
-             return `
-                <div class="exercise-box">
-                    <p class="exercise-thema">${komp.thema}</p>
-                    <h3 class="exercise-title">📝 Situation: ÜK-Aufgebot</h3>
-                    <div style="background: white; border: 2px solid #E5E7EB; border-radius: 12px; padding: 1rem; margin: 1rem 0; font-family: monospace; font-size: 0.875rem;">
-                        <strong>Betreff:</strong> ÜK-Aufgebot Herbst 2024<br><br>
-                        Guten Tag<br><br>
-                        Hiermit laden wir Sie zum überbetrieblichen Kurs ein:<br>
-                        <strong>Datum:</strong> Montag, 25. November 2024<br>
-                        <strong>Zeit:</strong> vormittags<br>
-                        <strong>Ort:</strong> Berufsbildungszentrum, Raum 3.12<br><br>
-                        Freundliche Grüsse
-                    </div>
-                    <p class="exercise-description">Die Zeitangabe "vormittags" ist unklar. Selbst-Check: Ist eine Rückfrage nötig?</p>
-                    
-                    <div style="background: linear-gradient(to right, rgba(76, 175, 80, 0.1), rgba(33, 150, 243, 0.1)); border-radius: 12px; padding: 1.5rem; border: 2px solid rgba(76, 175, 80, 0.3);">
-                        <h4 style="color: #4CAF50; font-weight: bold; margin-bottom: 1rem;">✅ Was muss in einer Rückfrage-E-Mail enthalten sein?</h4>
-                        <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; cursor: pointer; font-size: 0.875rem;">
-                            <input type="checkbox" class="criteria-check" style="width: 18px; height: 18px; cursor: pointer;">
-                            <span>Höfliche Anrede und Grussformel</span>
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; cursor: pointer; font-size: 0.875rem;">
-                            <input type="checkbox" class="criteria-check" style="width: 18px; height: 18px; cursor: pointer;">
-                            <span>Klare Frage nach der genauen Uhrzeit</span>
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; cursor: pointer; font-size: 0.875rem;">
-                            <input type="checkbox" class="criteria-check" style="width: 18px; height: 18px; cursor: pointer;">
-                            <span>Bezug zum Original-Aufgebot</span>
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.875rem;">
-                            <input type="checkbox" class="criteria-check" style="width: 18px; height: 18px; cursor: pointer;">
-                            <span>Vollständig (Betreff, Anrede, Gruss)</span>
-                        </label>
-                        <div id="criteriaFeedback" style="margin-top: 1rem; padding: 0.75rem; background: white; border-radius: 8px; display: none;">
-                            <p style="font-size: 0.875rem; color: #4CAF50; font-weight: 600;">🎉 Alle wichtigen Punkte erfasst!</p>
-                        </div>
-                    </div>
-                    ${getTagsHTML(komp)}
-                </div>
-            `;
+        function restoreActivityData() {
+            if (!currentActivityData.activity) return;
+            
+            const activity = currentActivityData.activity;
+            
+            // Restore input fields
+            Object.entries(activity).forEach(([key, value]) => {
+                const element = document.getElementById(key);
+                if (element) {
+                    if (element.type === 'checkbox') {
+                        element.checked = value;
+                    } else if (element.tagName === 'TEXTAREA' || element.tagName === 'INPUT') {
+                        element.value = value;
+                        // Update timeline items if filled
+                        const timelineItem = element.closest('.timeline-item');
+                        if (timelineItem && value) {
+                            timelineItem.classList.add('filled');
+                        }
+                    }
+                }
+            });
+            
+            // Restore ratings
+            document.querySelectorAll('.rating-container').forEach(container => {
+                const name = container.dataset.name;
+                if (activity[name]) {
+                    const option = container.querySelector(`[data-value="${activity[name]}"]`);
+                    if (option) option.classList.add('selected');
+                }
+            });
+            
+            // Restore choices
+            document.querySelectorAll('[data-name]').forEach(element => {
+                const name = element.dataset.name;
+                if (activity[name] && element.dataset.value === activity[name]) {
+                    element.classList.add('selected');
+                }
+            });
+            
+            // Restore emojis
+            updateSelectedEmojis();
+            
+            // Restore notizen
+            const notizenField = document.getElementById('notizenField');
+            if (notizenField && currentActivityData.reflexion?.notizen) {
+                notizenField.value = currentActivityData.reflexion.notizen;
+            }
         }
-
-        // 3.2.3
-        function generate323(komp) {
-             return `
-                <div class="exercise-box">
-                    <p class="exercise-thema">${komp.thema}</p>
-                    <h3 class="exercise-title">🤝 Aufgabe: Team-Projekt planen</h3>
-                    <p class="exercise-description">Ihr plant zu dritt eine Präsentation über "Rechte und Pflichten in der Lehre"</p>
-                    
-                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
-                        <h4 style="color: #8B4513; font-weight: bold; margin-bottom: 1rem;">👥 Ordne Rollen zu:</h4>
-                        <div style="margin-bottom: 1.5rem;">
-                            <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Person 1:</label>
-                            <select class="role-select" style="width: 100%; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px;">
-                                <option value="">Wähle...</option>
-                                <option value="recherche">📚 Recherche & Inhalte</option>
-                                <option value="design">🎨 Folien gestalten</option>
-                                <option value="praesentation">🗣️ Präsentation halten</option>
-                            </select>
-                        </div>
-                        <div style="margin-bottom: 1.5rem;">
-                            <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Person 2:</label>
-                            <select class="role-select" style="width: 100%; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px;">
-                                <option value="">Wähle...</option>
-                                <option value="recherche">📚 Recherche & Inhalte</option>
-                                <option value="design">🎨 Folien gestalten</option>
-                                <option value="praesentation">🗣️ Präsentation halten</option>
-                            </select>
-                        </div>
-                        <div style="margin-bottom: 1.5rem;">
-                            <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Person 3:</label>
-                            <select class="role-select" style="width: 100%; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px;">
-                                <option value="">Wähle...</option>
-                                <option value="recherche">📚 Recherche & Inhalte</option>
-                                <option value="design">🎨 Folien gestalten</option>
-                                <option value="praesentation">🗣️ Präsentation halten</option>
-                            </select>
-                        </div>
-                        <div id="roleCheck" style="margin-top: 1rem; padding: 0.75rem; background: #E8F5E9; border-radius: 8px; display: none; border: 2px solid #4CAF50;">
-                            <p style="font-size: 0.875rem; color: #2E7D32; font-weight: 600;">✅ Alle Rollen verteilt!</p>
-                        </div>
-                    </div>
-                    ${getTagsHTML(komp)}
-                </div>
-            `;
+        
+        function setupAutoSave() {
+            const inputs = document.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                input.addEventListener('input', triggerAutoSave);
+                input.addEventListener('change', triggerAutoSave);
+            });
         }
-
-        // 3.2.4
-        function generate324(komp) {
-             return `
-                <div class="exercise-box">
-                    <p class="exercise-thema">${komp.thema}</p>
-                    <h3 class="exercise-title">📄 Aufgabe: Lehrvertrag prüfen</h3>
-                    <p class="exercise-description">Was prüfst du in einem Lehrvertrag?</p>
-                    
-                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
-                        <h4 style="color: #8B4513; font-weight: bold; margin-bottom: 1rem;">🔍 Markiere wichtige Punkte:</h4>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;">Probezeit: Dauer und Bedingungen</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;">Arbeitszeit: Wochenstunden und Pausen</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;">Lohn: Höhe und Zahlungstermine</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;">Ferien: Anzahl Wochen pro Jahr</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;">Kündigungsfristen</span>
-                        </label>
-                        <div id="activityFeedback" style="margin-top: 1rem; padding: 0.75rem; background: #E8F5E9; border-radius: 8px; display: none; border: 2px solid #4CAF50;">
-                            <p style="font-size: 0.875rem; color: #2E7D32; font-weight: 600;">🎉 Alle wichtigen Punkte!</p>
-                        </div>
-                    </div>
-                    ${getTagsHTML(komp)}
-                </div>
-            `;
+        
+        function triggerAutoSave() {
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(async () => {
+                await saveActivityData(false);
+                showAutoSaveIndicator();
+            }, 2000);
         }
-
-        // 3.2.5
-        function generate325(komp) {
-            return `
-                <div class="exercise-box">
-                    <p class="exercise-thema">${komp.thema}</p>
-                    <h3 class="exercise-title">🔧 Situation: Missverständnis</h3>
-                    <p class="exercise-description">Anweisung war unklar, du hast es anders gemacht. Bringe die Schritte in die richtige Reihenfolge (1-5):</p>
-                    
-                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
-                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 8px;">
-                                <input type="number" min="1" max="5" class="order-input" data-correct="3" style="width: 50px; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px; text-align: center;">
-                                <span style="font-size: 0.875rem;">Entschuldigung für Missverständnis</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 8px;">
-                                <input type="number" min="1" max="5" class="order-input" data-correct="1" style="width: 50px; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px; text-align: center;">
-                                <span style="font-size: 0.875rem;">Ruhig bleiben, Situation analysieren</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 8px;">
-                                <input type="number" min="1" max="5" class="order-input" data-correct="5" style="width: 50px; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px; text-align: center;">
-                                <span style="font-size: 0.875rem;">Lösung umsetzen, bei Unklarheiten nachfragen</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 8px;">
-                                <input type="number" min="1" max="5" class="order-input" data-correct="2" style="width: 50px; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px; text-align: center;">
-                                <span style="font-size: 0.875rem;">Gespräch mit Vorgesetzten suchen</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 8px;">
-                                <input type="number" min="1" max="5" class="order-input" data-correct="4" style="width: 50px; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px; text-align: center;">
-                                <span style="font-size: 0.875rem;">Gemeinsam Lösung finden</span>
-                            </div>
-                        </div>
-                        <button onclick="checkOrder()" style="margin-top: 1rem; width: 100%; background: #2196F3; color: white; font-weight: 600; padding: 0.75rem; border: none; border-radius: 8px; cursor: pointer;">
-                            Prüfen
-                        </button>
-                        <div id="orderFeedback" style="margin-top: 1rem; padding: 0.75rem; border-radius: 8px; display: none;"></div>
-                    </div>
-                    ${getTagsHTML(komp)}
-                </div>
-            `;
+        
+        async function saveActivityData(markCompleted = false) {
+            try {
+                const aktivitaetenRef = doc(db, 'aktivitaeten', userId);
+                const aktivitaetenDoc = await getDoc(aktivitaetenRef);
+                
+                let aktivitaeten = {};
+                if (aktivitaetenDoc.exists()) {
+                    aktivitaeten = aktivitaetenDoc.data();
+                }
+                
+                if (!aktivitaeten.schluesselkompetenzen) {
+                    aktivitaeten.schluesselkompetenzen = {};
+                }
+                
+                // Collect current activity data
+                const activity = collectActivityData();
+                
+                aktivitaeten.schluesselkompetenzen[currentKompetenz] = {
+                    status: markCompleted ? 'completed' : 'in-progress',
+                    activity: activity,
+                    reflexion: {
+                        emojis: selectedEmojis,
+                        notizen: document.getElementById('notizenField')?.value || ''
+                    },
+                    lastUpdated: new Date().toISOString()
+                };
+                
+                await setDoc(aktivitaetenRef, aktivitaeten);
+                
+                if (!markCompleted) {
+                    updateCardStatus(currentKompetenz, 'in-progress');
+                }
+            } catch (error) {
+                console.error('Fehler beim Speichern:', error);
+            }
         }
-
-        // 3.2.6
-        function generate326(komp) {
-             return `
-                <div class="exercise-box">
-                    <p class="exercise-thema">${komp.thema}</p>
-                    <h3 class="exercise-title">📧 Aufgabe: Terminanfrage</h3>
-                    <p class="exercise-description">Was gehört in eine höfliche Terminanfrage? Wähle aus:</p>
+        
+        function collectActivityData() {
+            const data = {};
+            const inputs = document.querySelectorAll('input, textarea, select');
+            
+            inputs.forEach(input => {
+                if (input.id || input.name) {
+                    const key = input.id || input.name;
+                    if (key === 'notizenField') return; // Skip, handled separately
                     
-                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
-                        <h4 style="color: #8B4513; font-weight: bold; margin-bottom: 1rem;">✅ Elemente einer guten Terminanfrage:</h4>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;">Höfliche Anrede</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;">Klarer Grund für Anfrage</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;">Kurz und präzise (nicht zu lang)</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;">Freundliche Grussformel</span>
-                        </label>
-                        <div id="activityFeedback" style="margin-top: 1rem; padding: 0.75rem; background: #E8F5E9; border-radius: 8px; display: none; border: 2px solid #4CAF50;">
-                            <p style="font-size: 0.875rem; color: #2E7D32; font-weight: 600;">✅ Alle Elemente gewählt!</p>
-                        </div>
-                    </div>
-                    ${getTagsHTML(komp)}
-                </div>
-            `;
+                    if (input.type === 'checkbox') {
+                        data[key] = input.checked;
+                    } else if (input.type === 'radio') {
+                        if (input.checked) {
+                            data[key] = input.value;
+                        }
+                    } else {
+                        data[key] = input.value;
+                    }
+                }
+            });
+            
+            // Collect selected ratings
+            document.querySelectorAll('.rating-option.selected').forEach(option => {
+                const container = option.closest('.rating-container');
+                if (container && container.dataset.name) {
+                    data[container.dataset.name] = option.dataset.value;
+                }
+            });
+            
+            // Collect selected choices
+            document.querySelectorAll('.choice-btn.selected').forEach(choice => {
+                if (choice.dataset.name) {
+                    data[choice.dataset.name] = choice.dataset.value;
+                }
+            });
+            
+            return data;
         }
-
-        // 3.2.7
-        function generate327(komp) {
-            return `
-                <div class="exercise-box">
-                    <p class="exercise-thema">${komp.thema}</p>
-                    <h3 class="exercise-title">📅 Aufgabe: Wochenplan erstellen</h3>
-                    <p class="exercise-description">Trage wichtige Termine ein:</p>
-                    
-                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
-                        <div style="display: grid; gap: 1rem;">
-                            <div>
-                                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">📌 Montag:</label>
-                                <input type="text" class="calendar-input" placeholder="z.B. 08:00-17:00 Arbeit" style="width: 100%; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px;">
-                            </div>
-                            <div>
-                                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">📌 Dienstag:</label>
-                                <input type="text" class="calendar-input" placeholder="z.B. 08:00-16:00 Schule" style="width: 100%; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px;">
-                            </div>
-                            <div>
-                                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">📌 Mittwoch:</label>
-                                <input type="text" class="calendar-input" placeholder="z.B. 09:00-17:00 ÜK" style="width: 100%; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px;">
-                            </div>
-                        </div>
-                        <div id="calendarCheck" style="margin-top: 1rem; padding: 0.75rem; background: #E8F5E9; border-radius: 8px; display: none; border: 2px solid #4CAF50;">
-                            <p style="font-size: 0.875rem; color: #2E7D32; font-weight: 600;">✅ Wochenplan vollständig!</p>
-                        </div>
-                    </div>
-                    ${getTagsHTML(komp)}
-                </div>
-            `;
+        
+        function showAutoSaveIndicator() {
+            const indicator = document.getElementById('autoSaveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 2000);
         }
-
-        // 3.2.8
-        function generate328(komp) {
-             return `
-                <div class="exercise-box">
-                    <p class="exercise-thema">${komp.thema}</p>
-                    <h3 class="exercise-title">📚 Aufgabe: Lernstrategien wählen</h3>
-                    <p class="exercise-description">Welche Strategien passen zu dir? Wähle mindestens 3:</p>
-                    
-                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;"><strong>📝 Zusammenfassungen</strong> schreiben</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;"><strong>🗣️ Laut wiederholen</strong></span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;"><strong>🎨 Mindmaps</strong> erstellen</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;"><strong>👥 Lerngruppe</strong> bilden</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;"><strong>📱 Apps nutzen</strong> (Karteikarten, Quiz)</span>
-                        </label>
-                        <div id="activityFeedback" style="margin-top: 1rem; padding: 0.75rem; background: #E8F5E9; border-radius: 8px; display: none; border: 2px solid #4CAF50;">
-                            <p style="font-size: 0.875rem; color: #2E7D32; font-weight: 600;">✅ Lernstrategien gewählt!</p>
-                        </div>
-                    </div>
-                    ${getTagsHTML(komp)}
-                </div>
-            `;
+        
+        function closeModal() {
+            document.getElementById('uebungModal').classList.remove('show');
+            currentKompetenz = null;
+            currentActivityData = {};
         }
-
-        // 3.2.9
-        function generate329(komp) {
-             return `
-                <div class="exercise-box">
-                    <p class="exercise-thema">${komp.thema}</p>
-                    <h3 class="exercise-title">🔄 Aufgabe: Übergang bewerten</h3>
-                    <p class="exercise-description">Was hat dir beim Übergang Schule → Lehre geholfen?</p>
+        
+        // ==================== ÜBUNGS-GENERATOR ====================
+        
+        function generateExercise(komp) {
+            const savedData = currentActivityData.activity || {};
+            let exerciseHTML = '';
+            
+            // Generate exercise based on kompetenz ID
+            switch(komp.id) {
+                case '3.2.1':
+                    exerciseHTML = `
+                        <div class="exercise-box">
+                            <p class="exercise-thema">${komp.thema}</p>
+                            <h3 class="exercise-title">📧 Aufgabe: Professionelle E-Mail schreiben</h3>
+                            <p class="exercise-description">Du möchtest dich bei deiner Lehrperson für ein ÜK abmelden. Schreibe eine professionelle E-Mail.</p>
+                            
+                            <div style="background: white; border-radius: 12px; padding: 1.5rem;">
+                                <div style="margin-bottom: 1rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Betreff:</label>
+                                    <input type="text" id="betreff" class="input-field" placeholder="z.B. Abmeldung ÜK 15. November 2024" value="${savedData.betreff || ''}">
+                                </div>
+                                
+                                <div style="margin-bottom: 1rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Anrede:</label>
+                                    <input type="text" id="anrede" class="input-field" placeholder="z.B. Guten Tag Frau Müller" value="${savedData.anrede || ''}">
+                                </div>
+                                
+                                <div style="margin-bottom: 1rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Nachricht:</label>
+                                    <textarea id="nachricht" class="textarea-field" placeholder="Erkläre kurz und höflich, warum du nicht teilnehmen kannst...">${savedData.nachricht || ''}</textarea>
+                                </div>
+                                
+                                <div>
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Grussformel:</label>
+                                    <input type="text" id="gruss" class="input-field" placeholder="z.B. Freundliche Grüsse" value="${savedData.gruss || ''}">
+                                </div>
+                            </div>
+                            ${getTagsHTML(komp)}
+                        </div>
+                    `;
+                    break;
                     
-                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
-                        <div style="margin-bottom: 1.5rem;">
-                            <p style="font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.75rem;">Offenheit für Neues</p>
-                            <div style="display: flex; gap: 0.5rem; align-items: center;">
-                                <span style="font-size: 0.75rem; color: #6B7280;">wenig</span>
-                                <input type="range" min="1" max="5" value="3" class="rating-slider" style="flex: 1;">
-                                <span style="font-size: 0.75rem; color: #6B7280;">sehr</span>
+                case '3.2.2':
+                    exerciseHTML = `
+                        <div class="exercise-box">
+                            <p class="exercise-thema">${komp.thema}</p>
+                            <h3 class="exercise-title">🎯 Aufgabe: Lernziel mit Zeitplan</h3>
+                            <p class="exercise-description">Setze dir ein konkretes Lernziel für die ersten 3 Monate deiner Lehre.</p>
+                            
+                            <div style="background: white; border-radius: 12px; padding: 1.5rem;">
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Mein Ziel:</label>
+                                    <input type="text" id="ziel" class="input-field" placeholder="z.B. Ich kann selbstständig Kundenanfragen bearbeiten" value="${savedData.ziel || ''}">
+                                </div>
+                                
+                                <div class="timeline-container">
+                                    <div class="timeline-item ${savedData.schritt1 ? 'filled' : ''}">
+                                        <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Monat 1 - Was mache ich?</label>
+                                        <input type="text" id="schritt1" class="input-field" placeholder="z.B. Alle Arbeitsabläufe beobachten" value="${savedData.schritt1 || ''}">
+                                    </div>
+                                    
+                                    <div class="timeline-item ${savedData.schritt2 ? 'filled' : ''}">
+                                        <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Monat 2 - Was mache ich?</label>
+                                        <input type="text" id="schritt2" class="input-field" placeholder="z.B. Einfache Anfragen mit Unterstützung" value="${savedData.schritt2 || ''}">
+                                    </div>
+                                    
+                                    <div class="timeline-item ${savedData.schritt3 ? 'filled' : ''}">
+                                        <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Monat 3 - Was mache ich?</label>
+                                        <input type="text" id="schritt3" class="input-field" placeholder="z.B. Standardanfragen selbstständig" value="${savedData.schritt3 || ''}">
+                                    </div>
+                                </div>
                             </div>
+                            ${getTagsHTML(komp)}
                         </div>
-                        <div style="margin-bottom: 1.5rem;">
-                            <p style="font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.75rem;">Fragen stellen</p>
-                            <div style="display: flex; gap: 0.5rem; align-items: center;">
-                                <span style="font-size: 0.75rem; color: #6B7280;">wenig</span>
-                                <input type="range" min="1" max="5" value="3" class="rating-slider" style="flex: 1;">
-                                <span style="font-size: 0.75rem; color: #6B7280;">sehr</span>
-                            </div>
-                        </div>
-                        <div>
-                            <p style="font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.75rem;">Unterstützung holen</p>
-                            <div style="display: flex; gap: 0.5rem; align-items: center;">
-                                <span style="font-size: 0.75rem; color: #6B7280;">wenig</span>
-                                <input type="range" min="1" max="5" value="3" class="rating-slider" style="flex: 1;">
-                                <span style="font-size: 0.75rem; color: #6B7280;">sehr</span>
-                            </div>
-                        </div>
-                        <div style="margin-top: 1rem; padding: 0.75rem; background: #E3F2FD; border-radius: 8px; border: 2px solid #2196F3;">
-                            <p style="font-size: 0.875rem; color: #1565C0; font-weight: 600;">💡 Bewertung abgeschlossen!</p>
-                        </div>
-                    </div>
-                    ${getTagsHTML(komp)}
-                </div>
-            `;
-        }
-
-        // 3.2.10
-        function generate3210(komp) {
-             return `
-                <div class="exercise-box">
-                    <p class="exercise-thema">${komp.thema}</p>
-                    <h3 class="exercise-title">⚖️ Aufgabe: Pflichten kennen</h3>
-                    <p class="exercise-description">Welche Aussagen sind richtig?</p>
+                    `;
+                    break;
                     
-                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="quiz-check" data-correct="true" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;">Ich muss pünktlich zur Arbeit erscheinen</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="quiz-check" data-correct="false" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;">Ich kann Ferien nehmen, wann ich will</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="quiz-check" data-correct="true" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;">Ich muss Arbeitsanweisungen befolgen</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="quiz-check" data-correct="true" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;">Bei Krankheit Betrieb informieren</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="quiz-check" data-correct="false" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;">Berufsschule ist freiwillig</span>
-                        </label>
-                        <button onclick="checkQuiz()" style="margin-top: 1rem; width: 100%; background: #2196F3; color: white; font-weight: 600; padding: 0.75rem; border: none; border-radius: 8px; cursor: pointer;">
-                            Prüfen
-                        </button>
-                        <div id="quizFeedback" style="margin-top: 1rem; padding: 0.75rem; border-radius: 8px; display: none;"></div>
-                    </div>
-                    ${getTagsHTML(komp)}
-                </div>
-            `;
-        }
-
-        // 3.2.11
-        function generate3211(komp) {
-             return `
-                <div class="exercise-box">
-                    <p class="exercise-thema">${komp.thema}</p>
-                    <h3 class="exercise-title">🎨 Aufgabe: Deckblatt planen</h3>
-                    <p class="exercise-description">Was gehört auf ein Bewerbungsdeckblatt?</p>
+                case '3.2.3':
+                    exerciseHTML = `
+                        <div class="exercise-box">
+                            <p class="exercise-thema">${komp.thema}</p>
+                            <h3 class="exercise-title">🤝 Situation: Konflikt im Team</h3>
+                            
+                            <div class="scenario-box">
+                                <strong>Situation:</strong><br>
+                                Ihr müsst zu dritt ein Projekt präsentieren. Ein Teammitglied macht seine Arbeit nicht, antwortet nicht auf Nachrichten. Die Präsentation ist in 3 Tagen.
+                            </div>
+                            
+                            <p class="exercise-description">Wie reagierst du? Wähle die beste Reaktion:</p>
+                            
+                            <div class="choice-buttons">
+                                <button class="choice-btn ${savedData.reaktion === 'a' ? 'selected' : ''}" data-name="reaktion" data-value="a">
+                                    <strong>A)</strong> Ich mache die Arbeit einfach selbst, um Ärger zu vermeiden.
+                                </button>
+                                <button class="choice-btn ${savedData.reaktion === 'b' ? 'selected' : ''}" data-name="reaktion" data-value="b">
+                                    <strong>B)</strong> Ich spreche die Person direkt an, frage nach Gründen und suche gemeinsam nach einer Lösung.
+                                </button>
+                                <button class="choice-btn ${savedData.reaktion === 'c' ? 'selected' : ''}" data-name="reaktion" data-value="c">
+                                    <strong>C)</strong> Ich beschwere mich bei der Lehrperson über das Teammitglied.
+                                </button>
+                                <button class="choice-btn ${savedData.reaktion === 'd' ? 'selected' : ''}" data-name="reaktion" data-value="d">
+                                    <strong>D)</strong> Ich ignoriere es und hoffe, dass die Person sich noch meldet.
+                                </button>
+                            </div>
+                            
+                            <div style="margin-top: 1.5rem;">
+                                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Begründung für deine Wahl:</label>
+                                <textarea id="begruendung" class="textarea-field" placeholder="Warum hast du so gehandelt?">${savedData.begruendung || ''}</textarea>
+                            </div>
+                            ${getTagsHTML(komp)}
+                        </div>
+                    `;
+                    break;
                     
-                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;">📸 Professionelles Bewerbungsfoto</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;">✏️ Name und Kontaktdaten</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;">🎯 Titel: "Bewerbung als..."</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;">🎨 Persönliche Note (Farbe, Design)</span>
-                        </label>
-                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
-                            <input type="checkbox" class="activity-check" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
-                            <span style="font-size: 0.875rem;">📅 Datum der Bewerbung</span>
-                        </label>
-                        <div id="activityFeedback" style="margin-top: 1rem; padding: 0.75rem; background: #E8F5E9; border-radius: 8px; display: none; border: 2px solid #4CAF50;">
-                            <p style="font-size: 0.875rem; color: #2E7D32; font-weight: 600;">✅ Alle Elemente gewählt!</p>
+                case '3.2.4':
+                    exerciseHTML = `
+                        <div class="exercise-box">
+                            <p class="exercise-thema">${komp.thema}</p>
+                            <h3 class="exercise-title">🔍 Aufgabe: Quelle kritisch prüfen</h3>
+                            
+                            <div class="scenario-box">
+                                Du findest online einen Artikel: "Lehrabbruch - 10 Gründe warum du sofort kündigen solltest"<br>
+                                Veröffentlicht auf: www.job-tipps-blog-24.info<br>
+                                Autor: Nicht angegeben<br>
+                                Datum: 2019
+                            </div>
+                            
+                            <p class="exercise-description">Bewerte diese Quelle auf einer Skala von 1-5:</p>
+                            
+                            <div class="rating-container" data-name="glaubwuerdigkeit">
+                                <span class="rating-label">Glaubwürdigkeit</span>
+                                <div class="rating-scale">
+                                    ${[1,2,3,4,5].map(n => `<div class="rating-option ${savedData.glaubwuerdigkeit == n ? 'selected' : ''}" data-value="${n}">${n}</div>`).join('')}
+                                </div>
+                            </div>
+                            
+                            <div class="rating-container" data-name="aktualitaet">
+                                <span class="rating-label">Aktualität</span>
+                                <div class="rating-scale">
+                                    ${[1,2,3,4,5].map(n => `<div class="rating-option ${savedData.aktualitaet == n ? 'selected' : ''}" data-value="${n}">${n}</div>`).join('')}
+                                </div>
+                            </div>
+                            
+                            <div class="rating-container" data-name="objektivitaet">
+                                <span class="rating-label">Objektivität (neutral/sachlich)</span>
+                                <div class="rating-scale">
+                                    ${[1,2,3,4,5].map(n => `<div class="rating-option ${savedData.objektivitaet == n ? 'selected' : ''}" data-value="${n}">${n}</div>`).join('')}
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 1.5rem;">
+                                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Würdest du dieser Quelle vertrauen? Warum (nicht)?</label>
+                                <textarea id="bewertung" class="textarea-field" placeholder="Deine Einschätzung...">${savedData.bewertung || ''}</textarea>
+                            </div>
+                            ${getTagsHTML(komp)}
                         </div>
-                    </div>
-                    ${getTagsHTML(komp)}
-                </div>
-            `;
-        }
-
-        // 3.2.12
-        function generate3212(komp) {
-            return `
-                <div class="exercise-box">
-                    <p class="exercise-thema">${komp.thema}</p>
-                    <h3 class="exercise-title">🪞 Aufgabe: Erste Woche reflektieren</h3>
-                    <p class="exercise-description">Bewerte deine erste Woche:</p>
+                    `;
+                    break;
                     
-                    <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
-                        <div style="margin-bottom: 1.5rem;">
-                            <p style="font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.75rem;">Wie gut hast du dich eingelebt?</p>
-                            <div style="display: flex; gap: 0.5rem; align-items: center;">
-                                <span style="font-size: 0.75rem;">😰</span>
-                                <input type="range" min="1" max="5" value="3" class="rating-slider" style="flex: 1;">
-                                <span style="font-size: 0.75rem;">😊</span>
+                case '3.2.5':
+                    exerciseHTML = `
+                        <div class="exercise-box">
+                            <p class="exercise-thema">${komp.thema}</p>
+                            <h3 class="exercise-title">🔧 Situation: Unklare Arbeitsanweisung</h3>
+                            
+                            <div class="scenario-box">
+                                Dein Berufsbildner sagt: "Mach mal die Ablage fertig bis heute Abend."<br>
+                                Du weisst nicht genau, was gemeint ist und wie viel Zeit du hast.
                             </div>
-                        </div>
-                        <div style="margin-bottom: 1.5rem;">
-                            <p style="font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.75rem;">Wie klar waren die Anweisungen?</p>
-                            <div style="display: flex; gap: 0.5rem; align-items: center;">
-                                <span style="font-size: 0.75rem; color: #6B7280;">unklar</span>
-                                <input type="range" min="1" max="5" value="3" class="rating-slider" style="flex: 1;">
-                                <span style="font-size: 0.75rem; color: #6B7280;">sehr klar</span>
+                            
+                            <p class="exercise-description">Wie gehst du vor? Beschreibe deine Lösungsstrategie:</p>
+                            
+                            <div style="background: white; border-radius: 12px; padding: 1.5rem;">
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">1. Problem erkennen - Was ist unklar?</label>
+                                    <textarea id="problem" class="textarea-field" placeholder="z.B. Welche Ablage? Physisch oder digital?">${savedData.problem || ''}</textarea>
+                                </div>
+                                
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">2. Lösungsansatz - Was machst du konkret?</label>
+                                    <textarea id="loesung" class="textarea-field" placeholder="z.B. Ich frage nach und kläre die Details...">${savedData.loesung || ''}</textarea>
+                                </div>
+                                
+                                <div>
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">3. Prävention - Wie vermeidest du das in Zukunft?</label>
+                                    <textarea id="praevention" class="textarea-field" placeholder="z.B. Immer sofort nachfragen...">${savedData.praevention || ''}</textarea>
+                                </div>
                             </div>
+                            ${getTagsHTML(komp)}
                         </div>
-                        <div style="margin-bottom: 1.5rem;">
-                            <p style="font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.75rem;">Wie gut war das Team?</p>
-                            <div style="display: flex; gap: 0.5rem; align-items: center;">
-                                <span style="font-size: 0.75rem;">❄️</span>
-                                <input type="range" min="1" max="5" value="3" class="rating-slider" style="flex: 1;">
-                                <span style="font-size: 0.75rem;">🔥</span>
+                    `;
+                    break;
+                    
+                case '3.2.6':
+                    exerciseHTML = `
+                        <div class="exercise-box">
+                            <p class="exercise-thema">${komp.thema}</p>
+                            <h3 class="exercise-title">💬 Aufgabe: Feedback-Gespräch</h3>
+                            
+                            <p class="exercise-description">Du möchtest deinem Berufsbildner Feedback geben, dass die Erklärungen manchmal zu schnell gehen. Formuliere drei Sätze:</p>
+                            
+                            <div style="background: white; border-radius: 12px; padding: 1.5rem;">
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">1. Situation beschreiben (Ich-Botschaft)</label>
+                                    <textarea id="situation" class="textarea-field" placeholder="z.B. Mir fällt auf, dass...">${savedData.situation || ''}</textarea>
+                                </div>
+                                
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">2. Wirkung beschreiben (Wie geht es dir damit?)</label>
+                                    <textarea id="wirkung" class="textarea-field" placeholder="z.B. Das führt dazu, dass ich...">${savedData.wirkung || ''}</textarea>
+                                </div>
+                                
+                                <div>
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">3. Wunsch äussern (Was brauchst du?)</label>
+                                    <textarea id="wunsch" class="textarea-field" placeholder="z.B. Ich würde mir wünschen, dass...">${savedData.wunsch || ''}</textarea>
+                                </div>
                             </div>
+                            ${getTagsHTML(komp)}
                         </div>
-                        <div>
-                            <p style="font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.75rem;">Was willst du verbessern?</p>
-                            <select class="improve-select" style="width: 100%; padding: 0.5rem; border: 2px solid #E5E7EB; border-radius: 6px;">
-                                <option value="">Wähle...</option>
-                                <option value="punctuality">⏰ Pünktlichkeit</option>
-                                <option value="questions">❓ Mehr Fragen</option>
-                                <option value="organization">📋 Organisation</option>
-                                <option value="communication">💬 Kommunikation</option>
-                                <option value="focus">🎯 Konzentration</option>
-                            </select>
+                    `;
+                    break;
+                    
+                case '3.2.7':
+                    exerciseHTML = `
+                        <div class="exercise-box">
+                            <p class="exercise-thema">${komp.thema}</p>
+                            <h3 class="exercise-title">📱 Aufgabe: Digitale Tools nutzen</h3>
+                            <p class="exercise-description">Welche digitalen Tools nutzt du für was? Erstelle deinen persönlichen Tool-Plan.</p>
+                            
+                            <div style="background: white; border-radius: 12px; padding: 1.5rem;">
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">📅 Termine verwalten:</label>
+                                    <input type="text" id="termine" class="input-field" placeholder="z.B. Google Calendar, Outlook" value="${savedData.termine || ''}">
+                                </div>
+                                
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">📝 Notizen machen:</label>
+                                    <input type="text" id="notizen_tool" class="input-field" placeholder="z.B. OneNote, Notion" value="${savedData.notizen_tool || ''}">
+                                </div>
+                                
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">💬 Mit Team kommunizieren:</label>
+                                    <input type="text" id="kommunikation" class="input-field" placeholder="z.B. Teams, Slack" value="${savedData.kommunikation || ''}">
+                                </div>
+                                
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">📁 Dateien speichern:</label>
+                                    <input type="text" id="dateien" class="input-field" placeholder="z.B. OneDrive, Google Drive" value="${savedData.dateien || ''}">
+                                </div>
+                                
+                                <div>
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">🔐 Passwörter verwalten:</label>
+                                    <input type="text" id="passwoerter" class="input-field" placeholder="z.B. Browser, Passwort-Manager" value="${savedData.passwoerter || ''}">
+                                </div>
+                            </div>
+                            ${getTagsHTML(komp)}
                         </div>
-                        <div id="reflectionComplete" style="margin-top: 1rem; padding: 0.75rem; background: #E3F2FD; border-radius: 8px; border: 2px solid #2196F3; display: none;">
-                            <p style="font-size: 0.875rem; color: #1565C0; font-weight: 600;">💭 Reflexion abgeschlossen!</p>
+                    `;
+                    break;
+                    
+                case '3.2.8':
+                    exerciseHTML = `
+                        <div class="exercise-box">
+                            <p class="exercise-thema">${komp.thema}</p>
+                            <h3 class="exercise-title">📚 Aufgabe: Meine Lernstrategie</h3>
+                            <p class="exercise-description">Entwickle eine persönliche Lernstrategie für die Berufsschule.</p>
+                            
+                            <div style="background: white; border-radius: 12px; padding: 1.5rem;">
+                                <div class="rating-container" data-name="lernzeit">
+                                    <span class="rating-label">Wann lerne ich am besten?</span>
+                                    <div class="choice-buttons" style="margin-top: 0.5rem;">
+                                        <button class="choice-btn ${savedData.lernzeit === 'morgen' ? 'selected' : ''}" data-name="lernzeit" data-value="morgen">🌅 Morgens</button>
+                                        <button class="choice-btn ${savedData.lernzeit === 'mittag' ? 'selected' : ''}" data-name="lernzeit" data-value="mittag">☀️ Mittags/Nachmittags</button>
+                                        <button class="choice-btn ${savedData.lernzeit === 'abend' ? 'selected' : ''}" data-name="lernzeit" data-value="abend">🌙 Abends</button>
+                                    </div>
+                                </div>
+                                
+                                <div style="margin: 1.5rem 0;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Welche Lernmethoden funktionieren für mich?</label>
+                                    <textarea id="methoden" class="textarea-field" placeholder="z.B. Zusammenfassungen schreiben, Videos schauen...">${savedData.methoden || ''}</textarea>
+                                </div>
+                                
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Wie viel Zeit plane ich pro Woche fürs Lernen?</label>
+                                    <input type="text" id="lernzeit_woche" class="input-field" placeholder="z.B. 3 Stunden, aufgeteilt auf..." value="${savedData.lernzeit_woche || ''}">
+                                </div>
+                                
+                                <div>
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Was lenkt mich ab und wie vermeide ich das?</label>
+                                    <textarea id="ablenkungen" class="textarea-field" placeholder="z.B. Handy → in anderen Raum legen">${savedData.ablenkungen || ''}</textarea>
+                                </div>
+                            </div>
+                            ${getTagsHTML(komp)}
                         </div>
-                    </div>
-                    ${getTagsHTML(komp)}
-                </div>
-            `;
+                    `;
+                    break;
+                    
+                case '3.2.9':
+                    exerciseHTML = `
+                        <div class="exercise-box">
+                            <p class="exercise-thema">${komp.thema}</p>
+                            <h3 class="exercise-title">🔄 Aufgabe: Übergang reflektieren</h3>
+                            <p class="exercise-description">Was hat sich durch den Lehrbeginn in deinem Leben verändert?</p>
+                            
+                            <div style="background: white; border-radius: 12px; padding: 1.5rem;">
+                                <div class="rating-container" data-name="veraenderung_zeitplan">
+                                    <span class="rating-label">Zeitplan/Tagesablauf</span>
+                                    <div class="rating-scale">
+                                        <div class="rating-option ${savedData.veraenderung_zeitplan == '1' ? 'selected' : ''}" data-value="1">😰<br><span style="font-size: 0.7rem;">schwierig</span></div>
+                                        <div class="rating-option ${savedData.veraenderung_zeitplan == '2' ? 'selected' : ''}" data-value="2">😐<br><span style="font-size: 0.7rem;">geht so</span></div>
+                                        <div class="rating-option ${savedData.veraenderung_zeitplan == '3' ? 'selected' : ''}" data-value="3">🙂<br><span style="font-size: 0.7rem;">okay</span></div>
+                                        <div class="rating-option ${savedData.veraenderung_zeitplan == '4' ? 'selected' : ''}" data-value="4">😊<br><span style="font-size: 0.7rem;">gut</span></div>
+                                        <div class="rating-option ${savedData.veraenderung_zeitplan == '5' ? 'selected' : ''}" data-value="5">🔥<br><span style="font-size: 0.7rem;">super</span></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="rating-container" data-name="veraenderung_verantwortung">
+                                    <span class="rating-label">Verantwortung/Selbstständigkeit</span>
+                                    <div class="rating-scale">
+                                        ${[1,2,3,4,5].map(n => {
+                                            const emojis = ['😰', '😐', '🙂', '😊', '🔥'];
+                                            return `<div class="rating-option ${savedData.veraenderung_verantwortung == n ? 'selected' : ''}" data-value="${n}">${emojis[n-1]}</div>`;
+                                        }).join('')}
+                                    </div>
+                                </div>
+                                
+                                <div class="rating-container" data-name="veraenderung_sozial">
+                                    <span class="rating-label">Soziales Leben/Freizeit</span>
+                                    <div class="rating-scale">
+                                        ${[1,2,3,4,5].map(n => {
+                                            const emojis = ['😰', '😐', '🙂', '😊', '🔥'];
+                                            return `<div class="rating-option ${savedData.veraenderung_sozial == n ? 'selected' : ''}" data-value="${n}">${emojis[n-1]}</div>`;
+                                        }).join('')}
+                                    </div>
+                                </div>
+                                
+                                <div style="margin-top: 1.5rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Was hilft dir, mit den Veränderungen umzugehen?</label>
+                                    <textarea id="anpassung_strategie" class="textarea-field" placeholder="z.B. Routine, Pausen einplanen...">${savedData.anpassung_strategie || ''}</textarea>
+                                </div>
+                            </div>
+                            ${getTagsHTML(komp)}
+                        </div>
+                    `;
+                    break;
+                    
+                case '3.2.10':
+                    exerciseHTML = `
+                        <div class="exercise-box">
+                            <p class="exercise-thema">${komp.thema}</p>
+                            <h3 class="exercise-title">⚖️ Aufgabe: Verantwortung konkret</h3>
+                            <p class="exercise-description">Nenne konkrete Beispiele, wo du Verantwortung übernimmst:</p>
+                            
+                            <div style="background: white; border-radius: 12px; padding: 1.5rem;">
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">🏢 Im Betrieb:</label>
+                                    <textarea id="verantwortung_betrieb" class="textarea-field" placeholder="z.B. Pünktlich sein, Aufgaben fertig machen...">${savedData.verantwortung_betrieb || ''}</textarea>
+                                </div>
+                                
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">🏫 In der Schule:</label>
+                                    <textarea id="verantwortung_schule" class="textarea-field" placeholder="z.B. Hausaufgaben machen, für Prüfungen lernen...">${savedData.verantwortung_schule || ''}</textarea>
+                                </div>
+                                
+                                <div>
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">🏠 Im Privatleben:</label>
+                                    <textarea id="verantwortung_privat" class="textarea-field" placeholder="z.B. Termine einhalten, Budget planen...">${savedData.verantwortung_privat || ''}</textarea>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 1rem; background: #FFF3CD; border: 2px solid #FFC107; border-radius: 12px; padding: 1rem;">
+                                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #F57C00; margin-bottom: 0.5rem;">💡 Was passiert, wenn ich Verantwortung NICHT übernehme?</label>
+                                <textarea id="konsequenzen" class="textarea-field" placeholder="z.B. Vertrauensverlust, Probleme im Team...">${savedData.konsequenzen || ''}</textarea>
+                            </div>
+                            ${getTagsHTML(komp)}
+                        </div>
+                    `;
+                    break;
+                    
+                case '3.2.11':
+                    exerciseHTML = `
+                        <div class="exercise-box">
+                            <p class="exercise-thema">${komp.thema}</p>
+                            <h3 class="exercise-title">🎨 Aufgabe: Kreative Bewerbung</h3>
+                            <p class="exercise-description">Plane ein kreatives Element für deine nächste Bewerbung.</p>
+                            
+                            <div style="background: white; border-radius: 12px; padding: 1.5rem;">
+                                <div class="rating-container" data-name="kreativ_typ">
+                                    <span class="rating-label">Welche Art von kreativem Element?</span>
+                                    <div class="choice-buttons" style="margin-top: 0.5rem;">
+                                        <button class="choice-btn ${savedData.kreativ_typ === 'video' ? 'selected' : ''}" data-name="kreativ_typ" data-value="video">🎥 Kurzes Video-Pitch</button>
+                                        <button class="choice-btn ${savedData.kreativ_typ === 'infografik' ? 'selected' : ''}" data-name="kreativ_typ" data-value="infografik">📊 Infografik über mich</button>
+                                        <button class="choice-btn ${savedData.kreativ_typ === 'deckblatt' ? 'selected' : ''}" data-name="kreativ_typ" data-value="deckblatt">🎨 Kreatives Deckblatt</button>
+                                        <button class="choice-btn ${savedData.kreativ_typ === 'portfolio' ? 'selected' : ''}" data-name="kreativ_typ" data-value="portfolio">📁 Online-Portfolio</button>
+                                    </div>
+                                </div>
+                                
+                                <div style="margin-top: 1.5rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Was genau möchtest du zeigen?</label>
+                                    <textarea id="kreativ_inhalt" class="textarea-field" placeholder="z.B. Meine Stärken, Projekte, Motivation...">${savedData.kreativ_inhalt || ''}</textarea>
+                                </div>
+                                
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Welche Tools/Programme nutzt du?</label>
+                                    <input type="text" id="kreativ_tools" class="input-field" placeholder="z.B. Canva, PowerPoint..." value="${savedData.kreativ_tools || ''}">
+                                </div>
+                                
+                                <div>
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Bis wann setzt du die Idee um?</label>
+                                    <input type="date" id="kreativ_deadline" class="input-field" value="${savedData.kreativ_deadline || ''}">
+                                </div>
+                            </div>
+                            ${getTagsHTML(komp)}
+                        </div>
+                    `;
+                    break;
+                    
+                case '3.2.12':
+                    exerciseHTML = `
+                        <div class="exercise-box">
+                            <p class="exercise-thema">${komp.thema}</p>
+                            <h3 class="exercise-title">🪞 Aufgabe: Erste Woche reflektieren</h3>
+                            <p class="exercise-description">Schau auf deine erste Woche zurück:</p>
+                            
+                            <div style="background: white; border-radius: 12px; padding: 1.5rem;">
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">✅ Was lief gut?</label>
+                                    <textarea id="gut" class="textarea-field" placeholder="z.B. Ich habe mich gut eingelebt...">${savedData.gut || ''}</textarea>
+                                </div>
+                                
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">⚠️ Was war herausfordernd?</label>
+                                    <textarea id="herausfordernd" class="textarea-field" placeholder="z.B. Viele neue Abläufe...">${savedData.herausfordernd || ''}</textarea>
+                                </div>
+                                
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">💡 Was habe ich über mich gelernt?</label>
+                                    <textarea id="gelernt" class="textarea-field" placeholder="z.B. Ich brauche klare Anweisungen...">${savedData.gelernt || ''}</textarea>
+                                </div>
+                                
+                                <div>
+                                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">🎯 Was nehme ich mir für nächste Woche vor?</label>
+                                    <textarea id="vorsatz" class="textarea-field" placeholder="z.B. Mehr Fragen stellen...">${savedData.vorsatz || ''}</textarea>
+                                </div>
+                            </div>
+                            ${getTagsHTML(komp)}
+                        </div>
+                    `;
+                    break;
+                    
+                default:
+                    exerciseHTML = `
+                        <div class="exercise-box">
+                            <p class="exercise-thema">${komp.thema}</p>
+                            <h3 class="exercise-title">Übung in Vorbereitung</h3>
+                            <p class="exercise-description">Diese interaktive Übung wird gerade entwickelt.</p>
+                            ${getTagsHTML(komp)}
+                        </div>
+                    `;
+            }
+            
+            // Add reflexion box
+            exerciseHTML += getReflexionBox();
+            
+            return exerciseHTML;
         }
         
         function getTagsHTML(komp) {
             return `
-                <div class="tags-grid" style="margin-top: 1.5rem;">
+                <div class="tags-grid">
                     <div>
                         <p class="tag-group-title">🎯 Aspekte:</p>
                         <div class="tags">
@@ -1398,151 +1730,147 @@
             `;
         }
         
-        function getDefaultContent(komp) {
+        function getReflexionBox() {
             return `
-                <div class="exercise-box">
-                    <p class="exercise-thema">${komp.thema}</p>
-                    <h3 class="exercise-title">Übung in Vorbereitung</h3>
-                    <p class="exercise-description">Diese interaktive Übung wird gerade entwickelt.</p>
-                    ${getTagsHTML(komp)}
+                <div class="emoji-box">
+                    <h3 class="emoji-title">💭 Reflexion</h3>
+                    <p class="emoji-subtitle">Wie war's für dich? Wähle Emojis:</p>
+                    <div class="emoji-buttons" id="emojiButtons">
+                        <button class="emoji-btn" data-emoji="😊" title="Hat Spaß gemacht">😊</button>
+                        <button class="emoji-btn" data-emoji="💪" title="War anstrengend">💪</button>
+                        <button class="emoji-btn" data-emoji="🤔" title="Musste nachdenken">🤔</button>
+                        <button class="emoji-btn" data-emoji="❓" title="War unklar">❓</button>
+                        <button class="emoji-btn" data-emoji="🔥" title="War super">🔥</button>
+                        <button class="emoji-btn" data-emoji="😅" title="War schwierig">😅</button>
+                        <button class="emoji-btn" data-emoji="💡" title="Hatte eine Idee">💡</button>
+                        <button class="emoji-btn" data-emoji="✅" title="Gut gelaufen">✅</button>
+                    </div>
+                    <div id="selectedEmojis" class="selected-emojis">
+                        <span class="emoji-placeholder">Klicke auf Emojis...</span>
+                    </div>
+                    
+                    <div class="notizen-field">
+                        <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">📝 Zusätzliche Notizen (optional)</label>
+                        <textarea id="notizenField" class="textarea-field" placeholder="Was hast du gelernt? Was war herausfordernd?" maxlength="500"></textarea>
+                        <div class="char-count">
+                            <span id="charCount">0</span>/500 Zeichen
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button id="speichernBtn" class="btn-save">
+                        ✅ Als geübt markieren
+                    </button>
+                    <button id="portfolioBtn" class="btn-portfolio">
+                        📁 Ins Portfolio speichern
+                    </button>
+                    <button id="abbrechenBtn" class="btn-cancel">
+                        Abbrechen
+                    </button>
                 </div>
             `;
         }
         
-        // ==================== EVENT LISTENER ====================
+        // ==================== INTERACTIVE FUNCTIONS ====================
         
         function setupActivityListeners() {
-            // Checkboxen mit Feedback
-            const activityChecks = document.querySelectorAll('.activity-check');
-            if (activityChecks.length > 0) {
-                activityChecks.forEach(cb => {
-                    cb.addEventListener('change', () => {
-                        const allChecked = Array.from(activityChecks).every(c => c.checked);
-                        const feedback = document.getElementById('activityFeedback');
-                        if (feedback) feedback.style.display = allChecked ? 'block' : 'none';
-                    });
+            // Character counter for notizen
+            const notizenField = document.getElementById('notizenField');
+            const charCount = document.getElementById('charCount');
+            
+            if (notizenField && charCount) {
+                charCount.textContent = notizenField.value.length;
+                notizenField.addEventListener('input', function() {
+                    charCount.textContent = this.value.length;
                 });
             }
             
-            // Kriterien-Checks
-            const criteriaChecks = document.querySelectorAll('.criteria-check');
-            if (criteriaChecks.length > 0) {
-                criteriaChecks.forEach(cb => {
-                    cb.addEventListener('change', () => {
-                        const allChecked = Array.from(criteriaChecks).every(c => c.checked);
-                        const feedback = document.getElementById('criteriaFeedback');
-                        if (feedback) feedback.style.display = allChecked ? 'block' : 'none';
-                    });
+            // Update emoji buttons based on saved selection
+            document.querySelectorAll('.emoji-btn').forEach(btn => {
+                const emoji = btn.dataset.emoji;
+                if (selectedEmojis.includes(emoji)) {
+                    btn.classList.add('selected');
+                }
+                
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    toggleEmoji(emoji);
                 });
-            }
+            });
             
-            // Rollen-Select
-            const roleSelects = document.querySelectorAll('.role-select');
-            if (roleSelects.length > 0) {
-                roleSelects.forEach(select => {
-                    select.addEventListener('change', () => {
-                        const allFilled = Array.from(roleSelects).every(s => s.value !== '');
-                        const values = Array.from(roleSelects).map(s => s.value);
-                        const allDifferent = new Set(values).size === values.length;
-                        const feedback = document.getElementById('roleCheck');
-                        if (feedback) feedback.style.display = (allFilled && allDifferent) ? 'block' : 'none';
-                    });
+            // Rating options
+            document.querySelectorAll('.rating-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    selectRating(this);
                 });
-            }
+            });
             
-            // Kalender-Inputs
-            const calendarInputs = document.querySelectorAll('.calendar-input');
-            if (calendarInputs.length > 0) {
-                calendarInputs.forEach(input => {
-                    input.addEventListener('input', () => {
-                        const allFilled = Array.from(calendarInputs).every(i => i.value.trim() !== '');
-                        const feedback = document.getElementById('calendarCheck');
-                        if (feedback) feedback.style.display = allFilled ? 'block' : 'none';
-                    });
+            // Choice buttons
+            document.querySelectorAll('.choice-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    selectChoice(this);
                 });
-            }
+            });
             
-            // Improve Select (3.2.12)
-            const improveSelect = document.querySelector('.improve-select');
-            if (improveSelect) {
-                improveSelect.addEventListener('change', () => {
-                    const feedback = document.getElementById('reflectionComplete');
-                    if (feedback && improveSelect.value !== '') {
-                        feedback.style.display = 'block';
+            // Timeline inputs
+            document.querySelectorAll('.timeline-item input').forEach(input => {
+                input.addEventListener('input', function() {
+                    const timelineItem = this.closest('.timeline-item');
+                    if (this.value.trim()) {
+                        timelineItem.classList.add('filled');
+                    } else {
+                        timelineItem.classList.remove('filled');
                     }
                 });
-            }
+            });
+            
+            // Action buttons
+            document.getElementById('speichernBtn').addEventListener('click', markAsCompleted);
+            document.getElementById('portfolioBtn').addEventListener('click', saveToPortfolio);
+            document.getElementById('abbrechenBtn').addEventListener('click', closeModal);
+            
+            updateSelectedEmojis();
         }
         
-        // Globale Funktionen für spezielle Checks
-        window.checkOrder = function() {
-            const inputs = document.querySelectorAll('.order-input');
-            let allCorrect = true;
-            inputs.forEach(input => {
-                const value = parseInt(input.value);
-                const correct = parseInt(input.dataset.correct);
-                if (value !== correct) {
-                    allCorrect = false;
-                    input.style.borderColor = '#EF4444';
-                } else {
-                    input.style.borderColor = '#4CAF50';
-                }
+        function selectRating(element) {
+            const container = element.closest('.rating-container');
+            container.querySelectorAll('.rating-option').forEach(opt => {
+                opt.classList.remove('selected');
             });
-            
-            const feedback = document.getElementById('orderFeedback');
-            if (allCorrect) {
-                feedback.style.display = 'block';
-                feedback.style.background = '#E8F5E9';
-                feedback.style.border = '2px solid #4CAF50';
-                feedback.innerHTML = '<p style="font-size: 0.875rem; color: #2E7D32; font-weight: 600;">🎉 Perfekt! Reihenfolge stimmt!</p>';
-            } else {
-                feedback.style.display = 'block';
-                feedback.style.background = '#FFEBEE';
-                feedback.style.border = '2px solid #EF4444';
-                feedback.innerHTML = '<p style="font-size: 0.875rem; color: #C62828; font-weight: 600;">❌ Noch nicht ganz richtig. Versuch nochmal!</p>';
-            }
-        };
+            element.classList.add('selected');
+            triggerAutoSave();
+        }
         
-        window.checkQuiz = function() {
-            const checks = document.querySelectorAll('.quiz-check');
-            let allCorrect = true;
-            checks.forEach(cb => {
-                const isCorrect = cb.dataset.correct === 'true';
-                if (cb.checked !== isCorrect) {
-                    allCorrect = false;
-                }
+        function selectChoice(element) {
+            const name = element.dataset.name;
+            document.querySelectorAll(`[data-name="${name}"]`).forEach(btn => {
+                btn.classList.remove('selected');
             });
-            
-            const feedback = document.getElementById('quizFeedback');
-            if (allCorrect) {
-                feedback.style.display = 'block';
-                feedback.style.background = '#E8F5E9';
-                feedback.style.border = '2px solid #4CAF50';
-                feedback.innerHTML = '<p style="font-size: 0.875rem; color: #2E7D32; font-weight: 600;">🎉 Alle Antworten richtig!</p>';
-            } else {
-                feedback.style.display = 'block';
-                feedback.style.background = '#FFEBEE';
-                feedback.style.border = '2px solid #EF4444';
-                feedback.innerHTML = '<p style="font-size: 0.875rem; color: #C62828; font-weight: 600;">❌ Nicht alle richtig. Überlege nochmal!</p>';
-            }
-        };
-        
-        function closeModal() {
-            document.getElementById('uebungModal').classList.remove('show');
-            currentKompetenz = null;
+            element.classList.add('selected');
+            triggerAutoSave();
         }
         
         function toggleEmoji(emoji) {
-            if (selectedEmojis.includes(emoji)) {
-                selectedEmojis = selectedEmojis.filter(e => e !== emoji);
+            const index = selectedEmojis.indexOf(emoji);
+            const btn = document.querySelector(`.emoji-btn[data-emoji="${emoji}"]`);
+            
+            if (index > -1) {
+                selectedEmojis.splice(index, 1);
+                btn.classList.remove('selected');
             } else {
                 selectedEmojis.push(emoji);
+                btn.classList.add('selected');
             }
+            
             updateSelectedEmojis();
+            triggerAutoSave();
         }
         
         function updateSelectedEmojis() {
             const container = document.getElementById('selectedEmojis');
+            if (!container) return;
+            
             if (selectedEmojis.length === 0) {
                 container.innerHTML = '<span class="emoji-placeholder">Klicke auf Emojis...</span>';
             } else {
@@ -1550,7 +1878,6 @@
             }
         }
         
-        // NUR als geübt markieren (ohne Portfolio)
         async function markAsCompleted() {
             if (selectedEmojis.length === 0) {
                 alert('Bitte wähle mindestens ein Emoji als Reflexion!');
@@ -1575,7 +1902,10 @@
                         'kompetenzen.schluessel': schluessel
                     });
                     
-                    updateCardStatus(currentKompetenz);
+                    // Save activity data with completed status
+                    await saveActivityData(true);
+                    
+                    updateCardStatus(currentKompetenz, 'completed');
                     await loadProgress();
                     closeModal();
                     
@@ -1587,7 +1917,6 @@
             }
         }
         
-        // Ins Portfolio speichern (MIT Performanz-Daten)
         async function saveToPortfolio() {
             if (selectedEmojis.length === 0) {
                 alert('Bitte wähle mindestens ein Emoji als Reflexion!');
@@ -1603,32 +1932,30 @@
                     const schluessel = data.kompetenzen?.schluessel || {};
                     const portfolio = data.portfolio || [];
                     
-                    // Sammle Performanz-Daten (ERWEITERT)
-                    const performanzData = collectPerformanceData(currentKompetenz);
-                    
-                    // NEU: Notizen holen
+                    // Collect performance data
+                    const performanzData = collectActivityData();
                     const notizen = document.getElementById('notizenField')?.value.trim() || '';
                     
-                    // Markiere auch als geübt
+                    // Mark as completed
                     schluessel[currentKompetenz] = {
                         completed: true,
                         reflexion: selectedEmojis.join(''),
                         timestamp: new Date().toISOString()
                     };
                     
-                    // Erstelle Portfolio-Eintrag
+                    // Create portfolio entry
                     const komp = kompetenzen.find(k => k.id === currentKompetenz);
                     const portfolioEntry = {
-                        id: 'sk_' + currentKompetenz.replace('.', '_') + '_' + Date.now(),
+                        id: 'sk_' + currentKompetenz.replace(/\./g, '_') + '_' + Date.now(),
                         type: 'schluesselkompetenz',
                         kompetenzId: currentKompetenz,
                         kompetenzTitle: komp.title,
                         thema: komp.thema,
-                        aspekte: komp.aspekte, // ✅ NEU: Aspekte speichern
-                        sprachmodi: komp.sprachmodi, // ✅ NEU: Sprachmodi speichern
+                        aspekte: komp.aspekte,
+                        sprachmodi: komp.sprachmodi,
                         performanz: performanzData,
                         reflexion: selectedEmojis.join(''),
-                        notizen: notizen,  // ✅ NEU: Notizen speichern
+                        notizen: notizen,
                         createdAt: new Date().toISOString(),
                         shareable: true
                     };
@@ -1640,11 +1967,13 @@
                         'portfolio': portfolio
                     });
                     
-                    updateCardStatus(currentKompetenz);
+                    // Save activity data with completed status
+                    await saveActivityData(true);
+                    
+                    updateCardStatus(currentKompetenz, 'completed');
                     await loadProgress();
                     closeModal();
                     
-                    // Erfolgs-Nachricht anpassen
                     let successMsg = '📂 Ins Portfolio gespeichert!\n\n✓ Kompetenz als geübt markiert\n✓ Performanz dokumentiert\n✓ Reflexion: ' + selectedEmojis.join(' ');
                     if (notizen) {
                         successMsg += '\n✓ Notizen gespeichert';
@@ -1657,236 +1986,6 @@
             }
         }
         
-        // Sammle die Performanz-Daten je nach Übung (ERWEITERT)
-        function collectPerformanceData(kompetenzId) {
-            const data = {
-                kompetenzId: kompetenzId,
-                uebungstyp: getUebungstyp(kompetenzId)
-            };
-            
-            // Je nach Kompetenz unterschiedliche Daten sammeln
-            switch(kompetenzId) {
-                case '3.2.1': // Checklist
-                    const checks321 = document.querySelectorAll('.activity-check');
-                    // Labels finden: In dieser Struktur ist der Text im span nach dem input
-                    const items321 = Array.from(checks321).map((checkbox, index) => {
-                        // Suche das Span-Element im gleichen Label
-                        const labelSpan = checkbox.parentElement.querySelector('span');
-                        const text = labelSpan ? labelSpan.textContent.trim() : `Schritt ${index + 1}`;
-                        return {
-                            checked: checkbox.checked,
-                            text: text,
-                            id: index + 1
-                        };
-                    });
-                    
-                    data.checklist = {
-                        total: checks321.length,
-                        completed: items321.filter(i => i.checked).length,
-                        items: items321
-                    };
-                    break;
-                    
-                case '3.2.2': // E-Mail Kriterien
-                    const checks322 = document.querySelectorAll('.criteria-check');
-                    const items322 = Array.from(checks322).map((checkbox, index) => {
-                         const labelSpan = checkbox.parentElement.querySelector('span');
-                         const text = labelSpan ? labelSpan.textContent.trim() : `Kriterium ${index + 1}`;
-                         return {
-                             checked: checkbox.checked,
-                             text: text,
-                             id: index + 1
-                         };
-                    });
-
-                    data.kriterien = {
-                        total: checks322.length,
-                        erfuellt: items322.filter(i => i.checked).length,
-                        items: items322
-                    };
-                    break;
-                    
-                case '3.2.3': // Rollenverteilung
-                    const roles = document.querySelectorAll('.role-select');
-                    // Hier speichern wir, wer welche Rolle hat, mit Labels
-                    data.rollen = Array.from(roles).map((select, index) => {
-                        const personLabel = select.previousElementSibling.textContent.replace(':', '').trim();
-                        // Text der gewählten Option holen
-                        const selectedOptionText = select.options[select.selectedIndex].text;
-                        return {
-                            person: personLabel,
-                            rolleValue: select.value,
-                            rolleText: selectedOptionText
-                        };
-                    });
-                    break;
-                    
-                case '3.2.4': // Lehrvertrag
-                    const checks324 = document.querySelectorAll('.activity-check');
-                     const items324 = Array.from(checks324).map((checkbox, index) => {
-                        const labelSpan = checkbox.parentElement.querySelector('span');
-                        return {
-                            checked: checkbox.checked,
-                            text: labelSpan ? labelSpan.textContent.trim() : `Punkt ${index + 1}`,
-                            id: index + 1
-                        };
-                    });
-                    data.pruefpunkte = {
-                        total: checks324.length,
-                        markiert: items324.filter(i => i.checked).length,
-                        items: items324
-                    };
-                    break;
-                    
-                case '3.2.5': // Problemlösung
-                    const orders = document.querySelectorAll('.order-input');
-                    data.reihenfolge = Array.from(orders).map((input, index) => {
-                         const stepText = input.nextElementSibling.textContent.trim();
-                         return {
-                             step: stepText,
-                             eingabe: parseInt(input.value) || 0,
-                             korrekt: parseInt(input.dataset.correct)
-                         };
-                    });
-                    break;
-                    
-                case '3.2.6': // Kommunikation
-                    const checks326 = document.querySelectorAll('.activity-check');
-                    const items326 = Array.from(checks326).map((checkbox, index) => {
-                        const labelSpan = checkbox.parentElement.querySelector('span');
-                        return {
-                            checked: checkbox.checked,
-                            text: labelSpan ? labelSpan.textContent.trim() : `Element ${index + 1}`,
-                            id: index + 1
-                        };
-                    });
-                    data.elemente = {
-                        total: checks326.length,
-                        ausgewaehlt: items326.filter(i => i.checked).length,
-                        items: items326
-                    };
-                    break;
-                    
-                case '3.2.7': // Digital (Kalender)
-                    const calendar = document.querySelectorAll('.calendar-input');
-                    data.wochenplan = Array.from(calendar).map(input => {
-                        const dayLabel = input.previousElementSibling.textContent.replace('📌', '').replace(':', '').trim();
-                        return {
-                            tag: dayLabel,
-                            eintrag: input.value
-                        };
-                    });
-                    break;
-                    
-                case '3.2.8': // Lernen lernen
-                    const checks328 = document.querySelectorAll('.activity-check');
-                    const items328 = Array.from(checks328).map((checkbox, index) => {
-                        const labelSpan = checkbox.parentElement.querySelector('span');
-                        // Entferne HTML Tags aus dem Text für saubere Speicherung
-                        const text = labelSpan ? labelSpan.textContent.trim() : `Strategie ${index + 1}`;
-                        return {
-                            checked: checkbox.checked,
-                            text: text,
-                            id: index + 1
-                        };
-                    });
-                    data.strategien = {
-                        total: checks328.length,
-                        ausgewaehlt: items328.filter(i => i.checked).length,
-                        items: items328
-                    };
-                    break;
-                    
-                case '3.2.9': // Anpassung (Sliders)
-                    const sliders329 = document.querySelectorAll('.rating-slider');
-                    data.bewertungen = Array.from(sliders329).map(slider => {
-                        // Label ist im Paragraph darüber
-                        const labelP = slider.parentElement.previousElementSibling;
-                        return {
-                            kriterium: labelP ? labelP.textContent.trim() : 'Kriterium',
-                            wert: parseInt(slider.value),
-                            max: 5
-                        };
-                    });
-                    break;
-                    
-                case '3.2.10': // Verantwortung (Quiz)
-                    const quiz = document.querySelectorAll('.quiz-check');
-                    data.quiz = {
-                        total: quiz.length,
-                        antworten: Array.from(quiz).map((cb, index) => {
-                            const labelSpan = cb.parentElement.querySelector('span');
-                            return {
-                                frage: labelSpan ? labelSpan.textContent.trim() : `Frage ${index + 1}`,
-                                checked: cb.checked,
-                                isCorrect: cb.dataset.correct === 'true'
-                            };
-                        })
-                    };
-                    break;
-                    
-                case '3.2.11': // Kreativ
-                    const checks3211 = document.querySelectorAll('.activity-check');
-                    const items3211 = Array.from(checks3211).map((checkbox, index) => {
-                        const labelSpan = checkbox.parentElement.querySelector('span');
-                        return {
-                            checked: checkbox.checked,
-                            text: labelSpan ? labelSpan.textContent.trim() : `Element ${index + 1}`,
-                            id: index + 1
-                        };
-                    });
-                    data.elemente = {
-                        total: checks3211.length,
-                        ausgewaehlt: items3211.filter(i => i.checked).length,
-                        items: items3211
-                    };
-                    break;
-                    
-                case '3.2.12': // Reflexion
-                    const sliders3212 = document.querySelectorAll('.rating-slider');
-                    const improve = document.querySelector('.improve-select');
-                    
-                    const ratings = Array.from(sliders3212).map(slider => {
-                        const labelP = slider.parentElement.previousElementSibling;
-                        return {
-                            kriterium: labelP ? labelP.textContent.trim() : 'Kriterium',
-                            wert: parseInt(slider.value),
-                            max: 5
-                        };
-                    });
-                    
-                    let verbesserungText = '';
-                    if (improve && improve.selectedIndex >= 0) {
-                        verbesserungText = improve.options[improve.selectedIndex].text;
-                    }
-
-                    data.reflexion = {
-                        bewertungen: ratings,
-                        verbesserung: verbesserungText
-                    };
-                    break;
-            }
-            
-            return data;
-        }
-        
-        function getUebungstyp(kompetenzId) {
-            const typen = {
-                '3.2.1': 'Schulmail-Checklist',
-                '3.2.2': 'E-Mail Kriterien-Check',
-                '3.2.3': 'Rollenverteilung',
-                '3.2.4': 'Lehrvertrag prüfen',
-                '3.2.5': 'Problemlösungs-Reihenfolge',
-                '3.2.6': 'Kommunikations-Elemente',
-                '3.2.7': 'Wochenplan erstellen',
-                '3.2.8': 'Lernstrategien wählen',
-                '3.2.9': 'Anpassungsfähigkeit bewerten',
-                '3.2.10': 'Pflichten-Quiz',
-                '3.2.11': 'Deckblatt-Elemente',
-                '3.2.12': 'Erste Woche Reflexion'
-            };
-            return typen[kompetenzId] || 'Übung';
-        }
     </script>
 </body>
 </html>
