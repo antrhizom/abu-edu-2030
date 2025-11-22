@@ -1087,7 +1087,7 @@
                 <div class="section-box">
                     ${titelHTML}
                     <p class="section-box-title">${item.performanz.uebungstyp || 'Übung'}</p>
-                   ${formatPerformanzData(item.performanz, item)}
+                    ${formatPerformanzData(item.performanz)}
                 </div>
             </div>
         `;
@@ -1166,157 +1166,52 @@
     modal.classList.add('show');
 };
         
-function formatPerformanzData(performanz, item) {
+function formatPerformanzData(performanz) {
     let html = '';
     
     // ========== SPRACHMODI-DATEN ==========
     
-    // Multiple Choice / Selections mit den konkreten Fragen und Antworten
+    // Multiple Choice / Selections (für Sprachmodi)
     if (performanz.selections && Array.isArray(performanz.selections)) {
-        const uebung = getUebungData(item);
-        if (uebung && uebung.fragen) {
-            html += `<div style="margin-top: 0.5rem;">`;
-            uebung.fragen.forEach((frage, index) => {
-                const selected = performanz.selections[index];
-                if (selected !== null && selected !== undefined) {
-                    html += `
-                        <div style="margin-bottom: 1rem; padding: 0.75rem; background: #F9FAFB; border-radius: 8px; border-left: 3px solid #4CAF50;">
-                            <p class="section-box-small" style="font-weight: 600; margin-bottom: 0.5rem;">❓ ${frage.frage || frage.situation || frage.nachricht}</p>
-                            <p class="section-box-small" style="color: #4CAF50;">✓ Antwort: ${frage.optionen[selected]}</p>
-                        </div>
-                    `;
-                }
-            });
-            html += `</div>`;
-        } else {
-            const answered = performanz.selections.filter(s => s !== null && s !== undefined).length;
-            const total = performanz.selections.length;
-            html += `<p class="section-box-text">✅ ${answered} von ${total} Fragen beantwortet</p>`;
-        }
+        const answered = performanz.selections.filter(s => s !== null && s !== undefined).length;
+        const total = performanz.selections.length;
+        html += `<p class="section-box-text">✅ ${answered} von ${total} Fragen beantwortet</p>`;
     }
     
-    // Checkboxes mit den konkreten Items
+    // Checkboxes (für Sprachmodi)
     if (performanz.checkboxes && Array.isArray(performanz.checkboxes)) {
-        const uebung = getUebungData(item);
-        if (uebung && (uebung.checkpoints || uebung.schritte || uebung.items)) {
-            const items = uebung.checkpoints || uebung.schritte || uebung.items;
-            html += `<div style="margin-top: 0.5rem;">`;
-            items.forEach((itemText, index) => {
-                if (performanz.checkboxes[index]) {
-                    const text = itemText.text || itemText;
-                    html += `
-                        <div style="margin-bottom: 0.5rem; padding: 0.5rem 0.75rem; background: #F0FDF4; border-radius: 6px;">
-                            <p class="section-box-small">✅ ${text}</p>
-                        </div>
-                    `;
-                }
-            });
-            html += `</div>`;
-        } else {
-            const checked = performanz.checkboxes.filter(c => c === true).length;
-            const total = performanz.checkboxes.length;
-            html += `<p class="section-box-text">☑️ ${checked} von ${total} Punkten markiert</p>`;
-        }
+        const checked = performanz.checkboxes.filter(c => c === true).length;
+        const total = performanz.checkboxes.length;
+        html += `<p class="section-box-text">☑️ ${checked} von ${total} Punkten markiert</p>`;
     }
     
-    // Email-Eingaben mit vollem Inhalt
+    // Email-Eingaben (für Sprachmodi)
     if (performanz.emailBetreff || performanz.emailText) {
-        html += `
-            <div style="margin-top: 0.5rem; padding: 1rem; background: #F0F9FF; border-radius: 8px; border: 2px solid #3B82F6;">
-                <p class="section-box-title" style="margin-bottom: 0.75rem;">📧 Verfasste E-Mail:</p>
-        `;
+        html += `<p class="section-box-text" style="margin-bottom: 0.5rem;">📧 E-Mail verfasst:</p>`;
         if (performanz.emailBetreff) {
-            html += `
-                <div style="margin-bottom: 0.75rem;">
-                    <p class="section-box-small" style="font-weight: 600; color: #1E40AF;">Betreff:</p>
-                    <p class="section-box-text" style="margin-top: 0.25rem;">"${performanz.emailBetreff}"</p>
-                </div>
-            `;
+            html += `<p class="section-box-small">Betreff: "${performanz.emailBetreff}"</p>`;
         }
         if (performanz.emailText) {
-            html += `
-                <div>
-                    <p class="section-box-small" style="font-weight: 600; color: #1E40AF;">Nachricht:</p>
-                    <p class="section-box-text" style="margin-top: 0.25rem; white-space: pre-wrap;">"${performanz.emailText}"</p>
-                </div>
-            `;
-        }
-        html += `</div>`;
-    }
-    
-    // Zuordnungen mit Details
-    if (performanz.placements && Object.keys(performanz.placements).length > 0) {
-        const uebung = getUebungData(item);
-        if (uebung && uebung.items && (uebung.kategorien || uebung.ebenen)) {
-            const kategorien = uebung.kategorien || uebung.ebenen;
-            html += `<div style="margin-top: 0.5rem;">`;
-            
-            kategorien.forEach((kat, katIndex) => {
-                html += `<p class="section-box-title" style="margin-top: 0.75rem; margin-bottom: 0.5rem;">🎯 ${kat.name}:</p>`;
-                
-                Object.entries(performanz.placements).forEach(([itemIndex, placedKatIndex]) => {
-                    if (parseInt(placedKatIndex) === katIndex) {
-                        const itemText = uebung.items[parseInt(itemIndex)].text;
-                        html += `
-                            <div style="margin-bottom: 0.5rem; padding: 0.5rem 0.75rem; background: #F0FDF4; border-radius: 6px;">
-                                <p class="section-box-small">• ${itemText}</p>
-                            </div>
-                        `;
-                    }
-                });
-            });
-            html += `</div>`;
-        } else {
-            const placed = Object.keys(performanz.placements).length;
-            html += `<p class="section-box-text">🎯 ${placed} Items zugeordnet</p>`;
+            const preview = performanz.emailText.length > 100 
+                ? performanz.emailText.substring(0, 100) + '...' 
+                : performanz.emailText;
+            html += `<p class="section-box-small">Text: "${preview}"</p>`;
         }
     }
     
-    // Slider-Bewertungen mit Details
-    if (performanz.sliders && Object.keys(performanz.sliders).length > 0) {
-        const uebung = getUebungData(item);
-        if (uebung && (uebung.items || uebung.aspekte)) {
-            const items = uebung.items || uebung.aspekte;
-            html += `<div style="margin-top: 0.5rem;">`;
-            
-            Object.entries(performanz.sliders).forEach(([index, value]) => {
-                const item = items[parseInt(index)];
-                const itemName = item.name || item.text;
-                const stars = '⭐'.repeat(parseInt(value));
-                html += `
-                    <div style="margin-bottom: 0.75rem; padding: 0.75rem; background: #FFF7ED; border-radius: 6px;">
-                        <p class="section-box-small" style="font-weight: 600; margin-bottom: 0.25rem;">${itemName}</p>
-                        <p class="section-box-text">${stars} (${value}/5)</p>
-                    </div>
-                `;
-            });
-            html += `</div>`;
-        } else {
-            const count = Object.keys(performanz.sliders).length;
-            html += `<p class="section-box-text">⭐ ${count} Bewertungen abgegeben</p>`;
-        }
+    // Aspekte-Daten (Zuordnungen, Rankings, etc.)
+    if (performanz.placements) {
+        const placed = Object.keys(performanz.placements).length;
+        html += `<p class="section-box-text">🎯 ${placed} Items zugeordnet</p>`;
     }
     
-    // Ranking mit Reihenfolge
+    if (performanz.sliders) {
+        const count = Object.keys(performanz.sliders).length;
+        html += `<p class="section-box-text">⭐ ${count} Bewertungen abgegeben</p>`;
+    }
+    
     if (performanz.rankingOrder && Array.isArray(performanz.rankingOrder)) {
-        const uebung = getUebungData(item);
-        if (uebung && uebung.items) {
-            html += `<div style="margin-top: 0.5rem;">`;
-            html += `<p class="section-box-title" style="margin-bottom: 0.5rem;">📊 Sortierte Reihenfolge:</p>`;
-            
-            performanz.rankingOrder.forEach((itemIndex, position) => {
-                const item = uebung.items[itemIndex];
-                html += `
-                    <div style="margin-bottom: 0.5rem; padding: 0.5rem 0.75rem; background: #F9FAFB; border-radius: 6px; display: flex; align-items: center; gap: 0.5rem;">
-                        <span style="font-weight: 700; color: #8B4513; min-width: 1.5rem;">${position + 1}.</span>
-                        <p class="section-box-small">${item.text}</p>
-                    </div>
-                `;
-            });
-            html += `</div>`;
-        } else {
-            html += `<p class="section-box-text">📊 Ranking mit ${performanz.rankingOrder.length} Items erstellt</p>`;
-        }
+        html += `<p class="section-box-text">📊 Ranking mit ${performanz.rankingOrder.length} Items erstellt</p>`;
     }
     
     // ========== SCHLÜSSELKOMPETENZEN-DATEN ==========
@@ -1387,21 +1282,6 @@ function formatPerformanzData(performanz, item) {
     }
     
     return html || '<p class="section-box-text" style="color: #9CA3AF; font-style: italic;">Details nicht verfügbar</p>';
-}
-
-// Hilfsfunktion um Übungsdaten zu rekonstruieren
-function getUebungData(item) {
-    // Diese Funktion versucht die Original-Übungsdaten aus den gespeicherten Infos zu rekonstruieren
-    // Dies ist ein Best-Effort Ansatz, funktioniert am besten wenn die Übungsstruktur gespeichert wird
-    
-    // Für Sprachmodi
-    if (item.type === 'sprachmodus' && item.modusId) {
-        // Hier würden wir die Übungsdaten aus den modi-Definitionen holen
-        // Dies erfordert, dass die modi-Daten global verfügbar sind
-        return null; // Fallback auf Zusammenfassung
-    }
-    
-    return null;
 }
 
 function formatFieldLabel(key) {
