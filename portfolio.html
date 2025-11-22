@@ -230,6 +230,8 @@
             overflow: hidden;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
         
         .portfolio-item:hover {
@@ -239,6 +241,9 @@
         
         .portfolio-card-content {
             padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
         
         .card-header {
@@ -308,11 +313,10 @@
         .card-actions {
             display: flex;
             gap: 0.5rem;
-            margin-top: 1rem;
+            margin-top: auto;
         }
         
         .btn {
-            flex: 1;
             padding: 0.5rem 0.75rem;
             border-radius: 8px;
             font-size: 0.75rem;
@@ -320,9 +324,14 @@
             border: none;
             cursor: pointer;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
         }
         
         .btn-details {
+            flex: 1;
             background: rgba(139, 69, 19, 0.1);
             color: #8B4513;
         }
@@ -335,11 +344,20 @@
             background: rgba(76, 175, 80, 0.1);
             color: #4CAF50;
             flex: 0;
-            white-space: nowrap;
         }
         
         .btn-download:hover {
             background: rgba(76, 175, 80, 0.2);
+        }
+
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: #EF4444;
+            flex: 0;
+        }
+
+        .btn-delete:hover {
+            background: rgba(239, 68, 68, 0.2);
         }
         
         /* Empty State */
@@ -412,6 +430,7 @@
             max-height: 90vh;
             overflow-y: auto;
             padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
         
         .modal-header {
@@ -475,6 +494,9 @@
             font-weight: bold;
             color: #8B4513;
             margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
         .section-box {
@@ -493,12 +515,38 @@
             font-size: 0.875rem;
             color: #374151;
             margin-bottom: 0.25rem;
+            white-space: pre-wrap; /* Für Zeilenumbrüche in Notizen */
         }
         
         .section-box-small {
             font-size: 0.75rem;
             color: #6B7280;
             margin-left: 1rem;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 99px;
+        }
+
+        .tag-aspekt {
+            background: rgba(210, 105, 30, 0.1);
+            color: #D2691E;
+            border: 1px solid rgba(210, 105, 30, 0.2);
+        }
+
+        .tag-sprach {
+            background: rgba(255, 107, 53, 0.1);
+            color: #FF6B35;
+            border: 1px solid rgba(255, 107, 53, 0.2);
         }
         
         .reflexion-emoji {
@@ -865,7 +913,7 @@
                 year: 'numeric'
             });
             
-            const icon = item.type === 'schluesselkompetenz' ? '🔑' : '📝';
+            const icon = item.type === 'schluesselkompetenz' ? '🔑' : (item.type === 'challenge' ? '🎯' : '📝');
             const uebungstyp = item.performanz?.uebungstyp || 'Übung';
             
             // Bestimme die Kategorie basierend auf dem Type
@@ -906,7 +954,7 @@
                         <div class="card-category">${category}</div>
                         
                         <h3 class="card-title">
-                            ${item.kompetenzTitle || 'Kompetenz'}
+                            ${item.kompetenzTitle || item.challengeTitle || 'Eintrag'}
                         </h3>
                         
                         <p class="card-uebung">
@@ -924,12 +972,39 @@
                                 Details
                             </button>
                             ${downloadButton}
+                            <button onclick="event.stopPropagation(); deleteItem('${item.id}')" class="btn btn-delete" title="Löschen">
+                                🗑️
+                            </button>
                         </div>
                     </div>
                 </div>
             `;
         }
         
+        window.deleteItem = async function(itemId) {
+            if (!confirm('🗑️ Möchtest du diesen Portfolio-Eintrag wirklich löschen?\n\nDiese Aktion kann nicht rückgängig gemacht werden.')) {
+                return;
+            }
+            
+            try {
+                const userRef = doc(db, 'users', userId);
+                const userDoc = await getDoc(userRef);
+                
+                if (userDoc.exists()) {
+                    const portfolio = userDoc.data().portfolio || [];
+                    const filtered = portfolio.filter(i => i.id !== itemId);
+                    
+                    await updateDoc(userRef, { portfolio: filtered });
+                    
+                    alert('✅ Eintrag wurde gelöscht!');
+                    await loadPortfolio();
+                }
+            } catch (error) {
+                console.error('Fehler:', error);
+                alert('❌ Fehler beim Löschen. Versuche es nochmal.');
+            }
+        };
+
         window.showDetail = function(itemId) {
             const item = allPortfolioItems.find(i => i.id === itemId);
             if (!item) return;
@@ -945,6 +1020,29 @@
                 minute: '2-digit'
             });
             
+            // Metadaten für Aspekte und Sprachmodi vorbereiten
+            let metaHTML = '';
+            if (item.aspekte && item.aspekte.length > 0) {
+                metaHTML += `
+                    <div style="margin-bottom: 0.5rem;">
+                        <p class="section-box-title" style="font-size:0.8rem;">🌍 Aspekte:</p>
+                        <div class="tags-container">
+                            ${item.aspekte.map(a => `<span class="tag tag-aspekt">${a}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            if (item.sprachmodi && item.sprachmodi.length > 0) {
+                metaHTML += `
+                    <div style="margin-bottom: 1rem;">
+                        <p class="section-box-title" style="font-size:0.8rem;">💬 Sprachmodi:</p>
+                        <div class="tags-container">
+                            ${item.sprachmodi.map(s => `<span class="tag tag-sprach">${s}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
             let performanzHTML = '';
             if (item.performanz) {
                 performanzHTML = `
@@ -957,16 +1055,31 @@
                     </div>
                 `;
             }
+
+            // Notizen-Bereich
+            let notizenHTML = '';
+            if (item.notizen) {
+                notizenHTML = `
+                    <div class="section">
+                        <h3 class="section-title">📝 Persönliche Notizen</h3>
+                        <div class="section-box">
+                            <p class="section-box-text">${item.notizen}</p>
+                        </div>
+                    </div>
+                `;
+            }
             
             modalContent.innerHTML = `
                 <div style="margin-bottom: 1rem;">
-                    <div class="modal-icon">${item.type === 'schluesselkompetenz' ? '🔑' : '📝'}</div>
-                    <h3 class="modal-subtitle">${item.kompetenzTitle || 'Kompetenz'}</h3>
+                    <div class="modal-icon">${item.type === 'schluesselkompetenz' ? '🔑' : (item.type === 'challenge' ? '🎯' : '📝')}</div>
+                    <h3 class="modal-subtitle">${item.kompetenzTitle || item.challengeTitle || 'Kompetenz'}</h3>
                     <p class="modal-text">${item.thema || ''}</p>
+                    ${metaHTML}
                     <p class="modal-date">Erstellt: ${date}</p>
                 </div>
                 
                 ${performanzHTML}
+                ${notizenHTML}
                 
                 <div class="section">
                     <h3 class="section-title">💭 Reflexion</h3>
@@ -1147,105 +1260,57 @@ function formatPerformanzData(performanz) {
 
 function formatFieldLabel(key) {
     const labels = {
-        // E-Mail Formular (3.2.1)
         'betreff': '📧 Betreff',
         'anrede': '👋 Anrede',
         'nachricht': '✉️ Nachricht',
         'gruss': '👋 Grussformel',
-        
-        // Ziele (3.2.2)
         'ziel': '🎯 Mein Ziel',
         'schritt1': '1️⃣ Monat 1',
         'schritt2': '2️⃣ Monat 2',
         'schritt3': '3️⃣ Monat 3',
-        
-        // Team (3.2.3)
         'reaktion': '🤝 Gewählte Reaktion',
         'begruendung': '💭 Begründung',
-        
-        // Kritisches Denken (3.2.4)
         'glaubwuerdigkeit': '⭐ Glaubwürdigkeit',
         'aktualitaet': '⭐ Aktualität',
         'objektivitaet': '⭐ Objektivität',
         'bewertung': '💭 Einschätzung',
-        
-        // Problemlösung (3.2.5)
         'problem': '❓ Erkanntes Problem',
         'loesung': '💡 Lösungsansatz',
         'praevention': '🛡️ Prävention',
-        
-        // Kommunikation (3.2.6)
         'situation': '📍 Situation',
         'wirkung': '💭 Wirkung',
         'wunsch': '✨ Wunsch',
-        
-        // Digital (3.2.7)
         'termine': '📅 Termine-Tool',
         'notizen_tool': '📝 Notizen-Tool',
         'kommunikation': '💬 Kommunikations-Tool',
         'dateien': '📁 Dateien-Tool',
         'passwoerter': '🔐 Passwort-Tool',
-        
-        // Lernen (3.2.8)
         'lernzeit': '⏰ Beste Lernzeit',
         'methoden': '📚 Lernmethoden',
         'lernzeit_woche': '⏱️ Zeit pro Woche',
         'ablenkungen': '🚫 Ablenkungen vermeiden',
-        
-        // Anpassung (3.2.9)
         'veraenderung_zeitplan': '📅 Zeitplan/Tagesablauf',
         'veraenderung_verantwortung': '💪 Verantwortung',
         'veraenderung_sozial': '👥 Soziales Leben',
         'anpassung_strategie': '🔄 Anpassungsstrategie',
-        
-        // Verantwortung (3.2.10)
         'verantwortung_betrieb': '🏢 Im Betrieb',
         'verantwortung_schule': '🏫 In der Schule',
         'verantwortung_privat': '🏠 Im Privatleben',
         'konsequenzen': '⚠️ Konsequenzen',
-        
-        // Kreativ (3.2.11)
         'kreativ_typ': '🎨 Art des Elements',
         'kreativ_inhalt': '📝 Inhalt',
         'kreativ_tools': '🛠️ Tools/Programme',
         'kreativ_deadline': '📅 Deadline',
-        
-        // Reflexion (3.2.12)
         'gut': '✅ Lief gut',
         'herausfordernd': '⚠️ War herausfordernd',
         'gelernt': '💡 Gelernt',
         'vorsatz': '🎯 Vorsatz',
-        
-        // Notizen
         'notizen': '📝 Notizen'
     };
     
     return labels[key] || key.charAt(0).toUpperCase() + key.slice(1);
 }
-
-        window.deleteItem = async function(itemId) {
-    if (!confirm('🗑️ Möchtest du diesen Portfolio-Eintrag wirklich löschen?\n\nDiese Aktion kann nicht rückgängig gemacht werden.')) {
-        return;
-    }
-    
-    try {
-        const userRef = doc(db, 'users', userId);
-        const userDoc = await getDoc(userRef);
         
-        if (userDoc.exists()) {
-            const portfolio = userDoc.data().portfolio || [];
-            const filtered = portfolio.filter(i => i.id !== itemId);
-            
-            await updateDoc(userRef, { portfolio: filtered });
-            
-            alert('✅ Eintrag wurde gelöscht!');
-            await loadPortfolio();
-        }
-    } catch (error) {
-        console.error('Fehler:', error);
-        alert('❌ Fehler beim Löschen. Versuche es nochmal.');
-    }
-};
         function getRoleName(role) {
             const names = {
                 'recherche': '📚 Recherche & Inhalte',
@@ -1318,7 +1383,7 @@ function formatFieldLabel(key) {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `Portfolio_${item.kompetenzTitle || 'Arbeit'}_${new Date(item.createdAt).toLocaleDateString('de-CH')}.txt`;
+            a.download = `Portfolio_${item.kompetenzTitle || item.challengeTitle || 'Arbeit'}_${new Date(item.createdAt).toLocaleDateString('de-CH')}.txt`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -1346,7 +1411,7 @@ function formatFieldLabel(key) {
             
             if (choice) {
                 // E-Mail
-                const subject = encodeURIComponent(`Portfolio: ${item.kompetenzTitle || 'Arbeit'}`);
+                const subject = encodeURIComponent(`Portfolio: ${item.kompetenzTitle || item.challengeTitle || 'Arbeit'}`);
                 const body = encodedContent;
                 window.location.href = `mailto:?subject=${subject}&body=${body}`;
             } else {
@@ -1382,15 +1447,24 @@ Lernende/r: ${displayName}
 Erstellt: ${date}
 
 ───────────────────────────────────────────────────────
-KOMPETENZ
+KOMPETENZ / CHALLENGE
 ───────────────────────────────────────────────────────
 
-${item.kompetenzTitle || 'Kompetenz'}
+${item.kompetenzTitle || item.challengeTitle || 'Kompetenz'}
 ${item.thema ? `Thema: ${item.thema}` : ''}
-Typ: ${item.type === 'schluesselkompetenz' ? 'Schlüsselkompetenz' : 'Übung'}
+Typ: ${item.type === 'schluesselkompetenz' ? 'Schlüsselkompetenz' : (item.type === 'challenge' ? 'Challenge' : 'Übung')}
 
 `;
             
+            // Metadaten
+            if (item.aspekte && item.aspekte.length > 0) {
+                content += `🌍 Aspekte: ${item.aspekte.join(', ')}\n`;
+            }
+            if (item.sprachmodi && item.sprachmodi.length > 0) {
+                content += `💬 Sprachmodi: ${item.sprachmodi.join(', ')}\n`;
+            }
+            content += '\n';
+
             if (item.performanz) {
                 content += `
 ───────────────────────────────────────────────────────
@@ -1403,33 +1477,50 @@ DURCHGEFÜHRTE ÜBUNG
                 
                 if (item.performanz.checklist) {
                     content += `✅ ${item.performanz.checklist.completed} von ${item.performanz.checklist.total} Schritten erledigt\n`;
+                    if (item.performanz.checklist.items) {
+                        item.performanz.checklist.items.forEach(check => {
+                             content += `   ${check.checked ? '[x]' : '[ ]'} ${check.text}\n`;
+                        });
+                    }
                 }
                 
                 if (item.performanz.kriterien) {
                     content += `✅ ${item.performanz.kriterien.erfuellt} von ${item.performanz.kriterien.total} Kriterien erfüllt\n`;
-                    if (item.performanz.kriterien.liste) {
-                        content += `   Kriterien: ${item.performanz.kriterien.liste.join(', ')}\n`;
+                    if (item.performanz.kriterien.items) {
+                         item.performanz.kriterien.items.forEach(crit => {
+                             content += `   ${crit.checked ? '[x]' : '[ ]'} ${crit.text}\n`;
+                        });
                     }
                 }
                 
                 if (item.performanz.rollen) {
-                    content += `\n👥 Rollen:\n`;
-                    content += `   • Person 1: ${getRoleName(item.performanz.rollen.person1)}\n`;
-                    content += `   • Person 2: ${getRoleName(item.performanz.rollen.person2)}\n`;
-                    content += `   • Person 3: ${getRoleName(item.performanz.rollen.person3)}\n`;
+                    if (Array.isArray(item.performanz.rollen)) {
+                        content += `\n👥 Rollen:\n`;
+                        item.performanz.rollen.forEach(role => {
+                            content += `   • ${role.person}: ${role.rolleText || role.rolleValue}\n`;
+                        });
+                    } else {
+                         // Fallback for old format if any
+                         content += `\n👥 Rollen:\n`;
+                         content += `   • Person 1: ${getRoleName(item.performanz.rollen.person1)}\n`;
+                         content += `   • Person 2: ${getRoleName(item.performanz.rollen.person2)}\n`;
+                         content += `   • Person 3: ${getRoleName(item.performanz.rollen.person3)}\n`;
+                    }
                 }
                 
-                if (item.performanz.wochenplan) {
+                if (item.performanz.wochenplan && Array.isArray(item.performanz.wochenplan)) {
                     content += `\n📅 Wochenplan:\n`;
-                    if (item.performanz.wochenplan.montag) content += `   Mo: ${item.performanz.wochenplan.montag}\n`;
-                    if (item.performanz.wochenplan.dienstag) content += `   Di: ${item.performanz.wochenplan.dienstag}\n`;
-                    if (item.performanz.wochenplan.mittwoch) content += `   Mi: ${item.performanz.wochenplan.mittwoch}\n`;
+                    item.performanz.wochenplan.forEach(day => {
+                        if(day.eintrag) content += `   ${day.tag}: ${day.eintrag}\n`;
+                    });
                 }
+                
+                // Add handlers for other performance types...
             }
             
             content += `
 ───────────────────────────────────────────────────────
-REFLEXION
+REFLEXION & NOTIZEN
 ───────────────────────────────────────────────────────
 
 `;
@@ -1442,30 +1533,23 @@ REFLEXION
                 content += `\nZusätzliche Reflexion:\n"${item.textReflexion}"\n`;
             }
             
-            if (!item.reflexion && !item.textReflexion) {
+            if (item.notizen) {
+                content += `\nPersönliche Notizen:\n"${item.notizen}"\n`;
+            }
+            
+            if (!item.reflexion && !item.textReflexion && !item.notizen) {
                 content += `Keine Reflexion hinzugefügt\n`;
             }
             
             content += `
 ═══════════════════════════════════════════════════════
    Erstellt mit ant edu 🐜✏️👓
-   SLP ABU 2030 - Digitale Lernplattform
+   Kompetenzen 2030
 ═══════════════════════════════════════════════════════
 `;
             
             return content;
         }
-        
-        window.closeModal = function() {
-            document.getElementById('detailModal').classList.remove('show');
-        };
-        
-        // Close modal when clicking outside
-        document.getElementById('detailModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
     </script>
 </body>
 </html>
