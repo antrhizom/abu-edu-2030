@@ -513,6 +513,18 @@
         .instruction-box strong {
             color: #2196F3;
         }
+        
+        .saved-data-notice {
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .saved-data-notice strong {
+            color: #4CAF50;
+        }
     </style>
 </head>
 <body>
@@ -599,6 +611,12 @@
             <div class="modal-header">
                 <h2 class="modal-title">🎲 Herausforderungsgenerator</h2>
                 <span class="close" onclick="closeModal('challenge1')">&times;</span>
+            </div>
+            
+            <!-- Hinweis wenn gespeicherte Daten vorhanden -->
+            <div id="savedDataNotice" class="saved-data-notice" style="display: none;">
+                <p><strong>📂 Gespeicherte Daten gefunden!</strong></p>
+                <p>Deine vorherige Arbeit wurde geladen. Du kannst sie jetzt überarbeiten oder neu beginnen.</p>
             </div>
             
             <div class="challenge-section">
@@ -852,10 +870,146 @@
             }
         }
         
-        window.openChallenge = function(challengeId) {
+        // NEU: Funktion zum Laden gespeicherter Challenge-Daten
+        async function loadSavedChallenge() {
+            try {
+                const userRef = doc(db, 'users', userId);
+                const userDoc = await getDoc(userRef);
+                
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    const challenges = data.challenges || {};
+                    const savedChallenge = challenges['challenge1'];
+                    
+                    if (savedChallenge && savedChallenge.data) {
+                        const savedData = savedChallenge.data;
+                        
+                        // Lade die gespeicherten Kompetenzauswahlen
+                        if (savedData.schluessel) {
+                            document.getElementById('schluesselSelect').value = savedData.schluessel.value;
+                        }
+                        if (savedData.sprach) {
+                            document.getElementById('sprachSelect').value = savedData.sprach.value;
+                        }
+                        if (savedData.aspekt) {
+                            document.getElementById('aspektSelect').value = savedData.aspekt.value;
+                        }
+                        if (savedData.thema) {
+                            document.getElementById('themaSelect').value = savedData.thema.value;
+                        }
+                        
+                        // Lade Challenge-Text und Lösung
+                        if (savedData.challengeText && savedData.challengeText !== '(Noch nicht ausgefüllt)') {
+                            document.getElementById('challengeInput').value = savedData.challengeText;
+                        }
+                        if (savedData.solution && savedData.solution !== '(Noch nicht ausgefüllt)') {
+                            document.getElementById('solutionText').value = savedData.solution;
+                        }
+                        
+                        // Lade Emojis
+                        if (savedChallenge.reflexion) {
+                            selectedEmojis = Array.from(savedChallenge.reflexion);
+                            updateSelectedEmojis();
+                            
+                            // Markiere die Emojis visuell
+                            document.querySelectorAll('.emoji-option').forEach(emoji => {
+                                const emojiChar = emoji.getAttribute('data-emoji');
+                                if (selectedEmojis.includes(emojiChar)) {
+                                    emoji.classList.add('selected');
+                                }
+                            });
+                        }
+                        
+                        checkGenerateButton();
+                    }
+                }
+            } catch (error) {
+                console.log('Fehler beim Laden gespeicherter Daten:', error);
+            }
+        }
+        
+        window.openChallenge = async function(challengeId) {
             document.getElementById(`modal-${challengeId}`).style.display = 'block';
             document.body.style.overflow = 'hidden';
+            
+            // Lade gespeicherte Daten beim Öffnen
+            await loadSavedChallengeData();
         };
+        
+        // NEU: Funktion zum Laden der gespeicherten Daten beim Öffnen des Modals
+        async function loadSavedChallengeData() {
+            try {
+                const userRef = doc(db, 'users', userId);
+                const userDoc = await getDoc(userRef);
+                
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    const challenges = data.challenges || {};
+                    const savedChallenge = challenges['challenge1'];
+                    
+                    if (savedChallenge && savedChallenge.data) {
+                        const savedData = savedChallenge.data;
+                        
+                        // Zeige Hinweis an
+                        document.getElementById('savedDataNotice').style.display = 'block';
+                        
+                        // Setze currentSelection
+                        currentSelection = {
+                            schluessel: savedData.schluessel || null,
+                            sprach: savedData.sprach || null,
+                            aspekt: savedData.aspekt || null,
+                            thema: savedData.thema || null
+                        };
+                        
+                        // Wenn Kompetenzen ausgewählt wurden, zeige Prompt-Section
+                        if (currentSelection.schluessel && currentSelection.sprach && 
+                            currentSelection.aspekt && currentSelection.thema) {
+                            
+                            // Tags anzeigen
+                            const tagsHtml = `
+                                <span class="kompetenz-tag">🔑 ${currentSelection.schluessel.text.split(' ')[0]}</span>
+                                <span class="kompetenz-tag">💬 ${currentSelection.sprach.text.split(' ')[0]}</span>
+                                <span class="kompetenz-tag">🎯 ${currentSelection.aspekt.text.split(' ')[0]}</span>
+                                <span class="kompetenz-tag">📚 ${currentSelection.thema.text}</span>
+                            `;
+                            document.getElementById('selectedTags').innerHTML = tagsHtml;
+                            
+                            // Regeneriere Prompt
+                            const prompt = `Du bist ein Bildungsexperte für den Schweizer ABU-Unterricht (Allgemeinbildung EBA 2030).
+
+Erstelle eine praxisnahe, realistische Herausforderung für einen Lernenden mit folgender Kompetenz-Kombination:
+
+**Schlüsselkompetenz:** ${currentSelection.schluessel.text}
+**Sprachmodus:** ${currentSelection.sprach.text}
+**Gesellschaftlicher Aspekt:** ${currentSelection.aspekt.text}
+**Thema:** ${currentSelection.thema.text}
+
+Erstelle eine konkrete, realistische Herausforderung, die:
+1. Eine klare Situation beschreibt (2-3 Sätze)
+2. Eine spezifische Aufgabe formuliert, die ALLE drei Kompetenzbereiche kombiniert
+3. Praxisnah ist und zum Thema passt
+4. In 20-30 Minuten lösbar ist
+
+Format:
+**Situation:**
+[2-3 Sätze]
+
+**Deine Aufgabe:**
+[Konkrete Aufgabenstellung, die alle Kompetenzen integriert]
+
+Schreibe direkt auf Deutsch, ohne Einleitung.`;
+                            
+                            document.getElementById('promptBox').textContent = prompt;
+                            document.getElementById('promptSection').classList.add('show');
+                        }
+                    } else {
+                        document.getElementById('savedDataNotice').style.display = 'none';
+                    }
+                }
+            } catch (error) {
+                console.log('Fehler beim Laden gespeicherter Daten:', error);
+            }
+        }
         
         window.closeModal = function(challengeId) {
             document.getElementById(`modal-${challengeId}`).style.display = 'none';
@@ -962,19 +1116,28 @@ ABU EBA 2030 - Kompetenzen lernen
         };
         
         window.resetGenerator = function() {
-            document.getElementById('promptSection').classList.remove('show');
-            document.getElementById('challengeInput').value = '';
-            document.getElementById('solutionText').value = '';
-            selectedEmojis = [];
-            document.querySelectorAll('.emoji-option').forEach(e => e.classList.remove('selected'));
-            updateSelectedEmojis();
-            currentSelection = null;
-            
-            // Scroll zurück nach oben
-            document.querySelector('.modal-content').scrollTop = 0;
+            if (confirm('Möchtest du wirklich neu beginnen? Ungespeicherte Änderungen gehen verloren.')) {
+                document.getElementById('promptSection').classList.remove('show');
+                document.getElementById('challengeInput').value = '';
+                document.getElementById('solutionText').value = '';
+                document.getElementById('savedDataNotice').style.display = 'none';
+                selectedEmojis = [];
+                document.querySelectorAll('.emoji-option').forEach(e => e.classList.remove('selected'));
+                updateSelectedEmojis();
+                currentSelection = null;
+                
+                // Leere auch die Selects
+                ['schluesselSelect', 'sprachSelect', 'aspektSelect', 'themaSelect'].forEach(id => {
+                    document.getElementById(id).value = '';
+                });
+                checkGenerateButton();
+                
+                // Scroll zurück nach oben
+                document.querySelector('.modal-content').scrollTop = 0;
+            }
         };
         
-        // NEUE FUNKTION: Nur als abgeschlossen markieren (wie bei schluessel.html)
+        // Funktion: Nur als abgeschlossen markieren
         window.markAsCompleted = async function() {
             if (selectedEmojis.length === 0) {
                 alert('Bitte wähle mindestens ein Emoji als Reflexion!');
@@ -1018,14 +1181,7 @@ ABU EBA 2030 - Kompetenzen lernen
                     await loadProgress();
                     closeModal('challenge1');
                     
-                    alert('✅ Als abgeschlossen markiert!\n\nReflexion: ' + selectedEmojis.join(' '));
-                    
-                    // Reset
-                    resetGenerator();
-                    ['schluesselSelect', 'sprachSelect', 'aspektSelect', 'themaSelect'].forEach(id => {
-                        document.getElementById(id).value = '';
-                    });
-                    checkGenerateButton();
+                    alert('✅ Als abgeschlossen markiert!\n\nDu kannst diese Challenge jederzeit wieder öffnen und überarbeiten.\n\nReflexion: ' + selectedEmojis.join(' '));
                 }
             } catch (error) {
                 console.error('Fehler:', error);
@@ -1033,7 +1189,7 @@ ABU EBA 2030 - Kompetenzen lernen
             }
         };
         
-        // ANGEPASSTE FUNKTION: Ins Portfolio speichern UND als abgeschlossen markieren
+        // Funktion: Ins Portfolio speichern UND als abgeschlossen markieren
         window.saveToPortfolio = async function() {
             if (selectedEmojis.length === 0) {
                 alert('Bitte wähle mindestens ein Emoji als Reflexion!');
@@ -1078,6 +1234,11 @@ ABU EBA 2030 - Kompetenzen lernen
                         challengeId: 'challenge1',
                         challengeTitle: 'Herausforderungsgenerator',
                         thema: currentSelection.thema.text,
+                        kompetenzen: [
+                            currentSelection.schluessel.text.split(' ')[0],
+                            currentSelection.sprach.text.split(' ')[0],
+                            currentSelection.aspekt.text.split(' ')[0]
+                        ],
                         data: challengeData,
                         reflexion: selectedEmojis.join(''),
                         createdAt: new Date().toISOString(),
@@ -1097,6 +1258,7 @@ ABU EBA 2030 - Kompetenzen lernen
                     
                     let message = '📁 Ins Portfolio gespeichert!\n\n';
                     message += '✓ Als abgeschlossen markiert\n';
+                    message += '✓ Du kannst diese Challenge jederzeit wieder öffnen und überarbeiten\n';
                     if (challengeText && solution) {
                         message += '✓ Vollständige Herausforderung\n✓ Lösung dokumentiert\n';
                     } else {
@@ -1105,13 +1267,6 @@ ABU EBA 2030 - Kompetenzen lernen
                     message += '✓ Reflexion: ' + selectedEmojis.join(' ');
                     
                     alert(message);
-                    
-                    // Reset
-                    resetGenerator();
-                    ['schluesselSelect', 'sprachSelect', 'aspektSelect', 'themaSelect'].forEach(id => {
-                        document.getElementById(id).value = '';
-                    });
-                    checkGenerateButton();
                 }
             } catch (error) {
                 console.error('Fehler:', error);
@@ -1119,7 +1274,7 @@ ABU EBA 2030 - Kompetenzen lernen
             }
         };
         
-        // NEUE FUNKTION: Zwischenstand speichern (ohne als abgeschlossen zu markieren)
+        // Funktion: Zwischenstand speichern (ohne als abgeschlossen zu markieren)
         window.saveDraft = async function() {
             if (!currentSelection) {
                 alert('Bitte wähle zuerst Kompetenzen aus und generiere eine Zusammenstellung!');
@@ -1135,23 +1290,29 @@ ABU EBA 2030 - Kompetenzen lernen
                 
                 if (userDoc.exists()) {
                     const data = userDoc.data();
-                    const drafts = data.drafts || {};
+                    const challenges = data.challenges || {};
                     
-                    const draftData = {
+                    // Behalte den completed-Status bei, wenn bereits vorhanden
+                    const existingCompleted = challenges['challenge1']?.completed || false;
+                    
+                    const challengeData = {
                         ...currentSelection,
                         challengeText: challengeText || '',
-                        solution: solution || '',
-                        reflexion: selectedEmojis.join(''),
-                        savedAt: new Date().toISOString()
+                        solution: solution || ''
                     };
                     
-                    drafts['challenge1'] = draftData;
+                    challenges['challenge1'] = {
+                        completed: existingCompleted,
+                        reflexion: selectedEmojis.join(''),
+                        timestamp: new Date().toISOString(),
+                        data: challengeData
+                    };
                     
                     await updateDoc(userRef, {
-                        'drafts': drafts
+                        'challenges': challenges
                     });
                     
-                    alert('💾 Zwischenstand gespeichert!\n\nDu kannst später weitermachen.');
+                    alert('💾 Zwischenstand gespeichert!\n\nDu kannst später weitermachen. Deine Daten werden beim nächsten Öffnen automatisch geladen.');
                 }
             } catch (error) {
                 console.error('Fehler:', error);
