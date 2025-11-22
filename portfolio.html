@@ -998,10 +998,8 @@
                 <p class="card-thema">
                     ${item.thema || ''}
                 </p>
-                
-                ${tagsHTML}
 
-                ${getDetailPreview(item)}
+                ${tagsHTML}
 
                 ${reflexionHTML}
                 
@@ -1182,7 +1180,9 @@
     
     // Tags für Aspekte und Schlüsselkompetenzen
     let verknuepfungenHTML = '';
-    if ((item.aspekte && item.aspekte.length > 0) || (item.schluesselkompetenzen && item.schluesselkompetenzen.length > 0)) {
+    if ((item.aspekte && item.aspekte.length > 0) ||
+        (item.schluesselkompetenzen && item.schluesselkompetenzen.length > 0) ||
+        (item.sprachmodi && item.sprachmodi.length > 0)) {
         verknuepfungenHTML = `
             <div class="section">
                 <h3 class="section-title">🔗 Verknüpfte Kompetenzen</h3>
@@ -1206,13 +1206,69 @@
                 </div>
             `;
         }
-        
+
+        if (item.sprachmodi && item.sprachmodi.length > 0) {
+            verknuepfungenHTML += `
+                <p class="section-box-title" style="margin-bottom: 0.5rem;">💬 Sprachmodi:</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    ${item.sprachmodi.map(s => `<span style="padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; background: rgba(255, 107, 53, 0.15); color: #FF6B35; font-weight: 600;">${s}</span>`).join('')}
+                </div>
+            `;
+        }
+
         verknuepfungenHTML += `
                 </div>
             </div>
         `;
     }
-    
+
+    // Inhalte für verschiedene Typen
+    let challengeHTML = '';
+    if (item.type === 'challenge' && item.data) {
+        const { schluessel, sprach, aspekt, thema, challengeText, solution } = item.data;
+        const chips = [schluessel?.text, sprach?.text, aspekt?.text, thema?.text]
+            .filter(Boolean)
+            .map(text => `<span style="display: inline-block; padding: 0.35rem 0.6rem; margin: 0.15rem; border-radius: 9999px; background: rgba(33, 150, 243, 0.12); color: #0B5ED7; font-size: 0.75rem; font-weight: 700;">${text}</span>`) // kompakter Chip
+            .join('');
+
+        challengeHTML = `
+            <div class="section">
+                <h3 class="section-title">🎲 Challenge-Inhalt</h3>
+                <div class="section-box">
+                    ${chips ? `<div style="margin-bottom: 1rem; display: flex; flex-wrap: wrap;">${chips}</div>` : ''}
+                    ${challengeText ? `<p class="section-box-title">📝 Herausforderung:</p><p class="section-box-text">${challengeText}</p>` : ''}
+                    ${solution ? `<p class="section-box-title" style="margin-top: 1rem;">✅ Meine Lösung:</p><p class="section-box-text">${solution}</p>` : ''}
+                    ${!challengeText && !solution ? '<p class="section-box-text" style="color: #9CA3AF; font-style: italic;">Keine Challenge-Daten gespeichert</p>' : ''}
+                </div>
+            </div>
+        `;
+    }
+
+    let uebungHTML = '';
+    if (item.type === 'sprachmodus' && item.uebung) {
+        uebungHTML = `
+            <div class="section">
+                <h3 class="section-title">📝 Übung & Aufgabenstellung</h3>
+                <div class="section-box">
+                    ${item.uebung.titel ? `<p class="section-box-title">${item.uebung.titel}</p>` : ''}
+                    ${item.uebung.beschreibung ? `<p class="section-box-text">${item.uebung.beschreibung}</p>` : ''}
+                </div>
+            </div>
+        `;
+    }
+
+    let handlungsfeldHTML = '';
+    if (item.type === 'aspekt' && item.handlungsfeld) {
+        handlungsfeldHTML = `
+            <div class="section">
+                <h3 class="section-title">🧭 Handlungsfeld</h3>
+                <div class="section-box">
+                    <p class="section-box-text">${item.handlungsfeld}</p>
+                </div>
+            </div>
+        `;
+    }
+
     let performanzHTML = '';
     if (item.performanz) {
         performanzHTML = `
@@ -1260,9 +1316,12 @@
         </div>
         
         ${verknuepfungenHTML}
-        
+
+        ${challengeHTML}
+        ${uebungHTML}
+        ${handlungsfeldHTML}
         ${beschreibungHTML}
-        
+
         ${performanzHTML}
         
         <div class="section">
