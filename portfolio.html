@@ -639,6 +639,22 @@
         .btn-tertiary:hover {
             background: #1976D2;
         }
+
+        .btn-danger {
+            background: #EF4444;
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 150px;
+        }
+
+        .btn-danger:hover {
+            background: #DC2626;
+        }
         
         /* Footer */
         .footer {
@@ -1002,12 +1018,15 @@
                 ${tagsHTML}
 
                 ${reflexionHTML}
-                
+
                 <div class="card-actions">
                     <button onclick="event.stopPropagation(); showDetail('${item.id}')" class="btn btn-details">
                         Details
                     </button>
                     ${downloadButton}
+                    <button onclick="event.stopPropagation(); deleteItem('${item.id}')" class="btn btn-delete">
+                        🗑️ Löschen
+                    </button>
                 </div>
             </div>
         </div>
@@ -1137,9 +1156,10 @@
                 if (userDoc.exists()) {
                     const portfolio = userDoc.data().portfolio || [];
                     const filtered = portfolio.filter(i => i.id !== itemId);
-                    
+
                     await updateDoc(userRef, { portfolio: filtered });
-                    
+
+                    closeModal();
                     alert('✅ Eintrag wurde gelöscht!');
                     await loadPortfolio();
                 }
@@ -1353,9 +1373,12 @@
             <button onclick="sendDocument('${item.id}')" class="btn-tertiary">
                 📧 Versenden
             </button>
+            <button onclick="deleteItem('${item.id}')" class="btn-danger">
+                🗑️ Löschen
+            </button>
         </div>
     `;
-    
+
     modal.classList.add('show');
 };
         
