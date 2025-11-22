@@ -1169,183 +1169,119 @@
 function formatPerformanzData(performanz) {
     let html = '';
     
-    // Alle gespeicherten Felder durchgehen und anzeigen
-    const excludeKeys = ['uebungstyp', 'kompetenzId'];
+    // ========== SPRACHMODI-DATEN ==========
     
-    Object.entries(performanz).forEach(([key, value]) => {
-        if (excludeKeys.includes(key)) return;
-        if (!value) return;
-        
-        // Spezielle Formatierung für bekannte Felder
-        if (key === 'checklist' && value.items) {
-            html += `<div style="margin-bottom: 1rem;">`;
-            html += `<p class="section-box-title">✅ Checklist (${value.completed}/${value.total})</p>`;
-            value.items.forEach(item => {
-                html += `<p class="section-box-small">${item.checked ? '✅' : '⬜'} ${item.text}</p>`;
-            });
-            html += `</div>`;
-            return;
-        }
-        
-        // NEU: Handler für "vorbereitungen" (Challenges) - gleiche Struktur wie Checklist
-        if (key === 'vorbereitungen' && value.items) {
-            html += `<div style="margin-bottom: 1rem;">`;
-            html += `<p class="section-box-title">✅ Vorbereitungen</p>`;
-            value.items.forEach(item => {
-                html += `<p class="section-box-small">${item.checked ? '✅' : '⬜'} ${item.text}</p>`;
-            });
-            html += `</div>`;
-            return;
-        }
-        
-        if (key === 'kriterien' && value.items) {
-            html += `<div style="margin-bottom: 1rem;">`;
-            html += `<p class="section-box-title">✅ Kriterien</p>`;
-            value.items.forEach(item => {
-                html += `<p class="section-box-small">${item.checked ? '✅' : '⬜'} ${item.text}</p>`;
-            });
-            html += `</div>`;
-            return;
-        }
-
-        // NEU: Handler für "strategien" aus Challenges (oft Items-Array)
-        if (key === 'strategien' && value.items) {
-            html += `<div style="margin-bottom: 1rem;">`;
-            html += `<p class="section-box-title">🧠 Strategien</p>`;
-            value.items.forEach(item => {
-                html += `<p class="section-box-small">${item.checked ? '✅' : '⬜'} ${item.text}</p>`;
-            });
-            html += `</div>`;
-            return;
-        }
-        
-        if (key === 'rollen' && Array.isArray(value)) {
-            html += `<div style="margin-bottom: 1rem;">`;
-            html += `<p class="section-box-title">👥 Rollenverteilung</p>`;
-            value.forEach(role => {
-                html += `<p class="section-box-small">• ${role.person}: ${role.rolleText || role.rolleValue}</p>`;
-            });
-            html += `</div>`;
-            return;
-        }
-        
-        if (key === 'pruefpunkte' && value.items) {
-            html += `<div style="margin-bottom: 1rem;">`;
-            html += `<p class="section-box-title">🔍 Prüfpunkte (${value.markiert}/${value.total})</p>`;
-            value.items.forEach(item => {
-                html += `<p class="section-box-small">${item.checked ? '✅' : '⬜'} ${item.text}</p>`;
-            });
-            html += `</div>`;
-            return;
-        }
-        
-        if (key === 'reihenfolge' && Array.isArray(value)) {
-            html += `<div style="margin-bottom: 1rem;">`;
-            html += `<p class="section-box-title">🔢 Reihenfolge der Schritte</p>`;
-            value.forEach((step, index) => {
-                const isCorrect = step.eingabe === step.korrekt;
-                html += `<p class="section-box-small">${isCorrect ? '✅' : '❌'} ${index + 1}. ${step.step}</p>`;
-            });
-            html += `</div>`;
-            return;
-        }
-        
-        if (key === 'elemente' && value.items) {
-            html += `<div style="margin-bottom: 1rem;">`;
-            html += `<p class="section-box-title">📝 Ausgewählte Elemente (${value.ausgewaehlt}/${value.total})</p>`;
-            value.items.forEach(item => {
-                html += `<p class="section-box-small">${item.checked ? '✅' : '⬜'} ${item.text}</p>`;
-            });
-            html += `</div>`;
-            return;
-        }
-        
-        // Update für Wochenplan: Unterscheidung Array vs Object
-        if (key === 'wochenplan') {
-             html += `<div style="margin-bottom: 1rem;">`;
-             html += `<p class="section-box-title">📅 Wochenplan</p>`;
-             if (Array.isArray(value)) {
-                 // Schlüsselkompetenz Style
-                 value.forEach(day => {
-                    if (day.eintrag) html += `<p class="section-box-small">• ${day.tag}: ${day.eintrag}</p>`;
-                 });
-             } else {
-                 // Challenge Style (Object)
-                 Object.entries(value).forEach(([tag, text]) => {
-                     if(text) html += `<p class="section-box-small">• ${tag.charAt(0).toUpperCase() + tag.slice(1)}: ${text}</p>`;
-                 });
-             }
-             html += `</div>`;
-             return;
-        }
-        
-        // NEU: Handler für E-Mail (Challenges)
-        if (key === 'email') {
-             html += `<div style="margin-bottom: 1rem;">`;
-             html += `<p class="section-box-title">✉️ E-Mail Entwurf</p>`;
-             html += `<p class="section-box-small"><strong>Betreff:</strong> ${value.betreff}</p>`;
-             html += `<p class="section-box-text" style="margin-left: 1rem; border-left: 2px solid #ccc; padding-left: 0.5rem;">${value.text ? value.text.replace(/\n/g, '<br>') : ''}</p>`;
-             html += `</div>`;
-             return;
-        }
-
-        // NEU: Handler für Analyse (Challenges)
-        if (key === 'analyse') {
-             html += `<div style="margin-bottom: 1rem;">`;
-             html += `<p class="section-box-title">🧐 Analyse</p>`;
-             html += `<p class="section-box-small"><strong>Eigene Sicht:</strong> ${value.eigene_sicht}</p>`;
-             html += `<p class="section-box-small"><strong>Andere Sicht:</strong> ${value.andere_sicht}</p>`;
-             html += `</div>`;
-             return;
-        }
-        
-        if (key === 'bewertungen' && Array.isArray(value)) {
-            html += `<div style="margin-bottom: 1rem;">`;
-            html += `<p class="section-box-title">⭐ Bewertungen</p>`;
-            value.forEach(bewertung => {
-                html += `<p class="section-box-small">• ${bewertung.kriterium}: ${'⭐'.repeat(bewertung.wert)} (${bewertung.wert}/${bewertung.max})</p>`;
-            });
-            html += `</div>`;
-            return;
-        }
-        
-        if (key === 'quiz' && value.antworten) {
-            html += `<div style="margin-bottom: 1rem;">`;
-            html += `<p class="section-box-title">❓ Quiz</p>`;
-            value.antworten.forEach((antwort) => {
-                const isCorrect = antwort.checked === antwort.isCorrect;
-                html += `<p class="section-box-small">${isCorrect ? '✅' : '❌'} ${antwort.frage}</p>`;
-            });
-            html += `</div>`;
-            return;
-        }
-        
-        if (key === 'reflexion' && typeof value === 'object') {
-            html += `<div style="margin-bottom: 1rem;">`;
-            html += `<p class="section-box-title">🪞 Selbstreflexion</p>`;
-            if (value.bewertungen) {
-                value.bewertungen.forEach(b => {
-                    html += `<p class="section-box-small">• ${b.kriterium}: ${'⭐'.repeat(b.wert)} (${b.wert}/${b.max})</p>`;
-                });
-            }
-            if (value.verbesserung) {
-                html += `<p class="section-box-small">🎯 Verbesserungsziel: ${value.verbesserung}</p>`;
-            }
-            html += `</div>`;
-            return;
-        }
-        
-        // Generische Textfelder (alle anderen Felder)
-        if (typeof value === 'string' && value.trim()) {
-            const fieldLabel = formatFieldLabel(key);
-            html += `<div style="margin-bottom: 1rem;">`;
-            html += `<p class="section-box-title">${fieldLabel}</p>`;
-            html += `<p class="section-box-text">"${value}"</p>`;
-            html += `</div>`;
-        }
-    });
+    // Multiple Choice / Selections (für Sprachmodi)
+    if (performanz.selections && Array.isArray(performanz.selections)) {
+        const answered = performanz.selections.filter(s => s !== null && s !== undefined).length;
+        const total = performanz.selections.length;
+        html += `<p class="section-box-text">✅ ${answered} von ${total} Fragen beantwortet</p>`;
+    }
     
-    return html || '<p class="section-box-text" style="color: #9CA3AF; font-style: italic;">Keine Details verfügbar</p>';
+    // Checkboxes (für Sprachmodi)
+    if (performanz.checkboxes && Array.isArray(performanz.checkboxes)) {
+        const checked = performanz.checkboxes.filter(c => c === true).length;
+        const total = performanz.checkboxes.length;
+        html += `<p class="section-box-text">☑️ ${checked} von ${total} Punkten markiert</p>`;
+    }
+    
+    // Email-Eingaben (für Sprachmodi)
+    if (performanz.emailBetreff || performanz.emailText) {
+        html += `<p class="section-box-text" style="margin-bottom: 0.5rem;">📧 E-Mail verfasst:</p>`;
+        if (performanz.emailBetreff) {
+            html += `<p class="section-box-small">Betreff: "${performanz.emailBetreff}"</p>`;
+        }
+        if (performanz.emailText) {
+            const preview = performanz.emailText.length > 100 
+                ? performanz.emailText.substring(0, 100) + '...' 
+                : performanz.emailText;
+            html += `<p class="section-box-small">Text: "${preview}"</p>`;
+        }
+    }
+    
+    // Aspekte-Daten (Zuordnungen, Rankings, etc.)
+    if (performanz.placements) {
+        const placed = Object.keys(performanz.placements).length;
+        html += `<p class="section-box-text">🎯 ${placed} Items zugeordnet</p>`;
+    }
+    
+    if (performanz.sliders) {
+        const count = Object.keys(performanz.sliders).length;
+        html += `<p class="section-box-text">⭐ ${count} Bewertungen abgegeben</p>`;
+    }
+    
+    if (performanz.rankingOrder && Array.isArray(performanz.rankingOrder)) {
+        html += `<p class="section-box-text">📊 Ranking mit ${performanz.rankingOrder.length} Items erstellt</p>`;
+    }
+    
+    // ========== SCHLÜSSELKOMPETENZEN-DATEN ==========
+    
+    if (performanz.checklist) {
+        html += `<p class="section-box-text">✅ ${performanz.checklist.completed} von ${performanz.checklist.total} Schritten erledigt</p>`;
+    }
+    
+    if (performanz.kriterien) {
+        html += `<p class="section-box-text">✅ ${performanz.kriterien.erfuellt} von ${performanz.kriterien.total} Kriterien erfüllt</p>`;
+        if (performanz.kriterien.liste && performanz.kriterien.liste.length > 0) {
+            html += `<p class="section-box-small">Kriterien: ${performanz.kriterien.liste.join(', ')}</p>`;
+        }
+    }
+    
+    if (performanz.rollen) {
+        html += `<p class="section-box-text">👥 Rollen verteilt:</p>`;
+        html += `<p class="section-box-small">• Person 1: ${getRoleName(performanz.rollen.person1)}</p>`;
+        html += `<p class="section-box-small">• Person 2: ${getRoleName(performanz.rollen.person2)}</p>`;
+        html += `<p class="section-box-small">• Person 3: ${getRoleName(performanz.rollen.person3)}</p>`;
+    }
+    
+    if (performanz.pruefpunkte) {
+        html += `<p class="section-box-text">🔍 ${performanz.pruefpunkte.markiert} von ${performanz.pruefpunkte.total} Prüfpunkten markiert</p>`;
+    }
+    
+    if (performanz.reihenfolge) {
+        html += `<p class="section-box-text">🔢 Reihenfolge: ${performanz.reihenfolge.join(' → ')}</p>`;
+    }
+    
+    if (performanz.elemente) {
+        html += `<p class="section-box-text">📝 ${performanz.elemente.ausgewaehlt} von ${performanz.elemente.total} Elementen ausgewählt</p>`;
+    }
+    
+    if (performanz.wochenplan) {
+        html += `<p class="section-box-text" style="margin-bottom: 0.5rem;">📅 Wochenplan erstellt:</p>`;
+        if (performanz.wochenplan.montag) html += `<p class="section-box-small">Mo: ${performanz.wochenplan.montag}</p>`;
+        if (performanz.wochenplan.dienstag) html += `<p class="section-box-small">Di: ${performanz.wochenplan.dienstag}</p>`;
+        if (performanz.wochenplan.mittwoch) html += `<p class="section-box-small">Mi: ${performanz.wochenplan.mittwoch}</p>`;
+    }
+    
+    if (performanz.strategien) {
+        html += `<p class="section-box-text">📚 ${performanz.strategien.ausgewaehlt} von ${performanz.strategien.total} Lernstrategien gewählt</p>`;
+    }
+    
+    if (performanz.bewertungen) {
+        html += `<p class="section-box-text">⭐ Bewertungen: ${performanz.bewertungen.map(b => '⭐'.repeat(b)).join(' | ')}</p>`;
+    }
+    
+    if (performanz.quiz) {
+        const correct = performanz.quiz.antworten.filter(a => a === true).length;
+        html += `<p class="section-box-text">❓ Quiz: ${correct} von ${performanz.quiz.total} beantwortet</p>`;
+    }
+    
+    if (performanz.reflexion) {
+        html += `<p class="section-box-text" style="margin-bottom: 0.5rem;">🪞 Reflexions-Bewertungen:</p>`;
+        if (performanz.reflexion.bewertungen) {
+            html += `<p class="section-box-small">${performanz.reflexion.bewertungen.map(b => '⭐'.repeat(b)).join(' | ')}</p>`;
+        }
+        if (performanz.reflexion.verbesserung) {
+            html += `<p class="section-box-small">Verbesserung: ${getVerbesserungName(performanz.reflexion.verbesserung)}</p>`;
+        }
+    }
+    
+    // Generische Übungstyp-Anzeige falls nichts anderes passt
+    if (html === '' && performanz.abgeschlossen) {
+        html += `<p class="section-box-text">✅ Übung erfolgreich abgeschlossen</p>`;
+    }
+    
+    return html || '<p class="section-box-text" style="color: #9CA3AF; font-style: italic;">Details nicht verfügbar</p>';
 }
 
 function formatFieldLabel(key) {
