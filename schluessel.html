@@ -503,7 +503,7 @@
         <div class="header">
             <div class="header-content">
                 <div class="header-left">
-                    <a href="kompetenzen.html" class="back-btn">←</a>
+                    <a href="dashboard.html" class="back-btn">←</a>
                     <div>
                         <h1 class="header-title">
                             🔑 Schlüsselkompetenzen
@@ -566,7 +566,7 @@
                     <!-- Wird dynamisch gefüllt -->
                 </div>
                 
-                <!-- Reflexion mit Emojis - KEIN Textfeld -->
+                <!-- Reflexion mit Emojis -->
                 <div class="emoji-box">
                     <h3 class="emoji-title">💭 Wie war's für dich?</h3>
                     <p class="emoji-subtitle">Wähle ein oder mehrere Emojis als Reflexion:</p>
@@ -582,6 +582,19 @@
                     </div>
                     <div id="selectedEmojis" class="selected-emojis">
                         <span class="emoji-placeholder" id="emojiPlaceholder">Klicke auf Emojis...</span>
+                    </div>
+
+                    <!-- NEU: Notizen-Feld -->
+                    <div class="emoji-box" style="margin-top: 1rem; border: 0; padding: 0; background: transparent;">
+                        <h3 class="emoji-title">📝 Zusätzliche Notizen (optional)</h3>
+                        <p class="emoji-subtitle">Was hast du gelernt? Was war herausfordernd?</p>
+                        <textarea id="notizenField" 
+                                placeholder="z.B. 'Ich habe gelernt, dass eine klare Betreffzeile wichtig ist...'" 
+                                maxlength="500"
+                                style="width: 100%; min-height: 100px; padding: 0.75rem; border: 2px solid #E5E7EB; border-radius: 12px; font-family: inherit; font-size: 0.875rem; resize: vertical; margin-top: 0.5rem;"></textarea>
+                        <div style="text-align: right; font-size: 0.75rem; color: #9CA3AF; margin-top: 0.25rem;">
+                            <span id="charCount">0</span>/500 Zeichen
+                        </div>
                     </div>
                 </div>
                 
@@ -792,6 +805,21 @@
                 });
             });
         }
+
+        // NEU: Zeichenzähler Funktion
+        function setupCharCounter() {
+            const notizenField = document.getElementById('notizenField');
+            const charCount = document.getElementById('charCount');
+            
+            if (notizenField && charCount) {
+                // Reset counter beim Öffnen
+                charCount.textContent = notizenField.value.length;
+
+                notizenField.addEventListener('input', function() {
+                    charCount.textContent = this.value.length;
+                });
+            }
+        }
         
         async function loadProgress() {
             try {
@@ -851,13 +879,21 @@
             selectedEmojis = [];
             updateSelectedEmojis();
             
-            setTimeout(() => setupActivityListeners(), 100);
+            // Reset Notizen-Feld
+            const notizenField = document.getElementById('notizenField');
+            if(notizenField) notizenField.value = '';
+            
+            setTimeout(() => {
+                setupActivityListeners();
+                setupCharCounter(); // NEU: Counter aktivieren
+            }, 100);
             
             document.getElementById('uebungModal').classList.add('show');
         }
         
         // ==================== INTERAKTIVE ÜBUNGEN ====================
-        
+        // ... (Generierungsfunktionen bleiben gleich, werden nur für Platzersparnis hier gekürzt dargestellt, sind aber im vollständigen Code enthalten) ...
+
         // 3.2.1: Schulmail-Checklist
         function generate321(komp) {
             return `
@@ -865,7 +901,6 @@
                     <p class="exercise-thema">${komp.thema}</p>
                     <h3 class="exercise-title">📧 Aufgabe: Schulmail einrichten</h3>
                     <p class="exercise-description">Gehe Schritt für Schritt vor und hake ab:</p>
-                    
                     <div style="background: white; border: 2px solid #8B4513; border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
                         <h4 style="color: #8B4513; font-weight: bold; margin-bottom: 1rem;">✅ Setup-Checklist:</h4>
                         <label style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer; padding: 0.75rem; border-radius: 8px; background: #F9FAFB; border: 2px solid #E5E7EB;">
@@ -897,9 +932,9 @@
             `;
         }
         
-        // 3.2.2: E-Mail schreiben mit Selbst-Check
+        // 3.2.2
         function generate322(komp) {
-            return `
+             return `
                 <div class="exercise-box">
                     <p class="exercise-thema">${komp.thema}</p>
                     <h3 class="exercise-title">📝 Situation: ÜK-Aufgebot</h3>
@@ -940,10 +975,10 @@
                 </div>
             `;
         }
-        
-        // 3.2.3: Rollenverteilung
+
+        // 3.2.3
         function generate323(komp) {
-            return `
+             return `
                 <div class="exercise-box">
                     <p class="exercise-thema">${komp.thema}</p>
                     <h3 class="exercise-title">🤝 Aufgabe: Team-Projekt planen</h3>
@@ -986,10 +1021,10 @@
                 </div>
             `;
         }
-        
-        // 3.2.4: Lehrvertrag-Prüfung
+
+        // 3.2.4
         function generate324(komp) {
-            return `
+             return `
                 <div class="exercise-box">
                     <p class="exercise-thema">${komp.thema}</p>
                     <h3 class="exercise-title">📄 Aufgabe: Lehrvertrag prüfen</h3>
@@ -1025,8 +1060,8 @@
                 </div>
             `;
         }
-        
-        // 3.2.5: Problemlösungs-Reihenfolge
+
+        // 3.2.5
         function generate325(komp) {
             return `
                 <div class="exercise-box">
@@ -1066,10 +1101,10 @@
                 </div>
             `;
         }
-        
-        // 3.2.6: Kommunikation - Terminanfrage
+
+        // 3.2.6
         function generate326(komp) {
-            return `
+             return `
                 <div class="exercise-box">
                     <p class="exercise-thema">${komp.thema}</p>
                     <h3 class="exercise-title">📧 Aufgabe: Terminanfrage</h3>
@@ -1101,8 +1136,8 @@
                 </div>
             `;
         }
-        
-        // 3.2.7: Digital - Kalender planen
+
+        // 3.2.7
         function generate327(komp) {
             return `
                 <div class="exercise-box">
@@ -1133,10 +1168,10 @@
                 </div>
             `;
         }
-        
-        // 3.2.8: Lernstrategien wählen
+
+        // 3.2.8
         function generate328(komp) {
-            return `
+             return `
                 <div class="exercise-box">
                     <p class="exercise-thema">${komp.thema}</p>
                     <h3 class="exercise-title">📚 Aufgabe: Lernstrategien wählen</h3>
@@ -1171,10 +1206,10 @@
                 </div>
             `;
         }
-        
-        // 3.2.9: Anpassungsfähigkeit mit Sliders
+
+        // 3.2.9
         function generate329(komp) {
-            return `
+             return `
                 <div class="exercise-box">
                     <p class="exercise-thema">${komp.thema}</p>
                     <h3 class="exercise-title">🔄 Aufgabe: Übergang bewerten</h3>
@@ -1213,10 +1248,10 @@
                 </div>
             `;
         }
-        
-        // 3.2.10: Verantwortung - Pflichten Quiz
+
+        // 3.2.10
         function generate3210(komp) {
-            return `
+             return `
                 <div class="exercise-box">
                     <p class="exercise-thema">${komp.thema}</p>
                     <h3 class="exercise-title">⚖️ Aufgabe: Pflichten kennen</h3>
@@ -1252,10 +1287,10 @@
                 </div>
             `;
         }
-        
-        // 3.2.11: Kreativität - Deckblatt-Elemente
+
+        // 3.2.11
         function generate3211(komp) {
-            return `
+             return `
                 <div class="exercise-box">
                     <p class="exercise-thema">${komp.thema}</p>
                     <h3 class="exercise-title">🎨 Aufgabe: Deckblatt planen</h3>
@@ -1290,8 +1325,8 @@
                 </div>
             `;
         }
-        
-        // 3.2.12: Selbstreflexion mit Sliders
+
+        // 3.2.12
         function generate3212(komp) {
             return `
                 <div class="exercise-box">
@@ -1568,8 +1603,11 @@
                     const schluessel = data.kompetenzen?.schluessel || {};
                     const portfolio = data.portfolio || [];
                     
-                    // Sammle Performanz-Daten
+                    // Sammle Performanz-Daten (ERWEITERT)
                     const performanzData = collectPerformanceData(currentKompetenz);
+                    
+                    // NEU: Notizen holen
+                    const notizen = document.getElementById('notizenField')?.value.trim() || '';
                     
                     // Markiere auch als geübt
                     schluessel[currentKompetenz] = {
@@ -1588,6 +1626,7 @@
                         thema: komp.thema,
                         performanz: performanzData,
                         reflexion: selectedEmojis.join(''),
+                        notizen: notizen,  // ✅ NEU: Notizen speichern
                         createdAt: new Date().toISOString(),
                         shareable: true
                     };
@@ -1603,7 +1642,12 @@
                     await loadProgress();
                     closeModal();
                     
-                    alert('📁 Ins Portfolio gespeichert!\n\n✓ Kompetenz als geübt markiert\n✓ Performanz dokumentiert\n✓ Reflexion: ' + selectedEmojis.join(' '));
+                    // Erfolgs-Nachricht anpassen
+                    let successMsg = '📂 Ins Portfolio gespeichert!\n\n✓ Kompetenz als geübt markiert\n✓ Performanz dokumentiert\n✓ Reflexion: ' + selectedEmojis.join(' ');
+                    if (notizen) {
+                        successMsg += '\n✓ Notizen gespeichert';
+                    }
+                    alert(successMsg);
                 }
             } catch (error) {
                 console.error('Fehler:', error);
@@ -1611,7 +1655,7 @@
             }
         }
         
-        // Sammle die Performanz-Daten je nach Übung
+        // Sammle die Performanz-Daten je nach Übung (ERWEITERT)
         function collectPerformanceData(kompetenzId) {
             const data = {
                 kompetenzId: kompetenzId,
@@ -1622,96 +1666,201 @@
             switch(kompetenzId) {
                 case '3.2.1': // Checklist
                     const checks321 = document.querySelectorAll('.activity-check');
+                    // Labels finden: In dieser Struktur ist der Text im span nach dem input
+                    const items321 = Array.from(checks321).map((checkbox, index) => {
+                        // Suche das Span-Element im gleichen Label
+                        const labelSpan = checkbox.parentElement.querySelector('span');
+                        const text = labelSpan ? labelSpan.textContent.trim() : `Schritt ${index + 1}`;
+                        return {
+                            checked: checkbox.checked,
+                            text: text,
+                            id: index + 1
+                        };
+                    });
+                    
                     data.checklist = {
                         total: checks321.length,
-                        completed: Array.from(checks321).filter(c => c.checked).length,
-                        items: Array.from(checks321).map(c => c.checked)
+                        completed: items321.filter(i => i.checked).length,
+                        items: items321
                     };
                     break;
                     
                 case '3.2.2': // E-Mail Kriterien
                     const checks322 = document.querySelectorAll('.criteria-check');
+                    const items322 = Array.from(checks322).map((checkbox, index) => {
+                         const labelSpan = checkbox.parentElement.querySelector('span');
+                         const text = labelSpan ? labelSpan.textContent.trim() : `Kriterium ${index + 1}`;
+                         return {
+                             checked: checkbox.checked,
+                             text: text,
+                             id: index + 1
+                         };
+                    });
+
                     data.kriterien = {
                         total: checks322.length,
-                        erfuellt: Array.from(checks322).filter(c => c.checked).length,
-                        liste: ['höflich', 'klar', 'verständlich', 'vollständig'].filter((_, i) => checks322[i]?.checked)
+                        erfuellt: items322.filter(i => i.checked).length,
+                        items: items322
                     };
                     break;
                     
                 case '3.2.3': // Rollenverteilung
                     const roles = document.querySelectorAll('.role-select');
-                    data.rollen = {
-                        person1: roles[0]?.value || '',
-                        person2: roles[1]?.value || '',
-                        person3: roles[2]?.value || ''
-                    };
+                    // Hier speichern wir, wer welche Rolle hat, mit Labels
+                    data.rollen = Array.from(roles).map((select, index) => {
+                        const personLabel = select.previousElementSibling.textContent.replace(':', '').trim();
+                        // Text der gewählten Option holen
+                        const selectedOptionText = select.options[select.selectedIndex].text;
+                        return {
+                            person: personLabel,
+                            rolleValue: select.value,
+                            rolleText: selectedOptionText
+                        };
+                    });
                     break;
                     
                 case '3.2.4': // Lehrvertrag
                     const checks324 = document.querySelectorAll('.activity-check');
+                     const items324 = Array.from(checks324).map((checkbox, index) => {
+                        const labelSpan = checkbox.parentElement.querySelector('span');
+                        return {
+                            checked: checkbox.checked,
+                            text: labelSpan ? labelSpan.textContent.trim() : `Punkt ${index + 1}`,
+                            id: index + 1
+                        };
+                    });
                     data.pruefpunkte = {
                         total: checks324.length,
-                        markiert: Array.from(checks324).filter(c => c.checked).length
+                        markiert: items324.filter(i => i.checked).length,
+                        items: items324
                     };
                     break;
                     
                 case '3.2.5': // Problemlösung
                     const orders = document.querySelectorAll('.order-input');
-                    data.reihenfolge = Array.from(orders).map(o => parseInt(o.value) || 0);
+                    data.reihenfolge = Array.from(orders).map((input, index) => {
+                         const stepText = input.nextElementSibling.textContent.trim();
+                         return {
+                             step: stepText,
+                             eingabe: parseInt(input.value) || 0,
+                             korrekt: parseInt(input.dataset.correct)
+                         };
+                    });
                     break;
                     
                 case '3.2.6': // Kommunikation
                     const checks326 = document.querySelectorAll('.activity-check');
+                    const items326 = Array.from(checks326).map((checkbox, index) => {
+                        const labelSpan = checkbox.parentElement.querySelector('span');
+                        return {
+                            checked: checkbox.checked,
+                            text: labelSpan ? labelSpan.textContent.trim() : `Element ${index + 1}`,
+                            id: index + 1
+                        };
+                    });
                     data.elemente = {
                         total: checks326.length,
-                        ausgewaehlt: Array.from(checks326).filter(c => c.checked).length
+                        ausgewaehlt: items326.filter(i => i.checked).length,
+                        items: items326
                     };
                     break;
                     
-                case '3.2.7': // Digital
+                case '3.2.7': // Digital (Kalender)
                     const calendar = document.querySelectorAll('.calendar-input');
-                    data.wochenplan = {
-                        montag: calendar[0]?.value || '',
-                        dienstag: calendar[1]?.value || '',
-                        mittwoch: calendar[2]?.value || ''
-                    };
+                    data.wochenplan = Array.from(calendar).map(input => {
+                        const dayLabel = input.previousElementSibling.textContent.replace('📌', '').replace(':', '').trim();
+                        return {
+                            tag: dayLabel,
+                            eintrag: input.value
+                        };
+                    });
                     break;
                     
                 case '3.2.8': // Lernen lernen
                     const checks328 = document.querySelectorAll('.activity-check');
+                    const items328 = Array.from(checks328).map((checkbox, index) => {
+                        const labelSpan = checkbox.parentElement.querySelector('span');
+                        // Entferne HTML Tags aus dem Text für saubere Speicherung
+                        const text = labelSpan ? labelSpan.textContent.trim() : `Strategie ${index + 1}`;
+                        return {
+                            checked: checkbox.checked,
+                            text: text,
+                            id: index + 1
+                        };
+                    });
                     data.strategien = {
                         total: checks328.length,
-                        ausgewaehlt: Array.from(checks328).filter(c => c.checked).length
+                        ausgewaehlt: items328.filter(i => i.checked).length,
+                        items: items328
                     };
                     break;
                     
-                case '3.2.9': // Anpassung
+                case '3.2.9': // Anpassung (Sliders)
                     const sliders329 = document.querySelectorAll('.rating-slider');
-                    data.bewertungen = Array.from(sliders329).map(s => parseInt(s.value));
+                    data.bewertungen = Array.from(sliders329).map(slider => {
+                        // Label ist im Paragraph darüber
+                        const labelP = slider.parentElement.previousElementSibling;
+                        return {
+                            kriterium: labelP ? labelP.textContent.trim() : 'Kriterium',
+                            wert: parseInt(slider.value),
+                            max: 5
+                        };
+                    });
                     break;
                     
-                case '3.2.10': // Verantwortung
+                case '3.2.10': // Verantwortung (Quiz)
                     const quiz = document.querySelectorAll('.quiz-check');
                     data.quiz = {
                         total: quiz.length,
-                        antworten: Array.from(quiz).map(q => q.checked)
+                        antworten: Array.from(quiz).map((cb, index) => {
+                            const labelSpan = cb.parentElement.querySelector('span');
+                            return {
+                                frage: labelSpan ? labelSpan.textContent.trim() : `Frage ${index + 1}`,
+                                checked: cb.checked,
+                                isCorrect: cb.dataset.correct === 'true'
+                            };
+                        })
                     };
                     break;
                     
                 case '3.2.11': // Kreativ
                     const checks3211 = document.querySelectorAll('.activity-check');
+                    const items3211 = Array.from(checks3211).map((checkbox, index) => {
+                        const labelSpan = checkbox.parentElement.querySelector('span');
+                        return {
+                            checked: checkbox.checked,
+                            text: labelSpan ? labelSpan.textContent.trim() : `Element ${index + 1}`,
+                            id: index + 1
+                        };
+                    });
                     data.elemente = {
                         total: checks3211.length,
-                        ausgewaehlt: Array.from(checks3211).filter(c => c.checked).length
+                        ausgewaehlt: items3211.filter(i => i.checked).length,
+                        items: items3211
                     };
                     break;
                     
                 case '3.2.12': // Reflexion
                     const sliders3212 = document.querySelectorAll('.rating-slider');
                     const improve = document.querySelector('.improve-select');
+                    
+                    const ratings = Array.from(sliders3212).map(slider => {
+                        const labelP = slider.parentElement.previousElementSibling;
+                        return {
+                            kriterium: labelP ? labelP.textContent.trim() : 'Kriterium',
+                            wert: parseInt(slider.value),
+                            max: 5
+                        };
+                    });
+                    
+                    let verbesserungText = '';
+                    if (improve && improve.selectedIndex >= 0) {
+                        verbesserungText = improve.options[improve.selectedIndex].text;
+                    }
+
                     data.reflexion = {
-                        bewertungen: Array.from(sliders3212).map(s => parseInt(s.value)),
-                        verbesserung: improve?.value || ''
+                        bewertungen: ratings,
+                        verbesserung: verbesserungText
                     };
                     break;
             }
