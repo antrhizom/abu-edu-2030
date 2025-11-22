@@ -770,7 +770,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title">Portfolio-Eintrag</h2>
-                <button onclick="closeModal()" class="close-btn">×</button>
+                <button onclick="closeModal()" id="closeDetailBtn" class="close-btn">×</button>
             </div>
             <div id="modalContentDiv">
                 <!-- Wird dynamisch gefüllt -->
@@ -835,6 +835,12 @@
             document.getElementById('sortSelect').addEventListener('change', function() {
                 renderPortfolio();
             });
+
+            // Close Modal Button - ensuring ID matches HTML and using standard listener
+            const closeBtn = document.getElementById('closeDetailBtn');
+            if(closeBtn) {
+                closeBtn.addEventListener('click', closeModal);
+            }
         }
         
         async function loadPortfolio() {
@@ -1330,226 +1336,20 @@ function formatFieldLabel(key) {
             };
             return names[value] || value;
         }
-        
-        window.addReflexion = async function(itemId) {
-            const reflexion = prompt('💭 Füge eine Textreflexion hinzu:\n\n(Deine bisherige Emoji-Reflexion bleibt erhalten)');
-            
-            if (reflexion && reflexion.trim()) {
-                try {
-                    const userRef = doc(db, 'users', userId);
-                    const userDoc = await getDoc(userRef);
-                    
-                    if (userDoc.exists()) {
-                        const portfolio = userDoc.data().portfolio || [];
-                        const itemIndex = portfolio.findIndex(i => i.id === itemId);
-                        
-                        if (itemIndex !== -1) {
-                            portfolio[itemIndex].textReflexion = reflexion.trim();
-                            portfolio[itemIndex].reflexionUpdatedAt = new Date().toISOString();
-                            
-                            await updateDoc(userRef, { portfolio });
-                            
-                            alert('✅ Reflexion hinzugefügt!');
-                            await loadPortfolio();
-                            closeModal();
-                        }
-                    }
-                } catch (error) {
-                    console.error('Fehler:', error);
-                    alert('Fehler beim Speichern der Reflexion.');
-                }
-            }
-        };
-        
-        window.downloadItem = async function(itemId) {
-            const item = allPortfolioItems.find(i => i.id === itemId);
-            if (!item) return;
-            
-            // Download-Counter erhöhen
-            try {
-                const userRef = doc(db, 'users', userId);
-                await updateDoc(userRef, {
-                    downloadCount: (downloadCount || 0) + 1
-                });
-                downloadCount++;
-                document.getElementById('downloads').textContent = downloadCount;
-            } catch (error) {
-                console.log('Download-Counter-Update fehlgeschlagen:', error);
-            }
-            
-            // Erstelle Download-Datei
-            const content = generateDownloadContent(item);
-            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Portfolio_${item.kompetenzTitle || item.challengeTitle || 'Arbeit'}_${new Date(item.createdAt).toLocaleDateString('de-CH')}.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            alert('✅ Dokument wurde heruntergeladen!');
-        };
-        
-        window.downloadItemModal = function(itemId) {
-            downloadItem(itemId);
-        };
-        
-        window.sendDocument = function(itemId) {
-            const item = allPortfolioItems.find(i => i.id === itemId);
-            if (!item) return;
-            
-            const content = generateDownloadContent(item);
-            const encodedContent = encodeURIComponent(content);
-            
-            const choice = confirm(
-                '📧 Wie möchtest du das Dokument versenden?\n\n' +
-                'OK = Per E-Mail\n' +
-                'Abbrechen = Per Teams/Chat kopieren'
-            );
-            
-            if (choice) {
-                // E-Mail
-                const subject = encodeURIComponent(`Portfolio: ${item.kompetenzTitle || item.challengeTitle || 'Arbeit'}`);
-                const body = encodedContent;
-                window.location.href = `mailto:?subject=${subject}&body=${body}`;
-            } else {
-                // Teams/Chat - Kopiere in Zwischenablage
-                if (navigator.clipboard) {
-                    navigator.clipboard.writeText(content).then(() => {
-                        alert('✅ Dokument wurde in die Zwischenablage kopiert!\n\nDu kannst es jetzt in Teams, WhatsApp oder einem anderen Chat einfügen.');
-                    }).catch(() => {
-                        alert('⚠️ Automatisches Kopieren fehlgeschlagen.\n\nBitte lade das Dokument herunter und kopiere den Inhalt manuell.');
-                    });
-                } else {
-                    alert('⚠️ Automatisches Kopieren wird nicht unterstützt.\n\nBitte lade das Dokument herunter und kopiere den Inhalt manuell.');
-                }
-            }
-        };
-        
-        function generateDownloadContent(item) {
-            const displayName = localStorage.getItem('ant_edu_display_name') || 'Lernende/r';
-            const date = new Date(item.createdAt).toLocaleString('de-CH', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-            
-            let content = `
-═══════════════════════════════════════════════════════
-   PORTFOLIO-EINTRAG - SLP ABU 2030
-═══════════════════════════════════════════════════════
 
-Lernende/r: ${displayName}
-Erstellt: ${date}
-
-───────────────────────────────────────────────────────
-KOMPETENZ / CHALLENGE
-───────────────────────────────────────────────────────
-
-${item.kompetenzTitle || item.challengeTitle || 'Kompetenz'}
-${item.thema ? `Thema: ${item.thema}` : ''}
-Typ: ${item.type === 'schluesselkompetenz' ? 'Schlüsselkompetenz' : (item.type === 'challenge' ? 'Challenge' : 'Übung')}
-
-`;
-            
-            // Metadaten
-            if (item.aspekte && item.aspekte.length > 0) {
-                content += `🌍 Aspekte: ${item.aspekte.join(', ')}\n`;
-            }
-            if (item.sprachmodi && item.sprachmodi.length > 0) {
-                content += `💬 Sprachmodi: ${item.sprachmodi.join(', ')}\n`;
-            }
-            content += '\n';
-
-            if (item.performanz) {
-                content += `
-───────────────────────────────────────────────────────
-DURCHGEFÜHRTE ÜBUNG
-───────────────────────────────────────────────────────
-
-Übungstyp: ${item.performanz.uebungstyp || 'Übung'}
-
-`;
-                
-                if (item.performanz.checklist) {
-                    content += `✅ ${item.performanz.checklist.completed} von ${item.performanz.checklist.total} Schritten erledigt\n`;
-                    if (item.performanz.checklist.items) {
-                        item.performanz.checklist.items.forEach(check => {
-                             content += `   ${check.checked ? '[x]' : '[ ]'} ${check.text}\n`;
-                        });
-                    }
-                }
-                
-                if (item.performanz.kriterien) {
-                    content += `✅ ${item.performanz.kriterien.erfuellt} von ${item.performanz.kriterien.total} Kriterien erfüllt\n`;
-                    if (item.performanz.kriterien.items) {
-                         item.performanz.kriterien.items.forEach(crit => {
-                             content += `   ${crit.checked ? '[x]' : '[ ]'} ${crit.text}\n`;
-                        });
-                    }
-                }
-                
-                if (item.performanz.rollen) {
-                    if (Array.isArray(item.performanz.rollen)) {
-                        content += `\n👥 Rollen:\n`;
-                        item.performanz.rollen.forEach(role => {
-                            content += `   • ${role.person}: ${role.rolleText || role.rolleValue}\n`;
-                        });
-                    } else {
-                         // Fallback for old format if any
-                         content += `\n👥 Rollen:\n`;
-                         content += `   • Person 1: ${getRoleName(item.performanz.rollen.person1)}\n`;
-                         content += `   • Person 2: ${getRoleName(item.performanz.rollen.person2)}\n`;
-                         content += `   • Person 3: ${getRoleName(item.performanz.rollen.person3)}\n`;
-                    }
-                }
-                
-                if (item.performanz.wochenplan && Array.isArray(item.performanz.wochenplan)) {
-                    content += `\n📅 Wochenplan:\n`;
-                    item.performanz.wochenplan.forEach(day => {
-                        if(day.eintrag) content += `   ${day.tag}: ${day.eintrag}\n`;
-                    });
-                }
-                
-                // Add handlers for other performance types...
-            }
-            
-            content += `
-───────────────────────────────────────────────────────
-REFLEXION & NOTIZEN
-───────────────────────────────────────────────────────
-
-`;
-            
-            if (item.reflexion) {
-                content += `Emoji-Reflexion: ${item.reflexion}\n`;
-            }
-            
-            if (item.textReflexion) {
-                content += `\nZusätzliche Reflexion:\n"${item.textReflexion}"\n`;
-            }
-            
-            if (item.notizen) {
-                content += `\nPersönliche Notizen:\n"${item.notizen}"\n`;
-            }
-            
-            if (!item.reflexion && !item.textReflexion && !item.notizen) {
-                content += `Keine Reflexion hinzugefügt\n`;
-            }
-            
-            content += `
-═══════════════════════════════════════════════════════
-   Erstellt mit ant edu 🐜✏️👓
-   Kompetenzen 2030
-═══════════════════════════════════════════════════════
-`;
-            
-            return content;
+        // CHANGE: Defined as local function for cleaner scope usage
+        function closeModal() {
+            document.getElementById('detailModal').classList.remove('show');
         }
+        // Make it available globally just in case
+        window.closeModal = closeModal;
+        
+        // Close modal when clicking outside
+        document.getElementById('detailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>
