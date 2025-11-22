@@ -31,10 +31,115 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
-        
+
         .kompetenz-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 12px 24px rgba(139, 69, 19, 0.2);
+        }
+
+        .card-ant {
+            width: 64px;
+            height: 64px;
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
+            animation: ant-bob 6s ease-in-out infinite;
+        }
+
+        .card-ant svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        @keyframes ant-bob {
+            0%, 100% { transform: translateY(0) rotate(-8deg); }
+            50% { transform: translateY(-8px) rotate(-4deg); }
+        }
+
+        .floating-ant {
+            position: fixed;
+            bottom: 32px;
+            right: 28px;
+            cursor: pointer;
+            z-index: 1000;
+            animation: ant-bob 7s ease-in-out infinite;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+            width: 86px;
+            height: 86px;
+        }
+
+        .floating-ant svg {
+            pointer-events: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .floating-ant:hover {
+            transform: scale(1.15) rotate(4deg) !important;
+            animation-play-state: paused;
+        }
+
+        .ant-speech-bubble {
+            position: fixed;
+            bottom: 138px;
+            right: 38px;
+            background: white;
+            padding: 1rem 1.25rem;
+            border-radius: 1.25rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            max-width: 320px;
+            z-index: 999;
+            border: 3px solid #8B4513;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .ant-speech-bubble.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .ant-speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            right: 28px;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 15px solid #8B4513;
+        }
+
+        .ant-speech-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .ant-speech-title {
+            font-weight: 800;
+            color: #8B4513;
+            letter-spacing: 0.01em;
+        }
+
+        .ant-speech-close {
+            margin-left: auto;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            cursor: pointer;
+            color: #9CA3AF;
+        }
+
+        .ant-text {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #8B4513;
+            line-height: 1.45;
         }
     </style>
 </head>
@@ -176,7 +281,33 @@
                                 <span id="schluesselCount">0 geübt</span>
                             </div>
                         </div>
-                        <div class="text-2xl text-ant-primary">→</div>
+                        <div class="flex flex-col items-center gap-3">
+                            <div class="card-ant" aria-hidden="true">
+                                <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                                    <ellipse cx="30" cy="35" rx="12" ry="15" fill="#8B4513"/>
+                                    <ellipse cx="30" cy="20" rx="10" ry="12" fill="#A0522D"/>
+                                    <circle cx="30" cy="10" r="8" fill="#8B4513"/>
+                                    <line x1="26" y1="6" x2="22" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="34" y1="6" x2="38" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <circle cx="22" cy="0" r="2" fill="#654321"/>
+                                    <circle cx="38" cy="0" r="2" fill="#654321"/>
+                                    <line x1="20" y1="25" x2="10" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="20" y1="30" x2="8" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="22" y1="38" x2="12" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="40" y1="25" x2="50" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="40" y1="30" x2="52" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="38" y1="38" x2="48" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <ellipse cx="26" cy="10" rx="3" ry="4" fill="white"/>
+                                    <ellipse cx="34" cy="10" rx="3" ry="4" fill="white"/>
+                                    <circle cx="26" cy="11" r="2" fill="#333"/>
+                                    <circle cx="34" cy="11" r="2" fill="#333"/>
+                                    <circle cx="26.5" cy="10" r="0.8" fill="white"/>
+                                    <circle cx="34.5" cy="10" r="0.8" fill="white"/>
+                                    <path d="M 24 14 Q 30 16 36 14" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="text-2xl text-ant-primary">→</div>
+                        </div>
                     </div>
                 </a>
                 
@@ -197,7 +328,33 @@
                                 <span id="aspekteCount">0 geübt</span>
                             </div>
                         </div>
-                        <div class="text-2xl text-ant-secondary">→</div>
+                        <div class="flex flex-col items-center gap-3">
+                            <div class="card-ant" aria-hidden="true">
+                                <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                                    <ellipse cx="30" cy="35" rx="12" ry="15" fill="#8B4513"/>
+                                    <ellipse cx="30" cy="20" rx="10" ry="12" fill="#A0522D"/>
+                                    <circle cx="30" cy="10" r="8" fill="#8B4513"/>
+                                    <line x1="26" y1="6" x2="22" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="34" y1="6" x2="38" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <circle cx="22" cy="0" r="2" fill="#654321"/>
+                                    <circle cx="38" cy="0" r="2" fill="#654321"/>
+                                    <line x1="20" y1="25" x2="10" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="20" y1="30" x2="8" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="22" y1="38" x2="12" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="40" y1="25" x2="50" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="40" y1="30" x2="52" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="38" y1="38" x2="48" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <ellipse cx="26" cy="10" rx="3" ry="4" fill="white"/>
+                                    <ellipse cx="34" cy="10" rx="3" ry="4" fill="white"/>
+                                    <circle cx="26" cy="11" r="2" fill="#333"/>
+                                    <circle cx="34" cy="11" r="2" fill="#333"/>
+                                    <circle cx="26.5" cy="10" r="0.8" fill="white"/>
+                                    <circle cx="34.5" cy="10" r="0.8" fill="white"/>
+                                    <path d="M 24 14 Q 30 16 36 14" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="text-2xl text-ant-secondary">→</div>
+                        </div>
                     </div>
                 </a>
                 
@@ -218,7 +375,33 @@
                                 <span id="sprachCount">0 geübt</span>
                             </div>
                         </div>
-                        <div class="text-2xl text-ant-accent">→</div>
+                        <div class="flex flex-col items-center gap-3">
+                            <div class="card-ant" aria-hidden="true">
+                                <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                                    <ellipse cx="30" cy="35" rx="12" ry="15" fill="#8B4513"/>
+                                    <ellipse cx="30" cy="20" rx="10" ry="12" fill="#A0522D"/>
+                                    <circle cx="30" cy="10" r="8" fill="#8B4513"/>
+                                    <line x1="26" y1="6" x2="22" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="34" y1="6" x2="38" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <circle cx="22" cy="0" r="2" fill="#654321"/>
+                                    <circle cx="38" cy="0" r="2" fill="#654321"/>
+                                    <line x1="20" y1="25" x2="10" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="20" y1="30" x2="8" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="22" y1="38" x2="12" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="40" y1="25" x2="50" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="40" y1="30" x2="52" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <line x1="38" y1="38" x2="48" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+                                    <ellipse cx="26" cy="10" rx="3" ry="4" fill="white"/>
+                                    <ellipse cx="34" cy="10" rx="3" ry="4" fill="white"/>
+                                    <circle cx="26" cy="11" r="2" fill="#333"/>
+                                    <circle cx="34" cy="11" r="2" fill="#333"/>
+                                    <circle cx="26.5" cy="10" r="0.8" fill="white"/>
+                                    <circle cx="34.5" cy="10" r="0.8" fill="white"/>
+                                    <path d="M 24 14 Q 30 16 36 14" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="text-2xl text-ant-accent">→</div>
+                        </div>
                     </div>
                 </a>
             </div>
@@ -254,6 +437,41 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Floating Ant Guide -->
+    <div class="floating-ant" id="floatingAnt" title="Klick für Tipps!">
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="30" cy="35" rx="12" ry="15" fill="#8B4513"/>
+            <ellipse cx="30" cy="20" rx="10" ry="12" fill="#A0522D"/>
+            <circle cx="30" cy="10" r="8" fill="#8B4513"/>
+            <line x1="26" y1="6" x2="22" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <line x1="34" y1="6" x2="38" y2="0" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="22" cy="0" r="2" fill="#654321"/>
+            <circle cx="38" cy="0" r="2" fill="#654321"/>
+            <line x1="20" y1="25" x2="10" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <line x1="20" y1="30" x2="8" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <line x1="22" y1="38" x2="12" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <line x1="40" y1="25" x2="50" y2="30" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <line x1="40" y1="30" x2="52" y2="38" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <line x1="38" y1="38" x2="48" y2="48" stroke="#654321" stroke-width="2" stroke-linecap="round"/>
+            <ellipse cx="26" cy="10" rx="3" ry="4" fill="white"/>
+            <ellipse cx="34" cy="10" rx="3" ry="4" fill="white"/>
+            <circle cx="26" cy="11" r="2" fill="#333"/>
+            <circle cx="34" cy="11" r="2" fill="#333"/>
+            <circle cx="26.5" cy="10" r="0.8" fill="white"/>
+            <circle cx="34.5" cy="10" r="0.8" fill="white"/>
+            <path d="M 24 14 Q 30 16 36 14" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        </svg>
+    </div>
+
+    <div class="ant-speech-bubble" id="antSpeech" aria-live="polite">
+        <div class="ant-speech-header">
+            <span>🐜</span>
+            <span class="ant-speech-title">Ameisenwissen</span>
+            <button class="ant-speech-close" id="closeAntSpeech" aria-label="Sprechblase schließen">✕</button>
+        </div>
+        <p class="ant-text" id="antText">Klick auf mich und hol dir Fachwissen zu den Kompetenzbereichen!</p>
     </div>
     
     <script type="module">
@@ -306,6 +524,55 @@
                 console.log('Offline oder Fehler:', error);
             }
         }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const antQuotes = [
+                "🐜 Schlüsselkompetenzen = Fundament: Ohne Selbstorganisation, Kollaboration und Reflexion wird jeder Hügel wacklig.",
+                "🐜 Gesellschaftliche Aspekte lenken den Blick: Frag dich immer, welche Brille du aufsetzt, wenn du übst.",
+                "🐜 Sprachmodi sind mehr als Schreiben – probier Gestik, Visualisierung oder digitale Formate, um Themen greifbar zu machen.",
+                "🐜 Jede Kompetenzkarte zeigt Output + Bezug + Ressource. Notier dir beim Üben genau diese drei Punkte.",
+                "🐜 Verknüpfe Kompetenzbereiche: Eine Präsentation trainiert Sprachmodi, Schlüsselkompetenzen UND gesellschaftliche Aspekte zugleich.",
+                "🐜 Tipp: Wechsle beim Lernen zwischen Theorie und Tun. Ameisen lernen auf dem Weg – du auch!",
+                "🐜 Kontrolliere deinen Fortschritt: Welche Karten sind schon geübt? Welche brauchen Feedback oder Wiederholung?",
+                "🐜 Digitale Tools zählen als Ressource. Wähle sie bewusst – sie verändern Output und Zielgruppe.",
+                "🐜 Nutze die Ant-Icons als Marker: Wo tauchen Verbindungen auf? Jede Verbindung macht dein Netzwerk stabiler.",
+                "🐜 Micro-Übungen wirken Wunder: 10 Minuten gezielter Sprachmodus-Check bauen einen neuen Pfad im Ameisenstaat deines Wissens."
+            ];
+
+            let lastQuoteIndex = -1;
+            const floatingAnt = document.getElementById('floatingAnt');
+            const speechBubble = document.getElementById('antSpeech');
+            const antText = document.getElementById('antText');
+            const closeAntSpeech = document.getElementById('closeAntSpeech');
+
+            function showRandomQuote() {
+                let randomIndex;
+                do {
+                    randomIndex = Math.floor(Math.random() * antQuotes.length);
+                } while (randomIndex === lastQuoteIndex && antQuotes.length > 1);
+                lastQuoteIndex = randomIndex;
+                antText.textContent = antQuotes[randomIndex];
+                speechBubble.classList.add('show');
+            }
+
+            floatingAnt.addEventListener('click', function(e) {
+                e.stopPropagation();
+                showRandomQuote();
+            });
+
+            closeAntSpeech.addEventListener('click', function(e) {
+                e.stopPropagation();
+                speechBubble.classList.remove('show');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!speechBubble.contains(e.target) && !floatingAnt.contains(e.target)) {
+                    speechBubble.classList.remove('show');
+                }
+            });
+        });
     </script>
 </body>
 </html>

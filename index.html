@@ -837,15 +837,15 @@
         /* Floating Ant */
         .floating-ant {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 40px;
+            right: 40px;
             cursor: pointer;
             z-index: 1000;
             animation: ant-float 8s ease-in-out infinite;
             transition: transform 0.3s ease;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
-            width: 60px;
-            height: 60px;
+            width: 90px;
+            height: 90px;
         }
         
         .floating-ant svg {
@@ -873,25 +873,27 @@
         
         .ant-speech-bubble {
             position: fixed;
-            bottom: 120px;
-            right: 40px;
+            bottom: 150px;
+            right: 50px;
             background: white;
             padding: 1rem 1.25rem;
             border-radius: 1.25rem;
             box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-            max-width: 300px;
+            max-width: 320px;
             z-index: 999;
             border: 3px solid var(--ant-primary);
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.3s ease;
+            pointer-events: none;
         }
-        
+
         .ant-speech-bubble.show {
             opacity: 1;
             transform: translateY(0);
+            pointer-events: auto;
         }
-        
+
         .ant-speech-bubble::after {
             content: '';
             position: absolute;
@@ -903,11 +905,34 @@
             border-right: 15px solid transparent;
             border-top: 15px solid var(--ant-primary);
         }
-        
+
+        .ant-speech-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .ant-speech-title {
+            font-weight: 800;
+            color: var(--ant-primary);
+            letter-spacing: 0.01em;
+        }
+
+        .ant-speech-close {
+            margin-left: auto;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            cursor: pointer;
+            color: #9CA3AF;
+        }
+
         .ant-text {
-            font-size: 0.875rem;
+            font-size: 0.92rem;
             font-weight: 600;
             color: var(--ant-primary);
+            line-height: 1.45;
         }
         
         /* Login Modal */
@@ -1111,8 +1136,8 @@
             .section-title { font-size: 2rem; }
             .accordion-title { font-size: 1.25rem; }
             .spiral-grid { grid-template-columns: 1fr; }
-            .floating-ant { bottom: 20px; right: 20px; width: 50px; height: 50px; }
-            .ant-speech-bubble { bottom: 90px; right: 30px; max-width: 250px; }
+            .floating-ant { bottom: 25px; right: 25px; width: 70px; height: 70px; }
+            .ant-speech-bubble { bottom: 120px; right: 35px; max-width: 250px; }
             .returning-user-card {
                 flex-direction: column;
                 text-align: center;
@@ -1708,7 +1733,7 @@
     
     <!-- Floating Ant -->
     <div class="floating-ant" id="floatingAnt" title="Klick mich!">
-        <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+        <svg width="90" height="90" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
             <ellipse cx="30" cy="35" rx="12" ry="15" fill="#8B4513"/>
             <ellipse cx="30" cy="20" rx="10" ry="12" fill="#A0522D"/>
             <circle cx="30" cy="10" r="8" fill="#8B4513"/>
@@ -1732,8 +1757,13 @@
         </svg>
     </div>
     
-    <div class="ant-speech-bubble" id="antSpeech">
-        <p class="ant-text" id="antText"></p>
+    <div class="ant-speech-bubble" id="antSpeech" aria-live="polite">
+        <div class="ant-speech-header">
+            <span>🐜</span>
+            <span class="ant-speech-title">Ameisenwissen</span>
+            <button class="ant-speech-close" id="closeAntSpeech" aria-label="Sprechblase schließen">✕</button>
+        </div>
+        <p class="ant-text" id="antText">Klick auf mich, um mehr über die Kompetenzen 2030 zu erfahren!</p>
     </div>
     
     <!-- Firebase & Scripts -->
@@ -1982,32 +2012,28 @@
             
             // Ant Quotes
             const antQuotes = [
-                "🐜 Wusstest du? Kompetenzen sind wie Ameisenpfade – je öfter du sie nutzt, desto breiter werden sie!",
-                "🐜 Vernetzung ist alles! Genau wie wir Ameisen arbeiten auch Kompetenzen am besten zusammen!",
-                "🐜 Pro-Tipp: Jedes Thema verbindet immer Schlüsselkompetenzen, Aspekte und Sprache.",
-                "🐜 Spiralförmiges Lernen bedeutet: Du kehrst immer wieder zurück, aber auf höherem Niveau!",
-                "🐜 Schlüsselkompetenzen sind übertragbar – was du hier lernst, hilft dir überall!",
-                "🐜 Die 9 Sprachmodi zeigen: Kommunikation ist viel mehr als nur Sprechen und Schreiben!",
-                "🐜 Gesellschaftliche Aspekte sind wie verschiedene Brillen – sie ändern, was du siehst!",
-                "🐜 Themenbasiertes Lernen = Lernen aus dem Leben, für das Leben!",
-                "🐜 Zirkulär bedeutet: Alles hängt zusammen. Wie in einem Ameisenstaat! 🏰",
-                "🐜 Das Modell Kompetenzen 2030 ist revolutionär – endlich wird Vernetzung sichtbar gemacht!",
-                "🐜 Klick auf die Accordeons ⬆️ für mehr Details zu den Kompetenzbereichen!",
-                "🐜 Digital ist nicht extra – es ist überall integriert. Willkommen in 2030! 💻",
-                "🐜 Hallo! Ich bin deine Lern-Ameise! Klick mich für mehr Weisheiten! 👋",
-                "🐜 Wusstest du? Ameisen können das 50-fache ihres Körpergewichts tragen. Du schaffst deine Kompetenzen auch!",
-                "🐜 Im Ameisenstaat hat jeder eine Rolle – genau wie in den 8 gesellschaftlichen Aspekten!",
-                "🐜 Ameisen kommunizieren über Duftstoffe – Menschen über 9 verschiedene Sprachmodi! 💬",
-                "🐜 Schau dir den User-Counter an 👆 – immer mehr Lernende entdecken die Vernetzung!"
+                "🐜 Wusstest du? Jede Kompetenz verbindet Output, Bezug und Ressourcen – genau wie ein stabiler Ameisenbau!",
+                "🐜 Schlüsselkompetenzen sind wie Antennen: Sie helfen dir, Signale in jedem Kontext zu verstehen und umzusetzen.",
+                "🐜 Fachwissen wächst zirkulär: Du kehrst zurück, vernetzt Neues und vertiefst das Gelernte – Ameisen nennen das Pfadpflege.",
+                "🐜 In den 9 Sprachmodi steckt Power: Wenn du einen Modus trainierst, werden die anderen gleich mitgestärkt.",
+                "🐜 Gesellschaftliche Aspekte sind keine Extras – sie färben jedes Thema und jede Kompetenz, die du übst.",
+                "🐜 Beim Üben: Formuliere den Output klar, bestimme den Bezug und wähle passende Ressourcen. So wird Performanz sichtbar!",
+                "🐜 Die Kompetenzpfade sind vernetzt wie unsere Trails – klick dich durch die Bereiche und sammle Verbindungen.",
+                "🐜 Digitales, Kollaboration und Reflexion gehören zusammen. Misch sie, und dein Lernhügel wächst schneller!",
+                "🐜 Pro-Tipp: Schau nach, welche Sprachmodi zu deinem Thema passen. Vielfalt macht deine Nachricht verständlicher.",
+                "🐜 Nutze die Kompetenzkarten als Checkliste: Was kann ich? Was brauche ich noch? Wo hole ich Feedback?",
+                "🐜 Performanz heißt Handeln: Plane kurz, handle, reflektiere – drei Schritte, die jede Ameise im Team durchläuft.",
+                "🐜 Jede Übung kann mehrere Kompetenzen stärken. Markiere sie, damit dein Dashboard dein Netzwerk abbildet.",
+                "🐜 Transfer ist König: Wenn du eine Fähigkeit in neuen Situationen einsetzt, wird sie zum stabilen Ameisenpfad." 
             ];
-            
+
             let lastQuoteIndex = -1;
             const floatingAnt = document.getElementById('floatingAnt');
             const speechBubble = document.getElementById('antSpeech');
             const antText = document.getElementById('antText');
-            
-            floatingAnt.addEventListener('click', function(e) {
-                e.stopPropagation();
+            const closeAntSpeech = document.getElementById('closeAntSpeech');
+
+            function showRandomQuote() {
                 let randomIndex;
                 do {
                     randomIndex = Math.floor(Math.random() * antQuotes.length);
@@ -2015,7 +2041,22 @@
                 lastQuoteIndex = randomIndex;
                 antText.textContent = antQuotes[randomIndex];
                 speechBubble.classList.add('show');
-                setTimeout(() => speechBubble.classList.remove('show'), 6000);
+            }
+
+            floatingAnt.addEventListener('click', function(e) {
+                e.stopPropagation();
+                showRandomQuote();
+            });
+
+            closeAntSpeech.addEventListener('click', function(e) {
+                e.stopPropagation();
+                speechBubble.classList.remove('show');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!speechBubble.contains(e.target) && !floatingAnt.contains(e.target)) {
+                    speechBubble.classList.remove('show');
+                }
             });
         });
     </script>
