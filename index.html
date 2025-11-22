@@ -1872,6 +1872,16 @@
         const usernameInput = document.getElementById('usernameInput');
         const loginError = document.getElementById('loginError');
         const loginSuccess = document.getElementById('loginSuccess');
+        const floatingAnt = document.getElementById('floatingAnt');
+        const antSpeech = document.getElementById('antSpeech');
+
+        function setAntVisibility(show) {
+            if (!floatingAnt || !antSpeech) return;
+            floatingAnt.style.display = show ? 'block' : 'none';
+            if (!show) {
+                antSpeech.classList.remove('show');
+            }
+        }
         
         // Öffne Modal
         if (showLoginModalBtn) {
@@ -1881,6 +1891,7 @@
                 usernameInput.focus();
                 loginError.classList.remove('show');
                 loginSuccess.classList.remove('show');
+                setAntVisibility(false);
             });
         }
         
@@ -1890,6 +1901,7 @@
             usernameInput.value = '';
             loginError.classList.remove('show');
             loginSuccess.classList.remove('show');
+            setAntVisibility(true);
         }
         
         closeModalBtn.addEventListener('click', closeModal);
