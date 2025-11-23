@@ -28,12 +28,26 @@ class AbuEbaAuthService {
         this.auth = getAuth(this.app);
         this.db = getFirestore(this.app);
         this.currentUser = null;
+
+        this.authReady = this.ensureAnonymousAuth();
         
         // Listen to auth state changes
         onAuthStateChanged(this.auth, (user) => {
             this.currentUser = user;
             this.onAuthStateChange(user);
         });
+    }
+
+    async ensureAnonymousAuth() {
+        try {
+            if (!this.auth.currentUser) {
+                await signInAnonymously(this.auth);
+            }
+            return this.auth;
+        } catch (error) {
+            console.error('Error signing in anonymously:', error);
+            throw error;
+        }
     }
 
     // Auth state change callback

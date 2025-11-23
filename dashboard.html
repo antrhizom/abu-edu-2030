@@ -360,6 +360,7 @@
     
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
         import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
         
         const firebaseConfig = {
@@ -372,7 +373,13 @@
         };
         
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        await signInAnonymously(auth);
         const db = getFirestore(app);
+
+        onAuthStateChanged(auth, (user) => {
+            console.log('Auth state (dashboard):', user ? 'angemeldet' : 'abgemeldet');
+        });
         
         window.addEventListener('load', async function() {
             document.getElementById('currentYear').textContent = new Date().getFullYear();
