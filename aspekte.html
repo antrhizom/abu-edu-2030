@@ -845,7 +845,7 @@
         <div class="footer">
             <div class="footer-content">
                 <div class="footer-text">
-                    <span class="footer-icon">🐜✏️👓</span>
+                    <span class="footer-icon">🐜✏️💓</span>
                     <span>|</span>
                     <span>ant edu</span>
                     <span>|</span>
@@ -1182,10 +1182,10 @@
                             ${aspekt.handlungsfelder.length} Handlungsfelder
                         </span>
                         <span class="uebung-badge">
-                            📝 1 Übung
+                            📂 1 Übung
                         </span>
                     </div>
-                    <button class="card-button">Üben →</button>
+                    <button class="card-button">Üben ←</button>
                 </div>
             `).join('');
         }
@@ -1243,11 +1243,11 @@
                 if (status === 'completed') {
                     badge.textContent = '✅ Geübt';
                     badge.classList.add('completed');
-                    button.textContent = 'Erneut üben →';
+                    button.textContent = 'Erneut üben ←';
                 } else if (status === 'in-progress') {
                     badge.textContent = '⏳ In Arbeit';
                     badge.classList.add('in-progress');
-                    button.textContent = 'Weiterarbeiten →';
+                    button.textContent = 'Weiterarbeiten ←';
                 }
             }
         }
@@ -1441,6 +1441,9 @@
         function collectActivityData() {
             const data = {};
             const uebungTyp = currentAspekt.uebung.typ;
+            
+            // Capture the exercise title
+            data.uebungstyp = currentAspekt.uebung.titel || 'Übung';
             
             // Multiple choice
             if (uebungTyp === 'multiple-choice') {
@@ -1656,7 +1659,7 @@
                         <button class="emoji-btn" data-emoji="💪" title="War anstrengend">💪</button>
                         <button class="emoji-btn" data-emoji="🤔" title="Musste nachdenken">🤔</button>
                         <button class="emoji-btn" data-emoji="❓" title="War unklar">❓</button>
-                        <button class="emoji-btn" data-emoji="🔥" title="War super">🔥</button>
+                        <button class="emoji-btn" data-emoji="🤩" title="War super">🤩</button>
                         <button class="emoji-btn" data-emoji="😅" title="War schwierig">😅</button>
                         <button class="emoji-btn" data-emoji="💡" title="Hatte eine Idee">💡</button>
                         <button class="emoji-btn" data-emoji="✅" title="Gut gelaufen">✅</button>
@@ -1666,7 +1669,7 @@
                     </div>
                     
                     <div class="notizen-field">
-                        <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">📝 Zusätzliche Notizen (optional)</label>
+                        <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">📂 Zusätzliche Notizen (optional)</label>
                         <textarea id="notizenField" class="textarea-field" placeholder="Was hast du gelernt? Was war herausfordernd?" maxlength="500" style="min-height: 80px;"></textarea>
                         <div class="char-count">
                             <span id="charCount">0</span>/500 Zeichen
@@ -1679,7 +1682,7 @@
                         ✅ Als geübt markieren
                     </button>
                     <button id="portfolioBtn" class="btn-portfolio">
-                        📁 Ins Portfolio speichern
+                        📂 Ins Portfolio speichern
                     </button>
                     <button id="abbrechenBtn" class="btn-cancel">
                         Abbrechen
@@ -2103,7 +2106,7 @@
                     await loadProgress();
                     closeModal();
                     
-                    let successMsg = '📁 Ins Portfolio gespeichert!\n\n✓ Aspekt als geübt markiert\n✓ Performanz dokumentiert\n✓ Reflexion: ' + selectedEmojis.join(' ');
+                    let successMsg = '📂 Ins Portfolio gespeichert!\n\n✓ Aspekt als geübt markiert\n✓ Performanz dokumentiert\n✓ Reflexion: ' + selectedEmojis.join(' ');
                     if (notizen) {
                         successMsg += '\n✓ Notizen gespeichert';
                     }
