@@ -53,6 +53,34 @@ class ABUTracker {
         }
     }
 
+    async ensureAuthUser() {
+        if (this.auth?.currentUser) {
+            return this.auth.currentUser;
+        }
+
+        await signInAnonymously(this.auth);
+
+        return new Promise((resolve, reject) => {
+            const unsubscribe = onAuthStateChanged(this.auth, (user) => {
+                unsubscribe();
+                if (user) {
+                    resolve(user);
+                } else {
+                    reject(new Error('Kein authentifizierter Nutzer gefunden'));
+                }
+            });
+        });
+    }
+
+    async assertOwnership(docSnap, uid, context) {
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            if (data.ownerUid && data.ownerUid !== uid) {
+                throw new Error(`Kein Zugriff auf ${context}`);
+            }
+        }
+    }
+
     // Hash PIN for security
     async hashPIN(pin) {
         const encoder = new TextEncoder();
@@ -67,6 +95,8 @@ class ABUTracker {
         if (!this.isInitialized) {
             throw new Error('Tracker not initialized');
         }
+
+        const authUser = await this.ensureAuthUser();
 
         // Validate code format (e.g., ANNA-2024-KV)
         const codeRegex = /^[A-Z0-9]+-[0-9]{4}-[A-Z0-9]+$/i;
@@ -97,7 +127,8 @@ class ABUTracker {
             role: role,
             createdAt: new Date(),
             shares: [], // Who can view this portfolio
-            hasAccessTo: {} // Which portfolios this user can access
+            hasAccessTo: {}, // Which portfolios this user can access
+            ownerUid: authUser.uid
         });
 
         // Initialize user progress
@@ -106,7 +137,8 @@ class ABUTracker {
             sectionsCompleted: [],
             achievements: [],
             modules: {},
-            lastUpdated: new Date()
+            lastUpdated: new Date(),
+            ownerUid: authUser.uid
         });
 
         // Sign in anonymously for Firebase Auth
@@ -130,6 +162,8 @@ class ABUTracker {
 
         const upperCode = code.toUpperCase();
 
+        const authUser = await this.ensureAuthUser();
+
         // Get user document
         const userDoc = await getDoc(doc(this.db, 'users', upperCode));
         if (!userDoc.exists()) {
@@ -137,6 +171,8 @@ class ABUTracker {
         }
 
         const userData = userDoc.data();
+
+        await this.assertOwnership(userDoc, authUser.uid, 'dieses Konto');
 
         // Verify PIN
         const hashedPIN = await this.hashPIN(pin);
@@ -185,15 +221,19 @@ class ABUTracker {
             throw new Error('Not logged in');
         }
 
+        const authUser = await this.ensureAuthUser();
         const progressRef = doc(this.db, 'userProgress', this.currentUserCode);
-        
+        const progressDoc = await getDoc(progressRef);
+        await this.assertOwnership(progressDoc, authUser.uid, 'diesen Fortschritt');
+
         try {
             await updateDoc(progressRef, {
                 [`modules.${moduleId}`]: {
                     ...data,
                     lastUpdated: new Date()
                 },
-                lastUpdated: new Date()
+                lastUpdated: new Date(),
+                ownerUid: authUser.uid
             });
 
             console.log('✅ Progress tracked:', moduleId);
@@ -209,12 +249,16 @@ class ABUTracker {
             throw new Error('Not logged in');
         }
 
+        const authUser = await this.ensureAuthUser();
         const progressRef = doc(this.db, 'userProgress', this.currentUserCode);
-        
+        const progressDoc = await getDoc(progressRef);
+        await this.assertOwnership(progressDoc, authUser.uid, 'diesen Fortschritt');
+
         try {
             await updateDoc(progressRef, {
                 points: increment(points),
-                lastUpdated: new Date()
+                lastUpdated: new Date(),
+                ownerUid: authUser.uid
             });
 
             console.log(`✅ Added ${points} points: ${reason}`);
@@ -231,12 +275,16 @@ class ABUTracker {
             throw new Error('Not logged in');
         }
 
+        const authUser = await this.ensureAuthUser();
         const progressRef = doc(this.db, 'userProgress', this.currentUserCode);
-        
+        const progressDoc = await getDoc(progressRef);
+        await this.assertOwnership(progressDoc, authUser.uid, 'diesen Fortschritt');
+
         try {
             await updateDoc(progressRef, {
                 achievements: arrayUnion(achievement),
-                lastUpdated: new Date()
+                lastUpdated: new Date(),
+                ownerUid: authUser.uid
             });
 
             console.log('✅ Achievement unlocked:', achievement);
@@ -252,14 +300,18 @@ class ABUTracker {
             throw new Error('Not logged in');
         }
 
+        const authUser = await this.ensureAuthUser();
         const reflexionRef = doc(this.db, 'reflexionen', this.currentUserCode, 'lerninhalte', lerninhaltId);
-        
+        const reflexionDoc = await getDoc(reflexionRef);
+        await this.assertOwnership(reflexionDoc, authUser.uid, 'diese Reflexion');
+
         try {
             await setDoc(reflexionRef, {
                 text: reflexionText,
                 lerninhaltId: lerninhaltId,
                 createdAt: new Date(),
-                lastUpdated: new Date()
+                lastUpdated: new Date(),
+                ownerUid: authUser.uid
             }, { merge: true });
 
             console.log('✅ Reflexion saved:', lerninhaltId);
@@ -275,10 +327,16 @@ class ABUTracker {
             throw new Error('Not logged in');
         }
 
+        const authUser = await this.ensureAuthUser();
+        if (userCode !== this.currentUserCode) {
+            throw new Error('Kein Zugriff auf Reflexionen anderer Nutzer');
+        }
+
         const reflexionRef = doc(this.db, 'reflexionen', userCode, 'lerninhalte', lerninhaltId);
-        
+
         try {
             const reflexionDoc = await getDoc(reflexionRef);
+            await this.assertOwnership(reflexionDoc, authUser.uid, 'diese Reflexion');
             if (reflexionDoc.exists()) {
                 return reflexionDoc.data();
             }
@@ -347,8 +405,11 @@ class ABUTracker {
             throw new Error('Not logged in');
         }
 
+        const authUser = await this.ensureAuthUser();
         const userRef = doc(this.db, 'users', this.currentUserCode);
-        
+        const currentUserDoc = await getDoc(userRef);
+        await this.assertOwnership(currentUserDoc, authUser.uid, 'dieses Nutzerkonto');
+
         try {
             await updateDoc(userRef, {
                 shares: arrayUnion(targetUserCode.toUpperCase())
@@ -374,10 +435,12 @@ class ABUTracker {
             throw new Error('No user code provided');
         }
 
+        const authUser = await this.ensureAuthUser();
         const progressRef = doc(this.db, 'userProgress', code);
-        
+
         try {
             const progressDoc = await getDoc(progressRef);
+            await this.assertOwnership(progressDoc, authUser.uid, 'diesen Fortschritt');
             if (progressDoc.exists()) {
                 return progressDoc.data();
             }
@@ -394,10 +457,12 @@ class ABUTracker {
             throw new Error('Not logged in');
         }
 
+        const authUser = await this.ensureAuthUser();
         const userRef = doc(this.db, 'users', this.currentUserCode);
-        
+
         try {
             const userDoc = await getDoc(userRef);
+            await this.assertOwnership(userDoc, authUser.uid, 'dieses Nutzerkonto');
             if (userDoc.exists()) {
                 const userData = userDoc.data();
                 return Object.keys(userData.hasAccessTo || {});
@@ -422,14 +487,18 @@ class ABUTracker {
             throw new Error('Not logged in');
         }
 
+        const authUser = await this.ensureAuthUser();
         const umsetzungRef = doc(this.db, 'umsetzungsbeispiele', this.currentUserCode, 'lebensbezuege', lebensbezugId);
-        
+        const umsetzungDoc = await getDoc(umsetzungRef);
+        await this.assertOwnership(umsetzungDoc, authUser.uid, 'dieses Umsetzungsbeispiel');
+
         try {
             await setDoc(umsetzungRef, {
                 ...data,
                 lebensbezugId: lebensbezugId,
                 createdAt: new Date(),
-                lastUpdated: new Date()
+                lastUpdated: new Date(),
+                ownerUid: authUser.uid
             }, { merge: true });
 
             console.log('✅ Umsetzungsbeispiel saved:', lebensbezugId);
@@ -445,10 +514,16 @@ class ABUTracker {
             throw new Error('Not logged in');
         }
 
+        const authUser = await this.ensureAuthUser();
+        if (userCode !== this.currentUserCode) {
+            throw new Error('Kein Zugriff auf Umsetzungsbeispiele anderer Nutzer');
+        }
+
         const umsetzungRef = doc(this.db, 'umsetzungsbeispiele', userCode, 'lebensbezuege', lebensbezugId);
-        
+
         try {
             const umsetzungDoc = await getDoc(umsetzungRef);
+            await this.assertOwnership(umsetzungDoc, authUser.uid, 'dieses Umsetzungsbeispiel');
             if (umsetzungDoc.exists()) {
                 return umsetzungDoc.data();
             }
