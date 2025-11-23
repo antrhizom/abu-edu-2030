@@ -1106,16 +1106,26 @@
         
         /* Responsive */
         @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
-            .subtitle { font-size: 1.25rem; }
-            .section-title { font-size: 2rem; }
-            .accordion-title { font-size: 1.25rem; }
+            body { padding: 0.5rem; }
+            h1 { font-size: 2.25rem; line-height: 1.2; }
+            .subtitle { font-size: 1.1rem; }
+            .hero-section { padding: 1.5rem 1rem; }
+            .hero-content { margin-bottom: 2rem; }
+            .hero-description { font-size: 1rem; }
+            .quick-facts { grid-template-columns: 1fr; }
+            .fact-card { padding: 1.25rem; }
+            .section-title { font-size: 1.75rem; }
+            .section-header { flex-direction: column; align-items: flex-start; }
+            .accordion-title { font-size: 1.15rem; }
+            .section { padding: 2rem 1.25rem; }
+            .content { padding: 2.5rem 1rem; }
             .spiral-grid { grid-template-columns: 1fr; }
             .floating-ant { bottom: 30px; right: 30px; width: 85px; height: 85px; }
             .ant-speech-bubble { bottom: 140px; right: 42px; max-width: 250px; }
             .returning-user-card {
                 flex-direction: column;
                 text-align: center;
+                padding: 1.25rem;
             }
             .returning-user-content {
                 text-align: center;
@@ -1123,9 +1133,11 @@
             .returning-login-button {
                 width: 100%;
             }
+            .cta-button { width: 100%; padding: 1rem 1.5rem; }
             .modal-footer {
                 flex-direction: column;
             }
+            .modal-content { max-height: 80vh; }
         }
         
         strong { font-weight: 600; }

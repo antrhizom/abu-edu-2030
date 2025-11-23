@@ -677,9 +677,25 @@
             font-size: 0.875rem;
             color: #6B7280;
         }
-        
+
         .footer-icon {
             font-size: 1.125rem;
+        }
+
+        @media (max-width: 640px) {
+            .header { padding: 1.25rem; }
+            .header-content { align-items: flex-start; gap: 0.75rem; }
+            .header-left { align-items: flex-start; }
+            .header-title { font-size: 1.65rem; }
+            .header-subtitle { font-size: 0.95rem; }
+            .info-box, .portfolio-card, .upload-area, .share-box, .modal-body { padding: 1.25rem; }
+            .header-right { width: 100%; text-align: left; }
+            .progress-count { font-size: 1.5rem; }
+            .progress-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .section-title { font-size: 1.25rem; }
+            .progress-box { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+            .entry-card { padding: 1rem; }
+            .footer-content { width: 100%; text-align: center; }
         }
     </style>
 </head>

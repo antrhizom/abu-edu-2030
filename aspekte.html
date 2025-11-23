@@ -772,9 +772,29 @@
             font-size: 0.875rem;
             color: #6B7280;
         }
-        
+
         .footer-icon {
             font-size: 1.125rem;
+        }
+
+        @media (max-width: 640px) {
+            .header { padding: 1.25rem; }
+            .header-content { align-items: flex-start; gap: 0.75rem; }
+            .header-left { align-items: flex-start; }
+            .header-title { font-size: 1.65rem; }
+            .header-subtitle { font-size: 0.95rem; }
+            .header-icon { font-size: 3rem; }
+            .progress-count { font-size: 1.5rem; }
+            .info-box, .aspekt-card, .uebung-section, .modal-body { padding: 1.25rem; }
+            .aspekt-header-flex { align-items: flex-start; gap: 0.75rem; }
+            .aspekt-title { font-size: 1.1rem; }
+            .drag-container { grid-template-columns: 1fr; }
+            .modal-content { max-height: 80vh; }
+            .modal-header { padding: 1.25rem; }
+            .modal-title { font-size: 1.35rem; }
+            .choice-item { font-size: 0.95rem; }
+            .footer-content { width: 100%; text-align: center; }
+            .auto-save-indicator { right: 1rem; left: 1rem; justify-content: center; }
         }
     </style>
 </head>
