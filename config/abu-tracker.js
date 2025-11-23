@@ -33,17 +33,18 @@ class ABUTracker {
             this.app = initializeApp(this.firebaseConfig);
             this.auth = getAuth(this.app);
             this.db = getFirestore(this.app);
-            
+
+            if (!this.auth.currentUser) {
+                await signInAnonymously(this.auth);
+            }
+
             // Check if user is already logged in
             const savedCode = localStorage.getItem('abuUserCode');
             if (savedCode) {
                 this.currentUserCode = savedCode;
                 this.currentUserRole = localStorage.getItem('abuUserRole') || 'lernende';
-                
-                // Sign in anonymously for Firebase Auth
-                await signInAnonymously(this.auth);
             }
-            
+
             this.isInitialized = true;
             console.log('✅ ABU Tracker initialized');
         } catch (error) {
