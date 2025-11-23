@@ -1391,22 +1391,108 @@
             return text || 'Übung wurde abgeschlossen\n\n';
         }
         
-        window.sendDocument = function(itemId) {
+        window.sendDocument = async function(itemId) {
             const item = allPortfolioItems.find(i => i.id === itemId);
             if (!item) return;
             
-            const subject = encodeURIComponent(`Portfolio: ${item.kompetenzTitle || 'Eintrag'}`);
-            const body = encodeURIComponent(`Hallo,
-
-anbei sende ich dir meinen Portfolio-Eintrag:
+            const shareText = `Portfolio: ${item.kompetenzTitle || 'Eintrag'}
 
 Kompetenz: ${item.kompetenzTitle || '-'}
 Thema: ${item.thema || '-'}
 Datum: ${new Date(item.createdAt).toLocaleDateString('de-CH')}
 
-Beste Grüsse`);
+Erstellt mit ant edu - SLP ABU EBA 2030`;
             
-            window.location.href = `mailto:?subject=${subject}&body=${body}`;
+            // Prüfen ob Web Share API verfügbar ist (für Mobile und moderne Browser)
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: `Portfolio: ${item.kompetenzTitle || 'Eintrag'}`,
+                        text: shareText
+                    });
+                } catch (error) {
+                    // Nutzer hat Teilen abgebrochen oder Fehler
+                    if (error.name !== 'AbortError') {
+                        console.log('Share error:', error);
+                        fallbackShare(shareText);
+                    }
+                }
+            } else {
+                // Fallback für Desktop-Browser ohne Share API
+                fallbackShare(shareText);
+            }
+        };
+        
+        function fallbackShare(text) {
+            // Text in Zwischenablage kopieren
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('📋 Text wurde in die Zwischenablage kopiert!\n\nDu kannst ihn jetzt in Teams, WhatsApp oder einer anderen App einfügen.');
+                }).catch(() => {
+                    // Fallback wenn Clipboard API nicht funktioniert
+                    showShareModal(text);
+                });
+            } else {
+                showShareModal(text);
+            }
+        }
+        
+        function showShareModal(text) {
+            const shareModal = document.createElement('div');
+            shareModal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                padding: 1rem;
+            `;
+            
+            shareModal.innerHTML = `
+                <div style="background: white; border-radius: 24px; padding: 2rem; max-width: 500px; width: 100%;">
+                    <h3 style="color: #8B4513; margin-bottom: 1rem; font-size: 1.5rem;">📤 Portfolio teilen</h3>
+                    <p style="color: #6B7280; margin-bottom: 1rem;">Kopiere den Text und füge ihn in Teams, WhatsApp oder eine andere App ein:</p>
+                    <textarea readonly style="width: 100%; height: 200px; padding: 1rem; border: 2px solid #E5E7EB; border-radius: 12px; font-family: inherit; font-size: 0.875rem; resize: vertical;">${text}</textarea>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                        <button onclick="copyShareText(this)" style="flex: 1; background: #4CAF50; color: white; border: none; padding: 0.75rem; border-radius: 9999px; font-weight: bold; cursor: pointer;">
+                            📋 In Zwischenablage kopieren
+                        </button>
+                        <button onclick="closeShareModal(this)" style="flex: 1; background: #E5E7EB; color: #374151; border: none; padding: 0.75rem; border-radius: 9999px; font-weight: bold; cursor: pointer;">
+                            Schliessen
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(shareModal);
+            
+            // Text beim Klick ins Textarea automatisch markieren
+            const textarea = shareModal.querySelector('textarea');
+            textarea.addEventListener('click', function() {
+                this.select();
+            });
+        }
+        
+        window.copyShareText = function(btn) {
+            const textarea = btn.parentElement.parentElement.querySelector('textarea');
+            textarea.select();
+            document.execCommand('copy');
+            btn.textContent = '✅ Kopiert!';
+            setTimeout(() => {
+                btn.textContent = '📋 In Zwischenablage kopieren';
+            }, 2000);
+        };
+        
+        window.closeShareModal = function(btn) {
+            const modal = btn.closest('div[style*="position: fixed"]');
+            if (modal && modal.parentElement) {
+                modal.parentElement.removeChild(modal);
+            }
         };
         
         window.addReflexion = async function(itemId) {
@@ -1644,7 +1730,7 @@ Beste Grüsse`);
                         ⬇️ Download
                     </button>
                     <button onclick="sendDocument('${item.id}')" class="btn-tertiary">
-                        📧 Versenden
+                        📤 Teilen
                     </button>
                     <button onclick="deleteItem('${item.id}')" class="btn-danger">
                         🗑️ Löschen
