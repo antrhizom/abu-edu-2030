@@ -1,0 +1,34 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwnerId(targetId) {
+      return isSignedIn() && targetId == request.auth.uid;
+    }
+
+    function ownsExistingDocument() {
+      return isSignedIn() && resource.data.ownerId == request.auth.uid;
+    }
+
+    function ownsIncomingDocument() {
+      return isSignedIn() && request.resource.data.ownerId == request.auth.uid;
+    }
+
+    match /users/{userId} {
+      allow read: if isOwnerId(userId) || ownsExistingDocument();
+      allow create, update, delete: if isOwnerId(userId) || ownsIncomingDocument();
+    }
+
+    match /userProgress/{userId}/{document=**} {
+      allow read: if isOwnerId(userId) || ownsExistingDocument();
+      allow create, update, delete: if isOwnerId(userId) || ownsIncomingDocument();
+    }
+
+    match /{document=**} {
+      allow read, write: if isSignedIn();
+    }
+  }
+}
