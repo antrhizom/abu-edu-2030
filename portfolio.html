@@ -536,7 +536,7 @@
             font-size: 0.875rem;
             color: #374151;
             margin-bottom: 0.25rem;
-            white-space: pre-wrap; /* Für Zeilenumbrüche in Notizen */
+            white-space: pre-wrap;
         }
 
         .section-box-small {
@@ -1176,6 +1176,272 @@
             }
         };
 
+        window.downloadItem = async function(itemId) {
+            await downloadPortfolioItem(itemId);
+        };
+        
+        window.downloadItemModal = async function(itemId) {
+            await downloadPortfolioItem(itemId);
+        };
+        
+        async function downloadPortfolioItem(itemId) {
+            const item = allPortfolioItems.find(i => i.id === itemId);
+            if (!item) return;
+            
+            // Download-Counter erhöhen
+            try {
+                const userRef = doc(db, 'users', userId);
+                const currentCount = downloadCount + 1;
+                await updateDoc(userRef, { downloadCount: currentCount });
+                downloadCount = currentCount;
+                document.getElementById('downloads').textContent = downloadCount;
+            } catch (error) {
+                console.log('Fehler beim Aktualisieren des Download-Counters:', error);
+            }
+            
+            const date = new Date(item.createdAt).toLocaleString('de-CH', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            let content = `
+╔═══════════════════════════════════════════════════════════════╗
+║                     PORTFOLIO-EINTRAG                         ║
+║                    SLP ABU EBA 2030                           ║
+╚═══════════════════════════════════════════════════════════════╝
+
+📂 KOMPETENZ: ${item.kompetenzTitle || 'Kompetenz'}
+📅 ERSTELLT: ${date}
+🎓 THEMA: ${item.thema || '-'}
+
+`;
+
+            // Verknüpfte Kompetenzen
+            if (item.schluesselkompetenzen && item.schluesselkompetenzen.length > 0) {
+                content += `\n🔑 SCHLÜSSELKOMPETENZEN:\n`;
+                item.schluesselkompetenzen.forEach(k => {
+                    content += `   • ${k}\n`;
+                });
+            }
+            
+            if (item.aspekte && item.aspekte.length > 0) {
+                content += `\n🎯 GESELLSCHAFTLICHE ASPEKTE:\n`;
+                item.aspekte.forEach(a => {
+                    content += `   • ${a}\n`;
+                });
+            }
+            
+            if (item.sprachmodi && item.sprachmodi.length > 0) {
+                content += `\n💬 SPRACHMODI:\n`;
+                item.sprachmodi.forEach(s => {
+                    content += `   • ${s}\n`;
+                });
+            }
+
+            // Challenge-Daten
+            if (item.type === 'challenge' && item.data) {
+                content += `\n\n═══════════════════════════════════════════════════════════════\n`;
+                content += `🎲 CHALLENGE-INHALT\n`;
+                content += `═══════════════════════════════════════════════════════════════\n\n`;
+                
+                if (item.data.challengeText) {
+                    content += `📂 HERAUSFORDERUNG:\n${item.data.challengeText}\n\n`;
+                }
+                
+                if (item.data.solution) {
+                    content += `✅ MEINE LÖSUNG:\n${item.data.solution}\n\n`;
+                }
+            }
+
+            // Übung bei Sprachmodi
+            if (item.type === 'sprachmodus' && item.uebung) {
+                content += `\n\n═══════════════════════════════════════════════════════════════\n`;
+                content += `📂 ÜBUNG & AUFGABENSTELLUNG\n`;
+                content += `═══════════════════════════════════════════════════════════════\n\n`;
+                
+                if (item.uebung.titel) {
+                    content += `${item.uebung.titel}\n\n`;
+                }
+                if (item.uebung.beschreibung) {
+                    content += `${item.uebung.beschreibung}\n\n`;
+                }
+            }
+
+            // Handlungsfeld bei Aspekten
+            if (item.type === 'aspekt' && item.handlungsfeld) {
+                content += `\n\n═══════════════════════════════════════════════════════════════\n`;
+                content += `🧭 HANDLUNGSFELD\n`;
+                content += `═══════════════════════════════════════════════════════════════\n\n`;
+                content += `${item.handlungsfeld}\n\n`;
+            }
+
+            // Beschreibung bei Sprachmodi
+            if (item.beschreibung && item.type === 'sprachmodus') {
+                content += `\n\n═══════════════════════════════════════════════════════════════\n`;
+                content += `📖 BESCHREIBUNG\n`;
+                content += `═══════════════════════════════════════════════════════════════\n\n`;
+                content += `${item.beschreibung}\n\n`;
+            }
+
+            // Performanz-Daten
+            if (item.performanz) {
+                content += `\n\n═══════════════════════════════════════════════════════════════\n`;
+                content += `📊 DURCHGEFÜHRTE ÜBUNG\n`;
+                content += `═══════════════════════════════════════════════════════════════\n\n`;
+                
+                if (item.modusTitle) {
+                    content += `📂 ${item.modusTitle}\n\n`;
+                }
+                if (item.performanz.uebungstyp) {
+                    content += `📝 ${item.performanz.uebungstyp}\n\n`;
+                }
+                
+                content += formatPerformanzForDownload(item.performanz);
+            }
+            
+            // Reflexion
+            content += `\n\n═══════════════════════════════════════════════════════════════\n`;
+            content += `💭 REFLEXION\n`;
+            content += `═══════════════════════════════════════════════════════════════\n\n`;
+            
+            if (item.reflexion) {
+                content += `Emoji-Reflexion: ${item.reflexion}\n\n`;
+            }
+            
+            if (item.textReflexion) {
+                content += `Zusätzliche Reflexion:\n${item.textReflexion}\n\n`;
+            }
+            
+            if (item.notizen) {
+                content += `Notizen:\n${item.notizen}\n\n`;
+            }
+            
+            if (!item.reflexion && !item.textReflexion && !item.notizen) {
+                content += `Keine Reflexion hinzugefügt\n\n`;
+            }
+            
+            content += `\n═══════════════════════════════════════════════════════════════\n`;
+            content += `ant edu | SLP ABU EBA 2030 | ${new Date().getFullYear()}\n`;
+            content += `═══════════════════════════════════════════════════════════════\n`;
+            
+            // Download als Textdatei
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Portfolio_${item.kompetenzTitle?.replace(/[^a-zA-Z0-9]/g, '_') || 'Eintrag'}_${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('📥 Portfolio-Eintrag wurde heruntergeladen!');
+        }
+        
+        function formatPerformanzForDownload(performanz) {
+            let text = '';
+            
+            // Alle generischen Text-Inputs zuerst
+            const processedKeys = new Set(['uebungstyp', 'abgeschlossen', 'selections', 'checkboxes', 
+                'emailBetreff', 'emailText', 'placements', 'sliders', 'rankingOrder', 'checklist', 
+                'kriterien', 'rollen', 'pruefpunkte', 'reihenfolge', 'elemente', 'wochenplan', 
+                'strategien', 'bewertungen', 'quiz', 'reflexion']);
+            
+            Object.keys(performanz).forEach(key => {
+                if (!processedKeys.has(key) && performanz[key]) {
+                    const value = performanz[key];
+                    if (typeof value === 'string' && value.trim()) {
+                        const label = formatFieldLabel(key);
+                        text += `${label}:\n${value}\n\n`;
+                    }
+                }
+            });
+            
+            // Spezifische Datentypen
+            if (performanz.selections && Array.isArray(performanz.selections)) {
+                const answered = performanz.selections.filter(s => s !== null && s !== undefined).length;
+                text += `✅ ${answered} von ${performanz.selections.length} Fragen beantwortet\n\n`;
+            }
+            
+            if (performanz.checkboxes && Array.isArray(performanz.checkboxes)) {
+                const checked = performanz.checkboxes.filter(c => c === true).length;
+                text += `☑️ ${checked} von ${performanz.checkboxes.length} Punkten markiert\n\n`;
+            }
+            
+            if (performanz.emailBetreff || performanz.emailText) {
+                text += `📧 E-Mail verfasst:\n`;
+                if (performanz.emailBetreff) text += `Betreff: ${performanz.emailBetreff}\n`;
+                if (performanz.emailText) text += `Text: ${performanz.emailText}\n\n`;
+            }
+            
+            if (performanz.checklist) {
+                text += `✅ ${performanz.checklist.completed} von ${performanz.checklist.total} Schritten erledigt\n\n`;
+            }
+            
+            if (performanz.kriterien) {
+                text += `✅ ${performanz.kriterien.erfuellt} von ${performanz.kriterien.total} Kriterien erfüllt\n`;
+                if (performanz.kriterien.liste) {
+                    text += `Kriterien: ${performanz.kriterien.liste.join(', ')}\n\n`;
+                }
+            }
+            
+            return text || 'Übung wurde abgeschlossen\n\n';
+        }
+        
+        window.sendDocument = function(itemId) {
+            const item = allPortfolioItems.find(i => i.id === itemId);
+            if (!item) return;
+            
+            const subject = encodeURIComponent(`Portfolio: ${item.kompetenzTitle || 'Eintrag'}`);
+            const body = encodeURIComponent(`Hallo,
+
+anbei sende ich dir meinen Portfolio-Eintrag:
+
+Kompetenz: ${item.kompetenzTitle || '-'}
+Thema: ${item.thema || '-'}
+Datum: ${new Date(item.createdAt).toLocaleDateString('de-CH')}
+
+Beste Grüsse`);
+            
+            window.location.href = `mailto:?subject=${subject}&body=${body}`;
+        };
+        
+        window.addReflexion = async function(itemId) {
+            const item = allPortfolioItems.find(i => i.id === itemId);
+            if (!item) return;
+            
+            const reflexion = prompt('💭 Deine Reflexion:\n\nWas hast du gelernt? Was war besonders? Was möchtest du festhalten?', item.textReflexion || '');
+            
+            if (reflexion !== null && reflexion.trim()) {
+                try {
+                    const userRef = doc(db, 'users', userId);
+                    const userDoc = await getDoc(userRef);
+                    
+                    if (userDoc.exists()) {
+                        const portfolio = userDoc.data().portfolio || [];
+                        const updated = portfolio.map(i => {
+                            if (i.id === itemId) {
+                                return { ...i, textReflexion: reflexion.trim() };
+                            }
+                            return i;
+                        });
+                        
+                        await updateDoc(userRef, { portfolio: updated });
+                        
+                        alert('✅ Reflexion gespeichert!');
+                        closeModal();
+                        await loadPortfolio();
+                    }
+                } catch (error) {
+                    console.error('Fehler:', error);
+                    alert('❌ Fehler beim Speichern. Versuche es nochmal.');
+                }
+            }
+        };
+
         window.showDetail = function(itemId) {
             const item = allPortfolioItems.find(i => i.id === itemId);
             if (!item) return;
@@ -1255,7 +1521,7 @@
                 const { schluessel, sprach, aspekt, thema, challengeText, solution } = item.data;
                 const chips = [schluessel?.text, sprach?.text, aspekt?.text, thema?.text]
                     .filter(Boolean)
-                    .map(text => `<span style="display: inline-block; padding: 0.35rem 0.6rem; margin: 0.15rem; border-radius: 9999px; background: rgba(33, 150, 243, 0.12); color: #0B5ED7; font-size: 0.75rem; font-weight: 700;">${text}</span>`) // kompakter Chip
+                    .map(text => `<span style="display: inline-block; padding: 0.35rem 0.6rem; margin: 0.15rem; border-radius: 9999px; background: rgba(33, 150, 243, 0.12); color: #0B5ED7; font-size: 0.75rem; font-weight: 700;">${text}</span>`)
                     .join('');
 
                 challengeHTML = `
@@ -1393,7 +1659,6 @@
             let html = '';
             
             // ========== ALLE GENERISCHEN TEXT-INPUTS ZUERST ANZEIGEN ==========
-            // Alle Felder durchgehen und Text/Werte anzeigen
             const processedKeys = new Set(['uebungstyp', 'abgeschlossen', 'selections', 'checkboxes', 
                 'emailBetreff', 'emailText', 'placements', 'sliders', 'rankingOrder', 'checklist', 
                 'kriterien', 'rollen', 'pruefpunkte', 'reihenfolge', 'elemente', 'wochenplan', 
@@ -1611,7 +1876,6 @@
         function closeModal() {
             document.getElementById('detailModal').classList.remove('show');
         }
-        // Make it available globally just in case
         window.closeModal = closeModal;
         
         // Close modal when clicking outside
