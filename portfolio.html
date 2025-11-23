@@ -10,25 +10,25 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             background: linear-gradient(135deg, #FFF8F0 0%, #FFE4D0 100%);
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             min-height: 100vh;
             padding: 1rem;
         }
-        
+
         @media (min-width: 768px) {
             body {
                 padding: 2rem;
             }
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
         }
-        
+
         /* Header */
         .header {
             background: white;
@@ -37,13 +37,13 @@
             padding: 1.5rem;
             margin-bottom: 2rem;
         }
-        
+
         @media (min-width: 768px) {
             .header {
                 padding: 2rem;
             }
         }
-        
+
         .header-content {
             display: flex;
             align-items: center;
@@ -51,75 +51,75 @@
             flex-wrap: wrap;
             gap: 1rem;
         }
-        
+
         .header-left {
             display: flex;
             align-items: center;
             gap: 1rem;
         }
-        
+
         .back-btn {
             font-size: 2rem;
             text-decoration: none;
             transition: transform 0.2s;
         }
-        
+
         .back-btn:hover {
             transform: scale(1.1);
         }
-        
+
         .header-title {
             font-size: 2rem;
             font-weight: bold;
             color: #8B4513;
             margin-bottom: 0.5rem;
         }
-        
+
         @media (min-width: 768px) {
             .header-title {
                 font-size: 2.5rem;
             }
         }
-        
+
         .header-subtitle {
             color: #6B7280;
         }
-        
+
         .header-icon {
             font-size: 4rem;
         }
-        
+
         /* Stats Grid */
         .stats-grid {
             display: grid;
             gap: 1rem;
             margin-bottom: 2rem;
         }
-        
+
         @media (min-width: 640px) {
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-        
+
         @media (min-width: 768px) {
             .stats-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
-        
+
         @media (min-width: 1024px) {
             .stats-grid {
                 grid-template-columns: repeat(4, 1fr);
             }
         }
-        
+
         @media (min-width: 1280px) {
             .stats-grid {
                 grid-template-columns: repeat(7, 1fr);
             }
         }
-        
+
         .stat-card {
             background: white;
             border-radius: 16px;
@@ -127,23 +127,23 @@
             padding: 1.5rem;
             text-align: center;
         }
-        
+
         .stat-icon {
             font-size: 2rem;
             margin-bottom: 0.5rem;
         }
-        
+
         .stat-value {
             font-size: 2rem;
             font-weight: bold;
             color: #8B4513;
         }
-        
+
         .stat-label {
             font-size: 0.875rem;
             color: #6B7280;
         }
-        
+
         /* Filter Bar */
         .filter-bar {
             background: white;
@@ -152,7 +152,7 @@
             padding: 1rem;
             margin-bottom: 2rem;
         }
-        
+
         .filter-content {
             display: flex;
             flex-wrap: wrap;
@@ -160,13 +160,13 @@
             align-items: center;
             justify-content: space-between;
         }
-        
+
         .filter-buttons {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
         }
-        
+
         .filter-btn {
             padding: 0.5rem 1rem;
             border-radius: 9999px;
@@ -178,16 +178,16 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        
+
         .filter-btn:hover {
             background: #D1D5DB;
         }
-        
+
         .filter-btn.active {
             background: #8B4513;
             color: white;
         }
-        
+
         .sort-select {
             padding: 0.5rem 1rem;
             border-radius: 9999px;
@@ -198,31 +198,31 @@
             border: 2px solid transparent;
             cursor: pointer;
         }
-        
+
         .sort-select:focus {
             border-color: #8B4513;
             outline: none;
         }
-        
+
         /* Portfolio Grid */
         .portfolio-grid {
             display: grid;
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
-        
+
         @media (min-width: 768px) {
             .portfolio-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-        
+
         @media (min-width: 1024px) {
             .portfolio-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
-        
+
         .portfolio-item {
             background: white;
             border-radius: 16px;
@@ -233,30 +233,30 @@
             display: flex;
             flex-direction: column;
         }
-        
+
         .portfolio-item:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 24px rgba(139, 69, 19, 0.2);
         }
-        
+
         .portfolio-card-content {
             padding: 1.5rem;
             flex: 1;
             display: flex;
             flex-direction: column;
         }
-        
+
         .card-header {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
             margin-bottom: 0.75rem;
         }
-        
+
         .card-icon {
             font-size: 2.5rem;
         }
-        
+
         .card-date {
             font-size: 0.75rem;
             padding: 0.25rem 0.5rem;
@@ -265,7 +265,7 @@
             border-radius: 9999px;
             font-weight: 600;
         }
-        
+
         .card-category {
             font-size: 0.75rem;
             font-weight: 700;
@@ -274,33 +274,33 @@
             letter-spacing: 0.5px;
             margin-bottom: 0.5rem;
         }
-        
+
         .card-title {
             font-size: 1.125rem;
             font-weight: bold;
             color: #8B4513;
             margin-bottom: 0.5rem;
         }
-        
+
         .card-uebung {
             font-size: 0.875rem;
             color: #6B7280;
             margin-bottom: 0.5rem;
         }
-        
+
         .card-thema {
             font-size: 0.75rem;
             color: #9CA3AF;
             margin-bottom: 0.75rem;
         }
-        
+
         .card-reflexion {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             margin-bottom: 0.75rem;
         }
-        
+
         .card-reflexion-label {
             font-size: 0.75rem;
             color: #9CA3AF;
@@ -330,13 +330,13 @@
         .detail-icon {
             font-size: 1rem;
         }
-        
+
         .card-actions {
             display: flex;
             gap: 0.5rem;
             margin-top: auto;
         }
-        
+
         .btn {
             padding: 0.5rem 0.75rem;
             border-radius: 8px;
@@ -350,23 +350,23 @@
             justify-content: center;
             gap: 0.25rem;
         }
-        
+
         .btn-details {
             flex: 1;
             background: rgba(139, 69, 19, 0.1);
             color: #8B4513;
         }
-        
+
         .btn-details:hover {
             background: rgba(139, 69, 19, 0.2);
         }
-        
+
         .btn-download {
             background: rgba(76, 175, 80, 0.1);
             color: #4CAF50;
             flex: 0;
         }
-        
+
         .btn-download:hover {
             background: rgba(76, 175, 80, 0.2);
         }
@@ -380,7 +380,7 @@
         .btn-delete:hover {
             background: rgba(239, 68, 68, 0.2);
         }
-        
+
         /* Empty State */
         .empty-state {
             background: white;
@@ -390,24 +390,24 @@
             text-align: center;
             display: none;
         }
-        
+
         .empty-icon {
             font-size: 4rem;
             margin-bottom: 1rem;
         }
-        
+
         .empty-title {
             font-size: 1.5rem;
             font-weight: bold;
             color: #8B4513;
             margin-bottom: 1rem;
         }
-        
+
         .empty-text {
             color: #6B7280;
             margin-bottom: 1.5rem;
         }
-        
+
         .empty-link {
             display: inline-block;
             background: #FF6B35;
@@ -418,11 +418,11 @@
             text-decoration: none;
             transition: all 0.2s;
         }
-        
+
         .empty-link:hover {
             background: #D2691E;
         }
-        
+
         /* Modal */
         .modal {
             display: none;
@@ -438,11 +438,11 @@
             justify-content: center;
             padding: 1rem;
         }
-        
+
         .modal.show {
             display: flex;
         }
-        
+
         .modal-content {
             background: white;
             border-radius: 24px;
@@ -453,20 +453,20 @@
             padding: 2rem;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
-        
+
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             margin-bottom: 1.5rem;
         }
-        
+
         .modal-title {
             font-size: 1.5rem;
             font-weight: bold;
             color: #8B4513;
         }
-        
+
         .close-btn {
             font-size: 2rem;
             color: #9CA3AF;
@@ -476,40 +476,40 @@
             line-height: 1;
             transition: all 0.2s;
         }
-        
+
         .close-btn:hover {
             color: #6B7280;
             transform: scale(1.1);
         }
-        
+
         .modal-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
         }
-        
+
         .modal-subtitle {
             font-size: 1.25rem;
             font-weight: bold;
             color: #8B4513;
             margin-bottom: 0.5rem;
         }
-        
+
         .modal-text {
             font-size: 0.875rem;
             color: #6B7280;
             margin-bottom: 0.5rem;
         }
-        
+
         .modal-date {
             font-size: 0.75rem;
             color: #9CA3AF;
             margin-bottom: 1.5rem;
         }
-        
+
         .section {
             margin-bottom: 1.5rem;
         }
-        
+
         .section-title {
             font-size: 1.125rem;
             font-weight: bold;
@@ -519,26 +519,26 @@
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         .section-box {
             background: #FFF8F0;
             border-radius: 12px;
             padding: 1rem;
         }
-        
+
         .section-box-title {
             font-weight: 600;
             color: #8B4513;
             margin-bottom: 0.5rem;
         }
-        
+
         .section-box-text {
             font-size: 0.875rem;
             color: #374151;
             margin-bottom: 0.25rem;
             white-space: pre-wrap; /* Für Zeilenumbrüche in Notizen */
         }
-        
+
         .section-box-small {
             font-size: 0.75rem;
             color: #6B7280;
@@ -569,28 +569,28 @@
             color: #FF6B35;
             border: 1px solid rgba(255, 107, 53, 0.2);
         }
-        
+
         .reflexion-emoji {
             font-size: 2rem;
             margin-bottom: 0.5rem;
         }
-        
+
         .reflexion-text {
             font-size: 0.875rem;
             color: #6B7280;
         }
-        
+
         .no-reflexion {
             color: #9CA3AF;
             font-style: italic;
         }
-        
+
         .modal-actions {
             display: flex;
             gap: 0.75rem;
             flex-wrap: wrap;
         }
-        
+
         .btn-primary {
             flex: 1;
             background: #FF6B35;
@@ -603,11 +603,11 @@
             transition: all 0.2s;
             min-width: 150px;
         }
-        
+
         .btn-primary:hover {
             background: #D2691E;
         }
-        
+
         .btn-secondary {
             background: #4CAF50;
             color: white;
@@ -619,11 +619,11 @@
             transition: all 0.2s;
             min-width: 150px;
         }
-        
+
         .btn-secondary:hover {
             background: #45a049;
         }
-        
+
         .btn-tertiary {
             background: #2196F3;
             color: white;
@@ -635,7 +635,7 @@
             transition: all 0.2s;
             min-width: 150px;
         }
-        
+
         .btn-tertiary:hover {
             background: #1976D2;
         }
@@ -655,13 +655,13 @@
         .btn-danger:hover {
             background: #DC2626;
         }
-        
+
         /* Footer */
         .footer {
             margin-top: 2rem;
             text-align: center;
         }
-        
+
         .footer-content {
             background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(10px);
@@ -669,7 +669,7 @@
             padding: 0.75rem 1.5rem;
             display: inline-block;
         }
-        
+
         .footer-text {
             display: flex;
             align-items: center;
@@ -703,7 +703,6 @@
     
     <div class="container">
         
-        <!-- Header -->
         <div class="header">
             <div class="header-content">
                 <div class="header-left">
@@ -721,7 +720,6 @@
             </div>
         </div>
         
-        <!-- Statistik Cards -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon">📂</div>
@@ -760,7 +758,6 @@
             </div>
         </div>
         
-        <!-- Filter -->
         <div class="filter-bar">
             <div class="filter-content">
                 <div class="filter-buttons">
@@ -787,24 +784,20 @@
             </div>
         </div>
         
-        <!-- Portfolio Grid -->
         <div id="portfolioGrid" class="portfolio-grid">
-            <!-- Wird dynamisch gefüllt -->
-        </div>
+            </div>
         
-        <!-- Empty State -->
         <div id="emptyState" class="empty-state">
-            <div class="empty-icon">ðŸ“‚</div>
+            <div class="empty-icon">📂</div>
             <h3 class="empty-title">Noch keine Einträge</h3>
             <p class="empty-text">
                 Beginne mit einer Übung und speichere sie ins Portfolio!
             </p>
             <a href="kompetenzen.html" class="empty-link">
-                Zu den Übungen ←’
+                Zu den Übungen ←
             </a>
         </div>
         
-        <!-- Footer -->
         <div class="footer">
             <div class="footer-content">
                 <div class="footer-text">
@@ -818,7 +811,6 @@
         </div>
     </div>
     
-    <!-- Detail Modal -->
     <div id="detailModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -826,8 +818,7 @@
                 <button onclick="closeModal()" id="closeDetailBtn" class="close-btn">×</button>
             </div>
             <div id="modalContentDiv">
-                <!-- Wird dynamisch gefüllt -->
-            </div>
+                </div>
         </div>
     </div>
     
@@ -889,7 +880,7 @@
                 renderPortfolio();
             });
 
-            // Close Modal Button - ensuring ID matches HTML and using standard listener
+            // Close Modal Button
             const closeBtn = document.getElementById('closeDetailBtn');
             if(closeBtn) {
                 closeBtn.addEventListener('click', closeModal);
@@ -965,89 +956,89 @@
             grid.innerHTML = filtered.map(item => createPortfolioCard(item)).join('');
         }
         
-       function createPortfolioCard(item) {
-    const date = new Date(item.createdAt).toLocaleDateString('de-CH', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-    });
-    
-    // Icon je nach Typ
-    let icon = '🔑';
-    if (item.type === 'schluesselkompetenz') icon = '🔑';
-    else if (item.type === 'aspekt') icon = '🎯';
-    else if (item.type === 'sprachmodus') icon = '💬';
-    
-    // Übungstitel oder Sprachmodus-Titel
-    const uebungstyp = item.modusTitle || item.performanz?.uebungstyp || 'Übung';
-    
-    const downloadButton = `
-        <button onclick="event.stopPropagation(); downloadItem('${item.id}')" class="btn btn-download">
-            ⬇️ Download
-        </button>
-    `;
-    
-    const reflexionHTML = item.reflexion ? `
-        <div class="card-reflexion">
-            <span class="card-reflexion-label">Reflexion:</span>
-            <span class="card-reflexion-emoji">${item.reflexion}</span>
-        </div>
-    ` : '';
-    
-    // Tags für Aspekte und Schlüsselkompetenzen
-    let tagsHTML = '';
-    if (item.aspekte && item.aspekte.length > 0) {
-        tagsHTML += `
-            <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.5rem;">
-                ${item.aspekte.map(a => `<span style="padding: 0.15rem 0.4rem; border-radius: 9999px; font-size: 0.65rem; background: rgba(210, 105, 30, 0.1); color: #D2691E; font-weight: 500;">${a}</span>`).join('')}
-            </div>
-        `;
-    }
-    if (item.schluesselkompetenzen && item.schluesselkompetenzen.length > 0) {
-        tagsHTML += `
-            <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.25rem;">
-                ${item.schluesselkompetenzen.map(s => `<span style="padding: 0.15rem 0.4rem; border-radius: 9999px; font-size: 0.65rem; background: rgba(139, 69, 19, 0.1); color: #8B4513; font-weight: 500;">${s}</span>`).join('')}
-            </div>
-        `;
-    }
-    
-    return `
-        <div class="portfolio-item" onclick="showDetail('${item.id}')">
-            <div class="portfolio-card-content">
-                <div class="card-header">
-                    <span class="card-icon">${icon}</span>
-                    <span class="card-date">${date}</span>
+        function createPortfolioCard(item) {
+            const date = new Date(item.createdAt).toLocaleDateString('de-CH', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+            
+            // Icon je nach Typ
+            let icon = '🔑';
+            if (item.type === 'schluesselkompetenz') icon = '🔑';
+            else if (item.type === 'aspekt') icon = '🎯';
+            else if (item.type === 'sprachmodus') icon = '💬';
+            
+            // Übungstitel oder Sprachmodus-Titel
+            const uebungstyp = item.modusTitle || item.performanz?.uebungstyp || 'Übung';
+            
+            const downloadButton = `
+                <button onclick="event.stopPropagation(); downloadItem('${item.id}')" class="btn btn-download">
+                    ⬇️ Download
+                </button>
+            `;
+            
+            const reflexionHTML = item.reflexion ? `
+                <div class="card-reflexion">
+                    <span class="card-reflexion-label">Reflexion:</span>
+                    <span class="card-reflexion-emoji">${item.reflexion}</span>
                 </div>
-                
-                <h3 class="card-title">
-                    ${item.kompetenzTitle || 'Kompetenz'}
-                </h3>
-                
-                <p class="card-uebung">
-                    ${uebungstyp}
-                </p>
-                
-                <p class="card-thema">
-                    ${item.thema || ''}
-                </p>
+            ` : '';
+            
+            // Tags für Aspekte und Schlüsselkompetenzen
+            let tagsHTML = '';
+            if (item.aspekte && item.aspekte.length > 0) {
+                tagsHTML += `
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.5rem;">
+                        ${item.aspekte.map(a => `<span style="padding: 0.15rem 0.4rem; border-radius: 9999px; font-size: 0.65rem; background: rgba(210, 105, 30, 0.1); color: #D2691E; font-weight: 500;">${a}</span>`).join('')}
+                    </div>
+                `;
+            }
+            if (item.schluesselkompetenzen && item.schluesselkompetenzen.length > 0) {
+                tagsHTML += `
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.25rem;">
+                        ${item.schluesselkompetenzen.map(s => `<span style="padding: 0.15rem 0.4rem; border-radius: 9999px; font-size: 0.65rem; background: rgba(139, 69, 19, 0.1); color: #8B4513; font-weight: 500;">${s}</span>`).join('')}
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="portfolio-item" onclick="showDetail('${item.id}')">
+                    <div class="portfolio-card-content">
+                        <div class="card-header">
+                            <span class="card-icon">${icon}</span>
+                            <span class="card-date">${date}</span>
+                        </div>
+                        
+                        <h3 class="card-title">
+                            ${item.kompetenzTitle || 'Kompetenz'}
+                        </h3>
+                        
+                        <p class="card-uebung">
+                            ${uebungstyp}
+                        </p>
+                        
+                        <p class="card-thema">
+                            ${item.thema || ''}
+                        </p>
 
-                ${tagsHTML}
+                        ${tagsHTML}
 
-                ${reflexionHTML}
+                        ${reflexionHTML}
 
-                <div class="card-actions">
-                    <button onclick="event.stopPropagation(); showDetail('${item.id}')" class="btn btn-details">
-                        Details
-                    </button>
-                    ${downloadButton}
-                    <button onclick="event.stopPropagation(); deleteItem('${item.id}')" class="btn btn-delete">
-                        ðŸ—‘ï¸ Löschen
-                    </button>
+                        <div class="card-actions">
+                            <button onclick="event.stopPropagation(); showDetail('${item.id}')" class="btn btn-details">
+                                Details
+                            </button>
+                            ${downloadButton}
+                            <button onclick="event.stopPropagation(); deleteItem('${item.id}')" class="btn btn-delete">
+                                🗑️ Löschen
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    `;
-}
+            `;
+        }
 
         function getDetailPreview(item) {
             const detailRows = [];
@@ -1078,7 +1069,7 @@
                     const checked = checkboxes.filter(c => c === true).length;
                     detailRows.push(`
                         <div class="detail-item">
-                            <span class="detail-icon">â˜‘ï¸</span>
+                            <span class="detail-icon">☑️</span>
                             <span>${checked} Punkte markiert</span>
                         </div>
                     `);
@@ -1096,7 +1087,7 @@
                 if (sliders && Object.keys(sliders).length > 0) {
                     detailRows.push(`
                         <div class="detail-item">
-                            <span class="detail-icon">⭐</span>
+                            <span class="detail-icon">⭐</span>
                             <span>${Object.keys(sliders).length} Bewertungen abgegeben</span>
                         </div>
                     `);
@@ -1105,7 +1096,7 @@
                 if (checklist) {
                     detailRows.push(`
                         <div class="detail-item">
-                            <span class="detail-icon">ðŸ“‹</span>
+                            <span class="detail-icon">📋</span>
                             <span>${checklist.completed} / ${checklist.total} Schritte erledigt</span>
                         </div>
                     `);
@@ -1114,7 +1105,7 @@
                 if (kriterien) {
                     detailRows.push(`
                         <div class="detail-item">
-                            <span class="detail-icon">ðŸ“‘</span>
+                            <span class="detail-icon">📃</span>
                             <span>${kriterien.erfuellt} / ${kriterien.total} Kriterien erfüllt</span>
                         </div>
                     `);
@@ -1124,7 +1115,7 @@
             if (item.beschreibung && item.type === 'sprachmodus') {
                 detailRows.push(`
                     <div class="detail-item">
-                        <span class="detail-icon">ðŸ“–</span>
+                        <span class="detail-icon">📖</span>
                         <span>${formatPreviewText(item.beschreibung)}</span>
                     </div>
                 `);
@@ -1157,11 +1148,11 @@
             const maxLength = 110;
             if (!text) return '';
             if (text.length <= maxLength) return text;
-            return text.substring(0, maxLength).trim() + 'â€¦';
+            return text.substring(0, maxLength).trim() + '...';
         }
 
         window.deleteItem = async function(itemId) {
-            if (!confirm('ðŸ—‘ï¸ Möchtest du diesen Portfolio-Eintrag wirklich löschen?\n\nDiese Aktion kann nicht rückgängig gemacht werden.')) {
+            if (!confirm('🗑️ Möchtest du diesen Portfolio-Eintrag wirklich löschen?\n\nDiese Aktion kann nicht rückgängig gemacht werden.')) {
                 return;
             }
             
@@ -1181,421 +1172,421 @@
                 }
             } catch (error) {
                 console.error('Fehler:', error);
-                alert('âŒ Fehler beim Löschen. Versuche es nochmal.');
+                alert('❌ Fehler beim Löschen. Versuche es nochmal.');
             }
         };
 
-       window.showDetail = function(itemId) {
-    const item = allPortfolioItems.find(i => i.id === itemId);
-    if (!item) return;
-    
-    const modal = document.getElementById('detailModal');
-    const modalContent = document.getElementById('modalContentDiv');
-    
-    const date = new Date(item.createdAt).toLocaleString('de-CH', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-    
-    // Icon je nach Typ
-    let icon = '🔑';
-    if (item.type === 'schluesselkompetenz') icon = '🔑';
-    else if (item.type === 'aspekt') icon = '🎯';
-    else if (item.type === 'sprachmodus') icon = '💬';
-    
-    // Sprachmodus-Titel oder Übungstitel
-    let titelHTML = '';
-    if (item.modusTitle) {
-        titelHTML = `
-            <p class="section-box-title" style="margin-bottom: 0.5rem; color: #8B4513;">📂 ${item.modusTitle}</p>
-        `;
-    }
-    
-    // Tags für Aspekte und Schlüsselkompetenzen
-    let verknuepfungenHTML = '';
-    if ((item.aspekte && item.aspekte.length > 0) ||
-        (item.schluesselkompetenzen && item.schluesselkompetenzen.length > 0) ||
-        (item.sprachmodi && item.sprachmodi.length > 0)) {
-        verknuepfungenHTML = `
-            <div class="section">
-                <h3 class="section-title">🔗 Verknüpfte Kompetenzen</h3>
-                <div class="section-box">
-        `;
-        
-        if (item.aspekte && item.aspekte.length > 0) {
-            verknuepfungenHTML += `
-                <p class="section-box-title" style="margin-bottom: 0.5rem;">🎯 Gesellschaftliche Aspekte:</p>
-                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
-                    ${item.aspekte.map(a => `<span style="padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; background: rgba(210, 105, 30, 0.15); color: #D2691E; font-weight: 600;">${a}</span>`).join('')}
-                </div>
-            `;
-        }
-        
-        if (item.schluesselkompetenzen && item.schluesselkompetenzen.length > 0) {
-            verknuepfungenHTML += `
-                <p class="section-box-title" style="margin-bottom: 0.5rem;">🔑 Schlüsselkompetenzen:</p>
-                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                    ${item.schluesselkompetenzen.map(s => `<span style="padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; background: rgba(139, 69, 19, 0.15); color: #8B4513; font-weight: 600;">${s}</span>`).join('')}
-                </div>
-            `;
-        }
-
-        if (item.sprachmodi && item.sprachmodi.length > 0) {
-            verknuepfungenHTML += `
-                <p class="section-box-title" style="margin-bottom: 0.5rem;">💬 Sprachmodi:</p>
-                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                    ${item.sprachmodi.map(s => `<span style="padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; background: rgba(255, 107, 53, 0.15); color: #FF6B35; font-weight: 600;">${s}</span>`).join('')}
-                </div>
-            `;
-        }
-
-        verknuepfungenHTML += `
-                </div>
-            </div>
-        `;
-    }
-
-    // Inhalte für verschiedene Typen
-    let challengeHTML = '';
-    if (item.type === 'challenge' && item.data) {
-        const { schluessel, sprach, aspekt, thema, challengeText, solution } = item.data;
-        const chips = [schluessel?.text, sprach?.text, aspekt?.text, thema?.text]
-            .filter(Boolean)
-            .map(text => `<span style="display: inline-block; padding: 0.35rem 0.6rem; margin: 0.15rem; border-radius: 9999px; background: rgba(33, 150, 243, 0.12); color: #0B5ED7; font-size: 0.75rem; font-weight: 700;">${text}</span>`) // kompakter Chip
-            .join('');
-
-        challengeHTML = `
-            <div class="section">
-                <h3 class="section-title">🎲 Challenge-Inhalt</h3>
-                <div class="section-box">
-                    ${chips ? `<div style="margin-bottom: 1rem; display: flex; flex-wrap: wrap;">${chips}</div>` : ''}
-                    ${challengeText ? `<p class="section-box-title">📂 Herausforderung:</p><p class="section-box-text">${challengeText}</p>` : ''}
-                    ${solution ? `<p class="section-box-title" style="margin-top: 1rem;">✅ Meine Lösung:</p><p class="section-box-text">${solution}</p>` : ''}
-                    ${!challengeText && !solution ? '<p class="section-box-text" style="color: #9CA3AF; font-style: italic;">Keine Challenge-Daten gespeichert</p>' : ''}
-                </div>
-            </div>
-        `;
-    }
-
-    let uebungHTML = '';
-    if (item.type === 'sprachmodus' && item.uebung) {
-        uebungHTML = `
-            <div class="section">
-                <h3 class="section-title">📂 Übung & Aufgabenstellung</h3>
-                <div class="section-box">
-                    ${item.uebung.titel ? `<p class="section-box-title">${item.uebung.titel}</p>` : ''}
-                    ${item.uebung.beschreibung ? `<p class="section-box-text">${item.uebung.beschreibung}</p>` : ''}
-                </div>
-            </div>
-        `;
-    }
-
-    let handlungsfeldHTML = '';
-    if (item.type === 'aspekt' && item.handlungsfeld) {
-        handlungsfeldHTML = `
-            <div class="section">
-                <h3 class="section-title">ðŸ§­ Handlungsfeld</h3>
-                <div class="section-box">
-                    <p class="section-box-text">${item.handlungsfeld}</p>
-                </div>
-            </div>
-        `;
-    }
-
-    let performanzHTML = '';
-    if (item.performanz) {
-        performanzHTML = `
-            <div class="section">
-                <h3 class="section-title">📊 Durchgeführte Übung</h3>
-                <div class="section-box">
-                    ${titelHTML}
-                    ${item.performanz.uebungstyp ? `<p class="section-box-title" style="color: #8B4513; margin-bottom: 0.75rem;">📝 ${item.performanz.uebungstyp}</p>` : ""}
-                    ${formatPerformanzData(item.performanz)}
-                </div>
-            </div>
-        `;
-    }
-    
-    // Beschreibung für Sprachmodi
-    let beschreibungHTML = '';
-    if (item.beschreibung && item.type === 'sprachmodus') {
-        beschreibungHTML = `
-            <div class="section">
-                <h3 class="section-title">ðŸ“– Beschreibung</h3>
-                <div class="section-box">
-                    <p class="section-box-text">${item.beschreibung}</p>
-                </div>
-            </div>
-        `;
-    }
-    
-    // Notizen anzeigen
-    let notizenHTML = '';
-    if (item.notizen) {
-        notizenHTML = `
-            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E5E7EB;">
-                <p class="section-box-title">📂 Notizen:</p>
-                <p class="section-box-text">"${item.notizen}"</p>
-            </div>
-        `;
-    }
-    
-    modalContent.innerHTML = `
-        <div style="margin-bottom: 1rem;">
-            <div class="modal-icon">${icon}</div>
-            <h3 class="modal-subtitle">${item.kompetenzTitle || 'Kompetenz'}</h3>
-            <p class="modal-text">${item.thema || ''}</p>
-            <p class="modal-date">Erstellt: ${date}</p>
-        </div>
-        
-        ${verknuepfungenHTML}
-
-        ${challengeHTML}
-        ${uebungHTML}
-        ${handlungsfeldHTML}
-        ${beschreibungHTML}
-
-        ${performanzHTML}
-        
-        <div class="section">
-            <h3 class="section-title">💭 Reflexion</h3>
-            <div class="section-box">
-                ${item.reflexion ? `
-                    <div class="reflexion-emoji">${item.reflexion}</div>
-                    <p class="reflexion-text">Emoji-Reflexion beim Speichern</p>
-                ` : `
-                    <p class="no-reflexion">Keine Reflexion hinzugefügt</p>
-                `}
-                ${item.textReflexion ? `
-                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E5E7EB;">
-                        <p class="section-box-title">Zusätzliche Reflexion:</p>
-                        <p class="section-box-text">"${item.textReflexion}"</p>
-                    </div>
-                ` : ''}
-                ${notizenHTML}
-            </div>
-        </div>
-        
-        <div class="modal-actions">
-            <button onclick="addReflexion('${item.id}')" class="btn-primary">
-                💭 Reflexion hinzufügen
-            </button>
-            <button onclick="downloadItemModal('${item.id}')" class="btn-secondary">
-                ⬇️ Download
-            </button>
-            <button onclick="sendDocument('${item.id}')" class="btn-tertiary">
-                📧 Versenden
-            </button>
-            <button onclick="deleteItem('${item.id}')" class="btn-danger">
-                ðŸ—‘ï¸ Löschen
-            </button>
-        </div>
-    `;
-
-    modal.classList.add('show');
-};
-        
-function formatPerformanzData(performanz) {
-    let html = '';
-    
-    // ========== ALLE GENERISCHEN TEXT-INPUTS ZUERST ANZEIGEN ==========
-    // Alle Felder durchgehen und Text/Werte anzeigen
-    const processedKeys = new Set(['uebungstyp', 'abgeschlossen', 'selections', 'checkboxes', 
-        'emailBetreff', 'emailText', 'placements', 'sliders', 'rankingOrder', 'checklist', 
-        'kriterien', 'rollen', 'pruefpunkte', 'reihenfolge', 'elemente', 'wochenplan', 
-        'strategien', 'bewertungen', 'quiz', 'reflexion']);
-    
-    // Generische Felder (Text-Inputs, Textareas, etc.)
-    Object.keys(performanz).forEach(key => {
-        if (!processedKeys.has(key) && performanz[key]) {
-            const value = performanz[key];
-            if (typeof value === 'string' && value.trim()) {
-                const label = formatFieldLabel(key);
-                html += `<div style="margin-bottom: 0.75rem;">
-                    <p class="section-box-title" style="font-size: 0.875rem; margin-bottom: 0.25rem;">${label}:</p>
-                    <p class="section-box-small" style="background: #F9FAFB; padding: 0.5rem; border-radius: 6px; white-space: pre-wrap;">${value}</p>
-                </div>`;
-            } else if (typeof value === 'boolean') {
-                const label = formatFieldLabel(key);
-                html += `<p class="section-box-small">• ${label}: ${value ? '✓ Ja' : '✗ Nein'}</p>`;
+        window.showDetail = function(itemId) {
+            const item = allPortfolioItems.find(i => i.id === itemId);
+            if (!item) return;
+            
+            const modal = document.getElementById('detailModal');
+            const modalContent = document.getElementById('modalContentDiv');
+            
+            const date = new Date(item.createdAt).toLocaleString('de-CH', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            // Icon je nach Typ
+            let icon = '🔑';
+            if (item.type === 'schluesselkompetenz') icon = '🔑';
+            else if (item.type === 'aspekt') icon = '🎯';
+            else if (item.type === 'sprachmodus') icon = '💬';
+            
+            // Sprachmodus-Titel oder Übungstitel
+            let titelHTML = '';
+            if (item.modusTitle) {
+                titelHTML = `
+                    <p class="section-box-title" style="margin-bottom: 0.5rem; color: #8B4513;">📂 ${item.modusTitle}</p>
+                `;
             }
-        }
-    });
-    
-    // ========== SPRACHMODI-DATEN ==========
-    
-    // Multiple Choice / Selections (für Sprachmodi)
-    if (performanz.selections && Array.isArray(performanz.selections)) {
-        const answered = performanz.selections.filter(s => s !== null && s !== undefined).length;
-        const total = performanz.selections.length;
-        html += `<p class="section-box-text">✅ ${answered} von ${total} Fragen beantwortet</p>`;
-    }
-    
-    // Checkboxes (für Sprachmodi)
-    if (performanz.checkboxes && Array.isArray(performanz.checkboxes)) {
-        const checked = performanz.checkboxes.filter(c => c === true).length;
-        const total = performanz.checkboxes.length;
-        html += `<p class="section-box-text">â˜‘ï¸ ${checked} von ${total} Punkten markiert</p>`;
-    }
-    
-    // Email-Eingaben (für Sprachmodi)
-    if (performanz.emailBetreff || performanz.emailText) {
-        html += `<p class="section-box-text" style="margin-bottom: 0.5rem;">📧 E-Mail verfasst:</p>`;
-        if (performanz.emailBetreff) {
-            html += `<p class="section-box-small">Betreff: "${performanz.emailBetreff}"</p>`;
-        }
-        if (performanz.emailText) {
-            const preview = performanz.emailText.length > 100 
-                ? performanz.emailText.substring(0, 100) + '...' 
-                : performanz.emailText;
-            html += `<p class="section-box-small">Text: "${preview}"</p>`;
-        }
-    }
-    
-    // Aspekte-Daten (Zuordnungen, Rankings, etc.)
-    if (performanz.placements) {
-        const placed = Object.keys(performanz.placements).length;
-        html += `<p class="section-box-text">🎯 ${placed} Items zugeordnet</p>`;
-    }
-    
-    if (performanz.sliders) {
-        const count = Object.keys(performanz.sliders).length;
-        html += `<p class="section-box-text">⭐ ${count} Bewertungen abgegeben</p>`;
-    }
-    
-    if (performanz.rankingOrder && Array.isArray(performanz.rankingOrder)) {
-        html += `<p class="section-box-text">📊 Ranking mit ${performanz.rankingOrder.length} Items erstellt</p>`;
-    }
-    
-    // ========== SCHLÜSSELKOMPETENZEN-DATEN ==========
-    
-    if (performanz.checklist) {
-        html += `<p class="section-box-text">✅ ${performanz.checklist.completed} von ${performanz.checklist.total} Schritten erledigt</p>`;
-    }
-    
-    if (performanz.kriterien) {
-        html += `<p class="section-box-text">✅ ${performanz.kriterien.erfuellt} von ${performanz.kriterien.total} Kriterien erfüllt</p>`;
-        if (performanz.kriterien.liste && performanz.kriterien.liste.length > 0) {
-            html += `<p class="section-box-small">Kriterien: ${performanz.kriterien.liste.join(', ')}</p>`;
-        }
-    }
-    
-    if (performanz.rollen) {
-        html += `<p class="section-box-text">💥 Rollen verteilt:</p>`;
-        html += `<p class="section-box-small">â€¢ Person 1: ${getRoleName(performanz.rollen.person1)}</p>`;
-        html += `<p class="section-box-small">â€¢ Person 2: ${getRoleName(performanz.rollen.person2)}</p>`;
-        html += `<p class="section-box-small">â€¢ Person 3: ${getRoleName(performanz.rollen.person3)}</p>`;
-    }
-    
-    if (performanz.pruefpunkte) {
-        html += `<p class="section-box-text">🔍 ${performanz.pruefpunkte.markiert} von ${performanz.pruefpunkte.total} Prüfpunkten markiert</p>`;
-    }
-    
-    if (performanz.reihenfolge) {
-        html += `<p class="section-box-text">🔍¢ Reihenfolge: ${performanz.reihenfolge.join(' ←’ ')}</p>`;
-    }
-    
-    if (performanz.elemente) {
-        html += `<p class="section-box-text">📂 ${performanz.elemente.ausgewaehlt} von ${performanz.elemente.total} Elementen ausgewählt</p>`;
-    }
-    
-    if (performanz.wochenplan) {
-        html += `<p class="section-box-text" style="margin-bottom: 0.5rem;">📅 Wochenplan erstellt:</p>`;
-        if (performanz.wochenplan.montag) html += `<p class="section-box-small">Mo: ${performanz.wochenplan.montag}</p>`;
-        if (performanz.wochenplan.dienstag) html += `<p class="section-box-small">Di: ${performanz.wochenplan.dienstag}</p>`;
-        if (performanz.wochenplan.mittwoch) html += `<p class="section-box-small">Mi: ${performanz.wochenplan.mittwoch}</p>`;
-    }
-    
-    if (performanz.strategien) {
-        html += `<p class="section-box-text">📚 ${performanz.strategien.ausgewaehlt} von ${performanz.strategien.total} Lernstrategien gewählt</p>`;
-    }
-    
-    if (performanz.bewertungen) {
-        html += `<p class="section-box-text">⭐ Bewertungen: ${performanz.bewertungen.map(b => '⭐'.repeat(b)).join(' | ')}</p>`;
-    }
-    
-    if (performanz.quiz) {
-        const correct = performanz.quiz.antworten.filter(a => a === true).length;
-        html += `<p class="section-box-text">❓ Quiz: ${correct} von ${performanz.quiz.total} beantwortet</p>`;
-    }
-    
-    if (performanz.reflexion) {
-        html += `<p class="section-box-text" style="margin-bottom: 0.5rem;">🪞 Reflexions-Bewertungen:</p>`;
-        if (performanz.reflexion.bewertungen) {
-            html += `<p class="section-box-small">${performanz.reflexion.bewertungen.map(b => '⭐'.repeat(b)).join(' | ')}</p>`;
-        }
-        if (performanz.reflexion.verbesserung) {
-            html += `<p class="section-box-small">Verbesserung: ${getVerbesserungName(performanz.reflexion.verbesserung)}</p>`;
-        }
-    }
-    
-    // Generische Übungstyp-Anzeige falls nichts anderes passt
-    if (html === '' && performanz.abgeschlossen) {
-        html += `<p class="section-box-text">✅ Übung erfolgreich abgeschlossen</p>`;
-    }
-    
-    return html || '<p class="section-box-text" style="color: #9CA3AF; font-style: italic;">Details nicht verfügbar</p>';
-}
+            
+            // Tags für Aspekte und Schlüsselkompetenzen
+            let verknuepfungenHTML = '';
+            if ((item.aspekte && item.aspekte.length > 0) ||
+                (item.schluesselkompetenzen && item.schluesselkompetenzen.length > 0) ||
+                (item.sprachmodi && item.sprachmodi.length > 0)) {
+                verknuepfungenHTML = `
+                    <div class="section">
+                        <h3 class="section-title">🔗 Verknüpfte Kompetenzen</h3>
+                        <div class="section-box">
+                `;
+                
+                if (item.aspekte && item.aspekte.length > 0) {
+                    verknuepfungenHTML += `
+                        <p class="section-box-title" style="margin-bottom: 0.5rem;">🎯 Gesellschaftliche Aspekte:</p>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
+                            ${item.aspekte.map(a => `<span style="padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; background: rgba(210, 105, 30, 0.15); color: #D2691E; font-weight: 600;">${a}</span>`).join('')}
+                        </div>
+                    `;
+                }
+                
+                if (item.schluesselkompetenzen && item.schluesselkompetenzen.length > 0) {
+                    verknuepfungenHTML += `
+                        <p class="section-box-title" style="margin-bottom: 0.5rem;">🔑 Schlüsselkompetenzen:</p>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            ${item.schluesselkompetenzen.map(s => `<span style="padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; background: rgba(139, 69, 19, 0.15); color: #8B4513; font-weight: 600;">${s}</span>`).join('')}
+                        </div>
+                    `;
+                }
 
-function formatFieldLabel(key) {
-    const labels = {
-        'betreff': '📧 Betreff',
-        'anrede': '👋 Anrede',
-        'nachricht': '✉️ Nachricht',
-        'gruss': '👋 Grussformel',
-        'ziel': '🎯 Mein Ziel',
-        'schritt1': '1️⃣ Monat 1',
-        'schritt2': '2️⃣ Monat 2',
-        'schritt3': '3️⃣ Monat 3',
-        'reaktion': '🤔 Gewählte Reaktion',
-        'begruendung': '💭 Begründung',
-        'glaubwuerdigkeit': '⭐ Glaubwürdigkeit',
-        'aktualitaet': '⭐ Aktualität',
-        'objektivitaet': '⭐ Objektivität',
-        'bewertung': '💭 Einschätzung',
-        'problem': '❓ Erkanntes Problem',
-        'loesung': '💡 Lösungsansatz',
-        'praevention': '🛡️ Prävention',
-        'situation': '📄 Situation',
-        'wirkung': '💭 Wirkung',
-        'wunsch': '✨ Wunsch',
-        'termine': '📅 Termine-Tool',
-        'notizen_tool': '📂 Notizen-Tool',
-        'kommunikation': '💬 Kommunikations-Tool',
-        'dateien': '📂 Dateien-Tool',
-        'passwoerter': '🔍 Passwort-Tool',
-        'lernzeit': '⏰ Beste Lernzeit',
-        'methoden': '📚 Lernmethoden',
-        'lernzeit_woche': '⏱️ Zeit pro Woche',
-        'ablenkungen': '🚫 Ablenkungen vermeiden',
-        'veraenderung_zeitplan': '📅 Zeitplan/Tagesablauf',
-        'veraenderung_verantwortung': '💪 Verantwortung',
-        'veraenderung_sozial': '💥 Soziales Leben',
-        'anpassung_strategie': '🔍„ Anpassungsstrategie',
-        'verantwortung_betrieb': '🏢 Im Betrieb',
-        'verantwortung_schule': '🏫 In der Schule',
-        'verantwortung_privat': '🏠 Im Privatleben',
-        'konsequenzen': '⚠️ Konsequenzen',
-        'kreativ_typ': '🎨 Art des Elements',
-        'kreativ_inhalt': '📂 Inhalt',
-        'kreativ_tools': '🛠️ Tools/Programme',
-        'kreativ_deadline': '📅 Deadline',
-        'gut': '✅ Lief gut',
-        'herausfordernd': '⚠️ War herausfordernd',
-        'gelernt': '💡 Gelernt',
-        'vorsatz': '🎯 Vorsatz',
-        'notizen': '📂 Notizen',
-        'vorbereitungen': '✅ Vorbereitungen',
-        'fragen': '❓ Offene Fragen',
-        'nachbereitung': '📞 Nachbereitung',
-        'gespraechseroeffnung': '🗣️ Gesprächseröffnung'
-    };
-    
-    return labels[key] || key.charAt(0).toUpperCase() + key.slice(1);
-}
+                if (item.sprachmodi && item.sprachmodi.length > 0) {
+                    verknuepfungenHTML += `
+                        <p class="section-box-title" style="margin-bottom: 0.5rem;">💬 Sprachmodi:</p>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            ${item.sprachmodi.map(s => `<span style="padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; background: rgba(255, 107, 53, 0.15); color: #FF6B35; font-weight: 600;">${s}</span>`).join('')}
+                        </div>
+                    `;
+                }
+
+                verknuepfungenHTML += `
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Inhalte für verschiedene Typen
+            let challengeHTML = '';
+            if (item.type === 'challenge' && item.data) {
+                const { schluessel, sprach, aspekt, thema, challengeText, solution } = item.data;
+                const chips = [schluessel?.text, sprach?.text, aspekt?.text, thema?.text]
+                    .filter(Boolean)
+                    .map(text => `<span style="display: inline-block; padding: 0.35rem 0.6rem; margin: 0.15rem; border-radius: 9999px; background: rgba(33, 150, 243, 0.12); color: #0B5ED7; font-size: 0.75rem; font-weight: 700;">${text}</span>`) // kompakter Chip
+                    .join('');
+
+                challengeHTML = `
+                    <div class="section">
+                        <h3 class="section-title">🎲 Challenge-Inhalt</h3>
+                        <div class="section-box">
+                            ${chips ? `<div style="margin-bottom: 1rem; display: flex; flex-wrap: wrap;">${chips}</div>` : ''}
+                            ${challengeText ? `<p class="section-box-title">📂 Herausforderung:</p><p class="section-box-text">${challengeText}</p>` : ''}
+                            ${solution ? `<p class="section-box-title" style="margin-top: 1rem;">✅ Meine Lösung:</p><p class="section-box-text">${solution}</p>` : ''}
+                            ${!challengeText && !solution ? '<p class="section-box-text" style="color: #9CA3AF; font-style: italic;">Keine Challenge-Daten gespeichert</p>' : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
+            let uebungHTML = '';
+            if (item.type === 'sprachmodus' && item.uebung) {
+                uebungHTML = `
+                    <div class="section">
+                        <h3 class="section-title">📂 Übung & Aufgabenstellung</h3>
+                        <div class="section-box">
+                            ${item.uebung.titel ? `<p class="section-box-title">${item.uebung.titel}</p>` : ''}
+                            ${item.uebung.beschreibung ? `<p class="section-box-text">${item.uebung.beschreibung}</p>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
+            let handlungsfeldHTML = '';
+            if (item.type === 'aspekt' && item.handlungsfeld) {
+                handlungsfeldHTML = `
+                    <div class="section">
+                        <h3 class="section-title">🧭 Handlungsfeld</h3>
+                        <div class="section-box">
+                            <p class="section-box-text">${item.handlungsfeld}</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            let performanzHTML = '';
+            if (item.performanz) {
+                performanzHTML = `
+                    <div class="section">
+                        <h3 class="section-title">📊 Durchgeführte Übung</h3>
+                        <div class="section-box">
+                            ${titelHTML}
+                            ${item.performanz.uebungstyp ? `<p class="section-box-title" style="color: #8B4513; margin-bottom: 0.75rem;">📝 ${item.performanz.uebungstyp}</p>` : ""}
+                            ${formatPerformanzData(item.performanz)}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Beschreibung für Sprachmodi
+            let beschreibungHTML = '';
+            if (item.beschreibung && item.type === 'sprachmodus') {
+                beschreibungHTML = `
+                    <div class="section">
+                        <h3 class="section-title">📖 Beschreibung</h3>
+                        <div class="section-box">
+                            <p class="section-box-text">${item.beschreibung}</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Notizen anzeigen
+            let notizenHTML = '';
+            if (item.notizen) {
+                notizenHTML = `
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E5E7EB;">
+                        <p class="section-box-title">📂 Notizen:</p>
+                        <p class="section-box-text">"${item.notizen}"</p>
+                    </div>
+                `;
+            }
+            
+            modalContent.innerHTML = `
+                <div style="margin-bottom: 1rem;">
+                    <div class="modal-icon">${icon}</div>
+                    <h3 class="modal-subtitle">${item.kompetenzTitle || 'Kompetenz'}</h3>
+                    <p class="modal-text">${item.thema || ''}</p>
+                    <p class="modal-date">Erstellt: ${date}</p>
+                </div>
+                
+                ${verknuepfungenHTML}
+
+                ${challengeHTML}
+                ${uebungHTML}
+                ${handlungsfeldHTML}
+                ${beschreibungHTML}
+
+                ${performanzHTML}
+                
+                <div class="section">
+                    <h3 class="section-title">💭 Reflexion</h3>
+                    <div class="section-box">
+                        ${item.reflexion ? `
+                            <div class="reflexion-emoji">${item.reflexion}</div>
+                            <p class="reflexion-text">Emoji-Reflexion beim Speichern</p>
+                        ` : `
+                            <p class="no-reflexion">Keine Reflexion hinzugefügt</p>
+                        `}
+                        ${item.textReflexion ? `
+                            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E5E7EB;">
+                                <p class="section-box-title">Zusätzliche Reflexion:</p>
+                                <p class="section-box-text">"${item.textReflexion}"</p>
+                            </div>
+                        ` : ''}
+                        ${notizenHTML}
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button onclick="addReflexion('${item.id}')" class="btn-primary">
+                        💭 Reflexion hinzufügen
+                    </button>
+                    <button onclick="downloadItemModal('${item.id}')" class="btn-secondary">
+                        ⬇️ Download
+                    </button>
+                    <button onclick="sendDocument('${item.id}')" class="btn-tertiary">
+                        📧 Versenden
+                    </button>
+                    <button onclick="deleteItem('${item.id}')" class="btn-danger">
+                        🗑️ Löschen
+                    </button>
+                </div>
+            `;
+
+            modal.classList.add('show');
+        };
+        
+        function formatPerformanzData(performanz) {
+            let html = '';
+            
+            // ========== ALLE GENERISCHEN TEXT-INPUTS ZUERST ANZEIGEN ==========
+            // Alle Felder durchgehen und Text/Werte anzeigen
+            const processedKeys = new Set(['uebungstyp', 'abgeschlossen', 'selections', 'checkboxes', 
+                'emailBetreff', 'emailText', 'placements', 'sliders', 'rankingOrder', 'checklist', 
+                'kriterien', 'rollen', 'pruefpunkte', 'reihenfolge', 'elemente', 'wochenplan', 
+                'strategien', 'bewertungen', 'quiz', 'reflexion']);
+            
+            // Generische Felder (Text-Inputs, Textareas, etc.)
+            Object.keys(performanz).forEach(key => {
+                if (!processedKeys.has(key) && performanz[key]) {
+                    const value = performanz[key];
+                    if (typeof value === 'string' && value.trim()) {
+                        const label = formatFieldLabel(key);
+                        html += `<div style="margin-bottom: 0.75rem;">
+                            <p class="section-box-title" style="font-size: 0.875rem; margin-bottom: 0.25rem;">${label}:</p>
+                            <p class="section-box-small" style="background: #F9FAFB; padding: 0.5rem; border-radius: 6px; white-space: pre-wrap;">${value}</p>
+                        </div>`;
+                    } else if (typeof value === 'boolean') {
+                        const label = formatFieldLabel(key);
+                        html += `<p class="section-box-small">• ${label}: ${value ? '✓ Ja' : '✗ Nein'}</p>`;
+                    }
+                }
+            });
+            
+            // ========== SPRACHMODI-DATEN ==========
+            
+            // Multiple Choice / Selections (für Sprachmodi)
+            if (performanz.selections && Array.isArray(performanz.selections)) {
+                const answered = performanz.selections.filter(s => s !== null && s !== undefined).length;
+                const total = performanz.selections.length;
+                html += `<p class="section-box-text">✅ ${answered} von ${total} Fragen beantwortet</p>`;
+            }
+            
+            // Checkboxes (für Sprachmodi)
+            if (performanz.checkboxes && Array.isArray(performanz.checkboxes)) {
+                const checked = performanz.checkboxes.filter(c => c === true).length;
+                const total = performanz.checkboxes.length;
+                html += `<p class="section-box-text">☑️ ${checked} von ${total} Punkten markiert</p>`;
+            }
+            
+            // Email-Eingaben (für Sprachmodi)
+            if (performanz.emailBetreff || performanz.emailText) {
+                html += `<p class="section-box-text" style="margin-bottom: 0.5rem;">📧 E-Mail verfasst:</p>`;
+                if (performanz.emailBetreff) {
+                    html += `<p class="section-box-small">Betreff: "${performanz.emailBetreff}"</p>`;
+                }
+                if (performanz.emailText) {
+                    const preview = performanz.emailText.length > 100 
+                        ? performanz.emailText.substring(0, 100) + '...' 
+                        : performanz.emailText;
+                    html += `<p class="section-box-small">Text: "${preview}"</p>`;
+                }
+            }
+            
+            // Aspekte-Daten (Zuordnungen, Rankings, etc.)
+            if (performanz.placements) {
+                const placed = Object.keys(performanz.placements).length;
+                html += `<p class="section-box-text">🎯 ${placed} Items zugeordnet</p>`;
+            }
+            
+            if (performanz.sliders) {
+                const count = Object.keys(performanz.sliders).length;
+                html += `<p class="section-box-text">⭐ ${count} Bewertungen abgegeben</p>`;
+            }
+            
+            if (performanz.rankingOrder && Array.isArray(performanz.rankingOrder)) {
+                html += `<p class="section-box-text">📊 Ranking mit ${performanz.rankingOrder.length} Items erstellt</p>`;
+            }
+            
+            // ========== SCHLÜSSELKOMPETENZEN-DATEN ==========
+            
+            if (performanz.checklist) {
+                html += `<p class="section-box-text">✅ ${performanz.checklist.completed} von ${performanz.checklist.total} Schritten erledigt</p>`;
+            }
+            
+            if (performanz.kriterien) {
+                html += `<p class="section-box-text">✅ ${performanz.kriterien.erfuellt} von ${performanz.kriterien.total} Kriterien erfüllt</p>`;
+                if (performanz.kriterien.liste && performanz.kriterien.liste.length > 0) {
+                    html += `<p class="section-box-small">Kriterien: ${performanz.kriterien.liste.join(', ')}</p>`;
+                }
+            }
+            
+            if (performanz.rollen) {
+                html += `<p class="section-box-text">💥 Rollen verteilt:</p>`;
+                html += `<p class="section-box-small">• Person 1: ${getRoleName(performanz.rollen.person1)}</p>`;
+                html += `<p class="section-box-small">• Person 2: ${getRoleName(performanz.rollen.person2)}</p>`;
+                html += `<p class="section-box-small">• Person 3: ${getRoleName(performanz.rollen.person3)}</p>`;
+            }
+            
+            if (performanz.pruefpunkte) {
+                html += `<p class="section-box-text">🔍 ${performanz.pruefpunkte.markiert} von ${performanz.pruefpunkte.total} Prüfpunkten markiert</p>`;
+            }
+            
+            if (performanz.reihenfolge) {
+                html += `<p class="section-box-text">🔍 Reihenfolge: ${performanz.reihenfolge.join(' ← ')}</p>`;
+            }
+            
+            if (performanz.elemente) {
+                html += `<p class="section-box-text">📂 ${performanz.elemente.ausgewaehlt} von ${performanz.elemente.total} Elementen ausgewählt</p>`;
+            }
+            
+            if (performanz.wochenplan) {
+                html += `<p class="section-box-text" style="margin-bottom: 0.5rem;">📅 Wochenplan erstellt:</p>`;
+                if (performanz.wochenplan.montag) html += `<p class="section-box-small">Mo: ${performanz.wochenplan.montag}</p>`;
+                if (performanz.wochenplan.dienstag) html += `<p class="section-box-small">Di: ${performanz.wochenplan.dienstag}</p>`;
+                if (performanz.wochenplan.mittwoch) html += `<p class="section-box-small">Mi: ${performanz.wochenplan.mittwoch}</p>`;
+            }
+            
+            if (performanz.strategien) {
+                html += `<p class="section-box-text">📚 ${performanz.strategien.ausgewaehlt} von ${performanz.strategien.total} Lernstrategien gewählt</p>`;
+            }
+            
+            if (performanz.bewertungen) {
+                html += `<p class="section-box-text">⭐ Bewertungen: ${performanz.bewertungen.map(b => '⭐'.repeat(b)).join(' | ')}</p>`;
+            }
+            
+            if (performanz.quiz) {
+                const correct = performanz.quiz.antworten.filter(a => a === true).length;
+                html += `<p class="section-box-text">❓ Quiz: ${correct} von ${performanz.quiz.total} beantwortet</p>`;
+            }
+            
+            if (performanz.reflexion) {
+                html += `<p class="section-box-text" style="margin-bottom: 0.5rem;">🪞 Reflexions-Bewertungen:</p>`;
+                if (performanz.reflexion.bewertungen) {
+                    html += `<p class="section-box-small">${performanz.reflexion.bewertungen.map(b => '⭐'.repeat(b)).join(' | ')}</p>`;
+                }
+                if (performanz.reflexion.verbesserung) {
+                    html += `<p class="section-box-small">Verbesserung: ${getVerbesserungName(performanz.reflexion.verbesserung)}</p>`;
+                }
+            }
+            
+            // Generische Übungstyp-Anzeige falls nichts anderes passt
+            if (html === '' && performanz.abgeschlossen) {
+                html += `<p class="section-box-text">✅ Übung erfolgreich abgeschlossen</p>`;
+            }
+            
+            return html || '<p class="section-box-text" style="color: #9CA3AF; font-style: italic;">Details nicht verfügbar</p>';
+        }
+
+        function formatFieldLabel(key) {
+            const labels = {
+                'betreff': '📧 Betreff',
+                'anrede': '👋 Anrede',
+                'nachricht': '✉️ Nachricht',
+                'gruss': '👋 Grussformel',
+                'ziel': '🎯 Mein Ziel',
+                'schritt1': '1️⃣ Monat 1',
+                'schritt2': '2️⃣ Monat 2',
+                'schritt3': '3️⃣ Monat 3',
+                'reaktion': '🤔 Gewählte Reaktion',
+                'begruendung': '💭 Begründung',
+                'glaubwuerdigkeit': '⭐ Glaubwürdigkeit',
+                'aktualitaet': '⭐ Aktualität',
+                'objektivitaet': '⭐ Objektivität',
+                'bewertung': '💭 Einschätzung',
+                'problem': '❓ Erkanntes Problem',
+                'loesung': '💡 Lösungsansatz',
+                'praevention': '🛡️ Prävention',
+                'situation': '📄 Situation',
+                'wirkung': '💭 Wirkung',
+                'wunsch': '✨ Wunsch',
+                'termine': '📅 Termine-Tool',
+                'notizen_tool': '📂 Notizen-Tool',
+                'kommunikation': '💬 Kommunikations-Tool',
+                'dateien': '📂 Dateien-Tool',
+                'passwoerter': '🔍 Passwort-Tool',
+                'lernzeit': '⏰ Beste Lernzeit',
+                'methoden': '📚 Lernmethoden',
+                'lernzeit_woche': '⏱️ Zeit pro Woche',
+                'ablenkungen': '🚫 Ablenkungen vermeiden',
+                'veraenderung_zeitplan': '📅 Zeitplan/Tagesablauf',
+                'veraenderung_verantwortung': '💪 Verantwortung',
+                'veraenderung_sozial': '💥 Soziales Leben',
+                'anpassung_strategie': '🔍 Anpassungsstrategie',
+                'verantwortung_betrieb': '🏢 Im Betrieb',
+                'verantwortung_schule': '🏫 In der Schule',
+                'verantwortung_privat': '🏠 Im Privatleben',
+                'konsequenzen': '⚠️ Konsequenzen',
+                'kreativ_typ': '🎨 Art des Elements',
+                'kreativ_inhalt': '📂 Inhalt',
+                'kreativ_tools': '🛠️ Tools/Programme',
+                'kreativ_deadline': '📅 Deadline',
+                'gut': '✅ Lief gut',
+                'herausfordernd': '⚠️ War herausfordernd',
+                'gelernt': '💡 Gelernt',
+                'vorsatz': '🎯 Vorsatz',
+                'notizen': '📂 Notizen',
+                'vorbereitungen': '✅ Vorbereitungen',
+                'fragen': '❓ Offene Fragen',
+                'nachbereitung': '📞 Nachbereitung',
+                'gespraechseroeffnung': '🗣️ Gesprächseröffnung'
+            };
+            
+            return labels[key] || key.charAt(0).toUpperCase() + key.slice(1);
+        }
         
         function getRoleName(role) {
             const names = {
@@ -1610,14 +1601,13 @@ function formatFieldLabel(key) {
             const names = {
                 'punctuality': '⏰ Pünktlichkeit',
                 'questions': '❓ Mehr Fragen',
-                'organization': 'ðŸ“‹ Organisation',
+                'organization': '📋 Organisation',
                 'communication': '💬 Kommunikation',
                 'focus': '🎯 Konzentration'
             };
             return names[value] || value;
         }
 
-        // CHANGE: Defined as local function for cleaner scope usage
         function closeModal() {
             document.getElementById('detailModal').classList.remove('show');
         }
