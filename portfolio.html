@@ -717,14 +717,14 @@
                         </p>
                     </div>
                 </div>
-                <div class="header-icon">📁</div>
+                <div class="header-icon">📂</div>
             </div>
         </div>
         
         <!-- Statistik Cards -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-icon">📝</div>
+                <div class="stat-icon">📂</div>
                 <div class="stat-value" id="totalWorks">0</div>
                 <div class="stat-label">Gesamt</div>
             </div>
@@ -794,13 +794,13 @@
         
         <!-- Empty State -->
         <div id="emptyState" class="empty-state">
-            <div class="empty-icon">📂</div>
+            <div class="empty-icon">ðŸ“‚</div>
             <h3 class="empty-title">Noch keine Einträge</h3>
             <p class="empty-text">
                 Beginne mit einer Übung und speichere sie ins Portfolio!
             </p>
             <a href="kompetenzen.html" class="empty-link">
-                Zu den Übungen →
+                Zu den Übungen ←’
             </a>
         </div>
         
@@ -808,7 +808,7 @@
         <div class="footer">
             <div class="footer-content">
                 <div class="footer-text">
-                    <span class="footer-icon">🐜✏️👓</span>
+                    <span class="footer-icon">🐜✏️💓</span>
                     <span>|</span>
                     <span>ant edu</span>
                     <span>|</span>
@@ -1041,7 +1041,7 @@
                     </button>
                     ${downloadButton}
                     <button onclick="event.stopPropagation(); deleteItem('${item.id}')" class="btn btn-delete">
-                        🗑️ Löschen
+                        ðŸ—‘ï¸ Löschen
                     </button>
                 </div>
             </div>
@@ -1055,7 +1055,7 @@
             if (item.performanz?.uebungstyp || item.modusTitle) {
                 detailRows.push(`
                     <div class="detail-item">
-                        <span class="detail-icon">📝</span>
+                        <span class="detail-icon">📂</span>
                         <span>${item.modusTitle || item.performanz?.uebungstyp}</span>
                     </div>
                 `);
@@ -1078,7 +1078,7 @@
                     const checked = checkboxes.filter(c => c === true).length;
                     detailRows.push(`
                         <div class="detail-item">
-                            <span class="detail-icon">☑️</span>
+                            <span class="detail-icon">â˜‘ï¸</span>
                             <span>${checked} Punkte markiert</span>
                         </div>
                     `);
@@ -1096,7 +1096,7 @@
                 if (sliders && Object.keys(sliders).length > 0) {
                     detailRows.push(`
                         <div class="detail-item">
-                            <span class="detail-icon">⭐</span>
+                            <span class="detail-icon">⭐</span>
                             <span>${Object.keys(sliders).length} Bewertungen abgegeben</span>
                         </div>
                     `);
@@ -1105,7 +1105,7 @@
                 if (checklist) {
                     detailRows.push(`
                         <div class="detail-item">
-                            <span class="detail-icon">📋</span>
+                            <span class="detail-icon">ðŸ“‹</span>
                             <span>${checklist.completed} / ${checklist.total} Schritte erledigt</span>
                         </div>
                     `);
@@ -1114,7 +1114,7 @@
                 if (kriterien) {
                     detailRows.push(`
                         <div class="detail-item">
-                            <span class="detail-icon">📑</span>
+                            <span class="detail-icon">ðŸ“‘</span>
                             <span>${kriterien.erfuellt} / ${kriterien.total} Kriterien erfüllt</span>
                         </div>
                     `);
@@ -1124,7 +1124,7 @@
             if (item.beschreibung && item.type === 'sprachmodus') {
                 detailRows.push(`
                     <div class="detail-item">
-                        <span class="detail-icon">📖</span>
+                        <span class="detail-icon">ðŸ“–</span>
                         <span>${formatPreviewText(item.beschreibung)}</span>
                     </div>
                 `);
@@ -1142,7 +1142,7 @@
             if (item.notizen) {
                 detailRows.push(`
                     <div class="detail-item">
-                        <span class="detail-icon">📝</span>
+                        <span class="detail-icon">📂</span>
                         <span>${formatPreviewText(item.notizen)}</span>
                     </div>
                 `);
@@ -1157,11 +1157,11 @@
             const maxLength = 110;
             if (!text) return '';
             if (text.length <= maxLength) return text;
-            return text.substring(0, maxLength).trim() + '…';
+            return text.substring(0, maxLength).trim() + 'â€¦';
         }
 
         window.deleteItem = async function(itemId) {
-            if (!confirm('🗑️ Möchtest du diesen Portfolio-Eintrag wirklich löschen?\n\nDiese Aktion kann nicht rückgängig gemacht werden.')) {
+            if (!confirm('ðŸ—‘ï¸ Möchtest du diesen Portfolio-Eintrag wirklich löschen?\n\nDiese Aktion kann nicht rückgängig gemacht werden.')) {
                 return;
             }
             
@@ -1181,7 +1181,7 @@
                 }
             } catch (error) {
                 console.error('Fehler:', error);
-                alert('❌ Fehler beim Löschen. Versuche es nochmal.');
+                alert('âŒ Fehler beim Löschen. Versuche es nochmal.');
             }
         };
 
@@ -1210,7 +1210,7 @@
     let titelHTML = '';
     if (item.modusTitle) {
         titelHTML = `
-            <p class="section-box-title" style="margin-bottom: 0.5rem; color: #8B4513;">📝 ${item.modusTitle}</p>
+            <p class="section-box-title" style="margin-bottom: 0.5rem; color: #8B4513;">📂 ${item.modusTitle}</p>
         `;
     }
     
@@ -1272,7 +1272,7 @@
                 <h3 class="section-title">🎲 Challenge-Inhalt</h3>
                 <div class="section-box">
                     ${chips ? `<div style="margin-bottom: 1rem; display: flex; flex-wrap: wrap;">${chips}</div>` : ''}
-                    ${challengeText ? `<p class="section-box-title">📝 Herausforderung:</p><p class="section-box-text">${challengeText}</p>` : ''}
+                    ${challengeText ? `<p class="section-box-title">📂 Herausforderung:</p><p class="section-box-text">${challengeText}</p>` : ''}
                     ${solution ? `<p class="section-box-title" style="margin-top: 1rem;">✅ Meine Lösung:</p><p class="section-box-text">${solution}</p>` : ''}
                     ${!challengeText && !solution ? '<p class="section-box-text" style="color: #9CA3AF; font-style: italic;">Keine Challenge-Daten gespeichert</p>' : ''}
                 </div>
@@ -1284,7 +1284,7 @@
     if (item.type === 'sprachmodus' && item.uebung) {
         uebungHTML = `
             <div class="section">
-                <h3 class="section-title">📝 Übung & Aufgabenstellung</h3>
+                <h3 class="section-title">📂 Übung & Aufgabenstellung</h3>
                 <div class="section-box">
                     ${item.uebung.titel ? `<p class="section-box-title">${item.uebung.titel}</p>` : ''}
                     ${item.uebung.beschreibung ? `<p class="section-box-text">${item.uebung.beschreibung}</p>` : ''}
@@ -1297,7 +1297,7 @@
     if (item.type === 'aspekt' && item.handlungsfeld) {
         handlungsfeldHTML = `
             <div class="section">
-                <h3 class="section-title">🧭 Handlungsfeld</h3>
+                <h3 class="section-title">ðŸ§­ Handlungsfeld</h3>
                 <div class="section-box">
                     <p class="section-box-text">${item.handlungsfeld}</p>
                 </div>
@@ -1312,7 +1312,7 @@
                 <h3 class="section-title">📊 Durchgeführte Übung</h3>
                 <div class="section-box">
                     ${titelHTML}
-                    <p class="section-box-title">${item.performanz.uebungstyp || 'Übung'}</p>
+                    ${item.performanz.uebungstyp ? `<p class="section-box-title" style="color: #8B4513; margin-bottom: 0.75rem;">📝 ${item.performanz.uebungstyp}</p>` : ""}
                     ${formatPerformanzData(item.performanz)}
                 </div>
             </div>
@@ -1324,7 +1324,7 @@
     if (item.beschreibung && item.type === 'sprachmodus') {
         beschreibungHTML = `
             <div class="section">
-                <h3 class="section-title">📖 Beschreibung</h3>
+                <h3 class="section-title">ðŸ“– Beschreibung</h3>
                 <div class="section-box">
                     <p class="section-box-text">${item.beschreibung}</p>
                 </div>
@@ -1337,7 +1337,7 @@
     if (item.notizen) {
         notizenHTML = `
             <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E5E7EB;">
-                <p class="section-box-title">📝 Notizen:</p>
+                <p class="section-box-title">📂 Notizen:</p>
                 <p class="section-box-text">"${item.notizen}"</p>
             </div>
         `;
@@ -1390,7 +1390,7 @@
                 📧 Versenden
             </button>
             <button onclick="deleteItem('${item.id}')" class="btn-danger">
-                🗑️ Löschen
+                ðŸ—‘ï¸ Löschen
             </button>
         </div>
     `;
@@ -1400,6 +1400,30 @@
         
 function formatPerformanzData(performanz) {
     let html = '';
+    
+    // ========== ALLE GENERISCHEN TEXT-INPUTS ZUERST ANZEIGEN ==========
+    // Alle Felder durchgehen und Text/Werte anzeigen
+    const processedKeys = new Set(['uebungstyp', 'abgeschlossen', 'selections', 'checkboxes', 
+        'emailBetreff', 'emailText', 'placements', 'sliders', 'rankingOrder', 'checklist', 
+        'kriterien', 'rollen', 'pruefpunkte', 'reihenfolge', 'elemente', 'wochenplan', 
+        'strategien', 'bewertungen', 'quiz', 'reflexion']);
+    
+    // Generische Felder (Text-Inputs, Textareas, etc.)
+    Object.keys(performanz).forEach(key => {
+        if (!processedKeys.has(key) && performanz[key]) {
+            const value = performanz[key];
+            if (typeof value === 'string' && value.trim()) {
+                const label = formatFieldLabel(key);
+                html += `<div style="margin-bottom: 0.75rem;">
+                    <p class="section-box-title" style="font-size: 0.875rem; margin-bottom: 0.25rem;">${label}:</p>
+                    <p class="section-box-small" style="background: #F9FAFB; padding: 0.5rem; border-radius: 6px; white-space: pre-wrap;">${value}</p>
+                </div>`;
+            } else if (typeof value === 'boolean') {
+                const label = formatFieldLabel(key);
+                html += `<p class="section-box-small">• ${label}: ${value ? '✓ Ja' : '✗ Nein'}</p>`;
+            }
+        }
+    });
     
     // ========== SPRACHMODI-DATEN ==========
     
@@ -1414,7 +1438,7 @@ function formatPerformanzData(performanz) {
     if (performanz.checkboxes && Array.isArray(performanz.checkboxes)) {
         const checked = performanz.checkboxes.filter(c => c === true).length;
         const total = performanz.checkboxes.length;
-        html += `<p class="section-box-text">☑️ ${checked} von ${total} Punkten markiert</p>`;
+        html += `<p class="section-box-text">â˜‘ï¸ ${checked} von ${total} Punkten markiert</p>`;
     }
     
     // Email-Eingaben (für Sprachmodi)
@@ -1439,7 +1463,7 @@ function formatPerformanzData(performanz) {
     
     if (performanz.sliders) {
         const count = Object.keys(performanz.sliders).length;
-        html += `<p class="section-box-text">⭐ ${count} Bewertungen abgegeben</p>`;
+        html += `<p class="section-box-text">⭐ ${count} Bewertungen abgegeben</p>`;
     }
     
     if (performanz.rankingOrder && Array.isArray(performanz.rankingOrder)) {
@@ -1460,22 +1484,22 @@ function formatPerformanzData(performanz) {
     }
     
     if (performanz.rollen) {
-        html += `<p class="section-box-text">👥 Rollen verteilt:</p>`;
-        html += `<p class="section-box-small">• Person 1: ${getRoleName(performanz.rollen.person1)}</p>`;
-        html += `<p class="section-box-small">• Person 2: ${getRoleName(performanz.rollen.person2)}</p>`;
-        html += `<p class="section-box-small">• Person 3: ${getRoleName(performanz.rollen.person3)}</p>`;
+        html += `<p class="section-box-text">💥 Rollen verteilt:</p>`;
+        html += `<p class="section-box-small">â€¢ Person 1: ${getRoleName(performanz.rollen.person1)}</p>`;
+        html += `<p class="section-box-small">â€¢ Person 2: ${getRoleName(performanz.rollen.person2)}</p>`;
+        html += `<p class="section-box-small">â€¢ Person 3: ${getRoleName(performanz.rollen.person3)}</p>`;
     }
     
     if (performanz.pruefpunkte) {
-        html += `<p class="section-box-text">🔍 ${performanz.pruefpunkte.markiert} von ${performanz.pruefpunkte.total} Prüfpunkten markiert</p>`;
+        html += `<p class="section-box-text">🔍 ${performanz.pruefpunkte.markiert} von ${performanz.pruefpunkte.total} Prüfpunkten markiert</p>`;
     }
     
     if (performanz.reihenfolge) {
-        html += `<p class="section-box-text">🔢 Reihenfolge: ${performanz.reihenfolge.join(' → ')}</p>`;
+        html += `<p class="section-box-text">🔍¢ Reihenfolge: ${performanz.reihenfolge.join(' ←’ ')}</p>`;
     }
     
     if (performanz.elemente) {
-        html += `<p class="section-box-text">📝 ${performanz.elemente.ausgewaehlt} von ${performanz.elemente.total} Elementen ausgewählt</p>`;
+        html += `<p class="section-box-text">📂 ${performanz.elemente.ausgewaehlt} von ${performanz.elemente.total} Elementen ausgewählt</p>`;
     }
     
     if (performanz.wochenplan) {
@@ -1490,7 +1514,7 @@ function formatPerformanzData(performanz) {
     }
     
     if (performanz.bewertungen) {
-        html += `<p class="section-box-text">⭐ Bewertungen: ${performanz.bewertungen.map(b => '⭐'.repeat(b)).join(' | ')}</p>`;
+        html += `<p class="section-box-text">⭐ Bewertungen: ${performanz.bewertungen.map(b => '⭐'.repeat(b)).join(' | ')}</p>`;
     }
     
     if (performanz.quiz) {
@@ -1501,7 +1525,7 @@ function formatPerformanzData(performanz) {
     if (performanz.reflexion) {
         html += `<p class="section-box-text" style="margin-bottom: 0.5rem;">🪞 Reflexions-Bewertungen:</p>`;
         if (performanz.reflexion.bewertungen) {
-            html += `<p class="section-box-small">${performanz.reflexion.bewertungen.map(b => '⭐'.repeat(b)).join(' | ')}</p>`;
+            html += `<p class="section-box-small">${performanz.reflexion.bewertungen.map(b => '⭐'.repeat(b)).join(' | ')}</p>`;
         }
         if (performanz.reflexion.verbesserung) {
             html += `<p class="section-box-small">Verbesserung: ${getVerbesserungName(performanz.reflexion.verbesserung)}</p>`;
@@ -1526,44 +1550,44 @@ function formatFieldLabel(key) {
         'schritt1': '1️⃣ Monat 1',
         'schritt2': '2️⃣ Monat 2',
         'schritt3': '3️⃣ Monat 3',
-        'reaktion': '🤝 Gewählte Reaktion',
+        'reaktion': '🤔 Gewählte Reaktion',
         'begruendung': '💭 Begründung',
-        'glaubwuerdigkeit': '⭐ Glaubwürdigkeit',
-        'aktualitaet': '⭐ Aktualität',
-        'objektivitaet': '⭐ Objektivität',
+        'glaubwuerdigkeit': '⭐ Glaubwürdigkeit',
+        'aktualitaet': '⭐ Aktualität',
+        'objektivitaet': '⭐ Objektivität',
         'bewertung': '💭 Einschätzung',
         'problem': '❓ Erkanntes Problem',
         'loesung': '💡 Lösungsansatz',
         'praevention': '🛡️ Prävention',
-        'situation': '📍 Situation',
+        'situation': '📄 Situation',
         'wirkung': '💭 Wirkung',
         'wunsch': '✨ Wunsch',
         'termine': '📅 Termine-Tool',
-        'notizen_tool': '📝 Notizen-Tool',
+        'notizen_tool': '📂 Notizen-Tool',
         'kommunikation': '💬 Kommunikations-Tool',
-        'dateien': '📁 Dateien-Tool',
-        'passwoerter': '🔐 Passwort-Tool',
+        'dateien': '📂 Dateien-Tool',
+        'passwoerter': '🔍 Passwort-Tool',
         'lernzeit': '⏰ Beste Lernzeit',
         'methoden': '📚 Lernmethoden',
         'lernzeit_woche': '⏱️ Zeit pro Woche',
         'ablenkungen': '🚫 Ablenkungen vermeiden',
         'veraenderung_zeitplan': '📅 Zeitplan/Tagesablauf',
         'veraenderung_verantwortung': '💪 Verantwortung',
-        'veraenderung_sozial': '👥 Soziales Leben',
-        'anpassung_strategie': '🔄 Anpassungsstrategie',
+        'veraenderung_sozial': '💥 Soziales Leben',
+        'anpassung_strategie': '🔍„ Anpassungsstrategie',
         'verantwortung_betrieb': '🏢 Im Betrieb',
         'verantwortung_schule': '🏫 In der Schule',
         'verantwortung_privat': '🏠 Im Privatleben',
         'konsequenzen': '⚠️ Konsequenzen',
         'kreativ_typ': '🎨 Art des Elements',
-        'kreativ_inhalt': '📝 Inhalt',
+        'kreativ_inhalt': '📂 Inhalt',
         'kreativ_tools': '🛠️ Tools/Programme',
         'kreativ_deadline': '📅 Deadline',
         'gut': '✅ Lief gut',
         'herausfordernd': '⚠️ War herausfordernd',
         'gelernt': '💡 Gelernt',
         'vorsatz': '🎯 Vorsatz',
-        'notizen': '📝 Notizen',
+        'notizen': '📂 Notizen',
         'vorbereitungen': '✅ Vorbereitungen',
         'fragen': '❓ Offene Fragen',
         'nachbereitung': '📞 Nachbereitung',
@@ -1586,7 +1610,7 @@ function formatFieldLabel(key) {
             const names = {
                 'punctuality': '⏰ Pünktlichkeit',
                 'questions': '❓ Mehr Fragen',
-                'organization': '📋 Organisation',
+                'organization': 'ðŸ“‹ Organisation',
                 'communication': '💬 Kommunikation',
                 'focus': '🎯 Konzentration'
             };
