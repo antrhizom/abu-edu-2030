@@ -1751,7 +1751,6 @@
     <!-- Firebase & Scripts -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
-        import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
         import { getFirestore, doc, setDoc, getDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
         
         const firebaseConfig = {
@@ -1764,13 +1763,7 @@
         };
         
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        await signInAnonymously(auth);
         const db = getFirestore(app);
-
-        onAuthStateChanged(auth, (user) => {
-            console.log('Auth state (index):', user ? 'angemeldet' : 'abgemeldet');
-        });
         
         const tiere = ['Eichhörnchen', 'Fuchs', 'Bär', 'Ameise', 'Eule', 'Igel', 'Hase', 'Reh', 'Dachs', 'Maus', 'Biber', 'Marder', 'Luchs', 'Wolf', 'Hirsch'];
         const sonderzeichen = ['+', '%', '-', '~', '*'];
